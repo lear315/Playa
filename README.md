@@ -1,2 +1,2 @@
 # Playa
-play-laya 趣味laya demo
+play-laya 趣玩laya demo
