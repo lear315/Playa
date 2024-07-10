@@ -1,0 +1,13 @@
+{
+  "name": "LayaProject",
+  "android": {
+    "targetArchitectures": {
+      "_$type": "Record",
+      "ARMv7": true,
+      "ARM64": false,
+      "x86": false,
+      "x86-64": false
+    },
+    "exportFormat": "APK"
+  }
+}
