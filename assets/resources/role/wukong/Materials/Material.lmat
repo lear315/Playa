@@ -1,0 +1,50 @@
+{
+  "version": "LAYAMATERIAL:04",
+  "props": {
+    "textures": [
+      {
+        "path": "res://f189185b-a903-4140-b493-25da94e1fc69",
+        "constructParams": [
+          512,
+          512,
+          1,
+          true,
+          false,
+          true
+        ],
+        "propertyParams": {
+          "filterMode": 1,
+          "wrapModeU": 1,
+          "wrapModeV": 1,
+          "anisoLevel": 4
+        },
+        "name": "u_AlbedoTexture"
+      }
+    ],
+    "type": "RoleShader",
+    "renderQueue": 2000,
+    "materialRenderMode": 0,
+    "s_Cull": 2,
+    "s_Blend": 0,
+    "s_BlendSrc": 1,
+    "s_BlendDst": 0,
+    "s_BlendSrcRGB": 1,
+    "s_BlendDstRGB": 0,
+    "s_BlendSrcAlpha": 1,
+    "s_BlendDstAlpha": 0,
+    "s_DepthTest": 1,
+    "s_DepthWrite": true,
+    "u_outlineColor": [
+      0.24820532213359078,
+      0.9651162790697676,
+      0.13840814854876513,
+      1
+    ],
+    "u_outlineRatio": 0.494,
+    "u_outlineLightness": 1.452,
+    "u_outlineScale": 2.79,
+    "u_outlineWidth": 1.787,
+    "u_outlineZOffset": -0.442,
+    "defines": []
+  }
+}
