@@ -92,12 +92,9 @@ GLSL Start
 
         vec3 positionWS = pixel.positionWS;
         vec3 positionVS = (u_View * vec4(positionWS, 1.0)).xyz;
-        vec4 vertexColor = vec4(1.0);
-        #ifdef COLOR 
-            vertexColor = pixel.vertexColor;
-        #endif
 
-        vec3 normalOS = vec3(1.0, 1.0, 1.0);
+        vec3 normalOS = getVertexNormal();
+
         vec3 normalWS = transformObjectToWorldNormal(normalOS, true);
 
         vec3 normalVS = transformObjectToWorldNormal(normalWS, true);

@@ -18,10 +18,10 @@
           "wrapModeV": 1,
           "anisoLevel": 4
         },
-        "name": "u_AlbedoTexture"
+        "name": "u_DiffusTexture"
       }
     ],
-    "type": "RoleShader",
+    "type": "RolePBRShader",
     "renderQueue": 2000,
     "materialRenderMode": 0,
     "s_Cull": 2,
@@ -34,17 +34,42 @@
     "s_BlendDstAlpha": 0,
     "s_DepthTest": 1,
     "s_DepthWrite": true,
-    "u_outlineColor": [
-      0.24820532213359078,
-      0.9651162790697676,
-      0.13840814854876513,
+    "u_DiffuseColor": [
+      1,
+      1,
+      1,
       1
     ],
-    "u_outlineRatio": 0.494,
-    "u_outlineLightness": 1.452,
-    "u_outlineScale": 2.79,
-    "u_outlineWidth": 1.787,
-    "u_outlineZOffset": -0.442,
+    "u_TillingOffset": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "u_EnvironmentColor": [
+      1,
+      0.5310077519379846,
+      0.8754239341085273,
+      0
+    ],
+    "u_LightingParam": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "u_HitEffectColor": [
+      0.534338662790702,
+      1,
+      0.0968992248062015,
+      1
+    ],
+    "u_HitEffectParams": [
+      1.474,
+      1.22,
+      0.459,
+      0.279
+    ],
     "defines": []
   }
 }
