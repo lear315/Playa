@@ -1,7 +1,44 @@
 {
   "version": "LAYAMATERIAL:04",
   "props": {
-    "textures": [],
+    "textures": [
+      {
+        "path": "res://9b543122-8eb7-4c1b-82fc-06bdf4ccb230",
+        "constructParams": [
+          1920,
+          1200,
+          1,
+          false,
+          false,
+          true
+        ],
+        "propertyParams": {
+          "filterMode": 1,
+          "wrapModeU": 1,
+          "wrapModeV": 1,
+          "anisoLevel": 4
+        },
+        "name": "u_albedoTexture"
+      },
+      {
+        "path": "res://aaa8db8a-b978-4354-aba5-f5701ef2c31c",
+        "constructParams": [
+          1920,
+          1200,
+          1,
+          false,
+          false,
+          true
+        ],
+        "propertyParams": {
+          "filterMode": 1,
+          "wrapModeU": 1,
+          "wrapModeV": 1,
+          "anisoLevel": 4
+        },
+        "name": "u_depthTexture"
+      }
+    ],
     "type": "Depth2D",
     "renderQueue": 2000,
     "materialRenderMode": 0,
@@ -15,6 +52,23 @@
     "s_BlendDstAlpha": 0,
     "s_DepthTest": 1,
     "s_DepthWrite": true,
+    "u_scale": 0.0215,
+    "u_focus": 0.44,
+    "u_enlarge": 0.32,
+    "u_dimensions": [
+      1205.075,
+      676
+    ],
+    "u_animateScale": [
+      0.866,
+      0.95,
+      0.95
+    ],
+    "u_animateScaleP": [
+      0.9,
+      0.925,
+      0.925
+    ],
     "defines": []
   }
 }
