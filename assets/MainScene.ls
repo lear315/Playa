@@ -99,36 +99,24 @@
               "maxBounces": 1024
             }
           ]
-        },
-        {
-          "_$id": "xc6qj0i8",
-          "_$prefab": "bb7a7d01-01b2-4ae0-b0fa-813ea0a591b7",
-          "name": "wukong",
-          "active": true,
-          "layer": 0,
-          "transform": {
-            "localPosition": {
-              "_$type": "Vector3",
-              "x": 5.120279312133789,
-              "y": -3.9256069660186768,
-              "z": 2.367166519165039
-            },
-            "localRotation": {
-              "_$type": "Quaternion",
-              "x": 0,
-              "y": 0,
-              "z": 0,
-              "w": 1
-            },
-            "localScale": {
-              "_$type": "Vector3",
-              "x": 1,
-              "y": 1,
-              "z": 1
-            }
-          }
         }
       ]
+    },
+    {
+      "_$id": "rftuabag",
+      "_$type": "Image",
+      "name": "Image",
+      "x": 258,
+      "y": 68,
+      "width": 512,
+      "height": 512,
+      "material": {
+        "_$uuid": "ae3e59a0-fc74-40e3-a65d-bfa333ca56b8",
+        "_$type": "Material"
+      },
+      "skin": "res://f189185b-a903-4140-b493-25da94e1fc69",
+      "useSourceSize": true,
+      "color": "#ffffff"
     }
   ]
 }
