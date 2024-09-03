@@ -108,13 +108,17 @@
       "name": "Image",
       "x": 85,
       "y": 51,
-      "width": 1000,
-      "height": 512,
+      "width": 1202,
+      "height": 676,
+      "scaleX": 0.8,
+      "scaleY": 0.8,
+      "_mouseState": 2,
       "material": {
         "_$uuid": "ae3e59a0-fc74-40e3-a65d-bfa333ca56b8",
         "_$type": "Material"
       },
-      "skin": "res://f189185b-a903-4140-b493-25da94e1fc69",
+      "gray": true,
+      "skin": "res://00000000-0000-0000-0001-000000000000",
       "color": "#ffffff"
     }
   ]

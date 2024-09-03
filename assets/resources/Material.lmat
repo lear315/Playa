@@ -3,10 +3,10 @@
   "props": {
     "textures": [
       {
-        "path": "res://9b543122-8eb7-4c1b-82fc-06bdf4ccb230",
+        "path": "res://910d123d-56f6-4cd8-a3d5-ffe99e7bc127",
         "constructParams": [
-          1920,
-          1200,
+          2192,
+          1233,
           1,
           false,
           false,
@@ -21,10 +21,10 @@
         "name": "u_albedoTexture"
       },
       {
-        "path": "res://aaa8db8a-b978-4354-aba5-f5701ef2c31c",
+        "path": "res://28708381-f975-440f-a4e3-01ff4308c04c",
         "constructParams": [
-          1920,
-          1200,
+          2192,
+          1233,
           1,
           false,
           false,
@@ -52,23 +52,26 @@
     "s_BlendDstAlpha": 0,
     "s_DepthTest": 1,
     "s_DepthWrite": true,
-    "u_scale": 0.0215,
-    "u_focus": 0.44,
-    "u_enlarge": 0.32,
     "u_dimensions": [
-      1205.075,
+      1202,
       676
     ],
-    "u_animateScale": [
-      0.866,
-      0.95,
-      0.95
+    "u_stereoGain": 0.01876,
+    "u_focus": 0.5,
+    "u_amplitude": [
+      0.1,
+      0.05,
+      0.4
     ],
-    "u_animateScaleP": [
-      0.9,
-      0.925,
-      0.925
+    "u_phase": [
+      0,
+      0.25,
+      0.25
     ],
+    "u_amountOfMotion": 0.4,
+    "u_animateDuration": 8,
+    "u_dilation": 0.15,
+    "u_enlarge": 1.2,
     "defines": []
   }
 }
