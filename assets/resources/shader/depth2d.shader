@@ -8,7 +8,6 @@ Shader3D Start
     uniformMap: {
         u_albedoTexture: {type: Texture2D, default: "white"}
         u_depthTexture: {type: Texture2D, default: "white"}
-        u_dimensions: {type: Vector2, default: [1.0, 1.0]}
         u_stereoGain: {type: Float, default: 0.01876}
         u_focus: {type: Float, default: 0.5}
         u_amplitude: {type: Vector3, default: [0.1, 0.05, 0.4]}
@@ -16,7 +15,7 @@ Shader3D Start
         u_amountOfMotion: {type: Float, default: 0.4}
         u_animateDuration: {type: Float, default: 8.0}
         u_dilation: {type: Float, default: 0.25}
-        u_enlarge: {type: Float, default: 1.3, min: 1s.0}
+        u_enlarge: {type: Float, default: 1.3, min: 1.0}
     },
     attributeMap: {
         a_posuv: Vector4,
@@ -127,7 +126,6 @@ GLSL Start
         return color;
     }
 
-
     vec3 getOffset(vec3 e, vec3 n, float r, float i) {
         const float pi = 3.1415926535897; 
         return vec3(sin(2.0 * pi * (i + n.x)) * e.x * r, sin(2.0 * pi * (i + n.y)) * e.y * r, 0.5 * (1.0 + sin(2.0 * pi * (i + n.z))) * e.z * r);
@@ -136,7 +134,8 @@ GLSL Start
     void main()
     {
         clip();
-        float aspect = u_dimensions.x / u_dimensions.y;
+        ivec2 textureSize = textureSize(u_albedoTexture, 0);
+        float aspect = float(textureSize.x) / float(textureSize.y);
 
         #ifdef GAIN
             // 3d色差滤镜
@@ -147,6 +146,8 @@ GLSL Start
             const vec4 right_glass = vec4(0, 1, 1, 1);
             vec4 color = left * left_glass + right * right_glass;
         #else
+
+
             vec2 uv = (v_texcoordAlpha.xy - vec2(0.5,0.5)) / u_enlarge + vec2(0.5,0.5);
             float time = u_Time / u_animateDuration; 
             vec3 offset = getOffset(u_amplitude, u_phase ,u_amountOfMotion,time);

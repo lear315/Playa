@@ -3,10 +3,10 @@
   "props": {
     "textures": [
       {
-        "path": "res://910d123d-56f6-4cd8-a3d5-ffe99e7bc127",
+        "path": "res://6bb4c5a1-4a42-413c-b3f1-dd35dde9b65c",
         "constructParams": [
-          2192,
-          1233,
+          1892,
+          915,
           1,
           false,
           false,
@@ -21,10 +21,10 @@
         "name": "u_albedoTexture"
       },
       {
-        "path": "res://28708381-f975-440f-a4e3-01ff4308c04c",
+        "path": "res://401ad9b9-3fe5-486c-9eab-569ab17b10e1",
         "constructParams": [
-          2192,
-          1233,
+          1892,
+          915,
           1,
           false,
           false,
@@ -32,9 +32,9 @@
         ],
         "propertyParams": {
           "filterMode": 1,
-          "wrapModeU": 1,
-          "wrapModeV": 1,
-          "anisoLevel": 4
+          "wrapModeU": 0,
+          "wrapModeV": 0,
+          "anisoLevel": 1
         },
         "name": "u_depthTexture"
       }
@@ -52,10 +52,6 @@
     "s_BlendDstAlpha": 0,
     "s_DepthTest": 1,
     "s_DepthWrite": true,
-    "u_dimensions": [
-      1202,
-      676
-    ],
     "u_stereoGain": 0.01876,
     "u_focus": 0.5,
     "u_amplitude": [
