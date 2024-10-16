@@ -121,6 +121,7 @@
       "y": 1124,
       "width": 179,
       "height": 86,
+      "visible": false,
       "_mouseState": 2,
       "bottom": 70,
       "centerX": 0,
