@@ -1,0 +1,20 @@
+{
+  "resolution": {
+    "designWidth": 720,
+    "designHeight": 1280,
+    "scaleMode": "fixedauto",
+    "alignV": "middle",
+    "alignH": "center",
+    "backgroundColor": "rgba(0, 0, 0, 1)"
+  },
+  "modules": {
+    "laya.d3": true,
+    "laya.ui": true,
+    "laya.ani": true,
+    "laya.physics3D": true,
+    "laya.spine": true
+  },
+  "splash": {
+    "fit": "center"
+  }
+}

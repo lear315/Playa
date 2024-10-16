@@ -3,10 +3,10 @@
   "props": {
     "textures": [
       {
-        "path": "res://6bb4c5a1-4a42-413c-b3f1-dd35dde9b65c",
+        "path": "res://342f5419-7a2d-47c8-90f3-2c2965952df0",
         "constructParams": [
-          1892,
-          915,
+          576,
+          1024,
           1,
           false,
           false,
@@ -21,10 +21,10 @@
         "name": "u_albedoTexture"
       },
       {
-        "path": "res://401ad9b9-3fe5-486c-9eab-569ab17b10e1",
+        "path": "res://9327bf49-ccfe-429f-9a40-bedc1cb94cff",
         "constructParams": [
-          1892,
-          915,
+          576,
+          1024,
           1,
           false,
           false,
@@ -32,9 +32,9 @@
         ],
         "propertyParams": {
           "filterMode": 1,
-          "wrapModeU": 0,
-          "wrapModeV": 0,
-          "anisoLevel": 1
+          "wrapModeU": 1,
+          "wrapModeV": 1,
+          "anisoLevel": 4
         },
         "name": "u_depthTexture"
       }
