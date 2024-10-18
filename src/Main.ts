@@ -68,9 +68,12 @@ export class Main extends Laya.Script {
             Laya.stage.width = stageHeight / 16 * 9;
         }
 
-        this.onStartGame();
+       // this.onStartGame();
         this.button.on(Laya.Event.CLICK, this, this.onStartGame);
+    }
 
+    async onStartGame() {
+        console.log("开始游戏");
         // 初始化摇杆
         this.joystick = this.joystickSprite.addComponent(Joystick);
 
@@ -79,10 +82,8 @@ export class Main extends Laya.Script {
 
         // 添加帧循环
         Laya.timer.frameLoop(1, this, this.onUpdate);
-    }
 
-    async onStartGame() {
-        console.log("开始游戏");
+
         // 初始化玩家实体
         this.player = new PlayerEntity();
         this.box.visible = false;

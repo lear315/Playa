@@ -173,13 +173,55 @@
       ]
     },
     {
+      "_$id": "6kk34ed9",
+      "_$type": "Box",
+      "name": "UI",
+      "width": 720,
+      "height": 1280,
+      "_mouseState": 2,
+      "top": 0,
+      "bottom": 0,
+      "centerX": 0,
+      "_$child": [
+        {
+          "_$id": "iayl6jox",
+          "_$type": "Sprite",
+          "name": "play_postion_bg",
+          "x": 222,
+          "y": 887,
+          "width": 277,
+          "height": 277,
+          "alpha": 0.103,
+          "texture": {
+            "_$uuid": "21e8007e-e18c-4ff1-93ee-83df142cd032",
+            "_$type": "Texture"
+          },
+          "_$child": [
+            {
+              "_$id": "71es19m2",
+              "_$type": "Sprite",
+              "name": "inner",
+              "x": 139,
+              "y": 139,
+              "width": 172,
+              "height": 172,
+              "anchorX": 0.5,
+              "anchorY": 0.5,
+              "texture": {
+                "_$uuid": "e22f1ac8-33dd-459c-893f-7e820d33ae81",
+                "_$type": "Texture"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
       "_$id": "h99fsarv",
       "_$type": "Box",
       "name": "Box",
-      "active": false,
       "width": 720,
       "height": 1280,
-      "visible": false,
       "_mouseState": 2,
       "top": 0,
       "bottom": 0,
@@ -226,50 +268,6 @@
           "labelAlign": "center",
           "labelVAlign": "middle",
           "labelPadding": "0,0,8,0"
-        }
-      ]
-    },
-    {
-      "_$id": "6kk34ed9",
-      "_$type": "Box",
-      "name": "UI",
-      "width": 720,
-      "height": 1280,
-      "_mouseState": 2,
-      "top": 0,
-      "bottom": 0,
-      "centerX": 0,
-      "_$child": [
-        {
-          "_$id": "iayl6jox",
-          "_$type": "Sprite",
-          "name": "play_postion_bg",
-          "x": 222,
-          "y": 887,
-          "width": 277,
-          "height": 277,
-          "alpha": 0.103,
-          "texture": {
-            "_$uuid": "21e8007e-e18c-4ff1-93ee-83df142cd032",
-            "_$type": "Texture"
-          },
-          "_$child": [
-            {
-              "_$id": "71es19m2",
-              "_$type": "Sprite",
-              "name": "inner",
-              "x": 139,
-              "y": 139,
-              "width": 172,
-              "height": 172,
-              "anchorX": 0.5,
-              "anchorY": 0.5,
-              "texture": {
-                "_$uuid": "e22f1ac8-33dd-459c-893f-7e820d33ae81",
-                "_$type": "Texture"
-              }
-            }
-          ]
         }
       ]
     }
