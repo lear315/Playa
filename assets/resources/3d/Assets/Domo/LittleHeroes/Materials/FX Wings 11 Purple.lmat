@@ -1,0 +1,50 @@
+{
+	"version":"LAYAMATERIAL:02",
+	"props":{
+		"type":"Laya.BlinnPhongMaterial",
+		"name":"FX Wings 11 Purple",
+		"renderStates":[
+			{
+				"cull":2,
+				"blend":0,
+				"srcBlend":1,
+				"dstBlend":0,
+				"depthWrite":true,
+				"depthTest":515
+			}
+		],
+		"alphaTest":false,
+		"alphaTestValue":0.5,
+		"renderQueue":3000,
+		"textures":[
+			{
+				"name":"albedoTexture",
+				"path":"../Textures/FX Wings 11 Purple.jpg",
+				"constructParams":[
+					128,
+					128,
+					0,
+					true
+				],
+				"propertyParams":{
+					"filterMode":1,
+					"wrapModeU":0,
+					"wrapModeV":0,
+					"anisoLevel":1
+				}
+			}
+		],
+		"vectors":[
+			{
+				"name":"tilingOffset",
+				"value":[
+					2,
+					1,
+					0,
+					0
+				]
+			}
+		],
+		"defines":[]
+	}
+}

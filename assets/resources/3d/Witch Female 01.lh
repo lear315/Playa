@@ -1,0 +1,2611 @@
+{
+	"version":"LAYAHIERARCHY:02",
+	"data":{
+		"type":"Sprite3D",
+		"instanceID":4135,
+		"props":{
+			"name":"Witch Female 01",
+			"active":true,
+			"isStatic":false,
+			"layer":0,
+			"position":[
+				14,
+				-16,
+				0
+			],
+			"rotation":[
+				0,
+				-0.2164396,
+				0,
+				-0.976296
+			],
+			"scale":[
+				1,
+				1,
+				1
+			]
+		},
+		"components":[
+			{
+				"type":"Animator",
+				"layers":[
+					{
+						"name":"Base Layer",
+						"weight":0,
+						"blendingMode":0,
+						"states":[
+							{
+								"name":"Idle",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Idle-Idle.lani"
+							},
+							{
+								"name":"Walk",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Walk-Walk.lani"
+							},
+							{
+								"name":"Run",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Run-Run.lani"
+							},
+							{
+								"name":"Run With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Run With Root Motion-Run With Root Motion.lani"
+							},
+							{
+								"name":"Relax",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Relax-Relax.lani"
+							},
+							{
+								"name":"Walk With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Walk With Root Motion-Walk With Root Motion.lani"
+							},
+							{
+								"name":"Jump",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Jump-Jump.lani"
+							},
+							{
+								"name":"Melee Right Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Melee Right Attack 01-Melee Right Attack 01.lani"
+							},
+							{
+								"name":"Melee Right Attack 02",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Melee Right Attack 02-Melee Right Attack 02.lani"
+							},
+							{
+								"name":"Melee Left Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Melee Left Attack 01-Melee Left Attack 01.lani"
+							},
+							{
+								"name":"Projectile Right Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Projectile Right Attack 01-Projectile Right Attack 01.lani"
+							},
+							{
+								"name":"Cast Spell",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Cast Spell-Cast Spell.lani"
+							},
+							{
+								"name":"Spin Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Spin Attack-Spin Attack.lani"
+							},
+							{
+								"name":"Take Damage",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Take Damage-Take Damage.lani"
+							},
+							{
+								"name":"Die",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Die-Die.lani"
+							},
+							{
+								"name":"Defend",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Defend-Defend.lani"
+							},
+							{
+								"name":"Shake Head",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Shake Head-Shake Head.lani"
+							},
+							{
+								"name":"Nod Head",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Nod Head-Nod Head.lani"
+							},
+							{
+								"name":"Stunned",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Stunned-Stunned.lani"
+							},
+							{
+								"name":"Wave Hand",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Wave Hand-Wave Hand.lani"
+							},
+							{
+								"name":"Pick Up",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Pick Up-Pick Up.lani"
+							},
+							{
+								"name":"Drink Potion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Drink Potion-Drink Potion.lani"
+							},
+							{
+								"name":"Melee Right Attack 03",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Melee Right Attack 03-Melee Right Attack 03.lani"
+							},
+							{
+								"name":"Left Punch Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Left Punch Attack-Left Punch Attack.lani"
+							},
+							{
+								"name":"Right Punch Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Right Punch Attack-Right Punch Attack.lani"
+							},
+							{
+								"name":"Cast Spell 02",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Cast Spell 02-Cast Spell 02.lani"
+							},
+							{
+								"name":"Fly Idle",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Idle-Fly Idle.lani"
+							},
+							{
+								"name":"Strafe Right With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Strafe Right With Root Motion-Strafe Right With Root Motion.lani"
+							},
+							{
+								"name":"Strafe Left With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Strafe Left With Root Motion-Strafe Left With Root Motion.lani"
+							},
+							{
+								"name":"Crossbow Shoot Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Crossbow Shoot Attack-Crossbow Shoot Attack.lani"
+							},
+							{
+								"name":"Fly Forward",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Forward-Fly Forward.lani"
+							},
+							{
+								"name":"Fly Take Damage",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Fly Take Damage-Fly Take Damage.lani"
+							},
+							{
+								"name":"Fly Melee Right Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Melee Right Attack 01-Fly Melee Right Attack 01.lani"
+							},
+							{
+								"name":"Fly Melee Right Attack 02",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Melee Right Attack 02-Fly Melee Right Attack 02.lani"
+							},
+							{
+								"name":"Fly Melee Right Attack 03",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Melee Right Attack 03-Fly Melee Right Attack 03.lani"
+							},
+							{
+								"name":"Fly Melee Left Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Melee Left Attack 01-Fly Melee Left Attack 01.lani"
+							},
+							{
+								"name":"Fly Right Punch Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Right Punch Attack-Fly Right Punch Attack.lani"
+							},
+							{
+								"name":"Fly Left Punch Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Left Punch Attack-Fly Left Punch Attack.lani"
+							},
+							{
+								"name":"Fly Crossbow Shoot Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Crossbow Shoot Attack-Fly Crossbow Shoot Attack.lani"
+							},
+							{
+								"name":"Fly Projectile Right Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Projectile Right Attack 01-Fly Projectile Right Attack 01.lani"
+							},
+							{
+								"name":"Fly Cast Spell 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Cast Spell 01-Fly Cast Spell 01.lani"
+							},
+							{
+								"name":"Fly Cast Spell 02",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Cast Spell 02-Fly Cast Spell 02.lani"
+							},
+							{
+								"name":"Fly Defend",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Defend-Fly Defend.lani"
+							},
+							{
+								"name":"Fly Die",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Fly Die-Fly Die.lani"
+							},
+							{
+								"name":"Chop Tree",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Chop Tree-Chop Tree.lani"
+							},
+							{
+								"name":"Digging",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Digging-Digging.lani"
+							},
+							{
+								"name":"Talking",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Talking-Talking.lani"
+							},
+							{
+								"name":"Sitting",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Sitting-Sitting.lani"
+							},
+							{
+								"name":"Idle to Lay Ground",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Idle to Lay Ground-Idle to Lay Ground.lani"
+							},
+							{
+								"name":"Lay Ground to Idle",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Lay Ground to Idle-Lay Ground to Idle.lani"
+							},
+							{
+								"name":"On the Ground Loop",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/On the Ground Loop-On the Ground Loop.lani"
+							},
+							{
+								"name":"Crying",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Crying-Crying.lani"
+							},
+							{
+								"name":"Clapping",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Clapping-Clapping.lani"
+							},
+							{
+								"name":"Jump Right Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Jump Right Attack 01-Jump Right Attack 01.lani"
+							},
+							{
+								"name":"Dash With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Dash With Root Motion-Dash With Root Motion.lani"
+							},
+							{
+								"name":"Dash",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Dash-Dash.lani"
+							},
+							{
+								"name":"Victory",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Victory-Victory.lani"
+							},
+							{
+								"name":"Spear Idle",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Spear Idle-Spear Idle.lani"
+							},
+							{
+								"name":"Spear Melee Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Spear Melee Attack 01-Spear Melee Attack 01.lani"
+							},
+							{
+								"name":"Spear Melee Attack 02",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Melee Attack 02-Spear Melee Attack 02.lani"
+							},
+							{
+								"name":"Spear Walk",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Walk-Spear Walk.lani"
+							},
+							{
+								"name":"Spear Run",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Run-Spear Run.lani"
+							},
+							{
+								"name":"Spear Cast Spell 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Cast Spell 01-Spear Cast Spell 01.lani"
+							},
+							{
+								"name":"Spear Strafe Left With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Strafe Left With Root Motion-Spear Strafe Left With Root Motion.lani"
+							},
+							{
+								"name":"Spear Strafe Right With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Strafe Right With Root Motion-Spear Strafe Right With Root Motion.lani"
+							},
+							{
+								"name":"Spear Walk With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Walk With Root Motion-Spear Walk With Root Motion.lani"
+							},
+							{
+								"name":"Spear Run With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Run With Root Motion-Spear Run With Root Motion.lani"
+							},
+							{
+								"name":"Spear Relax",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Relax-Spear Relax.lani"
+							},
+							{
+								"name":"Spear Dash With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Dash With Root Motion-Spear Dash With Root Motion.lani"
+							},
+							{
+								"name":"Spear Dash",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Dash-Spear Dash.lani"
+							},
+							{
+								"name":"Spear Take Damage",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Take Damage-Spear Take Damage.lani"
+							},
+							{
+								"name":"Spear Defend",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Defend-Spear Defend.lani"
+							},
+							{
+								"name":"Spear Die",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Die-Spear Die.lani"
+							},
+							{
+								"name":"Spear Jump",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Spear Jump-Spear Jump.lani"
+							},
+							{
+								"name":"Strafe Right",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Strafe Right-Strafe Right.lani"
+							},
+							{
+								"name":"Strafe Left",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Strafe Left-Strafe Left.lani"
+							},
+							{
+								"name":"Crossbow Reload",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Crossbow Right Reload-Crossbow Right Reload.lani"
+							},
+							{
+								"name":"Crossbow Aim",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Crossbow Aim-Crossbow Aim.lani"
+							},
+							{
+								"name":"Crossbow Right Aim",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Crossbow Right Aim-Crossbow Right Aim.lani"
+							},
+							{
+								"name":"Crossbow Right Shoot Attack",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Crossbow Right Shoot Attack-Crossbow Right Shoot Attack.lani"
+							},
+							{
+								"name":"Crossbow Right Reload",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Crossbow Right Reload-Crossbow Right Reload.lani"
+							},
+							{
+								"name":"Jump Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Jump Without Root Motion-Jump Without Root Motion.lani"
+							},
+							{
+								"name":"TH Sword Idle",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Idle-TH Sword Idle.lani"
+							},
+							{
+								"name":"TH Walk Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Walk Without Root Motion-TH Sword Walk Without Root Motion.lani"
+							},
+							{
+								"name":"TH Walk With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Walk With Root Motion-TH Sword Walk With Root Motion.lani"
+							},
+							{
+								"name":"TH Run With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Run With Root Motion-TH Sword Run With Root Motion.lani"
+							},
+							{
+								"name":"TH Run Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Run Without Root Motion-TH Sword Run Without Root Motion.lani"
+							},
+							{
+								"name":"TH Dash Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/TH Sword Dash Without Root Motion-TH Sword Dash Without Root Motion.lani"
+							},
+							{
+								"name":"TH Dash With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Dash With Root Motion-TH Sword Dash With Root Motion.lani"
+							},
+							{
+								"name":"TH Sword Melee Attack 02",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Melee Attack 02-TH Sword Melee Attack 02.lani"
+							},
+							{
+								"name":"TH Sword Melee Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Melee Attack 01-TH Sword Melee Attack 01.lani"
+							},
+							{
+								"name":"TH Sword Cast Spell",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Cast Spell-TH Sword Cast Spell.lani"
+							},
+							{
+								"name":"TH Strafe Left Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Strafe Left Without Root Motion-TH Sword Strafe Left Without Root Motion.lani"
+							},
+							{
+								"name":"TH Strafe Right Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/TH Sword Strafe Right Without Root Motion-TH Sword Strafe Right Without Root Motion.lani"
+							},
+							{
+								"name":"TH Strafe Right With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Strafe Right With Root Motion-TH Sword Strafe Right With Root Motion.lani"
+							},
+							{
+								"name":"TH Strafe Left With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Strafe Left With Root Motion-TH Sword Strafe Left With Root Motion.lani"
+							},
+							{
+								"name":"TH Jump With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Jump With Root Motion-TH Sword Jump With Root Motion.lani"
+							},
+							{
+								"name":"TH Jump Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Jump Without Root Motion-TH Sword Jump Without Root Motion.lani"
+							},
+							{
+								"name":"TH Sword Defend",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Defend-TH Sword Defend.lani"
+							},
+							{
+								"name":"TH Sword Take Damage",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Take Damage-TH Sword Take Damage.lani"
+							},
+							{
+								"name":"TH Sword Relax",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@TH Sword Relax-TH Sword Relax.lani"
+							},
+							{
+								"name":"TH Sword Die",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/TH Sword Die-TH Sword Die.lani"
+							},
+							{
+								"name":"Roll Forward Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Roll Forward Without Root Motion-Roll Forward Without Root Motion.lani"
+							},
+							{
+								"name":"Roll Forward With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Roll Forward With Root Motion-Roll Forward With Root Motion.lani"
+							},
+							{
+								"name":"Right Throw",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Right Throw-Right Throw.lani"
+							},
+							{
+								"name":"Push With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Push With Root Motion-Push With Root Motion.lani"
+							},
+							{
+								"name":"Push Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Push Without Root Motion-Push Without Root Motion.lani"
+							},
+							{
+								"name":"Pull With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Pull With Root Motion-Pull With Root Motion.lani"
+							},
+							{
+								"name":"Pull Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Pull Without Root Motion-Pull Without Root Motion.lani"
+							},
+							{
+								"name":"Look Up Wave Hand",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Look Up Wave Hand-Look Up Wave Hand.lani"
+							},
+							{
+								"name":"Longbow Shoot Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Longbow Shoot Attack 01-Longbow Shoot Attack 01.lani"
+							},
+							{
+								"name":"Longbow Aim 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Longbow Aim 01-Longbow Aim 01.lani"
+							},
+							{
+								"name":"Fly Longbow Aim 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Longbow Aim 01-Fly Longbow Aim 01.lani"
+							},
+							{
+								"name":"Fly Longbow Shoot Attack 01",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Fly Longbow Shoot Attack 01-Fly Longbow Shoot Attack 01.lani"
+							},
+							{
+								"name":"Walk Backward",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Walk Backward-Walk Backward.lani"
+							},
+							{
+								"name":"Walk Backward With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Walk Backward With Root Motion-Walk Backward With Root Motion.lani"
+							},
+							{
+								"name":"Roll Backward With Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Roll Backward With Root Motion-Roll Backward With Root Motion.lani"
+							},
+							{
+								"name":"Roll Backward Without Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Roll Backward Without Root Motion-Roll Backward Without Root Motion.lani"
+							},
+							{
+								"name":"Strumming",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Strumming-Strumming.lani"
+							},
+							{
+								"name":"Tread water",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Tread water-Tread water.lani"
+							},
+							{
+								"name":"Swim 02",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Swim 02-Swim 02.lani"
+							},
+							{
+								"name":"Swim 01",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Swim 01-Swim 01.lani"
+							},
+							{
+								"name":"Torch Walk Backward W Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Torch Walk Backward W Root Motion-Torch Walk Backward W Root Motion.lani"
+							},
+							{
+								"name":"Torch Walk Backward WO Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Torch Walk Backward WO Root Motion-Torch Walk Backward WO Root Motion.lani"
+							},
+							{
+								"name":"Torch Walk Forward W Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Torch Walk Forward W Root Motion-Torch Walk Forward W Root Motion.lani"
+							},
+							{
+								"name":"Torch Walk Forward WO Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Torch Walk Forward WO Root Motion-Torch Walk Forward WO Root Motion.lani"
+							},
+							{
+								"name":"Torch Idle",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Torch Idle-Torch Idle.lani"
+							},
+							{
+								"name":"Torch Look Around",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Torch Look Around-Torch Look Around.lani"
+							},
+							{
+								"name":"Torch Strafe Left W Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Torch Strafe Left W Root Motion-Torch Strafe Left W Root Motion.lani"
+							},
+							{
+								"name":"Torch Strafe Left WO Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Torch Strafe Left WO Root Motion-Torch Strafe Left WO Root Motion.lani"
+							},
+							{
+								"name":"Torch Strafe Right W Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Torch Strafe Right W Root Motion-Torch Strafe Right W Root Motion.lani"
+							},
+							{
+								"name":"Torch Strafe Right WO Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/Animations/Base@Torch Strafe Right WO Root Motion-Torch Strafe Right WO Root Motion.lani"
+							},
+							{
+								"name":"Left Throw",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Left Throw-Left Throw.lani"
+							},
+							{
+								"name":"Spawn Ground",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Spawn Ground-Spawn Ground.lani"
+							},
+							{
+								"name":"Run Backward W Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Run Backward W Root Motion-Run Backward W Root Motion.lani"
+							},
+							{
+								"name":"Run Backward WO Root Motion",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Run Backward WO Root Motion-Run Backward WO Root Motion.lani"
+							},
+							{
+								"name":"Hammering on anvil",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Hammering on anvil-Hammering on anvil.lani"
+							},
+							{
+								"name":"Push Button",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Push Button-Push Button.lani"
+							},
+							{
+								"name":"Sawing Wood",
+								"clipPath":"Assets/Domo/LittleHeroes/AnimationTrans/Sawing Wood-Sawing Wood.lani"
+							}
+						]
+					}
+				],
+				"cullingMode":0,
+				"playOnWake":true
+			}
+		],
+		"child":[
+			{
+				"type":"SkinnedMeshSprite3D",
+				"instanceID":4136,
+				"props":{
+					"name":"Base",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0,
+						0,
+						0
+					],
+					"rotation":[
+						0.7071068,
+						0,
+						0,
+						-0.7071068
+					],
+					"scale":[
+						1,
+						1,
+						1
+					],
+					"rootBone":4137,
+					"boundBox":{
+						"min":[
+							-0.5044802,
+							-0.256397,
+							-0.6543105
+						],
+						"max":[
+							1.043265,
+							0.2741774,
+							0.6543105
+						]
+					},
+					"boundSphere":{
+						"center":[
+							0.2693923,
+							0.008890182,
+							0
+						],
+						"radius":1.047558
+					},
+					"bones":[
+						4138,
+						4137,
+						4139,
+						4140,
+						4141,
+						4142,
+						4143,
+						4144,
+						4145,
+						4146,
+						4147,
+						4148,
+						4149,
+						4150,
+						4151,
+						4152,
+						4153,
+						4154
+					],
+					"enableRender":true,
+					"receiveShadows":true,
+					"castShadow":true,
+					"materials":[
+						{
+							"path":"Assets/Domo/LittleHeroes/Materials/Female Spideress 01 Purple.lmat"
+						}
+					],
+					"meshPath":"Assets/Domo/LittleHeroes/FBX/Base Normal-Base.lm"
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4155,
+				"props":{
+					"name":"Rig",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0,
+						0,
+						0
+					],
+					"rotation":[
+						-0.5000001,
+						-0.5000001,
+						-0.5,
+						-0.5
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4156,
+				"props":{
+					"name":"RigHeadGizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.08509883,
+						1.189926,
+						0.1196711
+					],
+					"rotation":[
+						0.4959578,
+						0.5080245,
+						0.5153155,
+						0.4799865
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4157,
+				"props":{
+					"name":"RigLArm1Gizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0.1402598,
+						0.7953143,
+						0.1239345
+					],
+					"rotation":[
+						-0.7816557,
+						0.453373,
+						0.116996,
+						-0.4120428
+					],
+					"scale":[
+						1.000001,
+						1.000004,
+						1.000002
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4158,
+				"props":{
+					"name":"RigLArm2Gizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0.2336354,
+						0.6613482,
+						0.1556027
+					],
+					"rotation":[
+						-0.7249278,
+						0.5105554,
+						0.1392204,
+						-0.440943
+					],
+					"scale":[
+						1.000003,
+						1,
+						1.000003
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4159,
+				"props":{
+					"name":"RigLArmPalmGizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0.3045655,
+						0.5222005,
+						0.1958222
+					],
+					"rotation":[
+						-0.1031712,
+						0.3241054,
+						0.5215682,
+						-0.782482
+					],
+					"scale":[
+						1.000003,
+						1.000001,
+						0.9999989
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4160,
+				"props":{
+					"name":"RigLLegPlatform",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0.1760709,
+						-5.153721E-09,
+						0.1211672
+					],
+					"rotation":[
+						-0.4655927,
+						-0.4655927,
+						-0.5321874,
+						-0.5321874
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4137,
+				"props":{
+					"name":"RigPelvis",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0.02042539,
+						0.4381026,
+						-0.05194271
+					],
+					"rotation":[
+						-0.4377633,
+						-0.3455535,
+						-0.6415589,
+						-0.526648
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[
+					{
+						"type":"Sprite3D",
+						"instanceID":4144,
+						"props":{
+							"name":"RigLLeg1",
+							"active":true,
+							"isStatic":false,
+							"layer":0,
+							"position":[
+								-0.01361359,
+								1.201792E-06,
+								0.1244041
+							],
+							"rotation":[
+								-0.2911213,
+								-0.9471291,
+								-0.03695671,
+								0.1297276
+							],
+							"scale":[
+								1,
+								1,
+								1
+							]
+						},
+						"components":[],
+						"child":[
+							{
+								"type":"Sprite3D",
+								"instanceID":4151,
+								"props":{
+									"name":"RigLLeg2",
+									"active":true,
+									"isStatic":false,
+									"layer":0,
+									"position":[
+										0.214803,
+										1.102162E-07,
+										9.560612E-09
+									],
+									"rotation":[
+										0.03264631,
+										-7.581294E-05,
+										0.3117917,
+										-0.9495895
+									],
+									"scale":[
+										0.9999999,
+										1,
+										0.9999998
+									]
+								},
+								"components":[],
+								"child":[
+									{
+										"type":"Sprite3D",
+										"instanceID":4154,
+										"props":{
+											"name":"RigLLegAnkle",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0.1627933,
+												2.981229E-08,
+												2.608577E-08
+											],
+											"rotation":[
+												0.05311828,
+												0.1033409,
+												-0.2643597,
+												-0.9573991
+											],
+											"scale":[
+												1,
+												0.9999998,
+												1
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
+							}
+						]
+					},
+					{
+						"type":"Sprite3D",
+						"instanceID":4138,
+						"props":{
+							"name":"RigRLeg1",
+							"active":true,
+							"isStatic":false,
+							"layer":0,
+							"position":[
+								-0.01361358,
+								1.234337E-06,
+								-0.1244041
+							],
+							"rotation":[
+								-0.1850674,
+								-0.9797838,
+								0.003031817,
+								-0.07592583
+							],
+							"scale":[
+								0.9999999,
+								1,
+								1
+							]
+						},
+						"components":[],
+						"child":[
+							{
+								"type":"Sprite3D",
+								"instanceID":4146,
+								"props":{
+									"name":"RigRLeg2",
+									"active":true,
+									"isStatic":false,
+									"layer":0,
+									"position":[
+										0.2148024,
+										1.059962E-07,
+										1.064182E-07
+									],
+									"rotation":[
+										0.02668984,
+										-0.005296067,
+										0.3124853,
+										-0.9495328
+									],
+									"scale":[
+										0.9999999,
+										1,
+										0.9999999
+									]
+								},
+								"components":[],
+								"child":[
+									{
+										"type":"Sprite3D",
+										"instanceID":4147,
+										"props":{
+											"name":"RigRLegAnkle",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0.1627818,
+												0,
+												1.863137E-08
+											],
+											"rotation":[
+												0.0006268139,
+												-0.06769934,
+												-0.3926875,
+												-0.9171766
+											],
+											"scale":[
+												1,
+												0.9999998,
+												1
+											]
+										},
+										"components":[],
+										"child":[]
+									}
+								]
+							}
+						]
+					},
+					{
+						"type":"Sprite3D",
+						"instanceID":4143,
+						"props":{
+							"name":"RigSpine1",
+							"active":true,
+							"isStatic":false,
+							"layer":0,
+							"position":[
+								0,
+								0,
+								0
+							],
+							"rotation":[
+								-7.10543E-15,
+								2.557175E-14,
+								7.105427E-15,
+								-1
+							],
+							"scale":[
+								1,
+								1,
+								1
+							]
+						},
+						"components":[],
+						"child":[
+							{
+								"type":"Sprite3D",
+								"instanceID":4141,
+								"props":{
+									"name":"RigSpine2",
+									"active":true,
+									"isStatic":false,
+									"layer":0,
+									"position":[
+										0.1821412,
+										-9.094947E-15,
+										4.480737E-15
+									],
+									"rotation":[
+										-0.02269516,
+										-0.0246013,
+										-0.04748027,
+										-0.9983113
+									],
+									"scale":[
+										1,
+										1,
+										1
+									]
+								},
+								"components":[],
+								"child":[
+									{
+										"type":"Sprite3D",
+										"instanceID":4140,
+										"props":{
+											"name":"RigRibcage",
+											"active":true,
+											"isStatic":false,
+											"layer":0,
+											"position":[
+												0.1821412,
+												0,
+												4.480737E-15
+											],
+											"rotation":[
+												-0.004205869,
+												-0.004592226,
+												-0.00884832,
+												-0.9999415
+											],
+											"scale":[
+												1,
+												1,
+												1
+											]
+										},
+										"components":[],
+										"child":[
+											{
+												"type":"Sprite3D",
+												"instanceID":4161,
+												"props":{
+													"name":"Dummy Prop Back",
+													"active":true,
+													"isStatic":false,
+													"layer":0,
+													"position":[
+														-0.02920059,
+														2.430373E-07,
+														-0.0001392666
+													],
+													"rotation":[
+														0.4999999,
+														0.5000001,
+														0.4999999,
+														-0.5000001
+													],
+													"scale":[
+														1,
+														1,
+														1
+													]
+												},
+												"components":[],
+												"child":[
+													{
+														"type":"Sprite3D",
+														"instanceID":4162,
+														"props":{
+															"name":"Back Prop 02 Red",
+															"active":true,
+															"isStatic":false,
+															"layer":0,
+															"position":[
+																0,
+																0,
+																0
+															],
+															"rotation":[
+																0,
+																0,
+																0,
+																-1
+															],
+															"scale":[
+																1,
+																1,
+																1
+															]
+														},
+														"components":[
+															{
+																"type":"Animator",
+																"layers":[
+																	{
+																		"name":"Base Layer",
+																		"weight":0,
+																		"blendingMode":0,
+																		"states":[
+																			{
+																				"name":"Take 001",
+																				"clipPath":"Assets/Domo/LittleHeroes/FBX/Back Prop 02-Take 001.lani"
+																			}
+																		]
+																	}
+																],
+																"cullingMode":0,
+																"playOnWake":true
+															}
+														],
+														"child":[
+															{
+																"type":"SkinnedMeshSprite3D",
+																"instanceID":4163,
+																"props":{
+																	"name":"Back Prop 02",
+																	"active":true,
+																	"isStatic":false,
+																	"layer":0,
+																	"position":[
+																		9.482955E-09,
+																		0,
+																		0
+																	],
+																	"rotation":[
+																		0,
+																		0,
+																		0,
+																		-1
+																	],
+																	"scale":[
+																		0.19674,
+																		0.19674,
+																		0.19674
+																	],
+																	"rootBone":4164,
+																	"boundBox":{
+																		"min":[
+																			-0.707654,
+																			-0.4808941,
+																			-0.7643226
+																		],
+																		"max":[
+																			0.6340065,
+																			0.06197423,
+																			0.7892751
+																		]
+																	},
+																	"boundSphere":{
+																		"center":[
+																			-0.03682378,
+																			-0.2094599,
+																			0.01247624
+																		],
+																		"radius":1.061653
+																	},
+																	"bones":[
+																		4165,
+																		4166,
+																		4164,
+																		4167,
+																		4168,
+																		4169,
+																		4170,
+																		4171,
+																		4172,
+																		4173,
+																		4174,
+																		4175,
+																		4176,
+																		4177,
+																		4178,
+																		4179,
+																		4180
+																	],
+																	"enableRender":true,
+																	"receiveShadows":true,
+																	"castShadow":true,
+																	"materials":[
+																		{
+																			"path":"Assets/Domo/LittleHeroes/Materials/Back prop 02 Red.lmat"
+																		}
+																	],
+																	"meshPath":"Assets/Domo/LittleHeroes/FBX/Back Prop 02-Back Prop 02.lm"
+																},
+																"components":[],
+																"child":[]
+															},
+															{
+																"type":"Sprite3D",
+																"instanceID":4181,
+																"props":{
+																	"name":"Rig",
+																	"active":true,
+																	"isStatic":false,
+																	"layer":0,
+																	"position":[
+																		0,
+																		0,
+																		0
+																	],
+																	"rotation":[
+																		-0.5000001,
+																		-0.5000001,
+																		-0.5,
+																		-0.5
+																	],
+																	"scale":[
+																		1,
+																		1,
+																		1
+																	]
+																},
+																"components":[],
+																"child":[]
+															},
+															{
+																"type":"Sprite3D",
+																"instanceID":4164,
+																"props":{
+																	"name":"RigMain",
+																	"active":true,
+																	"isStatic":false,
+																	"layer":0,
+																	"position":[
+																		-4.316199E-14,
+																		-0.02263622,
+																		-1.339826E-07
+																	],
+																	"rotation":[
+																		-0.5,
+																		-0.5,
+																		-0.5,
+																		-0.5
+																	],
+																	"scale":[
+																		1,
+																		1,
+																		1
+																	]
+																},
+																"components":[],
+																"child":[
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4173,
+																		"props":{
+																			"name":"RigL1Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				0.04519273,
+																				-0.2106356,
+																				0.05055879
+																			],
+																			"rotation":[
+																				-0.4433922,
+																				0.4963141,
+																				-0.04254985,
+																				-0.7451612
+																			],
+																			"scale":[
+																				1,
+																				0.9999994,
+																				0.9999999
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4175,
+																				"props":{
+																					"name":"RigL1Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.3875579,
+																						0,
+																						0
+																					],
+																					"rotation":[
+																						0.346839,
+																						-0.4363309,
+																						-0.299068,
+																						-0.774517
+																					],
+																					"scale":[
+																						1,
+																						0.9999989,
+																						1.000002
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	},
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4176,
+																		"props":{
+																			"name":"RigL2Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				-0.02434574,
+																				-0.2154346,
+																				0.07398146
+																			],
+																			"rotation":[
+																				-0.3718915,
+																				0.6352032,
+																				-0.1468938,
+																				-0.6607842
+																			],
+																			"scale":[
+																				1,
+																				1.000003,
+																				0.9999965
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4178,
+																				"props":{
+																					"name":"RigL2Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.3853694,
+																						0,
+																						0
+																					],
+																					"rotation":[
+																						0.4134066,
+																						0.1934626,
+																						-0.2850915,
+																						-0.8428463
+																					],
+																					"scale":[
+																						0.9999991,
+																						0.9999943,
+																						1.000007
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	},
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4179,
+																		"props":{
+																			"name":"RigL3Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				-0.1230843,
+																				-0.1997071,
+																				0.06980085
+																			],
+																			"rotation":[
+																				-0.3883693,
+																				0.7572327,
+																				-0.134034,
+																				-0.5077429
+																			],
+																			"scale":[
+																				1,
+																				1,
+																				0.9999996
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4177,
+																				"props":{
+																					"name":"RigL3Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.3084025,
+																						-2.861023E-08,
+																						1.907349E-08
+																					],
+																					"rotation":[
+																						0.4433042,
+																						0.3173701,
+																						-0.484194,
+																						-0.6843346
+																					],
+																					"scale":[
+																						1,
+																						1.000002,
+																						1
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	},
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4174,
+																		"props":{
+																			"name":"RigL4Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				-0.2144714,
+																				-0.2020214,
+																				0.03798841
+																			],
+																			"rotation":[
+																				-0.3186912,
+																				0.8602247,
+																				-0.1809636,
+																				-0.3545443
+																			],
+																			"scale":[
+																				0.9999982,
+																				1,
+																				1.000002
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4180,
+																				"props":{
+																					"name":"RigL4Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.2609113,
+																						9.536743E-09,
+																						1.907349E-08
+																					],
+																					"rotation":[
+																						0.245041,
+																						0.1178535,
+																						-0.4456471,
+																						-0.852915
+																					],
+																					"scale":[
+																						0.9999993,
+																						0.9999952,
+																						1.000005
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	},
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4166,
+																		"props":{
+																			"name":"RigR1Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				0.04519274,
+																				-0.2106358,
+																				-0.05055885
+																			],
+																			"rotation":[
+																				0.4580464,
+																				-0.5537903,
+																				-0.001130736,
+																				-0.6953478
+																			],
+																			"scale":[
+																				0.9999993,
+																				0.9999996,
+																				0.9999997
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4165,
+																				"props":{
+																					"name":"RigR1Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.3875578,
+																						0,
+																						0
+																					],
+																					"rotation":[
+																						-0.4232946,
+																						0.4563571,
+																						-0.2258986,
+																						-0.7493529
+																					],
+																					"scale":[
+																						1,
+																						1.000003,
+																						0.9999999
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	},
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4167,
+																		"props":{
+																			"name":"RigR2Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				-0.02434575,
+																				-0.2154345,
+																				-0.07398147
+																			],
+																			"rotation":[
+																				0.3448344,
+																				-0.695716,
+																				-0.1595448,
+																				-0.6096014
+																			],
+																			"scale":[
+																				0.9999998,
+																				1.000003,
+																				0.9999965
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4169,
+																				"props":{
+																					"name":"RigR2Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.3853694,
+																						1.907349E-08,
+																						1.907349E-08
+																					],
+																					"rotation":[
+																						-0.4730438,
+																						-0.06240496,
+																						-0.4536171,
+																						-0.7527063
+																					],
+																					"scale":[
+																						0.9999988,
+																						1.000016,
+																						0.9999861
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	},
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4170,
+																		"props":{
+																			"name":"RigR3Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				-0.1230844,
+																				-0.1997071,
+																				-0.06980088
+																			],
+																			"rotation":[
+																				0.3148628,
+																				-0.7752924,
+																				-0.1896722,
+																				-0.5136222
+																			],
+																			"scale":[
+																				1,
+																				0.9999999,
+																				0.9999998
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4168,
+																				"props":{
+																					"name":"RigR3Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.3084025,
+																						-2.861023E-08,
+																						0
+																					],
+																					"rotation":[
+																						-0.5046223,
+																						-0.278248,
+																						-0.198112,
+																						-0.7928973
+																					],
+																					"scale":[
+																						1,
+																						0.9999993,
+																						0.9999993
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	},
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4172,
+																		"props":{
+																			"name":"RigR4Arm1",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				-0.2144714,
+																				-0.2020214,
+																				-0.03798841
+																			],
+																			"rotation":[
+																				-0.2515894,
+																				0.8333776,
+																				0.1692134,
+																				0.4621162
+																			],
+																			"scale":[
+																				1.000002,
+																				0.9999999,
+																				0.9999983
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"Sprite3D",
+																				"instanceID":4171,
+																				"props":{
+																					"name":"RigR4Arm2",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0.2609114,
+																						-9.536743E-09,
+																						0
+																					],
+																					"rotation":[
+																						-0.330032,
+																						-0.1977103,
+																						-0.4769464,
+																						-0.7902605
+																					],
+																					"scale":[
+																						1,
+																						1.000005,
+																						0.9999941
+																					]
+																				},
+																				"components":[],
+																				"child":[]
+																			}
+																		]
+																	}
+																]
+															}
+														]
+													}
+												]
+											},
+											{
+												"type":"Sprite3D",
+												"instanceID":4150,
+												"props":{
+													"name":"RigLArm1",
+													"active":true,
+													"isStatic":false,
+													"layer":0,
+													"position":[
+														-0.00452424,
+														-8.378265E-08,
+														0.191122
+													],
+													"rotation":[
+														-0.01342229,
+														-0.9146751,
+														0.2370404,
+														0.3271104
+													],
+													"scale":[
+														1,
+														1,
+														1
+													]
+												},
+												"components":[],
+												"child":[
+													{
+														"type":"Sprite3D",
+														"instanceID":4152,
+														"props":{
+															"name":"RigLArm2",
+															"active":true,
+															"isStatic":false,
+															"layer":0,
+															"position":[
+																0.1681627,
+																7.703784E-08,
+																4.885077E-08
+															],
+															"rotation":[
+																0.06599335,
+																0.0320938,
+																-0.1641656,
+																-0.9836994
+															],
+															"scale":[
+																0.9999999,
+																1,
+																1
+															]
+														},
+														"components":[],
+														"child":[
+															{
+																"type":"Sprite3D",
+																"instanceID":4153,
+																"props":{
+																	"name":"RigLArmPalm",
+																	"active":true,
+																	"isStatic":false,
+																	"layer":0,
+																	"position":[
+																		0.1630839,
+																		-2.425648E-06,
+																		-1.688727E-08
+																	],
+																	"rotation":[
+																		0.8042058,
+																		0.05291624,
+																		-0.04681061,
+																		-0.5901371
+																	],
+																	"scale":[
+																		1,
+																		0.9999999,
+																		1
+																	]
+																},
+																"components":[],
+																"child":[
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4182,
+																		"props":{
+																			"name":"Dummy Prop Left",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				0.07158974,
+																				-0.06204193,
+																				-0.0006420043
+																			],
+																			"rotation":[
+																				-0.00122697,
+																				-0.002490373,
+																				0.005654285,
+																				-0.9999802
+																			],
+																			"scale":[
+																				0.9999999,
+																				1,
+																				1
+																			]
+																		},
+																		"components":[],
+																		"child":[]
+																	}
+																]
+															}
+														]
+													}
+												]
+											},
+											{
+												"type":"Sprite3D",
+												"instanceID":4145,
+												"props":{
+													"name":"RigNeck",
+													"active":true,
+													"isStatic":false,
+													"layer":0,
+													"position":[
+														0,
+														0,
+														0
+													],
+													"rotation":[
+														-7.10543E-15,
+														2.557175E-14,
+														7.105427E-15,
+														-1
+													],
+													"scale":[
+														1,
+														1,
+														1
+													]
+												},
+												"components":[],
+												"child":[
+													{
+														"type":"Sprite3D",
+														"instanceID":4139,
+														"props":{
+															"name":"RigHead",
+															"active":true,
+															"isStatic":false,
+															"layer":0,
+															"position":[
+																0.4075132,
+																-1.818989E-14,
+																1.002497E-14
+															],
+															"rotation":[
+																-0.1752252,
+																0.03301242,
+																0.1364294,
+																-0.9744709
+															],
+															"scale":[
+																1,
+																1,
+																1
+															]
+														},
+														"components":[],
+														"child":[
+															{
+																"type":"Sprite3D",
+																"instanceID":4183,
+																"props":{
+																	"name":"Dummy Prop Head",
+																	"active":true,
+																	"isStatic":false,
+																	"layer":0,
+																	"position":[
+																		-0.03671379,
+																		3.015007E-07,
+																		-5.731877E-11
+																	],
+																	"rotation":[
+																		0.4999999,
+																		0.5000001,
+																		0.4999999,
+																		-0.5000001
+																	],
+																	"scale":[
+																		1,
+																		1,
+																		1
+																	]
+																},
+																"components":[],
+																"child":[
+																	{
+																		"type":"MeshSprite3D",
+																		"instanceID":4184,
+																		"props":{
+																			"name":"Hair Female 12 Red",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				0,
+																				0,
+																				0
+																			],
+																			"rotation":[
+																				0.7071068,
+																				2.468906E-08,
+																				3.615625E-09,
+																				-0.7071068
+																			],
+																			"scale":[
+																				1,
+																				1,
+																				1
+																			],
+																			"meshPath":"Assets/Domo/LittleHeroes/FBX/Hair Female 12-Hair Female 12.lm",
+																			"enableRender":true,
+																			"receiveShadows":true,
+																			"castShadow":true,
+																			"materials":[
+																				{
+																					"path":"Assets/Domo/LittleHeroes/Materials/Hair Red.lmat"
+																				}
+																			]
+																		},
+																		"components":[],
+																		"child":[]
+																	}
+																]
+															}
+														]
+													}
+												]
+											},
+											{
+												"type":"Sprite3D",
+												"instanceID":4142,
+												"props":{
+													"name":"RigRArm1",
+													"active":true,
+													"isStatic":false,
+													"layer":0,
+													"position":[
+														-0.004524074,
+														6.227492E-08,
+														-0.191122
+													],
+													"rotation":[
+														0.1935295,
+														-0.9533106,
+														0.02716805,
+														-0.2302329
+													],
+													"scale":[
+														1,
+														1,
+														1
+													]
+												},
+												"components":[],
+												"child":[
+													{
+														"type":"Sprite3D",
+														"instanceID":4149,
+														"props":{
+															"name":"RigRArm2",
+															"active":true,
+															"isStatic":false,
+															"layer":0,
+															"position":[
+																0.1663895,
+																8.645293E-08,
+																1.332664E-07
+															],
+															"rotation":[
+																-0.1064875,
+																0.02572793,
+																-0.2911414,
+																-0.9503868
+															],
+															"scale":[
+																0.9999999,
+																1,
+																1
+															]
+														},
+														"components":[],
+														"child":[
+															{
+																"type":"Sprite3D",
+																"instanceID":4148,
+																"props":{
+																	"name":"RigRArmPalm",
+																	"active":true,
+																	"isStatic":false,
+																	"layer":0,
+																	"position":[
+																		0.1613581,
+																		2.021079E-06,
+																		-1.848989E-07
+																	],
+																	"rotation":[
+																		-0.7137362,
+																		-0.03541675,
+																		-0.0750444,
+																		-0.6954817
+																	],
+																	"scale":[
+																		1,
+																		0.9999999,
+																		1
+																	]
+																},
+																"components":[],
+																"child":[
+																	{
+																		"type":"Sprite3D",
+																		"instanceID":4185,
+																		"props":{
+																			"name":"Dummy Prop Right",
+																			"active":true,
+																			"isStatic":false,
+																			"layer":0,
+																			"position":[
+																				0.06358127,
+																				-0.06195144,
+																				0.0006025392
+																			],
+																			"rotation":[
+																				0.005654461,
+																				0.9999802,
+																				-0.001226699,
+																				0.002492946
+																			],
+																			"scale":[
+																				1,
+																				1,
+																				1
+																			]
+																		},
+																		"components":[],
+																		"child":[
+																			{
+																				"type":"MeshSprite3D",
+																				"instanceID":4186,
+																				"props":{
+																					"name":"Wand 03 Red",
+																					"active":true,
+																					"isStatic":false,
+																					"layer":0,
+																					"position":[
+																						0,
+																						0,
+																						0
+																					],
+																					"rotation":[
+																						0.7071068,
+																						0,
+																						0,
+																						-0.7071068
+																					],
+																					"scale":[
+																						1,
+																						1,
+																						1
+																					],
+																					"meshPath":"Assets/Domo/LittleHeroes/FBX/Wand 03-Wand 03.lm",
+																					"enableRender":true,
+																					"receiveShadows":true,
+																					"castShadow":true,
+																					"materials":[
+																						{
+																							"path":"Assets/Domo/LittleHeroes/Materials/Wand 03 Red.lmat"
+																						}
+																					]
+																				},
+																				"components":[],
+																				"child":[
+																					{
+																						"type":"ShuriKenParticle3D",
+																						"instanceID":4187,
+																						"props":{
+																							"name":"Wand Glow",
+																							"active":true,
+																							"isStatic":false,
+																							"layer":0,
+																							"position":[
+																								0.008,
+																								-0.239,
+																								0
+																							],
+																							"rotation":[
+																								2.682208E-07,
+																								-3.371747E-07,
+																								-2.444516E-06,
+																								-1
+																							],
+																							"scale":[
+																								1,
+																								1,
+																								1
+																							],
+																							"main":{
+																								"randomSeed":1.46085E+09,
+																								"bases":{
+																									"isPerformanceMode":true,
+																									"duration":1,
+																									"prewarm":false,
+																									"startLifetimeConstant":1,
+																									"startLifetimeConstantMax":1,
+																									"startSpeedConstant":0,
+																									"startSpeedConstantMax":0,
+																									"startSizeConstant":0.59,
+																									"startSizeConstantMax":0.59,
+																									"scaleMode":2,
+																									"maxParticles":10
+																								},
+																								"vector3s":{
+																									"startSizeConstantSeparate":[
+																										0.59,
+																										1,
+																										1
+																									],
+																									"startSizeConstantMaxSeparate":[
+																										0.59,
+																										1,
+																										1
+																									]
+																								},
+																								"vector4s":{
+																									"startColorConstant":[
+																										1,
+																										0.682353,
+																										0,
+																										1
+																									],
+																									"startColorConstantMin":[
+																										-2.292637E-05,
+																										1.401298E-45,
+																										151528.8,
+																										1.401298E-45
+																									],
+																									"startColorConstantMax":[
+																										1,
+																										0.682353,
+																										0,
+																										1
+																									]
+																								}
+																							},
+																							"emission":{
+																								"bases":{
+																									"enable":true,
+																									"emissionRate":5
+																								}
+																							},
+																							"shape":{
+																								"shapeType":0,
+																								"bases":{
+																									"enable":true,
+																									"radius":0.01
+																								}
+																							},
+																							"sizeOverLifetime":{
+																								"bases":{
+																									"enable":true
+																								},
+																								"size":{
+																									"type":0,
+																									"gradient":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":0.2416107,
+																												"value":0
+																											},
+																											{
+																												"key":0.4899329,
+																												"value":1
+																											},
+																											{
+																												"key":0.7745212,
+																												"value":0
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									},
+																									"gradientX":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":0.2416107,
+																												"value":0
+																											},
+																											{
+																												"key":0.4899329,
+																												"value":1
+																											},
+																											{
+																												"key":0.7745212,
+																												"value":0
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									},
+																									"gradientY":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									},
+																									"gradientZ":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									},
+																									"gradientMax":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":0.2416107,
+																												"value":0
+																											},
+																											{
+																												"key":0.4899329,
+																												"value":1
+																											},
+																											{
+																												"key":0.7745212,
+																												"value":0
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									},
+																									"gradientXMax":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":0.2416107,
+																												"value":0
+																											},
+																											{
+																												"key":0.4899329,
+																												"value":1
+																											},
+																											{
+																												"key":0.7745212,
+																												"value":0
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									},
+																									"gradientYMax":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									},
+																									"gradientZMax":{
+																										"sizes":[
+																											{
+																												"key":0,
+																												"value":1
+																											},
+																											{
+																												"key":1,
+																												"value":1
+																											}
+																										]
+																									}
+																								}
+																							},
+																							"renderer":{
+																								"resources":{
+																									"material":"Assets/Domo/LittleHeroes/Materials/FX - Wand Glow.lmat"
+																								}
+																							}
+																						},
+																						"components":[],
+																						"child":[]
+																					}
+																				]
+																			}
+																		]
+																	}
+																]
+															}
+														]
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4188,
+				"props":{
+					"name":"RigPelvisGizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						1.177864E-09,
+						0.4380011,
+						-0.02694771
+					],
+					"rotation":[
+						-0.437962,
+						-0.3452727,
+						-0.6416426,
+						-0.5265651
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4189,
+				"props":{
+					"name":"RigRArm1Gizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.218103,
+						0.7754012,
+						-0.007211788
+					],
+					"rotation":[
+						-0.6365967,
+						0.3717319,
+						0.6582633,
+						-0.152478
+					],
+					"scale":[
+						1.000001,
+						1.000003,
+						1.000001
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4190,
+				"props":{
+					"name":"RigRArm2Gizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.2419891,
+						0.6628694,
+						-0.1278645
+					],
+					"rotation":[
+						-0.4642471,
+						0.5910872,
+						0.6028341,
+						-0.2677344
+					],
+					"scale":[
+						1.000002,
+						1.000002,
+						1.000002
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4191,
+				"props":{
+					"name":"RigRArmPalmGizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.310741,
+						0.5223101,
+						-0.1670308
+					],
+					"rotation":[
+						-0.4680069,
+						0.8673372,
+						-0.1145715,
+						0.1247762
+					],
+					"scale":[
+						1.000003,
+						0.9999997,
+						0.9999984
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4192,
+				"props":{
+					"name":"RigRibcageGizmo",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.03970964,
+						0.7895072,
+						0.05968674
+					],
+					"rotation":[
+						0.45151,
+						0.3530097,
+						0.6729914,
+						0.4675528
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":4193,
+				"props":{
+					"name":"RigRLegPlatform",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						-0.1708386,
+						4.539477E-09,
+						-0.1005874
+					],
+					"rotation":[
+						-0.4081033,
+						-0.4081033,
+						-0.5774528,
+						-0.5774528
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
+			}
+		]
+	}
+}

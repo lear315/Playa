@@ -1,17 +1,20 @@
 {
   "name": "Playa",
-  "startupScene": "res://9b931ecf-fde9-44dd-acf3-15f8dc807965",
+  "startupScene": "res://667dd568-a3f4-4bb3-b4e4-56d0b0b06a9b",
   "alwaysIncluded": [
     ""
   ],
   "android": {
     "targetArchitectures": {
-      "_$type": "Record",
+      "_$type": true,
       "ARMv7": false,
       "ARM64": true,
       "x86": false,
       "x86-64": false
     },
     "exportFormat": "APK"
+  },
+  "wxgame": {
+    "appid": "wx491e7940f675b562"
   }
 }

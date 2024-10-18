@@ -42,23 +42,22 @@ export default class ResLoader {
     }
 
     /**
-     * 异步获取资源
+     * 同步获取资源
      * @param url 资源URL
      * @param noClone 是否不克隆资源
      * @returns Promise<any>
      */
-    public static async getResAsync(url: string, noClone: boolean = false): Promise<any> {
-        // 异步加载
-        await ResLoader.loadResAsync(url);
+    public static async getResSync(url: string, clone: boolean = true): Promise<any> {
+        await ResLoader.loadResSync(url);
         let getRes = ResLoader.getRes(url)
         if (getRes == null) {
             error("资源尚未加载", url);
             return null;
         }
-        if (noClone == false) {
+        if (clone == false) {
             return getRes;
         } else {
-            return getRes.clone();
+            return getRes.create();
         }
     }
 
@@ -68,7 +67,7 @@ export default class ResLoader {
      * @param onProgress 加载进度回调
      * @returns Promise<any>
      */
-    public static async loadResAsync(urls: string | string[], onProgress: Laya.Handler = null): Promise<any> {
+    public static async loadResSync(urls: string | string[], onProgress: Laya.Handler = null): Promise<any> {
         return new Promise(function (resolve, reject) {
             let flag = true;
             if (urls instanceof Array) {

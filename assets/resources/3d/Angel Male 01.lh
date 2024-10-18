@@ -1,0 +1,4160 @@
+{
+  "_$ver": 1,
+  "_$id": "c4b87faz",
+  "_$type": "Sprite3D",
+  "name": "Angel Male 01",
+  "_$comp": [
+    {
+      "_$type": "Animator",
+      "cullingMode": 0,
+      "controllerLayers": [
+        {
+          "_$type": "AnimatorControllerLayer",
+          "name": "Base Layer",
+          "states": [
+            {
+              "_$type": "AnimatorState",
+              "name": "Idle",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "8c94fdfb-b1cb-405b-90fe-34e8b9c56b6e",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Walk",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a1756cbb-dcc7-4c5b-860c-239b16d1c200",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Run",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "fb564dbc-1fdd-4cf4-8df0-f4119948aa23",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Run With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "928c7bb5-8da0-4711-b6cc-44499e6507e0",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Relax",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "e6f37542-6bfe-4661-b8b0-3e1824a835fe",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Walk With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "d24215a2-814e-4801-a9ad-d73e1f472e08",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Jump",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "eba84950-c54b-4025-8e52-8f00b1ae411c",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Melee Right Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "f03aa44e-55e4-4ba7-94ba-86f9bf64bb09",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Melee Right Attack 02",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "53ae36a4-7b71-4395-b150-45320518762a",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Melee Left Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "ba82ce2f-357c-401a-b972-c80e66d42630",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Projectile Right Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "28f1a964-b8ed-4d6c-8ca0-af1611727eaf",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Cast Spell",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "7a792748-ff0f-4d17-b3d8-677ab06b69be",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spin Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "1d267c2c-6397-4d2e-908d-d349157bd633",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Take Damage",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "1b88f5ae-ceb7-4e0c-8db2-e3cfbf87a6a8",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Die",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "02b3829c-e6cc-47d2-b092-95b851f38fe2",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Defend",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "806a603d-37f6-4e4a-83b6-feb618b82ff7",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Shake Head",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a7b8eac1-a6b8-4c42-b8d4-64503ea0c82e",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Nod Head",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "e7d88bda-984f-4659-a325-d5127576c29b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Stunned",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c24c6f44-754a-40b9-a939-918f6563a2b7",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Wave Hand",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "b874809d-fee9-48ab-9b57-7093548bdd73",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Pick Up",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "5ec824c7-3ef0-4a66-894a-343f98fe281f",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Drink Potion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "8b587134-f8a4-4541-968d-b1163b0ebbcd",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Melee Right Attack 03",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "912dde6d-4e28-4d1d-9eb9-9a7f281f52a1",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Left Punch Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "2c84ab4b-bcbd-48e0-9121-c1c1234747a3",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Right Punch Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "fb5d78e8-4be9-40d0-b8ae-74931ee86a04",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Cast Spell 02",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "1e386137-7e67-4d25-a720-56caa71ba723",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Idle",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "f934bbb4-620e-41f7-a9a4-3fbd70e547c4",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Strafe Right With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "180dc11b-62a2-455a-8a42-6e3e4c17e401",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Strafe Left With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "ee6ecefc-4493-4dee-8ce4-e23e973ed142",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Crossbow Shoot Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "86ab388f-d47b-4614-bc07-b574639c17da",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Forward",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "274fe649-2dfb-46fc-bb7d-7a2a9013eb24",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Take Damage",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "0cae0fed-e94c-4168-a7fe-acdd9cf82602",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Melee Right Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "2b414b39-76ef-4799-8d57-f0163fec2c46",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Melee Right Attack 02",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "6875d6c8-0160-48cc-a290-17749bd87500",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Melee Right Attack 03",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "9e241fc8-f9ff-4cf1-9554-d2093bbf0dab",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Melee Left Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "fc838a5f-f220-4cf4-8127-f4b24ec1822d",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Right Punch Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "9fba34af-76f0-4ea7-9684-7042ec44c1ba",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Left Punch Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "bfc867aa-f44b-4d9b-b9e9-e4dda463b4ac",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Crossbow Shoot Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "d4600f79-5fca-4423-80ed-9c9aadd2ba5a",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Projectile Right Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "67bdcdb1-6255-4751-8601-67ca64e51873",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Cast Spell 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "080a356c-4fc5-481c-83ba-dc19cbb9f701",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Cast Spell 02",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "5d9687e1-6173-4e5f-b5d1-ed2e06131a72",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Defend",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "b12c1003-92e4-4604-a18f-57a3e7edc731",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Die",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "dd1854dc-41e5-4e6c-97ed-432958e95836",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Chop Tree",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "5c3d1e46-e5d1-46f1-9091-c8fa0db86760",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Digging",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "7662f8ff-02c0-477f-9541-6b98ff038046",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Talking",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "aaa83591-47da-4d6f-929a-aaf22c66f33a",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Sitting",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "e7c7cc39-1146-4f49-876d-ae75fbda39c8",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Idle to Lay Ground",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "025cf5c4-b028-4646-ad4b-1cba46892687",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Lay Ground to Idle",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "db4339fa-c0b1-4de7-89e4-41849e5cc0f1",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "On the Ground Loop",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "4662f4f9-2137-445c-b389-09f7928eaad8",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Crying",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "47c1ea97-46fc-4c33-8646-e85ac6b7e5f7",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Clapping",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "cfb6dcb8-ec73-49ed-952e-cd10c55d3ae9",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Jump Right Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "858e6de5-c993-47b5-9e1e-c5fa1368ab4d",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Dash With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "fd5b0a43-be58-4be3-936c-5c754824c2b4",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Dash",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "3db64088-dc5b-4d1f-ae01-9ed336829247",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Victory",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a002b270-d50c-49dc-8398-94632fe3816a",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Idle",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "3f1039ce-20fb-4e20-b106-0e146d41e88d",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Melee Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "acf4a2f6-37d3-4987-97a3-2935f6eca1e5",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Melee Attack 02",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c0aa6aac-a047-4c4f-8468-dfe86c38c12d",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Walk",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "79e98c99-9263-425e-99bf-8a6e5c6ff22b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Run",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "8f7f50b3-c17a-422e-bc4c-c6b8dc2374eb",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Cast Spell 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "e48f8916-7154-4494-8c17-c15d5e3ec0a3",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Strafe Left With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "ed6967c8-ee50-49c0-9ba5-bf41fe6bfb6c",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Strafe Right With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c0e4e64c-3662-4032-8d4d-4522c11a1d31",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Walk With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a7f7fad3-f5fe-4f6b-a7f8-a4b5feceb052",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Run With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "b2f402df-5f02-47db-9827-ae4fce4c375c",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Relax",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "d9e32f76-4a08-4581-b214-114e62e3eec3",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Dash With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "7886fbc5-73ea-47f7-8de2-fd56db678e91",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Dash",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c668e976-ab36-4d96-b09b-cf47072d57c9",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Take Damage",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "0be04bac-9528-4844-a6cc-8554559d6fe1",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Defend",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "0123fe89-d1eb-4a4f-97b5-5f864da2a4e3",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Die",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "5125e95f-cc27-4ead-98ae-b5487be9efbe",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spear Jump",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "bba8d9fe-5108-4e8a-8d44-0c5281609c74",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Strafe Right",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a23bb6f3-1bb7-42b5-9868-92b391c53f65",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Strafe Left",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "1d24e15a-a339-4a4a-a4ca-9bd3b34ec673",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Crossbow Reload",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "e8e439c8-c0c7-4f27-ab5d-f43aacaa3c0c",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Crossbow Aim",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "57362014-fab6-47ec-b60b-d3d5b2884af8",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Crossbow Right Aim",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "2378f76b-82fd-4b0e-9fa4-09bf4c8d806d",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Crossbow Right Shoot Attack",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "d5c2f6b3-2d47-4d7a-96d6-c33a0e3b2d4e",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Crossbow Right Reload",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "ac98b600-e57d-4a9e-bdc6-9d9989432bba",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Jump Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a75e4fdb-d515-49e9-ac3a-781ea998b0f5",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Idle",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "9224a6d4-31fc-40fd-a5ff-e45e962165fb",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Walk Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "165f7dc4-b9c6-48a4-b987-867ac19d3211",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Walk With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "6c237c77-2a42-4b84-9f12-c934a75e453e",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Run With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "97f4b847-08aa-4664-9839-1192561fc3ca",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Run Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "82c1eeb4-401d-4cdb-bdc3-02eac1c5eada",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Dash Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "07a72f97-a641-4f63-b0e1-26e578f910cf",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Dash With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "2ae9ce87-7c40-4a1b-beac-4c2a041dc148",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Melee Attack 02",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "8f2f140f-5718-4b37-a9f1-387b43985a04",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Melee Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a71c79a7-42c0-4f39-ad66-e0c21cf4e66b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Cast Spell",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "8e2fd200-bc9a-491e-bd2f-079bffe45707",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Strafe Left Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "98889337-4d47-46d0-8265-b554f5ef80bc",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Strafe Right Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "6d2f5e3a-ded0-4ced-927c-610cd80de435",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Strafe Right With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "dcbfa07e-e19d-40ca-9792-7efe5641c16b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Strafe Left With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "715ae93a-3825-47ee-9baa-12eee0242bfc",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Jump With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "3f6cff9b-2b39-48b0-9efe-f806c2f16110",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Jump Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c0dae830-5389-40b1-871f-64448e7def5b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Defend",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "8cc28e19-4e7b-43ae-a1a6-868f53064bea",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Take Damage",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "3e2429cf-1335-4734-a505-980d755228b7",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Relax",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "e519e59b-0bff-4caf-822b-6e4fc5d8805e",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "TH Sword Die",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "ca7cb7e5-ac05-49eb-b689-8a82a74e2777",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Roll Forward Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "f5794043-d8f1-41b1-949f-0dc76ab21c35",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Roll Forward With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c6565872-5ea0-4f6c-a503-c128f8ddea28",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Right Throw",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "9fbe285e-f893-4bfc-b36c-90ffc14d807b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Push With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a06327dd-774e-4931-aa3b-3e0f6cbe39e5",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Push Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "14f2fbad-f80b-480a-890b-d37ae0c7edfe",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Pull With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "46614f22-da0d-463f-980a-e7067a92c69b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Pull Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "1eb059c1-ee7d-4b7a-aee3-c077e3c45433",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Look Up Wave Hand",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c2404219-bef6-4b74-ac3c-acd55a7aabf1",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Longbow Shoot Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "c286d33a-49be-4d57-b155-bdeb5da9f4d1",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Longbow Aim 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "d391c846-ec82-47c5-b23f-5e327ab7871c",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Longbow Aim 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "002f5828-0936-4a8f-8008-d2c4cdd2646f",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Fly Longbow Shoot Attack 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "50d1e253-9d5c-4e8a-b1aa-5f8a005cf5bc",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Walk Backward",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "a2a0ad5c-35e1-481a-8325-477a8fa5bafe",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Walk Backward With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "0d6502de-8042-4f8b-9e53-3246b93d084d",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Roll Backward With Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "4118f92d-b7bf-462d-b481-476de53f1561",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Roll Backward Without Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "d325a9b6-9108-4beb-bf36-e40e5d1a17b7",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Strumming",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "97851f13-6d19-445e-86b9-3323542db816",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Tread water",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "062ab46c-d6fe-4e32-89bb-5f39b6e25ad8",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Swim 02",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "5a27cb18-cf4d-4646-9618-1698a2466339",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Swim 01",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "180b74a5-c1db-4033-bcec-74481eafaa09",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Walk Backward W Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "28573b9c-e0ea-43a7-938b-494b7ab96cf6",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Walk Backward WO Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "cd0beedb-84d3-49db-8c5d-466f6cfe01c7",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Walk Forward W Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "4590bf5d-c859-446e-b2e5-813a064f1a54",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Walk Forward WO Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "56bd0f84-4705-4573-8409-e93d6532d93b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Idle",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "20adc17e-31e2-4ecc-bcbd-4ffc7f5ff475",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Look Around",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "0be5f896-246c-4fa2-b0dd-e25d550173e7",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Strafe Left W Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "6fca0987-95b2-4e63-a747-303f05fc8e0c",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Strafe Left WO Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "22f6a316-f32b-49ef-a68a-af4df7334b5f",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Strafe Right W Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "5484118e-874c-48e9-bc8d-9b05662fdaed",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Torch Strafe Right WO Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "902d54b6-a69c-4443-9e15-6656303ff4cc",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Left Throw",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "f0301058-02d2-4209-97c4-a5c578004b6b",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Spawn Ground",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "8743cbd3-dde3-472b-8b10-e7ef60fe7818",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Run Backward W Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "61713f94-a139-4b7e-b976-4267e4df9f56",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Run Backward WO Root Motion",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "207f7c06-b0a8-43dc-8f2d-1f63e152e68e",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Hammering on anvil",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "510052a1-fc47-49ad-8c83-b530896b269c",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Push Button",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "83c802d0-91ab-4de9-9904-3fddc2721cf1",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            },
+            {
+              "_$type": "AnimatorState",
+              "name": "Sawing Wood",
+              "clipStart": 0,
+              "clip": {
+                "_$uuid": "b9415ac8-2256-4fc5-b1b8-3f15ba53f2c6",
+                "_$type": "AnimationClip"
+              },
+              "soloTransitions": []
+            }
+          ],
+          "defaultStateName": "Idle"
+        }
+      ]
+    }
+  ],
+  "_$child": [
+    {
+      "_$id": "rjlu8i64",
+      "_$type": "Sprite3D",
+      "name": "Base",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "y": 2.220195058834785,
+          "z": -4.929823346954765e-16
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.7071067811865476,
+          "w": -0.7071067811865476
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "MeshFilter",
+          "sharedMesh": {
+            "_$uuid": "f6b9b598-7f55-4b93-b5d8-082761ddadb9",
+            "_$type": "Mesh"
+          }
+        },
+        {
+          "_$type": "SkinnedMeshRenderer",
+          "receiveShadow": true,
+          "castShadow": true,
+          "lightmapScaleOffset": {
+            "_$type": "Vector4"
+          },
+          "sharedMaterials": [
+            {
+              "_$uuid": "bf2ea537-adda-493e-ba16-7532616ce2b8",
+              "_$type": "Material"
+            }
+          ],
+          "_bones": [
+            {
+              "_$ref": "8wd8l2xs"
+            },
+            {
+              "_$ref": "1kg38a08"
+            },
+            {
+              "_$ref": "4q7xz2ij"
+            },
+            {
+              "_$ref": "nivxxmqo"
+            },
+            {
+              "_$ref": "us1odu69"
+            },
+            {
+              "_$ref": "7vbw8kyj"
+            },
+            {
+              "_$ref": "uei5gimm"
+            },
+            {
+              "_$ref": "oeftvr5o"
+            },
+            {
+              "_$ref": "lldlygjr"
+            },
+            {
+              "_$ref": "3w3jzstj"
+            },
+            {
+              "_$ref": "hikfq44f"
+            },
+            {
+              "_$ref": "7etb6369"
+            },
+            {
+              "_$ref": "hl9y4ftc"
+            },
+            {
+              "_$ref": "wb0kxvz9"
+            },
+            {
+              "_$ref": "dlqrzrh8"
+            },
+            {
+              "_$ref": "m2huh2r1"
+            },
+            {
+              "_$ref": "4x0r4a91"
+            },
+            {
+              "_$ref": "7l5l95zn"
+            }
+          ],
+          "rootBone": {
+            "_$ref": "1kg38a08"
+          },
+          "localBounds": {
+            "_$type": "Bounds",
+            "min": {
+              "_$type": "Vector3",
+              "x": -0.5044802,
+              "y": -0.256397,
+              "z": -0.6543105
+            },
+            "max": {
+              "_$type": "Vector3",
+              "x": 1.043265,
+              "y": 0.2741774,
+              "z": 0.6543105
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "i3nsgqdw",
+      "_$type": "Sprite3D",
+      "name": "Rig",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.5000000499999925,
+          "y": -0.5000000499999925,
+          "z": -0.4999999500000025,
+          "w": -0.4999999500000025
+        }
+      }
+    },
+    {
+      "_$id": "fnsu9wbs",
+      "_$type": "Sprite3D",
+      "name": "RigHeadGizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": -0.08509883,
+          "y": 1.189926,
+          "z": 0.1196711
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.4959577661003977,
+          "y": 0.5080244652756172,
+          "z": 0.5153154647772643,
+          "w": 0.4799864671920646
+        }
+      }
+    },
+    {
+      "_$id": "19ta2rwz",
+      "_$type": "Sprite3D",
+      "name": "RigLArm1Gizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": 0.1402598,
+          "y": 0.7953143,
+          "z": 0.1239345
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.7816556829914343,
+          "y": 0.45337299013475574,
+          "z": 0.11699599745420632,
+          "w": -0.412042791034087
+        },
+        "localScale": {
+          "_$type": "Vector3",
+          "x": 1.000001,
+          "y": 1.000004,
+          "z": 1.000002
+        }
+      }
+    },
+    {
+      "_$id": "q5ljkvke",
+      "_$type": "Sprite3D",
+      "name": "RigLArm2Gizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": 0.2336354,
+          "y": 0.6613482,
+          "z": 0.1556027
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.7249277345001869,
+          "y": 0.5105553538694981,
+          "z": 0.13922038742094014,
+          "w": -0.44094296015922674
+        },
+        "localScale": {
+          "_$type": "Vector3",
+          "x": 1.000003,
+          "y": 1,
+          "z": 1.000003
+        }
+      }
+    },
+    {
+      "_$id": "fk1w83m1",
+      "_$type": "Sprite3D",
+      "name": "RigLArmPalmGizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": 0.3045655,
+          "y": 0.5222005,
+          "z": 0.1958222
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.10317119616234934,
+          "y": 0.324105387944278,
+          "z": 0.5215681805992705,
+          "w": -0.7824819708940812
+        },
+        "localScale": {
+          "_$type": "Vector3",
+          "x": 1.000003,
+          "y": 1.000001,
+          "z": 0.9999989
+        }
+      }
+    },
+    {
+      "_$id": "qb40m7wc",
+      "_$type": "Sprite3D",
+      "name": "RigLLegPlatform",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": 0.1760709,
+          "y": -5.153721e-9,
+          "z": 0.1211672
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.4655927041847239,
+          "y": -0.4655927041847239,
+          "z": -0.5321874047832736,
+          "w": -0.5321874047832736
+        }
+      }
+    },
+    {
+      "_$id": "1kg38a08",
+      "_$type": "Sprite3D",
+      "name": "RigPelvis",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": 0.02042539,
+          "y": 0.4381026,
+          "z": -0.05194271
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.4377633292727204,
+          "y": -0.3455535231067588,
+          "z": -0.641558942900294,
+          "w": -0.5266480352163364
+        }
+      },
+      "_$child": [
+        {
+          "_$id": "oeftvr5o",
+          "_$type": "Sprite3D",
+          "name": "RigLLeg1",
+          "transform": {
+            "localPosition": {
+              "_$type": "Vector3",
+              "x": -0.01361359,
+              "y": 0.000001201792,
+              "z": 0.1244041
+            },
+            "localRotation": {
+              "_$type": "Quaternion",
+              "x": -0.2911212720529001,
+              "y": -0.9471290090773792,
+              "z": -0.03695670645222501,
+              "w": 0.1297275875463932
+            }
+          },
+          "_$child": [
+            {
+              "_$id": "dlqrzrh8",
+              "_$type": "Sprite3D",
+              "name": "RigLLeg2",
+              "transform": {
+                "localPosition": {
+                  "_$type": "Vector3",
+                  "x": 0.214803,
+                  "y": 1.102162e-7,
+                  "z": 9.560612e-9
+                },
+                "localRotation": {
+                  "_$type": "Quaternion",
+                  "x": 0.03264630885732439,
+                  "y": -0.00007581293734641994,
+                  "z": 0.3117916890867676,
+                  "w": -0.9495894667627748
+                },
+                "localScale": {
+                  "_$type": "Vector3",
+                  "x": 0.9999999,
+                  "y": 1,
+                  "z": 0.9999998
+                }
+              },
+              "_$child": [
+                {
+                  "_$id": "7l5l95zn",
+                  "_$type": "Sprite3D",
+                  "name": "RigLLegAnkle",
+                  "transform": {
+                    "localPosition": {
+                      "_$type": "Vector3",
+                      "x": 0.1627933,
+                      "y": 2.981229e-8,
+                      "z": 2.608577e-8
+                    },
+                    "localRotation": {
+                      "_$type": "Quaternion",
+                      "x": 0.05311828050600823,
+                      "y": 0.10334090098443223,
+                      "z": -0.2643597025183079,
+                      "w": -0.957399109120247
+                    },
+                    "localScale": {
+                      "_$type": "Vector3",
+                      "x": 1,
+                      "y": 0.9999998,
+                      "z": 1
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "_$id": "8wd8l2xs",
+          "_$type": "Sprite3D",
+          "name": "RigRLeg1",
+          "transform": {
+            "localPosition": {
+              "_$type": "Vector3",
+              "x": -0.01361358,
+              "y": 0.000001234337,
+              "z": -0.1244041
+            },
+            "localRotation": {
+              "_$type": "Quaternion",
+              "x": -0.18506738511496507,
+              "y": -0.9797837211956505,
+              "z": 0.003031816756149911,
+              "w": -0.07592582389325926
+            },
+            "localScale": {
+              "_$type": "Vector3",
+              "x": 0.9999999,
+              "y": 1,
+              "z": 1
+            }
+          },
+          "_$child": [
+            {
+              "_$id": "3w3jzstj",
+              "_$type": "Sprite3D",
+              "name": "RigRLeg2",
+              "transform": {
+                "localPosition": {
+                  "_$type": "Vector3",
+                  "x": 0.2148024,
+                  "y": 1.059962e-7,
+                  "z": 1.064182e-7
+                },
+                "localRotation": {
+                  "_$type": "Quaternion",
+                  "x": 0.02668984004167854,
+                  "y": -0.005296067008270276,
+                  "z": 0.31248530048797335,
+                  "w": -0.9495328014827792
+                },
+                "localScale": {
+                  "_$type": "Vector3",
+                  "x": 0.9999999,
+                  "y": 1,
+                  "z": 0.9999999
+                }
+              },
+              "_$child": [
+                {
+                  "_$id": "hikfq44f",
+                  "_$type": "Sprite3D",
+                  "name": "RigRLegAnkle",
+                  "transform": {
+                    "localPosition": {
+                      "_$type": "Vector3",
+                      "x": 0.1627818,
+                      "z": 1.863137e-8
+                    },
+                    "localRotation": {
+                      "_$type": "Quaternion",
+                      "x": 0.0006268139057115563,
+                      "y": -0.0676993406168794,
+                      "z": -0.39268750357818605,
+                      "w": -0.9171766083573542
+                    },
+                    "localScale": {
+                      "_$type": "Vector3",
+                      "x": 1,
+                      "y": 0.9999998,
+                      "z": 1
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "_$id": "uei5gimm",
+          "_$type": "Sprite3D",
+          "name": "RigSpine1",
+          "transform": {
+            "localRotation": {
+              "_$type": "Quaternion",
+              "x": -7.10543e-15,
+              "y": 2.557175e-14,
+              "z": 7.105427e-15,
+              "w": -1
+            }
+          },
+          "_$child": [
+            {
+              "_$id": "us1odu69",
+              "_$type": "Sprite3D",
+              "name": "RigSpine2",
+              "transform": {
+                "localPosition": {
+                  "_$type": "Vector3",
+                  "x": 0.1821412,
+                  "y": -9.094947e-15,
+                  "z": 4.480737e-15
+                },
+                "localRotation": {
+                  "_$type": "Quaternion",
+                  "x": -0.022695158615639862,
+                  "y": -0.02460129849936907,
+                  "z": -0.04748026710379689,
+                  "w": -0.9983112391049737
+                }
+              },
+              "_$child": [
+                {
+                  "_$id": "nivxxmqo",
+                  "_$type": "Sprite3D",
+                  "name": "RigRibcage",
+                  "transform": {
+                    "localPosition": {
+                      "_$type": "Vector3",
+                      "x": 0.1821412,
+                      "z": 4.480737e-15
+                    },
+                    "localRotation": {
+                      "_$type": "Quaternion",
+                      "x": -0.00420586884425089,
+                      "y": -0.004592225829943559,
+                      "z": -0.00884831967233455,
+                      "w": -0.999941462970792
+                    }
+                  },
+                  "_$child": [
+                    {
+                      "_$id": "vclx8vac",
+                      "_$type": "Sprite3D",
+                      "name": "Dummy Prop Back",
+                      "transform": {
+                        "localPosition": {
+                          "_$type": "Vector3",
+                          "x": -0.02920059,
+                          "y": 2.430373e-7,
+                          "z": -0.0001392666
+                        },
+                        "localRotation": {
+                          "_$type": "Quaternion",
+                          "x": 0.49999989999999,
+                          "y": 0.50000009999999,
+                          "z": 0.49999989999999,
+                          "w": -0.50000009999999
+                        }
+                      },
+                      "_$child": [
+                        {
+                          "_$id": "k2i30e2e",
+                          "_$type": "Sprite3D",
+                          "name": "Wings 11 Blue",
+                          "transform": {
+                            "localRotation": {
+                              "_$type": "Quaternion",
+                              "w": -1
+                            }
+                          },
+                          "_$comp": [
+                            {
+                              "_$type": "Animator",
+                              "cullingMode": 0,
+                              "controllerLayers": [
+                                {
+                                  "_$type": "AnimatorControllerLayer",
+                                  "name": "Base Layer",
+                                  "states": [
+                                    {
+                                      "_$type": "AnimatorState",
+                                      "name": "Take 001",
+                                      "clipStart": 0,
+                                      "clip": {
+                                        "_$uuid": "733c1a9f-0bfb-42b2-b552-94d9f1ebc988",
+                                        "_$type": "AnimationClip"
+                                      },
+                                      "soloTransitions": []
+                                    }
+                                  ],
+                                  "defaultStateName": "Take 001"
+                                }
+                              ]
+                            }
+                          ],
+                          "_$child": [
+                            {
+                              "_$id": "ixis3mbd",
+                              "_$type": "Sprite3D",
+                              "name": "Rig",
+                              "transform": {
+                                "localRotation": {
+                                  "_$type": "Quaternion",
+                                  "x": -0.49910139396538494,
+                                  "y": -0.49910139396538494,
+                                  "z": -0.5008969939436745,
+                                  "w": -0.5008969939436745
+                                }
+                              }
+                            },
+                            {
+                              "_$id": "c3mxu90t",
+                              "_$type": "Sprite3D",
+                              "name": "RigMain",
+                              "transform": {
+                                "localPosition": {
+                                  "_$type": "Vector3",
+                                  "x": 1.603126e-10,
+                                  "y": -0.04796993,
+                                  "z": -3.68246e-8
+                                },
+                                "localRotation": {
+                                  "_$type": "Quaternion",
+                                  "x": -0.502277688287437,
+                                  "y": -0.502277688287437,
+                                  "z": -0.4977118883939064,
+                                  "w": -0.4977118883939064
+                                }
+                              },
+                              "_$child": [
+                                {
+                                  "_$id": "9wd68zav",
+                                  "_$type": "Sprite3D",
+                                  "name": "RigLBtmWing1",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.07023641,
+                                      "y": -0.1670585,
+                                      "z": 0.03813132
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": -0.015258319240629755,
+                                      "y": 0.8682465567894346,
+                                      "z": 0.026082538701934107,
+                                      "w": -0.4952118753544832
+                                    },
+                                    "localScale": {
+                                      "_$type": "Vector3",
+                                      "x": 0.9999999,
+                                      "y": 0.9999998,
+                                      "z": 1
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "8i8b482o",
+                                      "_$type": "Sprite3D",
+                                      "name": "RigLBtmWing2",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.183051,
+                                          "y": -1.907349e-8,
+                                          "z": -7.152557e-9
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.01715858933946302,
+                                          "y": -0.03151767878669557,
+                                          "z": 0.017171749338956408,
+                                          "w": -0.9992083615344791
+                                        },
+                                        "localScale": {
+                                          "_$type": "Vector3",
+                                          "x": 1,
+                                          "y": 1,
+                                          "z": 0.9999999
+                                        }
+                                      },
+                                      "_$child": [
+                                        {
+                                          "_$id": "2x4ij119",
+                                          "_$type": "Sprite3D",
+                                          "name": "RigLBtmWing3",
+                                          "transform": {
+                                            "localPosition": {
+                                              "_$type": "Vector3",
+                                              "x": 0.182868,
+                                              "z": 4.768371e-9
+                                            },
+                                            "localRotation": {
+                                              "_$type": "Quaternion",
+                                              "x": 0.025880962293212385,
+                                              "y": -0.14048471244780927,
+                                              "z": 0.02172836192526646,
+                                              "w": -0.9895059876763144
+                                            },
+                                            "localScale": {
+                                              "_$type": "Vector3",
+                                              "x": 0.9999999,
+                                              "y": 0.9999999,
+                                              "z": 0.9999999
+                                            }
+                                          },
+                                          "_$child": [
+                                            {
+                                              "_$id": "lv9d2vpy",
+                                              "_$type": "Sprite3D",
+                                              "name": "RigLBtmWing4",
+                                              "transform": {
+                                                "localPosition": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.1830276,
+                                                  "z": -1.907349e-8
+                                                },
+                                                "localRotation": {
+                                                  "_$type": "Quaternion",
+                                                  "x": -0.029920968488505374,
+                                                  "y": 0.031665768400364655,
+                                                  "z": -0.04070565794370348,
+                                                  "w": -0.9982209495736375
+                                                },
+                                                "localScale": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.9999999,
+                                                  "y": 1,
+                                                  "z": 1
+                                                }
+                                              },
+                                              "_$child": [
+                                                {
+                                                  "_$id": "q1fzm5q5",
+                                                  "_$type": "Sprite3D",
+                                                  "name": "RigLBtmWing5",
+                                                  "transform": {
+                                                    "localPosition": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.1836886,
+                                                      "y": -9.536743e-9
+                                                    },
+                                                    "localRotation": {
+                                                      "_$type": "Quaternion",
+                                                      "x": -0.10702859917725725,
+                                                      "y": 0.2897296977728101,
+                                                      "z": -0.13637889895163768,
+                                                      "w": -0.9412769927642815
+                                                    }
+                                                  },
+                                                  "_$child": [
+                                                    {
+                                                      "_$id": "8s5ac1ql",
+                                                      "_$type": "Sprite3D",
+                                                      "name": "RigLBtmWing6",
+                                                      "transform": {
+                                                        "localPosition": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.182328,
+                                                          "y": 1.399474e-8,
+                                                          "z": 2.998615e-9
+                                                        },
+                                                        "localRotation": {
+                                                          "_$type": "Quaternion",
+                                                          "x": -0.04171217890416262,
+                                                          "y": 0.2738061928067277,
+                                                          "z": -0.09019001763058188,
+                                                          "w": -0.9566378748677827
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "_$id": "fou1z7tq",
+                                  "_$type": "Sprite3D",
+                                  "name": "RigLMidWing1",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.04592305,
+                                      "y": -0.1971126,
+                                      "z": 0.01591747
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": -0.018683478993237863,
+                                      "y": 0.7060037619568788,
+                                      "z": 0.018911398980956357,
+                                      "w": -0.7077089618649939
+                                    },
+                                    "localScale": {
+                                      "_$type": "Vector3",
+                                      "x": 0.9999999,
+                                      "y": 0.9999998,
+                                      "z": 1
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "d63qwv27",
+                                      "_$type": "Sprite3D",
+                                      "name": "RigLMidWing2",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.1814695
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.009924559618600995,
+                                          "y": 0.0722864572220447,
+                                          "z": 0.00952358563401035,
+                                          "w": -0.9972890616743642
+                                        }
+                                      },
+                                      "_$child": [
+                                        {
+                                          "_$id": "jaw0dqst",
+                                          "_$type": "Sprite3D",
+                                          "name": "RigLMidWing3",
+                                          "transform": {
+                                            "localPosition": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1834534,
+                                              "y": -1.907349e-8,
+                                              "z": -5.960464e-10
+                                            },
+                                            "localRotation": {
+                                              "_$type": "Quaternion",
+                                              "x": 0.019089269890697546,
+                                              "y": 0.13157149924664024,
+                                              "z": 0.020017939885380115,
+                                              "w": -0.9909206943261285
+                                            },
+                                            "localScale": {
+                                              "_$type": "Vector3",
+                                              "x": 0.9999999,
+                                              "y": 0.9999998,
+                                              "z": 1
+                                            }
+                                          },
+                                          "_$child": [
+                                            {
+                                              "_$id": "dor69dqr",
+                                              "_$type": "Sprite3D",
+                                              "name": "RigLMidWing4",
+                                              "transform": {
+                                                "localPosition": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.1835216,
+                                                  "y": 1.907349e-8
+                                                },
+                                                "localRotation": {
+                                                  "_$type": "Quaternion",
+                                                  "x": -0.030658198937529062,
+                                                  "y": -0.1728367940102786,
+                                                  "z": -0.030899948929151128,
+                                                  "w": -0.9839881658995353
+                                                },
+                                                "localScale": {
+                                                  "_$type": "Vector3",
+                                                  "x": 1,
+                                                  "y": 0.9999999,
+                                                  "z": 1
+                                                }
+                                              },
+                                              "_$child": [
+                                                {
+                                                  "_$id": "27vl16jx",
+                                                  "_$type": "Sprite3D",
+                                                  "name": "RigLMidWing5",
+                                                  "transform": {
+                                                    "localPosition": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.1851165,
+                                                      "y": 1.105623e-9,
+                                                      "z": 2.515353e-8
+                                                    },
+                                                    "localRotation": {
+                                                      "_$type": "Quaternion",
+                                                      "x": -0.030734398710454563,
+                                                      "y": -0.4360286817052286,
+                                                      "z": -0.034246528563093584,
+                                                      "w": -0.8987555622902617
+                                                    }
+                                                  },
+                                                  "_$child": [
+                                                    {
+                                                      "_$id": "cosvp64b",
+                                                      "_$type": "Sprite3D",
+                                                      "name": "RigLMidWing6",
+                                                      "transform": {
+                                                        "localPosition": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.1800087,
+                                                          "y": -1.907349e-8,
+                                                          "z": -4.030764e-8
+                                                        },
+                                                        "localRotation": {
+                                                          "_$type": "Quaternion",
+                                                          "x": -0.0022708479882644363,
+                                                          "y": -0.11681339939631755,
+                                                          "z": 0.007308165962231974,
+                                                          "w": -0.9931243948676114
+                                                        },
+                                                        "localScale": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.9999995,
+                                                          "y": 1,
+                                                          "z": 0.9999998
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "_$id": "1yx9dgww",
+                                      "_$type": "Sprite3D",
+                                      "name": "Glitter",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.496,
+                                          "y": -0.029,
+                                          "z": 0.01
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.9999267489729834,
+                                          "y": 0.002280540111693035,
+                                          "z": 0.011824480579122514,
+                                          "w": 0.0012155180595319066
+                                        }
+                                      },
+                                      "_$comp": [
+                                        {
+                                          "_$type": "ShurikenParticleRenderer",
+                                          "lightmapScaleOffset": {
+                                            "_$type": "Vector4"
+                                          },
+                                          "sharedMaterials": [
+                                            {
+                                              "_$uuid": "aeed7d39-d46d-40dc-951d-19a0c1e1f5e5",
+                                              "_$type": "Material"
+                                            }
+                                          ],
+                                          "_particleSystem": {
+                                            "duration": 0.7,
+                                            "startLifetimeConstant": 0.7,
+                                            "startLifetimeConstantMax": 0.7,
+                                            "startSpeedConstant": 0,
+                                            "startSpeedConstantMax": 0,
+                                            "startSizeType": 2,
+                                            "startSizeConstant": 0.1,
+                                            "startSizeConstantMin": 0.04,
+                                            "startSizeConstantMax": 0.1,
+                                            "startSizeConstantSeparate": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "startSizeConstantMinSeparate": {
+                                              "_$type": "Vector3",
+                                              "x": 0.04
+                                            },
+                                            "startSizeConstantMaxSeparate": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "startRotationConstantSeparate": {
+                                              "_$type": "Vector3"
+                                            },
+                                            "startRotationConstantMinSeparate": {
+                                              "_$type": "Vector3"
+                                            },
+                                            "startRotationConstantMaxSeparate": {
+                                              "_$type": "Vector3"
+                                            },
+                                            "startColorConstant": {
+                                              "_$type": "Vector4",
+                                              "x": 1,
+                                              "y": 1,
+                                              "z": 1,
+                                              "w": 1
+                                            },
+                                            "startColorConstantMin": {
+                                              "_$type": "Vector4",
+                                              "x": -0.00002292701,
+                                              "y": 1.401298e-45,
+                                              "z": 151528.8,
+                                              "w": 1.401298e-45
+                                            },
+                                            "startColorConstantMax": {
+                                              "_$type": "Vector4",
+                                              "x": 1,
+                                              "y": 1,
+                                              "z": 1,
+                                              "w": 1
+                                            },
+                                            "gravityModifier": 0.1,
+                                            "simulationSpace": 0,
+                                            "scaleMode": 2,
+                                            "maxParticles": 20,
+                                            "randomSeed": {
+                                              "_$type": "Uint32Array",
+                                              "value": [
+                                                2612487000
+                                              ]
+                                            },
+                                            "shape": {
+                                              "_$type": "BoxShape",
+                                              "x": 0.65,
+                                              "y": 0.05,
+                                              "z": 0.75
+                                            },
+                                            "velocityOverLifetime": {
+                                              "_$type": "VelocityOverLifetime",
+                                              "enable": true,
+                                              "_velocity": {
+                                                "_$type": "GradientVelocity",
+                                                "_constant": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.48,
+                                                  "z": 0.48
+                                                }
+                                              }
+                                            },
+                                            "sizeOverLifetime": {
+                                              "_$type": "SizeOverLifetime",
+                                              "enable": true,
+                                              "_size": {
+                                                "_$type": "GradientSize",
+                                                "_gradient": {
+                                                  "_$type": "GradientDataNumber",
+                                                  "_elements": {
+                                                    "_$type": "Float32Array",
+                                                    "value": [
+                                                      0,
+                                                      0,
+                                                      0.5014793276786804,
+                                                      0.9906919002532959,
+                                                      1,
+                                                      0.005208312999457121,
+                                                      0,
+                                                      0
+                                                    ]
+                                                  },
+                                                  "_currentLength": 6
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "_$id": "jr4vti87",
+                                  "_$type": "Sprite3D",
+                                  "name": "RigLUpWing1",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.05204717,
+                                      "y": -0.2372676,
+                                      "z": 0.08169073
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": -0.027461628571557112,
+                                      "y": 0.48786077462345495,
+                                      "z": 0.014185639262120398,
+                                      "w": -0.8723740546226288
+                                    },
+                                    "localScale": {
+                                      "_$type": "Vector3",
+                                      "x": 1,
+                                      "y": 0.9999998,
+                                      "z": 0.9999999
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "7z4tiot7",
+                                      "_$type": "Sprite3D",
+                                      "name": "RigLUpWing2",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.1818902,
+                                          "y": -1.907349e-8,
+                                          "z": 4.768371e-9
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.019801169619458922,
+                                          "y": -0.024189939535115054,
+                                          "z": 0.017308699667359487,
+                                          "w": -0.9993613807941619
+                                        },
+                                        "localScale": {
+                                          "_$type": "Vector3",
+                                          "x": 0.9999999,
+                                          "y": 1,
+                                          "z": 0.9999999
+                                        }
+                                      },
+                                      "_$child": [
+                                        {
+                                          "_$id": "q8bqxuhr",
+                                          "_$type": "Sprite3D",
+                                          "name": "RigLUpWing3",
+                                          "transform": {
+                                            "localPosition": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1840666
+                                            },
+                                            "localRotation": {
+                                              "_$type": "Quaternion",
+                                              "x": 0.02985739982348272,
+                                              "y": -0.11572639931582424,
+                                              "z": 0.02279367986524351,
+                                              "w": -0.9925705941319115
+                                            },
+                                            "localScale": {
+                                              "_$type": "Vector3",
+                                              "x": 1,
+                                              "y": 0.9999999,
+                                              "z": 0.9999998
+                                            }
+                                          },
+                                          "_$child": [
+                                            {
+                                              "_$id": "7qb861ji",
+                                              "_$type": "Sprite3D",
+                                              "name": "RigLUpWing4",
+                                              "transform": {
+                                                "localPosition": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.1816788,
+                                                  "y": -7.827738e-9,
+                                                  "z": -1.115723e-8
+                                                },
+                                                "localRotation": {
+                                                  "_$type": "Quaternion",
+                                                  "x": -0.0331639118093828,
+                                                  "y": 0.012006100655038291,
+                                                  "z": -0.042546022321259376,
+                                                  "w": -0.9984717544754079
+                                                },
+                                                "localScale": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.9999999,
+                                                  "y": 1,
+                                                  "z": 0.9999998
+                                                }
+                                              },
+                                              "_$child": [
+                                                {
+                                                  "_$id": "d4f7vl6u",
+                                                  "_$type": "Sprite3D",
+                                                  "name": "RigLUpWing5",
+                                                  "transform": {
+                                                    "localPosition": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.1818102,
+                                                      "y": -6.747491e-9,
+                                                      "z": 1.898495e-8
+                                                    },
+                                                    "localRotation": {
+                                                      "_$type": "Quaternion",
+                                                      "x": -0.11467919330341592,
+                                                      "y": 0.28729398322373695,
+                                                      "z": -0.1397292918406389,
+                                                      "w": -0.940630945072737
+                                                    },
+                                                    "localScale": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.9999998,
+                                                      "y": 1,
+                                                      "z": 0.9999998
+                                                    }
+                                                  },
+                                                  "_$child": [
+                                                    {
+                                                      "_$id": "u900wq3s",
+                                                      "_$type": "Sprite3D",
+                                                      "name": "RigLUpWing6",
+                                                      "transform": {
+                                                        "localPosition": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.1840968,
+                                                          "y": -1.07387e-9,
+                                                          "z": 1.230968e-8
+                                                        },
+                                                        "localRotation": {
+                                                          "_$type": "Quaternion",
+                                                          "x": -0.04815072786622858,
+                                                          "y": 0.22489699003382108,
+                                                          "z": -0.08210367636162347,
+                                                          "w": -0.9697225570273105
+                                                        },
+                                                        "localScale": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.9999998,
+                                                          "y": 1,
+                                                          "z": 0.9999996
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "_$id": "5w4v6kd0",
+                                  "_$type": "Sprite3D",
+                                  "name": "RigRBtmWing1",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.07023642,
+                                      "y": -0.1670585,
+                                      "z": -0.03813133
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": 0.01472775992394415,
+                                      "y": -0.8641676955373385,
+                                      "z": 0.027562749857662786,
+                                      "w": -0.502232597406413
+                                    },
+                                    "localScale": {
+                                      "_$type": "Vector3",
+                                      "x": 1,
+                                      "y": 0.9999999,
+                                      "z": 1
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "s2r7jp8q",
+                                      "_$type": "Sprite3D",
+                                      "name": "RigRBtmWing2",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.1815394,
+                                          "y": 1.907349e-8,
+                                          "z": -4.768371e-9
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.016940619307184674,
+                                          "y": -0.063768797392067,
+                                          "z": 0.01628165933413396,
+                                          "w": -0.9976880591978566
+                                        },
+                                        "localScale": {
+                                          "_$type": "Vector3",
+                                          "x": 0.9999998,
+                                          "y": 1,
+                                          "z": 1
+                                        }
+                                      },
+                                      "_$child": [
+                                        {
+                                          "_$id": "3ic91up2",
+                                          "_$type": "Sprite3D",
+                                          "name": "RigRBtmWing3",
+                                          "transform": {
+                                            "localPosition": {
+                                              "_$type": "Vector3",
+                                              "x": 0.184582,
+                                              "z": 4.768371e-9
+                                            },
+                                            "localRotation": {
+                                              "_$type": "Quaternion",
+                                              "x": 0.02507350962684387,
+                                              "y": -0.1970451970674778,
+                                              "z": 0.017638899737489337,
+                                              "w": -0.9799149854164299
+                                            },
+                                            "localScale": {
+                                              "_$type": "Vector3",
+                                              "x": 1,
+                                              "y": 0.9999998,
+                                              "z": 0.9999997
+                                            }
+                                          },
+                                          "_$child": [
+                                            {
+                                              "_$id": "w1g5lli8",
+                                              "_$type": "Sprite3D",
+                                              "name": "RigRBtmWing4",
+                                              "transform": {
+                                                "localPosition": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.1839733,
+                                                  "z": -3.814697e-8
+                                                },
+                                                "localRotation": {
+                                                  "_$type": "Quaternion",
+                                                  "x": -0.030484780254344486,
+                                                  "y": 0.06736107056201543,
+                                                  "z": -0.033630770280592505,
+                                                  "w": -0.9966956083157572
+                                                },
+                                                "localScale": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.9999997,
+                                                  "y": 1,
+                                                  "z": 0.9999997
+                                                }
+                                              },
+                                              "_$child": [
+                                                {
+                                                  "_$id": "saemu39m",
+                                                  "_$type": "Sprite3D",
+                                                  "name": "RigRBtmWing5",
+                                                  "transform": {
+                                                    "localPosition": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.1819905,
+                                                      "y": 2.799254e-10,
+                                                      "z": -4.240441e-8
+                                                    },
+                                                    "localRotation": {
+                                                      "_$type": "Quaternion",
+                                                      "x": -0.11070449396299518,
+                                                      "y": 0.37160597973535664,
+                                                      "z": -0.14516309208387793,
+                                                      "w": -0.9102643503609106
+                                                    },
+                                                    "localScale": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.9999999,
+                                                      "y": 1,
+                                                      "z": 0.9999999
+                                                    }
+                                                  },
+                                                  "_$child": [
+                                                    {
+                                                      "_$id": "svv0kpir",
+                                                      "_$type": "Sprite3D",
+                                                      "name": "RigRBtmWing6",
+                                                      "transform": {
+                                                        "localPosition": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.1820224,
+                                                          "y": -6.645576e-9,
+                                                          "z": -1.790959e-8
+                                                        },
+                                                        "localRotation": {
+                                                          "_$type": "Quaternion",
+                                                          "x": -0.048720887502051495,
+                                                          "y": 0.259413686699708,
+                                                          "z": -0.08952542540997889,
+                                                          "w": -0.9603728507611201
+                                                        },
+                                                        "localScale": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.9999998,
+                                                          "y": 1,
+                                                          "z": 0.9999997
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "_$id": "vuuub0vq",
+                                  "_$type": "Sprite3D",
+                                  "name": "RigRMidWing1",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.04592305,
+                                      "y": -0.1971126,
+                                      "z": -0.01591747
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": 0.020510160382273403,
+                                      "y": -0.7108901132497444,
+                                      "z": 0.01692871031552146,
+                                      "w": -0.7028001130989611
+                                    },
+                                    "localScale": {
+                                      "_$type": "Vector3",
+                                      "x": 1,
+                                      "y": 0.9999998,
+                                      "z": 1
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "sbeugawb",
+                                      "_$type": "Sprite3D",
+                                      "name": "RigRMidWing2",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.1805644,
+                                          "z": -1.341104e-9
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.018484800050646132,
+                                          "y": 0.0829663402273178,
+                                          "z": 0.026688570073123474,
+                                          "w": -0.9960234027289845
+                                        },
+                                        "localScale": {
+                                          "_$type": "Vector3",
+                                          "x": 0.9999999,
+                                          "y": 1,
+                                          "z": 0.9999999
+                                        }
+                                      },
+                                      "_$child": [
+                                        {
+                                          "_$id": "d98b0nfg",
+                                          "_$type": "Sprite3D",
+                                          "name": "RigRMidWing3",
+                                          "transform": {
+                                            "localPosition": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1856548,
+                                              "y": 1.196016e-9,
+                                              "z": -4.728139e-9
+                                            },
+                                            "localRotation": {
+                                              "_$type": "Quaternion",
+                                              "x": -0.009820357626820238,
+                                              "y": 0.1429301945685628,
+                                              "z": 0.04415509832207852,
+                                              "w": -0.9886985624288332
+                                            },
+                                            "localScale": {
+                                              "_$type": "Vector3",
+                                              "x": 0.9999996,
+                                              "y": 0.9999999,
+                                              "z": 0.9999998
+                                            }
+                                          },
+                                          "_$child": [
+                                            {
+                                              "_$id": "p2fln8gc",
+                                              "_$type": "Sprite3D",
+                                              "name": "RigRMidWing4",
+                                              "transform": {
+                                                "localPosition": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.1838824
+                                                },
+                                                "localRotation": {
+                                                  "_$type": "Quaternion",
+                                                  "x": -0.09130336435220593,
+                                                  "y": -0.1914663091267262,
+                                                  "z": -0.03553797169400736,
+                                                  "w": -0.9765968465519602
+                                                },
+                                                "localScale": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.9999999,
+                                                  "y": 1,
+                                                  "z": 0.9999998
+                                                }
+                                              },
+                                              "_$child": [
+                                                {
+                                                  "_$id": "j7ls6gmy",
+                                                  "_$type": "Sprite3D",
+                                                  "name": "RigRMidWing5",
+                                                  "transform": {
+                                                    "localPosition": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.1787678,
+                                                      "y": 9.536743e-9
+                                                    },
+                                                    "localRotation": {
+                                                      "_$type": "Quaternion",
+                                                      "x": 0.03969023754957661,
+                                                      "y": -0.47883047043763255,
+                                                      "z": -0.040044177527724815,
+                                                      "w": -0.8760950459110368
+                                                    },
+                                                    "localScale": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.9999999,
+                                                      "y": 1,
+                                                      "z": 0.9999997
+                                                    }
+                                                  },
+                                                  "_$child": [
+                                                    {
+                                                      "_$id": "26k312g4",
+                                                      "_$type": "Sprite3D",
+                                                      "name": "RigRMidWing6",
+                                                      "transform": {
+                                                        "localPosition": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.1853665,
+                                                          "z": -8.061528e-8
+                                                        },
+                                                        "localRotation": {
+                                                          "_$type": "Quaternion",
+                                                          "x": 0.15124789928282753,
+                                                          "y": -0.13305389936909806,
+                                                          "z": -0.007399692964912861,
+                                                          "w": -0.9794722953556343
+                                                        },
+                                                        "localScale": {
+                                                          "_$type": "Vector3",
+                                                          "x": 1,
+                                                          "y": 1,
+                                                          "z": 0.9999999
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "_$id": "p8j9eqbm",
+                                      "_$type": "Sprite3D",
+                                      "name": "Glitter",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.492,
+                                          "y": -0.04,
+                                          "z": 0.019
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": -0.017168868469948258,
+                                          "y": -0.00017419438447618013,
+                                          "z": 0.9998129108988756,
+                                          "w": 0.008907458206186944
+                                        }
+                                      },
+                                      "_$comp": [
+                                        {
+                                          "_$type": "ShurikenParticleRenderer",
+                                          "lightmapScaleOffset": {
+                                            "_$type": "Vector4"
+                                          },
+                                          "sharedMaterials": [
+                                            {
+                                              "_$uuid": "aeed7d39-d46d-40dc-951d-19a0c1e1f5e5",
+                                              "_$type": "Material"
+                                            }
+                                          ],
+                                          "_particleSystem": {
+                                            "duration": 0.7,
+                                            "startLifetimeConstant": 0.7,
+                                            "startLifetimeConstantMax": 0.7,
+                                            "startSpeedConstant": 0,
+                                            "startSpeedConstantMax": 0,
+                                            "startSizeType": 2,
+                                            "startSizeConstant": 0.1,
+                                            "startSizeConstantMin": 0.04,
+                                            "startSizeConstantMax": 0.1,
+                                            "startSizeConstantSeparate": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "startSizeConstantMinSeparate": {
+                                              "_$type": "Vector3",
+                                              "x": 0.04
+                                            },
+                                            "startSizeConstantMaxSeparate": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1,
+                                              "y": 1,
+                                              "z": 1
+                                            },
+                                            "startRotationConstantSeparate": {
+                                              "_$type": "Vector3"
+                                            },
+                                            "startRotationConstantMinSeparate": {
+                                              "_$type": "Vector3"
+                                            },
+                                            "startRotationConstantMaxSeparate": {
+                                              "_$type": "Vector3"
+                                            },
+                                            "startColorConstant": {
+                                              "_$type": "Vector4",
+                                              "x": 1,
+                                              "y": 1,
+                                              "z": 1,
+                                              "w": 1
+                                            },
+                                            "startColorConstantMin": {
+                                              "_$type": "Vector4",
+                                              "x": -0.00002292701,
+                                              "y": 1.401298e-45,
+                                              "z": 151528.8,
+                                              "w": 1.401298e-45
+                                            },
+                                            "startColorConstantMax": {
+                                              "_$type": "Vector4",
+                                              "x": 1,
+                                              "y": 1,
+                                              "z": 1,
+                                              "w": 1
+                                            },
+                                            "gravityModifier": 0.1,
+                                            "simulationSpace": 0,
+                                            "scaleMode": 2,
+                                            "maxParticles": 20,
+                                            "randomSeed": {
+                                              "_$type": "Uint32Array",
+                                              "value": [
+                                                1574067000
+                                              ]
+                                            },
+                                            "shape": {
+                                              "_$type": "BoxShape",
+                                              "x": 0.65,
+                                              "y": 0.05,
+                                              "z": 0.75
+                                            },
+                                            "velocityOverLifetime": {
+                                              "_$type": "VelocityOverLifetime",
+                                              "enable": true,
+                                              "_velocity": {
+                                                "_$type": "GradientVelocity",
+                                                "_constant": {
+                                                  "_$type": "Vector3",
+                                                  "x": -0.48,
+                                                  "z": 0.48
+                                                }
+                                              }
+                                            },
+                                            "sizeOverLifetime": {
+                                              "_$type": "SizeOverLifetime",
+                                              "enable": true,
+                                              "_size": {
+                                                "_$type": "GradientSize",
+                                                "_gradient": {
+                                                  "_$type": "GradientDataNumber",
+                                                  "_elements": {
+                                                    "_$type": "Float32Array",
+                                                    "value": [
+                                                      0,
+                                                      0,
+                                                      0.5014793276786804,
+                                                      0.9906919002532959,
+                                                      1,
+                                                      0.005208312999457121,
+                                                      0,
+                                                      0
+                                                    ]
+                                                  },
+                                                  "_currentLength": 6
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "_$id": "cl1yum2f",
+                                  "_$type": "Sprite3D",
+                                  "name": "RigRUpWing1",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.05204717,
+                                      "y": -0.2372676,
+                                      "z": -0.08169075
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": 0.026757379905552645,
+                                      "y": -0.47731789831517835,
+                                      "z": 0.014519349948750057,
+                                      "w": -0.878203196900146
+                                    },
+                                    "localScale": {
+                                      "_$type": "Vector3",
+                                      "x": 0.9999999,
+                                      "y": 0.9999998,
+                                      "z": 1
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "ncejqk74",
+                                      "_$type": "Sprite3D",
+                                      "name": "RigRUpWing2",
+                                      "transform": {
+                                        "localPosition": {
+                                          "_$type": "Vector3",
+                                          "x": 0.1824317,
+                                          "z": -4.768371e-9
+                                        },
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.015712129245370677,
+                                          "y": 0.0047149437735485265,
+                                          "z": 0.023057188892598796,
+                                          "w": -0.999599551990776
+                                        },
+                                        "localScale": {
+                                          "_$type": "Vector3",
+                                          "x": 0.9999999,
+                                          "y": 1,
+                                          "z": 0.9999997
+                                        }
+                                      },
+                                      "_$child": [
+                                        {
+                                          "_$id": "qsh44xxf",
+                                          "_$type": "Sprite3D",
+                                          "name": "RigRUpWing3",
+                                          "transform": {
+                                            "localPosition": {
+                                              "_$type": "Vector3",
+                                              "x": 0.1801147,
+                                              "z": 9.536743e-9
+                                            },
+                                            "localRotation": {
+                                              "_$type": "Quaternion",
+                                              "x": 0.02685639002380924,
+                                              "y": -0.11360980010071953,
+                                              "z": 0.03751530003325878,
+                                              "w": -0.9924536008798489
+                                            },
+                                            "localScale": {
+                                              "_$type": "Vector3",
+                                              "x": 0.9999998,
+                                              "y": 0.9999999,
+                                              "z": 0.9999999
+                                            }
+                                          },
+                                          "_$child": [
+                                            {
+                                              "_$id": "m3a59b0u",
+                                              "_$type": "Sprite3D",
+                                              "name": "RigRUpWing4",
+                                              "transform": {
+                                                "localPosition": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.1856831,
+                                                  "y": -3.047886e-8,
+                                                  "z": -1.484989e-9
+                                                },
+                                                "localRotation": {
+                                                  "_$type": "Quaternion",
+                                                  "x": -0.017212199741997385,
+                                                  "y": -0.1663550975064169,
+                                                  "z": -0.06049302909323852,
+                                                  "w": -0.9840580852494414
+                                                },
+                                                "localScale": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.9999998,
+                                                  "y": 0.9999999,
+                                                  "z": 0.9999999
+                                                }
+                                              },
+                                              "_$child": [
+                                                {
+                                                  "_$id": "benc3be7",
+                                                  "_$type": "Sprite3D",
+                                                  "name": "RigRUpWing5",
+                                                  "transform": {
+                                                    "localPosition": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.1832587,
+                                                      "y": 6.688007e-14,
+                                                      "z": 1.427767e-8
+                                                    },
+                                                    "localRotation": {
+                                                      "_$type": "Quaternion",
+                                                      "x": -0.04481996768684935,
+                                                      "y": 0.1292643933286874,
+                                                      "z": -0.14639699244447696,
+                                                      "w": -0.9797192494368617
+                                                    },
+                                                    "localScale": {
+                                                      "_$type": "Vector3",
+                                                      "x": 0.9999999,
+                                                      "y": 1,
+                                                      "z": 0.9999998
+                                                    }
+                                                  },
+                                                  "_$child": [
+                                                    {
+                                                      "_$id": "lgvgmj61",
+                                                      "_$type": "Sprite3D",
+                                                      "name": "RigRUpWing6",
+                                                      "transform": {
+                                                        "localPosition": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.1823279,
+                                                          "y": -6.981194e-8,
+                                                          "z": -1.799315e-8
+                                                        },
+                                                        "localRotation": {
+                                                          "_$type": "Quaternion",
+                                                          "x": -0.023679340402332296,
+                                                          "y": 0.3557450060444126,
+                                                          "z": -0.11273340191543714,
+                                                          "w": -0.9274567157582847
+                                                        },
+                                                        "localScale": {
+                                                          "_$type": "Vector3",
+                                                          "x": 0.9999998,
+                                                          "y": 1,
+                                                          "z": 0.9999998
+                                                        }
+                                                      }
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "_$id": "htjn050q",
+                              "_$type": "Sprite3D",
+                              "name": "Wings 11",
+                              "transform": {
+                                "localRotation": {
+                                  "_$type": "Quaternion",
+                                  "x": 0.7071067811865476,
+                                  "w": -0.7071067811865476
+                                }
+                              },
+                              "_$comp": [
+                                {
+                                  "_$type": "MeshFilter",
+                                  "sharedMesh": {
+                                    "_$uuid": "f41b0cb4-ff03-4fb9-aca1-8f456d1aee80",
+                                    "_$type": "Mesh"
+                                  }
+                                },
+                                {
+                                  "_$type": "SkinnedMeshRenderer",
+                                  "receiveShadow": true,
+                                  "castShadow": true,
+                                  "lightmapScaleOffset": {
+                                    "_$type": "Vector4"
+                                  },
+                                  "sharedMaterials": [
+                                    null
+                                  ],
+                                  "_bones": [
+                                    {
+                                      "_$ref": "26k312g4"
+                                    },
+                                    {
+                                      "_$ref": "5w4v6kd0"
+                                    },
+                                    {
+                                      "_$ref": "s2r7jp8q"
+                                    },
+                                    {
+                                      "_$ref": "j7ls6gmy"
+                                    },
+                                    {
+                                      "_$ref": "p2fln8gc"
+                                    },
+                                    {
+                                      "_$ref": "d98b0nfg"
+                                    },
+                                    {
+                                      "_$ref": "sbeugawb"
+                                    },
+                                    {
+                                      "_$ref": "vuuub0vq"
+                                    },
+                                    {
+                                      "_$ref": "cl1yum2f"
+                                    },
+                                    {
+                                      "_$ref": "ncejqk74"
+                                    },
+                                    {
+                                      "_$ref": "lgvgmj61"
+                                    },
+                                    {
+                                      "_$ref": "benc3be7"
+                                    },
+                                    {
+                                      "_$ref": "m3a59b0u"
+                                    },
+                                    {
+                                      "_$ref": "qsh44xxf"
+                                    },
+                                    {
+                                      "_$ref": "svv0kpir"
+                                    },
+                                    {
+                                      "_$ref": "saemu39m"
+                                    },
+                                    {
+                                      "_$ref": "w1g5lli8"
+                                    },
+                                    {
+                                      "_$ref": "3ic91up2"
+                                    },
+                                    {
+                                      "_$ref": "9wd68zav"
+                                    },
+                                    {
+                                      "_$ref": "fou1z7tq"
+                                    },
+                                    {
+                                      "_$ref": "cosvp64b"
+                                    },
+                                    {
+                                      "_$ref": "27vl16jx"
+                                    },
+                                    {
+                                      "_$ref": "dor69dqr"
+                                    },
+                                    {
+                                      "_$ref": "jaw0dqst"
+                                    },
+                                    {
+                                      "_$ref": "8i8b482o"
+                                    },
+                                    {
+                                      "_$ref": "d63qwv27"
+                                    },
+                                    {
+                                      "_$ref": "7z4tiot7"
+                                    },
+                                    {
+                                      "_$ref": "jr4vti87"
+                                    },
+                                    {
+                                      "_$ref": "u900wq3s"
+                                    },
+                                    {
+                                      "_$ref": "d4f7vl6u"
+                                    },
+                                    {
+                                      "_$ref": "7qb861ji"
+                                    },
+                                    {
+                                      "_$ref": "q8bqxuhr"
+                                    },
+                                    {
+                                      "_$ref": "8s5ac1ql"
+                                    },
+                                    {
+                                      "_$ref": "q1fzm5q5"
+                                    },
+                                    {
+                                      "_$ref": "lv9d2vpy"
+                                    },
+                                    {
+                                      "_$ref": "2x4ij119"
+                                    }
+                                  ],
+                                  "rootBone": {
+                                    "_$ref": "jr4vti87"
+                                  },
+                                  "localBounds": {
+                                    "_$type": "Bounds",
+                                    "min": {
+                                      "_$type": "Vector3",
+                                      "x": -1.100611,
+                                      "y": -0.06990772,
+                                      "z": -0.9625593
+                                    },
+                                    "max": {
+                                      "_$type": "Vector3",
+                                      "x": 1.057744,
+                                      "y": 0.1049097,
+                                      "z": 0.8294317
+                                    }
+                                  }
+                                },
+                                {
+                                  "_$type": "Animator",
+                                  "cullingMode": 0,
+                                  "controllerLayers": [
+                                    {
+                                      "_$type": "AnimatorControllerLayer",
+                                      "name": "Base Layer",
+                                      "states": [
+                                        {
+                                          "_$type": "AnimatorState",
+                                          "name": "Wings 11 Texture",
+                                          "clipStart": 0,
+                                          "clip": {
+                                            "_$uuid": "4f9a4e16-746d-4fc1-abde-cf4cce631651",
+                                            "_$type": "AnimationClip"
+                                          },
+                                          "soloTransitions": []
+                                        }
+                                      ],
+                                      "defaultStateName": "Wings 11 Texture"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "_$id": "wb0kxvz9",
+                      "_$type": "Sprite3D",
+                      "name": "RigLArm1",
+                      "transform": {
+                        "localPosition": {
+                          "_$type": "Vector3",
+                          "x": -0.00452424,
+                          "y": -8.378265e-8,
+                          "z": 0.191122
+                        },
+                        "localRotation": {
+                          "_$type": "Quaternion",
+                          "x": -0.013422289587605704,
+                          "y": -0.9146750718969867,
+                          "z": 0.23704039271703198,
+                          "w": 0.32711038994966857
+                        }
+                      },
+                      "_$child": [
+                        {
+                          "_$id": "m2huh2r1",
+                          "_$type": "Sprite3D",
+                          "name": "RigLArm2",
+                          "transform": {
+                            "localPosition": {
+                              "_$type": "Vector3",
+                              "x": 0.1681627,
+                              "y": 7.703784e-8,
+                              "z": 4.885077e-8
+                            },
+                            "localRotation": {
+                              "_$type": "Quaternion",
+                              "x": 0.06599335039508958,
+                              "y": 0.03209380019213944,
+                              "z": -0.16416560098282806,
+                              "w": -0.9836994058892202
+                            },
+                            "localScale": {
+                              "_$type": "Vector3",
+                              "x": 0.9999999,
+                              "y": 1,
+                              "z": 1
+                            }
+                          },
+                          "_$child": [
+                            {
+                              "_$id": "4x0r4a91",
+                              "_$type": "Sprite3D",
+                              "name": "RigLArmPalm",
+                              "transform": {
+                                "localPosition": {
+                                  "_$type": "Vector3",
+                                  "x": 0.1630839,
+                                  "y": -0.000002425648,
+                                  "z": -1.688727e-8
+                                },
+                                "localRotation": {
+                                  "_$type": "Quaternion",
+                                  "x": 0.8042057488467419,
+                                  "y": 0.05291623663414753,
+                                  "z": -0.0468106070225094,
+                                  "w": -0.5901370624630469
+                                },
+                                "localScale": {
+                                  "_$type": "Vector3",
+                                  "x": 1,
+                                  "y": 0.9999999,
+                                  "z": 1
+                                }
+                              },
+                              "_$child": [
+                                {
+                                  "_$id": "euke6a08",
+                                  "_$type": "Sprite3D",
+                                  "name": "Dummy Prop Left",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.07158974,
+                                      "y": -0.06204193,
+                                      "z": -0.0006420043
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": -0.0012269699516917637,
+                                      "y": -0.002490372901949088,
+                                      "z": 0.005654284777379614,
+                                      "w": -0.9999801606288012
+                                    },
+                                    "localScale": {
+                                      "_$type": "Vector3",
+                                      "x": 0.9999999,
+                                      "y": 1,
+                                      "z": 1
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "1sns7hdg",
+                                      "_$type": "Sprite3D",
+                                      "name": "Shield 10 Blue",
+                                      "transform": {
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.7071066811865407,
+                                          "y": 8.268969779993698e-8,
+                                          "z": 1.497664960152747e-8,
+                                          "w": -0.7071068811865354
+                                        }
+                                      },
+                                      "_$comp": [
+                                        {
+                                          "_$type": "MeshFilter",
+                                          "sharedMesh": {
+                                            "_$uuid": "e764e4e0-faae-4867-a806-f21bb6aaecb5",
+                                            "_$type": "Mesh"
+                                          }
+                                        },
+                                        {
+                                          "_$type": "MeshRenderer",
+                                          "receiveShadow": true,
+                                          "castShadow": true,
+                                          "lightmapScaleOffset": {
+                                            "_$type": "Vector4"
+                                          },
+                                          "sharedMaterials": [
+                                            {
+                                              "_$uuid": "f0b28d9d-9d41-4a15-884b-1d5e70502668",
+                                              "_$type": "Material"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "_$id": "lldlygjr",
+                      "_$type": "Sprite3D",
+                      "name": "RigNeck",
+                      "transform": {
+                        "localRotation": {
+                          "_$type": "Quaternion",
+                          "x": -7.10543e-15,
+                          "y": 2.557175e-14,
+                          "z": 7.105427e-15,
+                          "w": -1
+                        }
+                      },
+                      "_$child": [
+                        {
+                          "_$id": "4q7xz2ij",
+                          "_$type": "Sprite3D",
+                          "name": "RigHead",
+                          "transform": {
+                            "localPosition": {
+                              "_$type": "Vector3",
+                              "x": 0.4075132,
+                              "y": -1.818989e-14,
+                              "z": 1.002497e-14
+                            },
+                            "localRotation": {
+                              "_$type": "Quaternion",
+                              "x": -0.17522518188868524,
+                              "y": 0.033012416587829094,
+                              "z": 0.13642938589862758,
+                              "w": -0.9744707992784761
+                            }
+                          },
+                          "_$child": [
+                            {
+                              "_$id": "fp8ohsr8",
+                              "_$type": "Sprite3D",
+                              "name": "Dummy Prop Head",
+                              "transform": {
+                                "localPosition": {
+                                  "_$type": "Vector3",
+                                  "x": -0.03671379,
+                                  "y": 3.015007e-7,
+                                  "z": -5.731877e-11
+                                },
+                                "localRotation": {
+                                  "_$type": "Quaternion",
+                                  "x": 0.49999989999999,
+                                  "y": 0.50000009999999,
+                                  "z": 0.49999989999999,
+                                  "w": -0.50000009999999
+                                }
+                              },
+                              "_$child": [
+                                {
+                                  "_$id": "rpbt213s",
+                                  "_$type": "Sprite3D",
+                                  "name": "Halo 01",
+                                  "transform": {
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": 0.7071067811865476,
+                                      "w": -0.7071067811865476
+                                    }
+                                  },
+                                  "_$comp": [
+                                    {
+                                      "_$type": "MeshFilter",
+                                      "sharedMesh": {
+                                        "_$uuid": "36b80126-28c6-4edd-a582-7e8ac680d04d",
+                                        "_$type": "Mesh"
+                                      }
+                                    },
+                                    {
+                                      "_$type": "MeshRenderer",
+                                      "receiveShadow": true,
+                                      "castShadow": true,
+                                      "lightmapScaleOffset": {
+                                        "_$type": "Vector4"
+                                      },
+                                      "sharedMaterials": [
+                                        {
+                                          "_$uuid": "48e07e28-f52d-42d7-a8f1-20a26e395738",
+                                          "_$type": "Material"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "_$id": "gmz9c2wj",
+                                  "_$type": "Sprite3D",
+                                  "name": "Hair Male 06 Grey",
+                                  "transform": {
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": 0.7071067811865474,
+                                      "y": 2.4689059343116962e-8,
+                                      "z": 3.6156249038018163e-9,
+                                      "w": -0.7071067811865474
+                                    }
+                                  },
+                                  "_$comp": [
+                                    {
+                                      "_$type": "MeshFilter",
+                                      "sharedMesh": {
+                                        "_$uuid": "4c4468ac-030c-4c48-8917-d630b9d60f4e",
+                                        "_$type": "Mesh"
+                                      }
+                                    },
+                                    {
+                                      "_$type": "MeshRenderer",
+                                      "receiveShadow": true,
+                                      "castShadow": true,
+                                      "lightmapScaleOffset": {
+                                        "_$type": "Vector4"
+                                      },
+                                      "sharedMaterials": [
+                                        {
+                                          "_$uuid": "ffbcf77e-321e-4768-9ea0-8b83c60b2770",
+                                          "_$type": "Material"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "_$id": "htdxnpgo",
+                                  "_$type": "Sprite3D",
+                                  "name": "Headband 05 Blue",
+                                  "transform": {
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": 0.7071067811865476,
+                                      "w": -0.7071067811865476
+                                    }
+                                  },
+                                  "_$comp": [
+                                    {
+                                      "_$type": "MeshFilter",
+                                      "sharedMesh": {
+                                        "_$uuid": "6119a695-c261-4520-b980-570a7683c702",
+                                        "_$type": "Mesh"
+                                      }
+                                    },
+                                    {
+                                      "_$type": "MeshRenderer",
+                                      "receiveShadow": true,
+                                      "castShadow": true,
+                                      "lightmapScaleOffset": {
+                                        "_$type": "Vector4"
+                                      },
+                                      "sharedMaterials": [
+                                        {
+                                          "_$uuid": "53b72cbe-db02-4b1c-97e9-851809dfdaae",
+                                          "_$type": "Material"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "_$id": "7vbw8kyj",
+                      "_$type": "Sprite3D",
+                      "name": "RigRArm1",
+                      "transform": {
+                        "localPosition": {
+                          "_$type": "Vector3",
+                          "x": -0.004524074,
+                          "y": 6.227492e-8,
+                          "z": -0.191122
+                        },
+                        "localRotation": {
+                          "_$type": "Quaternion",
+                          "x": 0.19352949432708721,
+                          "y": -0.9533105720556923,
+                          "z": 0.027168049203625397,
+                          "w": -0.23023289325120375
+                        }
+                      },
+                      "_$child": [
+                        {
+                          "_$id": "hl9y4ftc",
+                          "_$type": "Sprite3D",
+                          "name": "RigRArm2",
+                          "transform": {
+                            "localPosition": {
+                              "_$type": "Vector3",
+                              "x": 0.1663895,
+                              "y": 8.645293e-8,
+                              "z": 1.332664e-7
+                            },
+                            "localRotation": {
+                              "_$type": "Quaternion",
+                              "x": -0.10648750540708773,
+                              "y": 0.025727931306380323,
+                              "z": -0.29114141478321015,
+                              "w": -0.9503868482575402
+                            },
+                            "localScale": {
+                              "_$type": "Vector3",
+                              "x": 0.9999999,
+                              "y": 1,
+                              "z": 1
+                            }
+                          },
+                          "_$child": [
+                            {
+                              "_$id": "7etb6369",
+                              "_$type": "Sprite3D",
+                              "name": "RigRArmPalm",
+                              "transform": {
+                                "localPosition": {
+                                  "_$type": "Vector3",
+                                  "x": 0.1613581,
+                                  "y": 0.000002021079,
+                                  "z": -1.848989e-7
+                                },
+                                "localRotation": {
+                                  "_$type": "Quaternion",
+                                  "x": -0.7137361406252736,
+                                  "y": -0.03541674705372959,
+                                  "z": -0.07504439375716024,
+                                  "w": -0.69548164214384
+                                },
+                                "localScale": {
+                                  "_$type": "Vector3",
+                                  "x": 1,
+                                  "y": 0.9999999,
+                                  "z": 1
+                                }
+                              },
+                              "_$child": [
+                                {
+                                  "_$id": "1lnk4vj4",
+                                  "_$type": "Sprite3D",
+                                  "name": "Dummy Prop Right",
+                                  "transform": {
+                                    "localPosition": {
+                                      "_$type": "Vector3",
+                                      "x": 0.06358127,
+                                      "y": -0.06195144,
+                                      "z": 0.0006025392
+                                    },
+                                    "localRotation": {
+                                      "_$type": "Quaternion",
+                                      "x": 0.005654460737374518,
+                                      "y": 0.9999801535552049,
+                                      "z": -0.0012266989430250882,
+                                      "w": 0.002492945884213341
+                                    }
+                                  },
+                                  "_$child": [
+                                    {
+                                      "_$id": "y2gjsy4k",
+                                      "_$type": "Sprite3D",
+                                      "name": "Sword 10 Blue Gold",
+                                      "transform": {
+                                        "localRotation": {
+                                          "_$type": "Quaternion",
+                                          "x": 0.7071067811865476,
+                                          "w": -0.7071067811865476
+                                        }
+                                      },
+                                      "_$comp": [
+                                        {
+                                          "_$type": "MeshFilter",
+                                          "sharedMesh": {
+                                            "_$uuid": "19576b9d-d2a7-497b-a7bf-81ae60965613",
+                                            "_$type": "Mesh"
+                                          }
+                                        },
+                                        {
+                                          "_$type": "MeshRenderer",
+                                          "receiveShadow": true,
+                                          "castShadow": true,
+                                          "lightmapScaleOffset": {
+                                            "_$type": "Vector4"
+                                          },
+                                          "sharedMaterials": [
+                                            {
+                                              "_$uuid": "29f0d1d1-171f-443d-a9cd-4f34d66a18c3",
+                                              "_$type": "Material"
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "_$child": [
+                                        {
+                                          "_$id": "uwu40612",
+                                          "_$type": "Sprite3D",
+                                          "name": "Glow",
+                                          "transform": {
+                                            "localPosition": {
+                                              "_$type": "Vector3",
+                                              "y": -0.468
+                                            },
+                                            "localRotation": {
+                                              "_$type": "Quaternion",
+                                              "w": -1
+                                            }
+                                          },
+                                          "_$comp": [
+                                            {
+                                              "_$type": "ShurikenParticleRenderer",
+                                              "lightmapScaleOffset": {
+                                                "_$type": "Vector4"
+                                              },
+                                              "sharedMaterials": [
+                                                {
+                                                  "_$uuid": "aeed7d39-d46d-40dc-951d-19a0c1e1f5e5",
+                                                  "_$type": "Material"
+                                                }
+                                              ],
+                                              "_particleSystem": {
+                                                "duration": 0.7,
+                                                "startLifetimeConstant": 0.7,
+                                                "startLifetimeConstantMax": 0.7,
+                                                "startSpeedConstant": 0,
+                                                "startSpeedConstantMax": 0,
+                                                "startSizeType": 2,
+                                                "startSizeConstant": 0.15,
+                                                "startSizeConstantMin": 0.05,
+                                                "startSizeConstantMax": 0.15,
+                                                "startSizeConstantSeparate": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.15,
+                                                  "y": 1,
+                                                  "z": 1
+                                                },
+                                                "startSizeConstantMinSeparate": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.05
+                                                },
+                                                "startSizeConstantMaxSeparate": {
+                                                  "_$type": "Vector3",
+                                                  "x": 0.15,
+                                                  "y": 1,
+                                                  "z": 1
+                                                },
+                                                "startRotationConstantSeparate": {
+                                                  "_$type": "Vector3"
+                                                },
+                                                "startRotationConstantMinSeparate": {
+                                                  "_$type": "Vector3"
+                                                },
+                                                "startRotationConstantMaxSeparate": {
+                                                  "_$type": "Vector3"
+                                                },
+                                                "startColorConstant": {
+                                                  "_$type": "Vector4",
+                                                  "x": 0.9921569,
+                                                  "y": 1,
+                                                  "z": 0.454902,
+                                                  "w": 1
+                                                },
+                                                "startColorConstantMin": {
+                                                  "_$type": "Vector4",
+                                                  "x": -0.00002292637,
+                                                  "y": 1.401298e-45,
+                                                  "z": 151528.8,
+                                                  "w": 1.401298e-45
+                                                },
+                                                "startColorConstantMax": {
+                                                  "_$type": "Vector4",
+                                                  "x": 0.9921569,
+                                                  "y": 1,
+                                                  "z": 0.454902,
+                                                  "w": 1
+                                                },
+                                                "scaleMode": 2,
+                                                "maxParticles": 10,
+                                                "randomSeed": {
+                                                  "_$type": "Uint32Array",
+                                                  "value": [
+                                                    7787980
+                                                  ]
+                                                },
+                                                "shape": {
+                                                  "_$type": "BoxShape",
+                                                  "x": 0.1,
+                                                  "y": 0.68,
+                                                  "z": 0.1
+                                                },
+                                                "velocityOverLifetime": {
+                                                  "_$type": "VelocityOverLifetime",
+                                                  "enable": true,
+                                                  "_velocity": {
+                                                    "_$type": "GradientVelocity",
+                                                    "_constant": {
+                                                      "_$type": "Vector3",
+                                                      "y": -0.3
+                                                    }
+                                                  }
+                                                },
+                                                "colorOverLifetime": {
+                                                  "_$type": "ColorOverLifetime",
+                                                  "enable": true,
+                                                  "_color": {
+                                                    "_$type": "GradientColor",
+                                                    "_type": 1,
+                                                    "_gradient": {
+                                                      "_$type": "Gradient",
+                                                      "_alphaElements": {
+                                                        "_$type": "Float32Array",
+                                                        "value": [
+                                                          0,
+                                                          1,
+                                                          1,
+                                                          1,
+                                                          0,
+                                                          0,
+                                                          0,
+                                                          0
+                                                        ]
+                                                      },
+                                                      "_colorAlphaKeysCount": 2,
+                                                      "_rgbElements": {
+                                                        "_$type": "Float32Array",
+                                                        "value": [
+                                                          0,
+                                                          0,
+                                                          0,
+                                                          0,
+                                                          0.5058823823928833,
+                                                          1,
+                                                          1,
+                                                          1,
+                                                          1,
+                                                          0,
+                                                          0,
+                                                          0,
+                                                          0,
+                                                          0,
+                                                          0,
+                                                          0
+                                                        ]
+                                                      },
+                                                      "_colorRGBKeysCount": 3
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_$id": "8r6cfl5b",
+      "_$type": "Sprite3D",
+      "name": "RigPelvisGizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": 1.177864e-9,
+          "y": 0.4380011,
+          "z": -0.02694771
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.43796200405507707,
+          "y": -0.3452727031968696,
+          "z": -0.6416426059409496,
+          "w": -0.5265651048754505
+        }
+      }
+    },
+    {
+      "_$id": "rgpgtzds",
+      "_$type": "Sprite3D",
+      "name": "RigRArm1Gizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": -0.218103,
+          "y": 0.7754012,
+          "z": -0.007211788
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.6365966756376399,
+          "y": 0.37173188577393435,
+          "z": 0.6582632748084657,
+          "w": -0.15247799416471378
+        },
+        "localScale": {
+          "_$type": "Vector3",
+          "x": 1.000001,
+          "y": 1.000003,
+          "z": 1.000001
+        }
+      }
+    },
+    {
+      "_$id": "oux2qmju",
+      "_$type": "Sprite3D",
+      "name": "RigRArm2Gizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": -0.2419891,
+          "y": 0.6628694,
+          "z": -0.1278645
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.4642470747151506,
+          "y": 0.5910871678069053,
+          "z": 0.6028340671671197,
+          "w": -0.2677343854180586
+        },
+        "localScale": {
+          "_$type": "Vector3",
+          "x": 1.000002,
+          "y": 1.000002,
+          "z": 1.000002
+        }
+      }
+    },
+    {
+      "_$id": "9oumj8xm",
+      "_$type": "Sprite3D",
+      "name": "RigRArmPalmGizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": -0.310741,
+          "y": 0.5223101,
+          "z": -0.1670308
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.4680068986778478,
+          "y": 0.8673371975497117,
+          "z": -0.1145714996763275,
+          "w": 0.1247761996474985
+        },
+        "localScale": {
+          "_$type": "Vector3",
+          "x": 1.000003,
+          "y": 0.9999997,
+          "z": 0.9999984
+        }
+      }
+    },
+    {
+      "_$id": "xcz7umzy",
+      "_$type": "Sprite3D",
+      "name": "RigRibcageGizmo",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": -0.03970964,
+          "y": 0.7895072,
+          "z": 0.05968674
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.45150996079631966,
+          "y": 0.35300966934889716,
+          "z": 0.6729913415655473,
+          "w": 0.46755275940335644
+        }
+      }
+    },
+    {
+      "_$id": "l13tfi5g",
+      "_$type": "Sprite3D",
+      "name": "RigRLegPlatform",
+      "transform": {
+        "localPosition": {
+          "_$type": "Vector3",
+          "x": -0.1708386,
+          "y": 4.539477e-9,
+          "z": -0.1005874
+        },
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": -0.4081032837988183,
+          "y": -0.4081032837988183,
+          "z": -0.5774527770758585,
+          "w": -0.5774527770758585
+        }
+      }
+    }
+  ]
+}
