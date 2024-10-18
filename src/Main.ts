@@ -28,5 +28,7 @@ export class Main extends Laya.Script {
 
     onStartGame() {
         console.log("Game start");
+
+
     }
 }

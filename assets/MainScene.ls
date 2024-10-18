@@ -10,7 +10,10 @@
   "_$comp": [
     {
       "_$type": "7bad1742-6eed-4d8d-81c0-501dc5bf03d6",
-      "scriptPath": "../src/Main.ts"
+      "scriptPath": "../src/Main.ts",
+      "button": {
+        "_$ref": "at0eo4o5"
+      }
     }
   ],
   "_$child": [
@@ -121,7 +124,6 @@
       "y": 1124,
       "width": 179,
       "height": 86,
-      "visible": false,
       "_mouseState": 2,
       "bottom": 70,
       "centerX": 0,
