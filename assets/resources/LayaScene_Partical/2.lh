@@ -1,0 +1,158 @@
+{
+  "_$ver": 1,
+  "_$id": "kfw1ohvl",
+  "_$type": "Sprite3D",
+  "name": "eff_guagnquan",
+  "transform": {
+    "localRotation": {
+      "_$type": "Quaternion",
+      "w": -1
+    }
+  },
+  "_$comp": [
+    {
+      "_$type": "ShurikenParticleRenderer",
+      "lightmapScaleOffset": {
+        "_$type": "Vector4"
+      },
+      "sharedMaterials": [
+        {
+          "_$uuid": "10991cb8-ffe0-42a6-a8fc-6ca1c474b9d9",
+          "_$type": "Material"
+        }
+      ],
+      "_particleSystem": {
+        "_isPlaying": true,
+        "duration": 1.5,
+        "startLifetimeConstant": 1.5,
+        "startLifetimeConstantMax": 1.5,
+        "startSpeedConstant": 0,
+        "startSpeedConstantMax": 0,
+        "startSizeConstant": 3,
+        "startSizeConstantMax": 3,
+        "startSizeConstantSeparate": {
+          "_$type": "Vector3",
+          "x": 3,
+          "y": 1,
+          "z": 1
+        },
+        "startSizeConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startSizeConstantMaxSeparate": {
+          "_$type": "Vector3",
+          "x": 3,
+          "y": 1,
+          "z": 1
+        },
+        "startRotationConstantSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMaxSeparate": {
+          "_$type": "Vector3"
+        },
+        "startColorConstant": {
+          "_$type": "Vector4",
+          "x": 1,
+          "y": 1,
+          "z": 1,
+          "w": 0.1176471
+        },
+        "startColorConstantMin": {
+          "_$type": "Vector4"
+        },
+        "startColorConstantMax": {
+          "_$type": "Vector4",
+          "x": 1,
+          "y": 1,
+          "z": 1,
+          "w": 0.1176471
+        },
+        "scaleMode": 0,
+        "maxParticles": 6,
+        "randomSeed": {
+          "_$type": "Uint32Array",
+          "value": [
+            2799164000
+          ]
+        },
+        "emission": {
+          "emissionRate": 4
+        },
+        "colorOverLifetime": {
+          "_$type": "ColorOverLifetime",
+          "_color": {
+            "_$type": "GradientColor",
+            "_type": 1,
+            "_gradient": {
+              "_$type": "Gradient",
+              "_alphaElements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_colorAlphaKeysCount": 4,
+              "_rgbElements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_colorRGBKeysCount": 4
+            }
+          }
+        },
+        "sizeOverLifetime": {
+          "_$type": "SizeOverLifetime",
+          "enable": true,
+          "_size": {
+            "_$type": "GradientSize",
+            "_gradient": {
+              "_$type": "GradientDataNumber",
+              "_elements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0.8508824110031128,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_currentLength": 4
+            }
+          }
+        }
+      }
+    }
+  ]
+}

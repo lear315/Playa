@@ -1,1 +1,1038 @@
-{"version":"LAYAHIERARCHY:02","data":{"type":"ShuriKenParticle3D","instanceID":28,"props":{"name":"chufa","active":true,"isStatic":false,"layer":0,"position":[0,0,0],"rotation":[0.7071068,0,0,-0.7071068],"scale":[0.2,0.2,0.2],"main":{"randomSeed":330476200,"bases":{"isPerformanceMode":true,"duration":1,"looping":false,"startLifetimeConstant":0.4,"startLifetimeConstantMax":0.4,"startSpeedConstant":0,"startSpeedConstantMax":0,"startSizeConstant":30,"startSizeConstantMax":30,"scaleMode":0,"maxParticles":5},"vector3s":{"startSizeConstantSeparate":[30,1,1],"startSizeConstantMaxSeparate":[30,1,1]}},"emission":{"bases":{"enable":true,"emissionRate":0},"bursts":[{"time":0,"min":0,"max":1},{"time":0.2,"min":0,"max":1},{"time":0.4,"min":0,"max":1}]},"colorOverLifetime":{"bases":{"enable":true},"color":{"type":1,"gradient":{"alphas":[{"key":0,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.5220588,0.9802231,1]},{"key":1,"value":[0,1,0.5862069]}]},"gradientMax":{"alphas":[{"key":0,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.5220588,0.9802231,1]},{"key":1,"value":[0,1,0.5862069]}]}}},"sizeOverLifetime":{"bases":{"enable":true},"size":{"type":0,"gradient":{"sizes":[{"key":0,"value":0.3123779},{"key":1,"value":1}]},"gradientX":{"sizes":[{"key":0,"value":0.3123779},{"key":1,"value":1}]},"gradientMax":{"sizes":[{"key":0,"value":0.3123779},{"key":1,"value":1}]},"gradientXMax":{"sizes":[{"key":0,"value":0.3123779},{"key":1,"value":1}]}}},"textureSheetAnimation":{"bases":{"enable":true},"vector2s":{"tiles":[4,3]},"frame":{"type":0,"constant":10,"constantMax":10},"startFrame":{"type":0}},"renderer":{"bases":{"renderMode":2},"resources":{"material":"Assets/weiyu/newMaterials/chufa.lmat"}}},"components":[],"child":[{"type":"ShuriKenParticle3D","instanceID":29,"props":{"name":"glow","active":true,"isStatic":false,"layer":0,"position":[0,0,0],"rotation":[0,0,0,-1],"scale":[1,1,1],"main":{"randomSeed":3599191000,"bases":{"isPerformanceMode":true,"duration":1,"looping":false,"startLifetimeConstant":0.15,"startLifetimeConstantMax":0.15,"startSpeedConstant":0,"startSpeedConstantMax":0,"startSizeConstant":20,"startSizeConstantMax":20,"scaleMode":0,"maxParticles":1},"vector3s":{"startSizeConstantSeparate":[20,1,1],"startSizeConstantMaxSeparate":[20,1,1]}},"emission":{"bases":{"enable":true,"emissionRate":0},"bursts":[{"time":0,"min":0,"max":1}]},"colorOverLifetime":{"bases":{"enable":true},"color":{"type":1,"gradient":{"alphas":[{"key":0,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.375,1,0.4827586]},{"key":1,"value":[1,1,1]}]},"gradientMax":{"alphas":[{"key":0,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.375,1,0.4827586]},{"key":1,"value":[1,1,1]}]}}},"textureSheetAnimation":{"bases":{"enable":true},"vector2s":{"tiles":[4,3]},"frame":{"type":0,"constant":9,"constantMax":9},"startFrame":{"type":0}},"renderer":{"resources":{"material":"Assets/weiyu/newMaterials/chufa 1.lmat"}}},"components":[],"child":[]},{"type":"ShuriKenParticle3D","instanceID":30,"props":{"name":"lizi","active":true,"isStatic":false,"layer":0,"position":[0,0,0],"rotation":[0,0,0,-1],"scale":[1,1,1],"main":{"randomSeed":836768600,"bases":{"isPerformanceMode":true,"duration":2,"looping":false,"startLifetimeType":2,"startLifetimeConstant":1.2,"startLifetimeConstantMin":0.8,"startLifetimeConstantMax":1.2,"startSpeedType":2,"startSpeedConstantMin":15,"startSizeType":2,"startSizeConstant":0.5,"startSizeConstantMin":1,"startSizeConstantMax":0.5,"startRotationType":2,"startRotationConstant":6.283185,"startRotationConstantMax":6.283185,"gravityModifier":0.5,"scaleMode":0,"maxParticles":20},"vector3s":{"startSizeConstantSeparate":[0.5,1,1],"startSizeConstantMinSeparate":[1,1,1],"startSizeConstantMaxSeparate":[0.5,1,1],"startRotationConstantSeparate":[0,0,-6.283185],"startRotationConstantMaxSeparate":[0,0,-6.283185]}},"emission":{"bases":{"enable":true,"emissionRate":0},"bursts":[{"time":0,"min":0,"max":30}]},"shape":{"shapeType":2,"bases":{"enable":true,"angle":0.07836528,"emitType":0}},"colorOverLifetime":{"bases":{"enable":true},"color":{"type":1,"gradient":{"alphas":[{"key":0,"value":0},{"key":0.1352712,"value":1},{"key":0.309926,"value":0},{"key":0.510277,"value":1},{"key":0.6986343,"value":0},{"key":0.8835584,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.7132353,1,0.7508114]},{"key":1,"value":[0,1,0.213793]}]},"gradientMax":{"alphas":[{"key":0,"value":0},{"key":0.1352712,"value":1},{"key":0.309926,"value":0},{"key":0.510277,"value":1},{"key":0.6986343,"value":0},{"key":0.8835584,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.7132353,1,0.7508114]},{"key":1,"value":[0,1,0.213793]}]}}},"textureSheetAnimation":{"bases":{"enable":true},"vector2s":{"tiles":[4,3]},"frame":{"type":2,"constant":8,"constantMax":8},"startFrame":{"type":0}},"renderer":{"resources":{"material":"Assets/weiyu/newMaterials/chufa 2.lmat"}}},"components":[],"child":[]},{"type":"ShuriKenParticle3D","instanceID":31,"props":{"name":"lizi (1)","active":true,"isStatic":false,"layer":0,"position":[0,0,0],"rotation":[0,0,0,-1],"scale":[1,1,1],"main":{"randomSeed":3584715000,"bases":{"isPerformanceMode":true,"duration":1,"looping":false,"startLifetimeType":2,"startLifetimeConstant":0.3,"startLifetimeConstantMin":0.1,"startLifetimeConstantMax":0.3,"startSpeedType":2,"startSpeedConstant":50,"startSpeedConstantMin":20,"startSpeedConstantMax":50,"startSizeType":2,"startSizeConstant":0.3,"startSizeConstantMin":0.6,"startSizeConstantMax":0.3,"startRotationType":2,"startRotationConstant":6.283185,"startRotationConstantMax":6.283185,"gravityModifier":5,"scaleMode":0,"maxParticles":20},"vector3s":{"startSizeConstantSeparate":[0.3,1,1],"startSizeConstantMinSeparate":[0.6,1,1],"startSizeConstantMaxSeparate":[0.3,1,1],"startRotationConstantSeparate":[0,0,-6.283185],"startRotationConstantMaxSeparate":[0,0,-6.283185]}},"emission":{"bases":{"enable":true,"emissionRate":0},"bursts":[{"time":0,"min":0,"max":30}]},"shape":{"shapeType":2,"bases":{"enable":true,"angle":1.226967,"emitType":0}},"colorOverLifetime":{"bases":{"enable":true},"color":{"type":1,"gradient":{"alphas":[{"key":0,"value":0},{"key":0.1352712,"value":1},{"key":0.309926,"value":0},{"key":0.510277,"value":1},{"key":0.6986343,"value":0},{"key":0.8835584,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.7132353,1,0.7508114]},{"key":1,"value":[0,1,0.213793]}]},"gradientMax":{"alphas":[{"key":0,"value":0},{"key":0.1352712,"value":1},{"key":0.309926,"value":0},{"key":0.510277,"value":1},{"key":0.6986343,"value":0},{"key":0.8835584,"value":1},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.7132353,1,0.7508114]},{"key":1,"value":[0,1,0.213793]}]}}},"textureSheetAnimation":{"bases":{"enable":true},"vector2s":{"tiles":[4,3]},"frame":{"type":2,"constant":8,"constantMax":8},"startFrame":{"type":0}},"renderer":{"resources":{"material":"Assets/weiyu/newMaterials/chufa 2.lmat"}}},"components":[],"child":[]},{"type":"ShuriKenParticle3D","instanceID":32,"props":{"name":"linghun","active":true,"isStatic":false,"layer":0,"position":[0,0,0],"rotation":[0,0,0,-1],"scale":[1,1,1],"main":{"randomSeed":1405862000,"bases":{"isPerformanceMode":true,"duration":1.2,"looping":false,"startLifetimeConstant":1.2,"startLifetimeConstantMax":1.2,"startSpeedConstant":0,"startSpeedConstantMax":0,"startSizeConstant":10,"startSizeConstantMax":10,"scaleMode":0,"maxParticles":1},"vector3s":{"startSizeConstantSeparate":[10,1,1],"startSizeConstantMaxSeparate":[10,1,1]}},"emission":{"bases":{"enable":true,"emissionRate":0},"bursts":[{"time":0,"min":0,"max":1}]},"colorOverLifetime":{"bases":{"enable":true},"color":{"type":1,"gradient":{"alphas":[{"key":0,"value":1},{"key":0.6661021,"value":1},{"key":1,"value":0}]},"gradientMax":{"alphas":[{"key":0,"value":1},{"key":0.6661021,"value":1},{"key":1,"value":0}]}}},"sizeOverLifetime":{"bases":{"enable":true},"size":{"type":0,"gradient":{"sizes":[{"key":0,"value":0},{"key":0.08457693,"value":0.9971486},{"key":0.3434165,"value":0.9368251},{"key":0.5235006,"value":1},{"key":0.7766666,"value":0.9295454},{"key":1,"value":1}]},"gradientX":{"sizes":[{"key":0,"value":0},{"key":0.08457693,"value":0.9971486},{"key":0.3434165,"value":0.9368251},{"key":0.5235006,"value":1},{"key":0.7766666,"value":0.9295454},{"key":1,"value":1}]},"gradientMax":{"sizes":[{"key":0,"value":0},{"key":0.08457693,"value":0.9971486},{"key":0.3434165,"value":0.9368251},{"key":0.5235006,"value":1},{"key":0.7766666,"value":0.9295454},{"key":1,"value":1}]},"gradientXMax":{"sizes":[{"key":0,"value":0},{"key":0.08457693,"value":0.9971486},{"key":0.3434165,"value":0.9368251},{"key":0.5235006,"value":1},{"key":0.7766666,"value":0.9295454},{"key":1,"value":1}]}}},"textureSheetAnimation":{"bases":{"enable":true},"vector2s":{"tiles":[4,3]},"frame":{"type":0,"constant":11,"constantMax":11},"startFrame":{"type":0}},"renderer":{"bases":{"renderMode":2},"resources":{"material":"Assets/weiyu/newMaterials/chufa 1.lmat"}}},"components":[],"child":[]},{"type":"ShuriKenParticle3D","instanceID":33,"props":{"name":"glow (1)","active":true,"isStatic":false,"layer":0,"position":[0,0,0],"rotation":[0,0,0,-1],"scale":[1,1,1],"main":{"randomSeed":3220910000,"bases":{"isPerformanceMode":true,"duration":1,"looping":false,"startLifetimeConstant":1,"startLifetimeConstantMax":1,"startSpeedConstant":0,"startSpeedConstantMax":0,"startSizeConstant":40,"startSizeConstantMax":40,"scaleMode":0,"maxParticles":1},"vector3s":{"startSizeConstantSeparate":[40,1,1],"startSizeConstantMaxSeparate":[40,1,1]}},"emission":{"bases":{"enable":true,"emissionRate":0},"bursts":[{"time":0,"min":0,"max":1}]},"colorOverLifetime":{"bases":{"enable":true},"color":{"type":1,"gradient":{"alphas":[{"key":0,"value":1},{"key":0.6746624,"value":0.9606165},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.1102941,1,0.6318458]},{"key":1,"value":[0.128607,1,0.6394236]}]},"gradientMax":{"alphas":[{"key":0,"value":1},{"key":0.6746624,"value":0.9606165},{"key":1,"value":0}],"rgbs":[{"key":0,"value":[0.1102941,1,0.6318458]},{"key":1,"value":[0.128607,1,0.6394236]}]}}},"textureSheetAnimation":{"bases":{"enable":true},"vector2s":{"tiles":[4,3]},"frame":{"type":0,"constant":9,"constantMax":9},"startFrame":{"type":0}},"renderer":{"bases":{"renderMode":2},"resources":{"material":"Assets/weiyu/newMaterials/chufa 3.lmat"}}},"components":[],"child":[]}]}}
+{
+  "_$ver": 1,
+  "_$id": "pdgh6uvv",
+  "_$type": "Sprite3D",
+  "name": "chufa",
+  "transform": {
+    "localRotation": {
+      "_$type": "Quaternion",
+      "x": 0.7071067811865476,
+      "w": -0.7071067811865476
+    },
+    "localScale": {
+      "_$type": "Vector3",
+      "x": 0.2,
+      "y": 0.2,
+      "z": 0.2
+    }
+  },
+  "_$comp": [
+    {
+      "_$type": "ShurikenParticleRenderer",
+      "lightmapScaleOffset": {
+        "_$type": "Vector4"
+      },
+      "sharedMaterials": [
+        {
+          "_$uuid": "8527c31c-afed-42a8-8cd2-07676c0e7867",
+          "_$type": "Material"
+        }
+      ],
+      "renderMode": 2,
+      "_particleSystem": {
+        "duration": 1,
+        "looping": false,
+        "startLifetimeConstant": 0.4,
+        "startLifetimeConstantMax": 0.4,
+        "startSpeedConstant": 0,
+        "startSpeedConstantMax": 0,
+        "startSizeConstant": 30,
+        "startSizeConstantMax": 30,
+        "startSizeConstantSeparate": {
+          "_$type": "Vector3",
+          "x": 30,
+          "y": 1,
+          "z": 1
+        },
+        "startSizeConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startSizeConstantMaxSeparate": {
+          "_$type": "Vector3",
+          "x": 30,
+          "y": 1,
+          "z": 1
+        },
+        "startRotationConstantSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMaxSeparate": {
+          "_$type": "Vector3"
+        },
+        "startColorConstant": {
+          "_$type": "Vector4",
+          "x": 1,
+          "y": 1,
+          "z": 1,
+          "w": 1
+        },
+        "startColorConstantMin": {
+          "_$type": "Vector4"
+        },
+        "startColorConstantMax": {
+          "_$type": "Vector4",
+          "x": 1,
+          "y": 1,
+          "z": 1,
+          "w": 1
+        },
+        "scaleMode": 0,
+        "maxParticles": 5,
+        "randomSeed": {
+          "_$type": "Uint32Array",
+          "value": [
+            330476200
+          ]
+        },
+        "emission": {
+          "emissionRate": 0,
+          "_bursts": [
+            {
+              "_$type": "Burst",
+              "_maxCount": 1
+            },
+            {
+              "_$type": "Burst",
+              "_time": 0.2,
+              "_maxCount": 1
+            },
+            {
+              "_$type": "Burst",
+              "_time": 0.4,
+              "_maxCount": 1
+            }
+          ]
+        },
+        "colorOverLifetime": {
+          "_$type": "ColorOverLifetime",
+          "_color": {
+            "_$type": "GradientColor",
+            "_type": 1,
+            "_gradient": {
+              "_$type": "Gradient",
+              "_alphaElements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_colorAlphaKeysCount": 4,
+              "_rgbElements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_colorRGBKeysCount": 4
+            }
+          }
+        },
+        "sizeOverLifetime": {
+          "_$type": "SizeOverLifetime",
+          "_size": {
+            "_$type": "GradientSize",
+            "_gradient": {
+              "_$type": "GradientDataNumber",
+              "_elements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0.3123778998851776,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_currentLength": 4
+            }
+          }
+        },
+        "textureSheetAnimation": {
+          "_$type": "TextureSheetAnimation",
+          "enable": true,
+          "tiles": {
+            "_$type": "Vector2",
+            "x": 4,
+            "y": 3
+          },
+          "_frame": {
+            "_$type": "FrameOverTime",
+            "_constant": 10
+          },
+          "_startFrame": {
+            "_$type": "StartFrame"
+          }
+        }
+      }
+    }
+  ],
+  "_$child": [
+    {
+      "_$id": "9e3fghto",
+      "_$type": "Sprite3D",
+      "name": "glow",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "w": -1
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "lightmapScaleOffset": {
+            "_$type": "Vector4"
+          },
+          "sharedMaterials": [
+            {
+              "_$uuid": "c950fb44-52cd-4054-baef-889d26eea4b6",
+              "_$type": "Material"
+            }
+          ],
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startLifetimeConstant": 0.15,
+            "startLifetimeConstantMax": 0.15,
+            "startSpeedConstant": 0,
+            "startSpeedConstantMax": 0,
+            "startSizeConstant": 20,
+            "startSizeConstantMax": 20,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 20,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 20,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3"
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "scaleMode": 0,
+            "maxParticles": 1,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                3599191000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 1
+                }
+              ]
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 4,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 4
+                }
+              }
+            },
+            "textureSheetAnimation": {
+              "_$type": "TextureSheetAnimation",
+              "enable": true,
+              "tiles": {
+                "_$type": "Vector2",
+                "x": 4,
+                "y": 3
+              },
+              "_frame": {
+                "_$type": "FrameOverTime",
+                "_constant": 9
+              },
+              "_startFrame": {
+                "_$type": "StartFrame"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "bmnhl532",
+      "_$type": "Sprite3D",
+      "name": "lizi",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "w": -1
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "lightmapScaleOffset": {
+            "_$type": "Vector4"
+          },
+          "sharedMaterials": [
+            {
+              "_$uuid": "3027131a-b022-4cef-8a7e-e9ca5fab8d7b",
+              "_$type": "Material"
+            }
+          ],
+          "_particleSystem": {
+            "duration": 2,
+            "looping": false,
+            "startLifetimeType": 2,
+            "startLifetimeConstant": 1.2,
+            "startLifetimeConstantMin": 0.8,
+            "startLifetimeConstantMax": 1.2,
+            "startSpeedType": 2,
+            "startSpeedConstantMin": 15,
+            "startSizeType": 2,
+            "startSizeConstant": 0.5,
+            "startSizeConstantMin": 1,
+            "startSizeConstantMax": 0.5,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 0.5,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3",
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 0.5,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationType": 2,
+            "startRotationConstant": 6.283185,
+            "startRotationConstantMax": 6.283185,
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3",
+              "z": -6.283185
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "z": -6.283185
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "gravityModifier": 0.5,
+            "scaleMode": 0,
+            "maxParticles": 20,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                836768600
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 30
+                }
+              ]
+            },
+            "shape": {
+              "_$type": "ConeShape",
+              "angleDEG": 4.48999980436096
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 4,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 4
+                }
+              }
+            },
+            "textureSheetAnimation": {
+              "_$type": "TextureSheetAnimation",
+              "enable": true,
+              "tiles": {
+                "_$type": "Vector2",
+                "x": 4,
+                "y": 3
+              },
+              "_frame": {
+                "_$type": "FrameOverTime",
+                "_type": 2,
+                "_constantMax": 8
+              },
+              "_startFrame": {
+                "_$type": "StartFrame"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "l36h4v2b",
+      "_$type": "Sprite3D",
+      "name": "lizi (1)",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "w": -1
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "lightmapScaleOffset": {
+            "_$type": "Vector4"
+          },
+          "sharedMaterials": [
+            {
+              "_$uuid": "3027131a-b022-4cef-8a7e-e9ca5fab8d7b",
+              "_$type": "Material"
+            }
+          ],
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startLifetimeType": 2,
+            "startLifetimeConstant": 0.3,
+            "startLifetimeConstantMin": 0.1,
+            "startLifetimeConstantMax": 0.3,
+            "startSpeedType": 2,
+            "startSpeedConstant": 50,
+            "startSpeedConstantMin": 20,
+            "startSpeedConstantMax": 50,
+            "startSizeType": 2,
+            "startSizeConstant": 0.3,
+            "startSizeConstantMin": 0.6,
+            "startSizeConstantMax": 0.3,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 0.3,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3",
+              "x": 0.6,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 0.3,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationType": 2,
+            "startRotationConstant": 6.283185,
+            "startRotationConstantMax": 6.283185,
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3",
+              "z": -6.283185
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "z": -6.283185
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "gravityModifier": 5,
+            "scaleMode": 0,
+            "maxParticles": 20,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                3584715000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 30
+                }
+              ]
+            },
+            "shape": {
+              "_$type": "ConeShape",
+              "angleDEG": 70.30003070182808
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 4,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 4
+                }
+              }
+            },
+            "textureSheetAnimation": {
+              "_$type": "TextureSheetAnimation",
+              "enable": true,
+              "tiles": {
+                "_$type": "Vector2",
+                "x": 4,
+                "y": 3
+              },
+              "_frame": {
+                "_$type": "FrameOverTime",
+                "_type": 2,
+                "_constantMax": 8
+              },
+              "_startFrame": {
+                "_$type": "StartFrame"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "k8ho566r",
+      "_$type": "Sprite3D",
+      "name": "linghun",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "w": -1
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "lightmapScaleOffset": {
+            "_$type": "Vector4"
+          },
+          "sharedMaterials": [
+            {
+              "_$uuid": "c950fb44-52cd-4054-baef-889d26eea4b6",
+              "_$type": "Material"
+            }
+          ],
+          "renderMode": 2,
+          "_particleSystem": {
+            "duration": 1.2,
+            "looping": false,
+            "startLifetimeConstant": 1.2,
+            "startLifetimeConstantMax": 1.2,
+            "startSpeedConstant": 0,
+            "startSpeedConstantMax": 0,
+            "startSizeConstant": 10,
+            "startSizeConstantMax": 10,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 10,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 10,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3"
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "scaleMode": 0,
+            "maxParticles": 1,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                1405862000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 1
+                }
+              ]
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 4,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 4
+                }
+              }
+            },
+            "sizeOverLifetime": {
+              "_$type": "SizeOverLifetime",
+              "enable": true,
+              "_size": {
+                "_$type": "GradientSize",
+                "_gradient": {
+                  "_$type": "GradientDataNumber",
+                  "_elements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0.08457692712545395,
+                      0.9971485733985901,
+                      0.3434165120124817,
+                      0.9368250966072083,
+                      1,
+                      1
+                    ]
+                  },
+                  "_currentLength": 8
+                }
+              }
+            },
+            "textureSheetAnimation": {
+              "_$type": "TextureSheetAnimation",
+              "enable": true,
+              "tiles": {
+                "_$type": "Vector2",
+                "x": 4,
+                "y": 3
+              },
+              "_frame": {
+                "_$type": "FrameOverTime",
+                "_constant": 11
+              },
+              "_startFrame": {
+                "_$type": "StartFrame"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "k5975t29",
+      "_$type": "Sprite3D",
+      "name": "glow (1)",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "w": -1
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "lightmapScaleOffset": {
+            "_$type": "Vector4"
+          },
+          "sharedMaterials": [
+            {
+              "_$uuid": "b3a1f075-b04c-4091-bdbe-098ea461d4c8",
+              "_$type": "Material"
+            }
+          ],
+          "renderMode": 2,
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startLifetimeConstant": 1,
+            "startLifetimeConstantMax": 1,
+            "startSpeedConstant": 0,
+            "startSpeedConstantMax": 0,
+            "startSizeConstant": 40,
+            "startSizeConstantMax": 40,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 40,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 40,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3"
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "scaleMode": 0,
+            "maxParticles": 1,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                3220910000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 1
+                }
+              ]
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 4,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 4
+                }
+              }
+            },
+            "textureSheetAnimation": {
+              "_$type": "TextureSheetAnimation",
+              "enable": true,
+              "tiles": {
+                "_$type": "Vector2",
+                "x": 4,
+                "y": 3
+              },
+              "_frame": {
+                "_$type": "FrameOverTime",
+                "_constant": 9
+              },
+              "_startFrame": {
+                "_$type": "StartFrame"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

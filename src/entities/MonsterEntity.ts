@@ -13,8 +13,9 @@ export class MonsterEntity {
 
 
     public skillRes: string[] = [
-        "resources/LayaScene_Partical/n14.lh",
-        "resources/LayaScene_Partical/a1.lh",
+        "resources/LayaScene_Partical/2.lh",
+        "resources/LayaScene_Partical/n14.lh"
+
     ];
 
     constructor() {
@@ -54,7 +55,7 @@ export class MonsterEntity {
 
         if (this.skillCooldown > 0) {
             this.skillCooldown -= deltaTime;
-        } else if (Math.random() < 0.0005) {
+        } else if (Math.random() < 0.00005) {
             this.useSkill();
         }
     }
