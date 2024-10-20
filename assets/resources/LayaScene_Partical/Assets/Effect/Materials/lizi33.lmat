@@ -1,0 +1,56 @@
+{
+  "version": "LAYAMATERIAL:04",
+  "props": {
+    "textures": [
+      {
+        "path": "res://ad860844-8ffe-43a3-8799-bcdf6b989217",
+        "constructParams": [
+          256,
+          256,
+          1,
+          true,
+          false,
+          false
+        ],
+        "propertyParams": {
+          "filterMode": 1,
+          "wrapModeU": 1,
+          "wrapModeV": 1,
+          "anisoLevel": 4
+        },
+        "name": "u_texture"
+      }
+    ],
+    "type": "PARTICLESHURIKEN",
+    "renderQueue": 2000,
+    "materialRenderMode": 0,
+    "u_AlphaTestValue": 0.5,
+    "s_Cull": 0,
+    "s_Blend": 0,
+    "s_BlendSrc": 6,
+    "s_BlendDst": 1,
+    "s_BlendSrcRGB": 1,
+    "s_BlendDstRGB": 0,
+    "s_BlendSrcAlpha": 1,
+    "s_BlendDstAlpha": 0,
+    "s_DepthTest": 1,
+    "s_DepthWrite": true,
+    "u_TilingOffset": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "u_Tintcolor": [
+      0.6007751937984496,
+      0.6007751937984496,
+      0.6007751937984496,
+      0.5019608
+    ],
+    "defines": [
+      "ADDTIVEFOG",
+      "DIFFUSEMAP",
+      "TINTCOLOR"
+    ]
+  }
+}

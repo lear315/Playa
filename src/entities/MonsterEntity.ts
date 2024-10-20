@@ -15,7 +15,8 @@ export class MonsterEntity {
     public skillRes: string[] = [
         "resources/LayaScene_Partical/2.lh",
         "resources/LayaScene_Partical/n14.lh",
-        "resources/LayaScene_Partical/a1.lh"
+        "resources/LayaScene_Partical/a1.lh",
+        // "resources/LayaScene_Partical/4.lh"
 
     ];
 
