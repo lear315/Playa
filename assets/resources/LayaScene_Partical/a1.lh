@@ -1,1 +1,122 @@
-{"version":"LAYAHIERARCHY:02","data":{"type":"ShuriKenParticle3D","instanceID":0,"props":{"name":"Particle System","active":true,"isStatic":false,"layer":0,"position":[0,0,0],"rotation":[0,0,0,-1],"scale":[1,1,1],"main":{"randomSeed":2054447000,"bases":{"isPerformanceMode":true,"startLifetimeConstant":1,"startLifetimeConstantMax":1,"startSpeedConstant":0,"startSpeedConstantMax":0,"simulationSpace":1,"maxParticles":1}},"emission":{"bases":{"enable":true}},"textureSheetAnimation":{"bases":{"enable":true},"vector2s":{"tiles":[5,4]},"frame":{"type":1,"overTime":{"frames":[{"key":0,"value":0},{"key":1,"value":19.998}]},"overTimeMax":{"frames":[{"key":0,"value":0},{"key":1,"value":19.998}]}},"startFrame":{"type":0}},"renderer":{"resources":{"material":"Assets/ZZF/mesh/texture/Materials/QP.lmat"}}},"components":[],"child":[]}}
+{
+  "_$ver": 1,
+  "_$id": "i5q4purx",
+  "_$type": "Sprite3D",
+  "name": "Particle System",
+  "transform": {
+    "localRotation": {
+      "_$type": "Quaternion",
+      "w": -1
+    },
+    "localScale": {
+      "_$type": "Vector3",
+      "x": 2,
+      "y": 2,
+      "z": 2
+    }
+  },
+  "_$comp": [
+    {
+      "_$type": "ShurikenParticleRenderer",
+      "lightmapScaleOffset": {
+        "_$type": "Vector4"
+      },
+      "sharedMaterials": [
+        {
+          "_$uuid": "082426f1-0fb2-412f-9839-363484d74f4c",
+          "_$type": "Material"
+        }
+      ],
+      "_particleSystem": {
+        "_isPlaying": true,
+        "startLifetimeConstant": 1,
+        "startLifetimeConstantMax": 1,
+        "startSpeedConstant": 0,
+        "startSpeedConstantMax": 0,
+        "startSizeConstantSeparate": {
+          "_$type": "Vector3",
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "startSizeConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startSizeConstantMaxSeparate": {
+          "_$type": "Vector3",
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "startRotationConstantSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMaxSeparate": {
+          "_$type": "Vector3"
+        },
+        "startColorConstant": {
+          "_$type": "Vector4",
+          "x": 1,
+          "y": 1,
+          "z": 1,
+          "w": 1
+        },
+        "startColorConstantMin": {
+          "_$type": "Vector4"
+        },
+        "startColorConstantMax": {
+          "_$type": "Vector4",
+          "x": 1,
+          "y": 1,
+          "z": 1,
+          "w": 1
+        },
+        "maxParticles": 1,
+        "randomSeed": {
+          "_$type": "Uint32Array",
+          "value": [
+            2054447000
+          ]
+        },
+        "textureSheetAnimation": {
+          "_$type": "TextureSheetAnimation",
+          "enable": true,
+          "tiles": {
+            "_$type": "Vector2",
+            "x": 5,
+            "y": 4
+          },
+          "_frame": {
+            "_$type": "FrameOverTime",
+            "_type": 1,
+            "_overTime": {
+              "_$type": "GradientDataInt",
+              "_elements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0,
+                  1,
+                  19.99799919128418,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_currentLength": 4,
+              "_curveMin": 0,
+              "_curveMax": 1
+            }
+          },
+          "_startFrame": {
+            "_$type": "StartFrame"
+          }
+        }
+      }
+    }
+  ]
+}

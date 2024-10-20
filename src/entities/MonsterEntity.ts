@@ -56,7 +56,7 @@ export class MonsterEntity {
 
         if (this.skillCooldown > 0) {
             this.skillCooldown -= deltaTime;
-        } else if (Math.random() < 0.00005) {
+        } else if (Math.random() < 0.0005) {
             this.useSkill();
         }
     }
