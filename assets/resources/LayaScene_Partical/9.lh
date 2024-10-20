@@ -1,0 +1,1189 @@
+{
+  "_$ver": 1,
+  "_$id": "wx4ze3au",
+  "_$type": "Sprite3D",
+  "name": "eff_baozha_lan7",
+  "transform": {
+    "localRotation": {
+      "_$type": "Quaternion",
+      "w": -1
+    }
+  },
+  "_$comp": [
+    {
+      "_$type": "ShurikenParticleRenderer",
+      "sharedMaterials": [
+        {
+          "_$uuid": "0c2cd15a-2e5d-4c0b-b311-b5b8d7bf4de9",
+          "_$type": "Material"
+        }
+      ],
+      "renderMode": 2,
+      "sortingFudge": -2,
+      "_particleSystem": {
+        "duration": 1,
+        "looping": false,
+        "startLifetimeConstant": 0.3,
+        "startLifetimeConstantMax": 0.3,
+        "startSpeedConstant": 0,
+        "startSpeedConstantMax": 0,
+        "startSizeConstant": 12,
+        "startSizeConstantMax": 12,
+        "startSizeConstantSeparate": {
+          "_$type": "Vector3",
+          "x": 12,
+          "y": 1,
+          "z": 1
+        },
+        "startSizeConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startSizeConstantMaxSeparate": {
+          "_$type": "Vector3",
+          "x": 12,
+          "y": 1,
+          "z": 1
+        },
+        "startRotationConstantSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMinSeparate": {
+          "_$type": "Vector3"
+        },
+        "startRotationConstantMaxSeparate": {
+          "_$type": "Vector3"
+        },
+        "startColorConstant": {
+          "_$type": "Vector4",
+          "x": 0.3345942,
+          "y": 0.8267998,
+          "z": 0.9716981,
+          "w": 1
+        },
+        "startColorConstantMin": {
+          "_$type": "Vector4"
+        },
+        "startColorConstantMax": {
+          "_$type": "Vector4",
+          "x": 0.3345942,
+          "y": 0.8267998,
+          "z": 0.9716981,
+          "w": 1
+        },
+        "maxParticles": 2,
+        "randomSeed": {
+          "_$type": "Uint32Array",
+          "value": [
+            2607261000
+          ]
+        },
+        "emission": {
+          "emissionRate": 0,
+          "_bursts": [
+            {
+              "_$type": "Burst",
+              "_maxCount": 2
+            }
+          ]
+        },
+        "colorOverLifetime": {
+          "_$type": "ColorOverLifetime",
+          "enable": true,
+          "_color": {
+            "_$type": "GradientColor",
+            "_type": 1,
+            "_gradient": {
+              "_$type": "Gradient",
+              "_alphaElements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_colorAlphaKeysCount": 2,
+              "_rgbElements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_colorRGBKeysCount": 2
+            }
+          }
+        },
+        "sizeOverLifetime": {
+          "_$type": "SizeOverLifetime",
+          "enable": true,
+          "_size": {
+            "_$type": "GradientSize",
+            "_gradient": {
+              "_$type": "GradientDataNumber",
+              "_elements": {
+                "_$type": "Float32Array",
+                "value": [
+                  0,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "_currentLength": 4
+            }
+          }
+        }
+      }
+    }
+  ],
+  "_$child": [
+    {
+      "_$id": "cilxsnun",
+      "_$type": "Sprite3D",
+      "name": "qibo",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.7071067811865476,
+          "w": -0.7071067811865476
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "sharedMaterials": [
+            {
+              "_$uuid": "b6845357-264d-4bf1-ba97-65c79ebffe63",
+              "_$type": "Material"
+            }
+          ],
+          "renderMode": 4,
+          "mesh": {
+            "_$uuid": "b1365ed1-0d52-441b-a833-cfe5c98e0ddc",
+            "_$type": "Mesh"
+          },
+          "sortingFudge": 2,
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startLifetimeType": 2,
+            "startLifetimeConstant": 0.5,
+            "startLifetimeConstantMin": 0.3,
+            "startLifetimeConstantMax": 0.5,
+            "startSpeedConstant": 0,
+            "startSpeedConstantMax": 0,
+            "startSizeConstant": 5.4,
+            "startSizeConstantMax": 5.4,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 5.4,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 5.4,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationType": 2,
+            "startRotationConstant": 360,
+            "startRotationConstantMax": 360,
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3",
+              "y": -360,
+              "z": -360
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "y": -360,
+              "z": -360
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 0.03684586,
+              "y": 0.1790592,
+              "z": 0.3396226,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 0.03684586,
+              "y": 0.1790592,
+              "z": 0.3396226,
+              "w": 1
+            },
+            "maxParticles": 6,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                2042347000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 6
+                }
+              ]
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "enable": true,
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      0.4823529124259949,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 3,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 2
+                }
+              }
+            },
+            "sizeOverLifetime": {
+              "_$type": "SizeOverLifetime",
+              "enable": true,
+              "_size": {
+                "_$type": "GradientSize",
+                "_gradient": {
+                  "_$type": "GradientDataNumber",
+                  "_elements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0.30215010046958923,
+                      1,
+                      0.9731746912002563,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_currentLength": 4
+                }
+              }
+            },
+            "rotationOverLifetime": {
+              "_$type": "RotationOverLifetime",
+              "enable": true,
+              "_angularVelocity": {
+                "_$type": "GradientAngularVelocity",
+                "_constant": 2,
+                "_constantMin": 0,
+                "_constantMax": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "6t71nw8g",
+      "_$type": "Sprite3D",
+      "name": "banyuan",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.7071067811865476,
+          "w": -0.7071067811865476
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "sharedMaterials": [
+            {
+              "_$uuid": "0403524f-1522-4739-892c-f5a826228ea8",
+              "_$type": "Material"
+            }
+          ],
+          "renderMode": 4,
+          "mesh": {
+            "_$uuid": "e5951276-5714-4bbb-b46d-bfd58f0e0dd9",
+            "_$type": "Mesh"
+          },
+          "sortingFudge": 2,
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startLifetimeConstant": 0.4,
+            "startLifetimeConstantMax": 0.4,
+            "startSpeedConstant": 0,
+            "startSpeedConstantMax": 0,
+            "startSizeConstant": 3.7,
+            "startSizeConstantMax": 3.7,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 3.7,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 3.7,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3"
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 0.1933962,
+              "y": 0.6598635,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 0.1933962,
+              "y": 0.6598635,
+              "z": 1,
+              "w": 1
+            },
+            "maxParticles": 2,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                1824167000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 2
+                }
+              ]
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "enable": true,
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      0.3970550000667572,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 3,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 2
+                }
+              }
+            },
+            "sizeOverLifetime": {
+              "_$type": "SizeOverLifetime",
+              "enable": true,
+              "_size": {
+                "_$type": "GradientSize",
+                "_gradient": {
+                  "_$type": "GradientDataNumber",
+                  "_elements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0.16591259837150574,
+                      1,
+                      0.9731746912002563,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_currentLength": 4
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "yv01jpx8",
+      "_$type": "Sprite3D",
+      "name": "lizi",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.7071067811865476,
+          "w": -0.7071067811865476
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "sharedMaterials": [
+            {
+              "_$uuid": "7cf0da3c-16d5-48a7-a09d-df7a57b9d395",
+              "_$type": "Material"
+            }
+          ],
+          "renderMode": 1,
+          "stretchedBillboardSpeedScale": -0.1,
+          "stretchedBillboardLengthScale": 5,
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startDelay": 0.05,
+            "startDelayMax": 0.05,
+            "startLifetimeType": 2,
+            "startLifetimeConstant": 0.3,
+            "startLifetimeConstantMin": 0.8,
+            "startLifetimeConstantMax": 0.3,
+            "startSpeedType": 2,
+            "startSpeedConstantMin": 3,
+            "startSizeType": 2,
+            "startSizeConstant": 0.3,
+            "startSizeConstantMin": 0.15,
+            "startSizeConstantMax": 0.3,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 0.3,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3",
+              "x": 0.15,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 0.3,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3"
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "maxParticles": 20,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                2396651000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 20
+                }
+              ]
+            },
+            "shape": {
+              "_$type": "HemisphereShape",
+              "radius": 0.5
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "enable": true,
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 2,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0.5141509771347046,
+                      0.9017680883407593,
+                      1,
+                      1,
+                      0.5141509771347046,
+                      0.9017680883407593,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 2
+                }
+              }
+            },
+            "sizeOverLifetime": {
+              "_$type": "SizeOverLifetime",
+              "enable": true,
+              "_size": {
+                "_$type": "GradientSize",
+                "_gradient": {
+                  "_$type": "GradientDataNumber",
+                  "_elements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0.5825461745262146,
+                      0.27305829524993896,
+                      0.9328405857086182,
+                      1,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_currentLength": 6
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "q7imhc3p",
+      "_$type": "Sprite3D",
+      "name": "shizi",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.7071067811865476,
+          "w": -0.7071067811865476
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "sharedMaterials": [
+            {
+              "_$uuid": "0403524f-1522-4739-892c-f5a826228ea8",
+              "_$type": "Material"
+            }
+          ],
+          "renderMode": 4,
+          "stretchedBillboardLengthScale": -2.5,
+          "mesh": {
+            "_$uuid": "e5159e29-d986-4360-a04a-2334b520a440",
+            "_$type": "Mesh"
+          },
+          "sortingFudge": 1,
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startDelay": 0.1,
+            "startDelayMax": 0.1,
+            "startLifetimeType": 2,
+            "startLifetimeConstant": 1,
+            "startLifetimeConstantMin": 0.5,
+            "startLifetimeConstantMax": 1,
+            "startSpeedType": 2,
+            "startSpeedConstant": 8,
+            "startSpeedConstantMin": 2,
+            "startSpeedConstantMax": 8,
+            "startSizeType": 2,
+            "startSizeConstantMin": 6,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3",
+              "x": 6,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationType": 2,
+            "startRotationConstant": 360,
+            "startRotationConstantMax": 360,
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3",
+              "z": -360
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "z": -360
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 0.1226415,
+              "y": 0.07937278,
+              "z": 0.06537023,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 0.1226415,
+              "y": 0.07937278,
+              "z": 0.06537023,
+              "w": 1
+            },
+            "gravityModifier": 0.5,
+            "maxParticles": 30,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                671479300
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 30
+                }
+              ]
+            },
+            "shape": {
+              "_$type": "ConeShape",
+              "angleDEG": 60.00002571454078
+            },
+            "sizeOverLifetime": {
+              "_$type": "SizeOverLifetime",
+              "enable": true,
+              "_size": {
+                "_$type": "GradientSize",
+                "_gradient": {
+                  "_$type": "GradientDataNumber",
+                  "_elements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_currentLength": 4
+                }
+              }
+            },
+            "rotationOverLifetime": {
+              "_$type": "RotationOverLifetime",
+              "enable": true,
+              "_angularVelocity": {
+                "_$type": "GradientAngularVelocity",
+                "_type": 2,
+                "_constant": 0,
+                "_constantMin": -4,
+                "_constantMax": 4
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "gkwcthj3",
+      "_$type": "Sprite3D",
+      "name": "dimian",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "w": -1
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "sharedMaterials": [
+            {
+              "_$uuid": "569f9af6-44f7-4afb-b208-5af3808c36c0",
+              "_$type": "Material"
+            }
+          ],
+          "renderMode": 2,
+          "sortingFudge": 3,
+          "_particleSystem": {
+            "_isPlaying": true,
+            "duration": 1,
+            "looping": false,
+            "startLifetimeConstant": 0.5,
+            "startLifetimeConstantMax": 0.5,
+            "startSpeedConstant": 0,
+            "startSpeedConstantMax": 0,
+            "startSizeConstant": 13,
+            "startSizeConstantMax": 13,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 13,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 13,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3"
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "y": 0.1613208,
+              "z": 0.5943396,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "y": 0.1613208,
+              "z": 0.5943396,
+              "w": 1
+            },
+            "maxParticles": 2,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                2363510000
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 2
+                }
+              ]
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "enable": true,
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 2,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorRGBKeysCount": 2
+                }
+              }
+            },
+            "sizeOverLifetime": {
+              "_$type": "SizeOverLifetime",
+              "enable": true,
+              "_size": {
+                "_$type": "GradientSize",
+                "_gradient": {
+                  "_$type": "GradientDataNumber",
+                  "_elements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_currentLength": 4
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "_$id": "t0re4c4v",
+      "_$type": "Sprite3D",
+      "name": "fire",
+      "transform": {
+        "localRotation": {
+          "_$type": "Quaternion",
+          "x": 0.7071067811865476,
+          "w": -0.7071067811865476
+        }
+      },
+      "_$comp": [
+        {
+          "_$type": "ShurikenParticleRenderer",
+          "sharedMaterials": [
+            {
+              "_$uuid": "cad577c8-ee02-403b-99b3-09d97bdd849a",
+              "_$type": "Material"
+            }
+          ],
+          "stretchedBillboardLengthScale": -2.5,
+          "sortingFudge": 2,
+          "_particleSystem": {
+            "duration": 1,
+            "looping": false,
+            "startLifetimeType": 2,
+            "startLifetimeConstant": 0.8,
+            "startLifetimeConstantMin": 0.4,
+            "startLifetimeConstantMax": 0.8,
+            "startSpeedType": 2,
+            "startSpeedConstant": 4,
+            "startSpeedConstantMin": 6,
+            "startSpeedConstantMax": 4,
+            "startSizeType": 2,
+            "startSizeConstant": 1.8,
+            "startSizeConstantMin": 1.3,
+            "startSizeConstantMax": 1.8,
+            "startSizeConstantSeparate": {
+              "_$type": "Vector3",
+              "x": 1.8,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMinSeparate": {
+              "_$type": "Vector3",
+              "x": 1.3,
+              "y": 1,
+              "z": 1
+            },
+            "startSizeConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "x": 1.8,
+              "y": 1,
+              "z": 1
+            },
+            "startRotationType": 2,
+            "startRotationConstant": 360,
+            "startRotationConstantMax": 360,
+            "startRotationConstantSeparate": {
+              "_$type": "Vector3",
+              "z": -360
+            },
+            "startRotationConstantMinSeparate": {
+              "_$type": "Vector3"
+            },
+            "startRotationConstantMaxSeparate": {
+              "_$type": "Vector3",
+              "z": -360
+            },
+            "startColorConstant": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "startColorConstantMin": {
+              "_$type": "Vector4"
+            },
+            "startColorConstantMax": {
+              "_$type": "Vector4",
+              "x": 1,
+              "y": 1,
+              "z": 1,
+              "w": 1
+            },
+            "gravityModifier": 0.2,
+            "maxParticles": 50,
+            "randomSeed": {
+              "_$type": "Uint32Array",
+              "value": [
+                877337200
+              ]
+            },
+            "emission": {
+              "emissionRate": 0,
+              "_bursts": [
+                {
+                  "_$type": "Burst",
+                  "_maxCount": 50
+                }
+              ]
+            },
+            "shape": {
+              "_$type": "HemisphereShape",
+              "radius": 0.4
+            },
+            "colorOverLifetime": {
+              "_$type": "ColorOverLifetime",
+              "enable": true,
+              "_color": {
+                "_$type": "GradientColor",
+                "_type": 1,
+                "_gradient": {
+                  "_$type": "Gradient",
+                  "_alphaElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      1,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_colorAlphaKeysCount": 2,
+                  "_rgbElements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0.4117647111415863,
+                      0.9234411120414734,
+                      1,
+                      0.3176470994949341,
+                      0.4117647111415863,
+                      0.9234411120414734,
+                      1,
+                      0.9794155955314636,
+                      0.11569949984550476,
+                      0.6438267230987549,
+                      0.9811320900917053,
+                      1,
+                      0.11569949984550476,
+                      0.6438267230987549,
+                      0.9811320900917053
+                    ]
+                  },
+                  "_colorRGBKeysCount": 4
+                }
+              }
+            },
+            "sizeOverLifetime": {
+              "_$type": "SizeOverLifetime",
+              "enable": true,
+              "_size": {
+                "_$type": "GradientSize",
+                "_gradient": {
+                  "_$type": "GradientDataNumber",
+                  "_elements": {
+                    "_$type": "Float32Array",
+                    "value": [
+                      0,
+                      0.6507987976074219,
+                      0.27305829524993896,
+                      0.9328405857086182,
+                      1,
+                      0,
+                      0,
+                      0
+                    ]
+                  },
+                  "_currentLength": 6
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
