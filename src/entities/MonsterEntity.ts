@@ -23,7 +23,7 @@ export class MonsterEntity {
         "resources/LayaScene_Partical/a6.lh",
         "resources/LayaScene_Partical/5.lh",
         "resources/LayaScene_Partical/6.lh",
-        "resources/LayaScene_Partical/9.lh"
+        "resources/LayaScene_Partical/9.lh",
         // "resources/LayaScene_Partical/4.lh"
 
     ];
