@@ -35,7 +35,8 @@ export class Main extends Laya.Script {
     private joystick: Joystick;
 
     public monsterRes: string[] = [
-        "resources/3d/Adventurer Male 01.lh",
+        "resources/role/wukong/wukong.lh"
+        // "resources/3d/Adventurer Male 01.lh",
         // "resources/3d/Angel Female 01.lh",
         // "resources/3d/Archer Female 01.lh",
         // "resources/3d/Archer Female 02.lh",
@@ -130,9 +131,9 @@ export class Main extends Laya.Script {
 		let materials:Laya.Material[] = [];
 
         for (let monster of this.monsters) {
-            renders.push(monster.model.getChildByName("Base").getComponent(Laya.BaseRender));
+            // renders.push(monster.model.getChildByName("Base").getComponent(Laya.BaseRender));
+            renders.push(monster.model.getChildByName("Mihuwang").getChildByName("Mihuwang").getChildByName("Mihuwang_0").getComponent(Laya.BaseRender));
         }
-        renders.push(this.player.model.getChildByName("Base").getComponent(Laya.BaseRender));
 
         materials.push(new OutlineMaterial());
         materials.push(new ShadowMaterial());

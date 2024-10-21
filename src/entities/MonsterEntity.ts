@@ -55,10 +55,12 @@ export class MonsterEntity {
         if (this.moveDuration > 0) {
             this.moveTowardsTarget(deltaTime, playerPosition, monsters);
             this.moveDuration -= deltaTime;
-            this.playAnimation("Run");
+            // this.playAnimation("Run");
+            this.playAnimation("move");
         } else if (this.idleDuration > 0) {
             this.idleDuration -= deltaTime;
-            this.playAnimation("Idle");
+            // this.playAnimation("Idle");
+            this.playAnimation("idle");
         } else {
             this.decideNextAction(playerPosition);
         }
@@ -126,7 +128,9 @@ export class MonsterEntity {
     private async useSkill(): Promise<void> {
         console.log("Monster used a skill!");
         this.skillCooldown = Math.random() * 5000 + 3000;
-        this.playAnimation("Cast Spell 02");
+        // this.playAnimation("Cast Spell 02");
+        this.playAnimation("attack");
+        
 
         // 随机选择一个技能特效
         const randomSkillIndex = Math.floor(Math.random() * this.skillRes.length);
