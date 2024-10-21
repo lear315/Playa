@@ -35,7 +35,7 @@ export class Main extends Laya.Script {
     private joystick: Joystick;
 
     public monsterRes: string[] = [
-        "resources/role/wukong/wukong.lh"
+        "resources/role/bake/RootNode.lh"
         // "resources/3d/Adventurer Male 01.lh",
         // "resources/3d/Angel Female 01.lh",
         // "resources/3d/Archer Female 01.lh",
@@ -116,7 +116,7 @@ export class Main extends Laya.Script {
             await monster.load(this.monsterRes[randomModelIndex]);
             
             // 随机位置
-            const x = (Math.random() - 0.5) * 100; // 假设场景范围是 -50 到 50
+            const x = (Math.random() - 0.5) * 100;
             const z = (Math.random() - 0.5) * 100;
             monster.model.transform.position = new Laya.Vector3(x, 0, z);
             
@@ -137,7 +137,7 @@ export class Main extends Laya.Script {
 
         materials.push(new OutlineMaterial());
         materials.push(new ShadowMaterial());
-       materials.push(new ThroughMaterial());
+        //  materials.push(new ThroughMaterial());
         //创建commandBuffer
 		this.commandBuffer = this.createDrawMeshCommandBuffer(renders, materials);
 		//将commandBuffer加入渲染流程
@@ -185,7 +185,10 @@ export class Main extends Laya.Script {
             // 更新怪物
             const deltaTime = Laya.timer.delta;
             const playerPosition = this.player.model.transform.position;
-            this.monsters.forEach(monster => monster.update(deltaTime, playerPosition, this.monsters));
+            this.monsters.forEach(monster => {
+                monster.update(deltaTime, playerPosition, this.monsters);
+                monster.updateHealthBarPosition(this.camera);
+            });
         }
     }
 

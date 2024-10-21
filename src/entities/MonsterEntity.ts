@@ -11,6 +11,10 @@ export class MonsterEntity {
     private avoidanceRadius: number = 6; // 避障半径
     private _curAnimation: string = "";
 
+    // 血条相关属性
+    public healthBar: Laya.ProgressBar;
+    private maxHealth: number = 100;
+    private currentHealth: number = 100;
 
     public skillRes: string[] = [
         "resources/LayaScene_Partical/2.lh",
@@ -30,6 +34,15 @@ export class MonsterEntity {
 
     constructor() {
         this.model = new Laya.Sprite3D();
+        this.createHealthBar();
+    }
+
+    private createHealthBar() {
+        this.healthBar = new Laya.ProgressBar("resources/ui/progress.png");
+        this.healthBar.width = 100;
+        this.healthBar.height = 10;
+        this.healthBar.value = 1;
+        Laya.stage.addChild(this.healthBar);
     }
 
     async load(url: string): Promise<void> {
@@ -67,8 +80,13 @@ export class MonsterEntity {
 
         if (this.skillCooldown > 0) {
             this.skillCooldown -= deltaTime;
-        } else if (Math.random() < 0.0025) {
+        } else if (Math.random() < 0.055) {
             this.useSkill();
+        }
+
+        // 随机受到伤害（用于测试）
+        if (Math.random() < 0.001) { // 每帧有0.1%的概率受到伤害
+            this.takeDamage(10);
         }
     }
 
@@ -156,5 +174,26 @@ export class MonsterEntity {
         } catch (error) {
             console.error("加载技能特效失败:", error);
         }
+    }
+
+    public updateHealthBarPosition(camera: Laya.Camera) {
+        if (this.model && this.healthBar) {
+            const worldPosition = this.model.transform.position;
+            const screenPosition = new Laya.Vector4();
+            camera.viewport.project(worldPosition, camera.projectionViewMatrix, screenPosition);
+            
+            if (screenPosition.z < 1) { // 检查是否在相机前面
+                this.healthBar.visible = true;
+                this.healthBar.x = screenPosition.x / Laya.stage.clientScaleX - this.healthBar.width / 2;
+                this.healthBar.y = screenPosition.y / Laya.stage.clientScaleY - 50; // 将血条放在怪物头顶上方
+            } else {
+                this.healthBar.visible = false;
+            }
+        }
+    }
+
+    public takeDamage(damage: number) {
+        this.currentHealth = Math.max(0, this.currentHealth - damage);
+        this.healthBar.value = this.currentHealth / this.maxHealth;
     }
 }

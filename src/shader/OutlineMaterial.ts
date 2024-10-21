@@ -17,7 +17,7 @@ export class OutlineMaterial extends Laya.Material
           vec3 positionWS = (worldMatrix * vec4(vertex.positionOS, 1.0)).xyz;
           mat4 normalMat = transpose(inverse(worldMatrix));
           vec3 normalWS = normalize((normalMat * vec4(vertex.normalOS, 0.0)).xyz);
-          positionWS += normalWS * 0.1;
+          positionWS += normalWS * 0.02;
           gl_Position = getPositionCS(positionWS);
           gl_Position = remapPositionZ(gl_Position);
         }`;
