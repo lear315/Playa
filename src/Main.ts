@@ -5,6 +5,9 @@
 import { PlayerEntity } from "./entities/PlayerEntity";
 import { Joystick } from "./ui/Joystick";
 import { MonsterEntity } from "./entities/MonsterEntity";
+import { OutlineMaterial } from "./shader/OutlineMaterial";
+import { ShadowMaterial } from "./shader/ShadowMaterial";
+import { ThroughMaterial } from "./shader/ThroughMaterial";
 
 const { regClass, property } = Laya;
 
@@ -43,6 +46,9 @@ export class Main extends Laya.Script {
 
     private monsters: MonsterEntity[] = [];
 
+    private commandBuffer: Laya.CommandBuffer;
+	private cameraEventFlag:Laya.CameraEventFlags = Laya.CameraEventFlags.BeforeImageEffect;
+
     onAwake() {
         console.log("游戏初始化");
         
@@ -67,6 +73,10 @@ export class Main extends Laya.Script {
             Laya.stage.scaleMode = Laya.Stage.SCALE_SHOWALL;
             Laya.stage.width = stageHeight / 16 * 9;
         }
+
+        OutlineMaterial.initShader();
+        ShadowMaterial.initShader();
+        ThroughMaterial.initShader();
 
        // this.onStartGame();
         this.button.on(Laya.Event.CLICK, this, this.onStartGame);
@@ -112,6 +122,36 @@ export class Main extends Laya.Script {
             monster.addToScene(this.scene3d);
             this.monsters.push(monster);
         }
+        this.addRender();
+    }
+
+    public addRender() {
+        let renders:Laya.BaseRender[] = [];
+		let materials:Laya.Material[] = [];
+
+        for (let monster of this.monsters) {
+            renders.push(monster.model.getChildByName("Base").getComponent(Laya.BaseRender));
+        }
+        renders.push(this.player.model.getChildByName("Base").getComponent(Laya.BaseRender));
+
+        materials.push(new OutlineMaterial());
+        materials.push(new ShadowMaterial());
+        // materials.push(new ThroughMaterial());
+        //创建commandBuffer
+		this.commandBuffer = this.createDrawMeshCommandBuffer(renders, materials);
+		//将commandBuffer加入渲染流程
+		this.camera.addCommandBuffer(this.cameraEventFlag,this.commandBuffer);
+    }
+
+    // 后处理
+    public createDrawMeshCommandBuffer(renders:Laya.BaseRender[],materials:Laya.Material[]):Laya.CommandBuffer{
+		var buf:Laya.CommandBuffer = new Laya.CommandBuffer();
+        for(var i = 0,n = renders.length;i<n;i++){
+            for (let j = 0; j < materials.length; j++) {
+                buf.drawRender(renders[i], materials[j], 0);
+            }
+		}
+        return buf;
     }
 
     onUpdate() {
