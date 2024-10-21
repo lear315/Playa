@@ -36,12 +36,12 @@ export class Main extends Laya.Script {
 
     public monsterRes: string[] = [
         "resources/3d/Adventurer Male 01.lh",
-        "resources/3d/Angel Female 01.lh",
-        "resources/3d/Archer Female 01.lh",
-        "resources/3d/Archer Female 02.lh",
-        "resources/3d/Archer Male 01.lh",
-        "resources/3d/Barbarian Male 02.lh",
-        "resources/3d/Barbarian Male 05.lh"
+        // "resources/3d/Angel Female 01.lh",
+        // "resources/3d/Archer Female 01.lh",
+        // "resources/3d/Archer Female 02.lh",
+        // "resources/3d/Archer Male 01.lh",
+        // "resources/3d/Barbarian Male 02.lh",
+        // "resources/3d/Barbarian Male 05.lh"
     ];
 
     private monsters: MonsterEntity[] = [];
@@ -76,7 +76,7 @@ export class Main extends Laya.Script {
 
         OutlineMaterial.initShader();
         ShadowMaterial.initShader();
-        ThroughMaterial.initShader();
+        // ThroughMaterial.initShader();
 
        // this.onStartGame();
         this.button.on(Laya.Event.CLICK, this, this.onStartGame);
@@ -109,7 +109,7 @@ export class Main extends Laya.Script {
     }
 
     async createMonsters() {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 350; i++) {
             const monster = new MonsterEntity();
             const randomModelIndex = Math.floor(Math.random() * this.monsterRes.length);
             await monster.load(this.monsterRes[randomModelIndex]);
@@ -136,7 +136,7 @@ export class Main extends Laya.Script {
 
         materials.push(new OutlineMaterial());
         materials.push(new ShadowMaterial());
-        // materials.push(new ThroughMaterial());
+       materials.push(new ThroughMaterial());
         //创建commandBuffer
 		this.commandBuffer = this.createDrawMeshCommandBuffer(renders, materials);
 		//将commandBuffer加入渲染流程

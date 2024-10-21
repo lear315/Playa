@@ -24,7 +24,7 @@ export class MonsterEntity {
         "resources/LayaScene_Partical/5.lh",
         "resources/LayaScene_Partical/6.lh",
         "resources/LayaScene_Partical/9.lh",
-        // "resources/LayaScene_Partical/4.lh"
+        //"resources/LayaScene_Partical/4.lh"
 
     ];
 
@@ -65,7 +65,7 @@ export class MonsterEntity {
 
         if (this.skillCooldown > 0) {
             this.skillCooldown -= deltaTime;
-        } else if (Math.random() < 0.0005) {
+        } else if (Math.random() < 0.0025) {
             this.useSkill();
         }
     }
