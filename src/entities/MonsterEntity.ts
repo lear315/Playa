@@ -10,6 +10,7 @@ export class MonsterEntity {
     private targetPosition: Laya.Vector3 = new Laya.Vector3();
     private avoidanceRadius: number = 6; // 避障半径
     private _curAnimation: string = "";
+    private currentSkillEffect: Laya.Sprite3D | null = null;
 
     // 血条相关属性
     public healthBar: Laya.ProgressBar;
@@ -31,6 +32,10 @@ export class MonsterEntity {
         //"resources/LayaScene_Partical/4.lh"
 
     ];
+
+    // 建议在类的顶部添加以下属性
+    private static readonly tempVector3 = new Laya.Vector3();
+    private static readonly tempVector4 = new Laya.Vector4();
 
     constructor() {
         this.model = new Laya.Sprite3D();
@@ -146,40 +151,43 @@ export class MonsterEntity {
     private async useSkill(): Promise<void> {
         console.log("Monster used a skill!");
         this.skillCooldown = Math.random() * 5000 + 3000;
-        // this.playAnimation("Cast Spell 02");
         this.playAnimation("attack");
-        
 
-        // 随机选择一个技能特效
+        // 清理当前的技能特效（如果有）
+        this.clearCurrentSkillEffect();
+
         const randomSkillIndex = Math.floor(Math.random() * this.skillRes.length);
         const skillEffectUrl = this.skillRes[randomSkillIndex];
 
         try {
-            // 加载并播放特效
             const skillEffect = await ResLoader.getResSync(skillEffectUrl) as Laya.Sprite3D;
             if (skillEffect) {
-                // 将特效直接添加到怪物模型上
-                skillEffect.transform.position = new Laya.Vector3(0,0.5,0);
+                skillEffect.transform.position = new Laya.Vector3(0, 0.5, 0);
                 this.model.addChild(skillEffect);
+                this.currentSkillEffect = skillEffect;
 
-                // 设置特效持续时间（例如3秒）
                 const effectDuration = 3000;
 
-                // 设置一个定时器来移除特效
-                Laya.timer.once(effectDuration, this, () => {
-                    this.model.removeChild(skillEffect);
-                    // skillEffect.destroy();
-                });
+                Laya.timer.once(effectDuration, this, this.clearCurrentSkillEffect);
             }
         } catch (error) {
             console.error("加载技能特效失败:", error);
         }
     }
 
+    private clearCurrentSkillEffect(): void {
+        if (this.currentSkillEffect) {
+            if (this.currentSkillEffect.parent) {
+                this.currentSkillEffect.parent.removeChild(this.currentSkillEffect);
+            }
+            this.currentSkillEffect = null;
+        }
+    }
+
     public updateHealthBarPosition(camera: Laya.Camera) {
         if (this.model && this.healthBar) {
             const worldPosition = this.model.transform.position;
-            const screenPosition = new Laya.Vector4();
+            const screenPosition = MonsterEntity.tempVector4;
             camera.viewport.project(worldPosition, camera.projectionViewMatrix, screenPosition);
             
             if (screenPosition.z < 1) { // 检查是否在相机前面
@@ -195,5 +203,42 @@ export class MonsterEntity {
     public takeDamage(damage: number) {
         this.currentHealth = Math.max(0, this.currentHealth - damage);
         this.healthBar.value = this.currentHealth / this.maxHealth;
+    }
+
+    public destroy(): void {
+        // 清理血条
+        if (this.healthBar) {
+            Laya.stage.removeChild(this.healthBar);
+            this.healthBar.destroy();
+            this.healthBar = null;
+        }
+
+        // 清理3D模型
+        if (this.model) {
+            if (this.model.parent) {
+                this.model.parent.removeChild(this.model);
+            }
+            this.model = null;
+        }
+
+        // 清理动画器
+        if (this.animator) {
+            this.animator.destroy();
+            this.animator = null;
+        }
+
+        // 清理当前的技能特效
+        this.clearCurrentSkillEffect();
+
+        // 清理定时器
+        Laya.timer.clearAll(this);
+
+        // 清理目标位置向量
+        this.targetPosition = null;
+
+        // 清理技能资源引用
+        this.skillRes = null;
+
+        console.log("Monster entity destroyed");
     }
 }

@@ -46,6 +46,7 @@ export class Main extends Laya.Script {
     ];
 
     private monsters: MonsterEntity[] = [];
+    private monsterCountText: Laya.Text;
 
     private commandBuffer: Laya.CommandBuffer;
 	private cameraEventFlag:Laya.CameraEventFlags = Laya.CameraEventFlags.BeforeImageEffect;
@@ -61,7 +62,7 @@ export class Main extends Laya.Script {
         //     Laya.URL.basePath = "http://192.168.3.101:8989/";
         // }
 
-        // Laya.URL.basePath = "http://192.168.3.101:8989/";
+        // Laya.URL.basePath = "http://192.168.3.101:8989/resources";
         // Laya.URL.basePath = "https://seaclear-1255444941.cos.ap-nanjing.myqcloud.com/laya32test/resources/";
     }
 
@@ -84,52 +85,111 @@ export class Main extends Laya.Script {
 
        // this.onStartGame();
         this.button.on(Laya.Event.CLICK, this, this.onStartGame);
+        this.createUI();
+        this.createMonsterCountDisplay();
     }
 
-    async onStartGame() {
-        console.log("开始游戏");
-        // 初始化摇杆
-        this.joystick = this.joystickSprite.addComponent(Joystick);
+    private createUI(): void {
+        // 创建"增加10个monster"按钮
+        const addMonstersBtn = new Laya.Button("common/common_btn_blue.png", "增加10个");
+        addMonstersBtn.stateNum =1;
+        addMonstersBtn.size(200, 80);
+        addMonstersBtn.labelSize = 33;
+        addMonstersBtn.labelColors = "#ffffff";
+        addMonstersBtn.pos(10, Laya.stage.height - 100);
+        addMonstersBtn.on(Laya.Event.CLICK, this, this.addMonsters);
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(addMonstersBtn);
 
-        // 创建怪物
-        this.createMonsters();
+        // 创建"清除monster"按钮
+        const clearMonstersBtn = new Laya.Button("common/common_btn_blue.png", "清除monster");
+        clearMonstersBtn.stateNum =1;
+        clearMonstersBtn.size(200, 80);
+        clearMonstersBtn.labelSize = 33;
+        clearMonstersBtn.labelColors = "#ffffff";
+        clearMonstersBtn.pos(10, Laya.stage.height - 200);
+        clearMonstersBtn.on(Laya.Event.CLICK, this, this.clearMonsters);
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(clearMonstersBtn);
+        
+        // 创建"重置相机"按钮
+        this.resetCameraBtn = new Laya.Button("common/common_btn_blue.png", "重置相机");
+        this.resetCameraBtn.stateNum = 1;
+        this.resetCameraBtn.size(200, 80);
+        this.resetCameraBtn.labelSize = 33;
+        this.resetCameraBtn.labelColors = "#ffffff";
+        this.resetCameraBtn.pos(Laya.stage.width - 210, Laya.stage.height - 90);
+        this.resetCameraBtn.on(Laya.Event.CLICK, this, this.resetCamera);
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.resetCameraBtn);
+    }
 
-        // 添加帧循环
-        Laya.timer.frameLoop(1, this, this.onUpdate);
+    private createMonsterCountDisplay(): void {
+        this.monsterCountText = new Laya.Text();
+        this.monsterCountText.fontSize = 30;
+        this.monsterCountText.color = "#ffffff";
+        this.monsterCountText.pos(Laya.stage.width - 200, 10);
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.monsterCountText);
+        this.updateMonsterCountDisplay();
+    }
 
+    private async addMonsters() {
+        for (let i = 0; i < 10; i++) {
+            await this.createMonster();
+        }
+        this.addRender(); // 在添加新怪物后重新创建渲染资源
+        this.updateMonsterCountDisplay();
+    }
 
-        // 初始化玩家实体
-        this.player = new PlayerEntity();
-        this.box.visible = false;
+    private clearMonsters(): void {
+        // 先清理渲染资源
+        this.clearRender();
 
-        // 加载玩家模型
-        await this.player.load(this.playerRes);
+        // 然后清理每个怪物实体
+        for (const monster of this.monsters) {
+            monster.destroy();
+            if (monster.model && monster.model.parent) {
+                monster.model.parent.removeChild(monster.model);
+            }
+        }
 
-        // 将玩家添加到场景
-        this.player.addToScene(this.scene3d);
+        // 清空怪物数组
+        this.monsters = [];
 
-        // 播放一个动画 (假设有一个名为 "idle" 的动画)
-        this.player.playAnimation("Idle");
+        // 更新显示
+        this.updateMonsterCountDisplay();
+
+        // 重置相关状态（如果有的话）
+        // 例如：this.lastRenderTime = 0;
+
+        console.log("Monsters cleared, count:", this.monsters.length);
+    }
+
+    private updateMonsterCountDisplay(): void {
+        this.monsterCountText.text = `怪物数量: ${this.monsters.length}`;
+    }
+
+    private async createMonster(): Promise<void> {
+        const monster = new MonsterEntity();
+        const randomModelIndex = Math.floor(Math.random() * this.monsterRes.length);
+        await monster.load(this.monsterRes[randomModelIndex]);
+        
+        // 随机位置
+        const x = (Math.random() - 0.5) * 100;
+        const z = (Math.random() - 0.5) * 100;
+        monster.model.transform.position = new Laya.Vector3(x, 0, z);
+        
+        monster.addToScene(this.scene3d);
+        this.monsters.push(monster);
+        this.updateMonsterCountDisplay();
     }
 
     async createMonsters() {
-        for (let i = 0; i < 100; i++) {
-            const monster = new MonsterEntity();
-            const randomModelIndex = Math.floor(Math.random() * this.monsterRes.length);
-            await monster.load(this.monsterRes[randomModelIndex]);
-            
-            // 随机位置
-            const x = (Math.random() - 0.5) * 100; // 假设场景范围是 -50 到 50
-            const z = (Math.random() - 0.5) * 100;
-            monster.model.transform.position = new Laya.Vector3(x, 0, z);
-            
-            monster.addToScene(this.scene3d);
-            this.monsters.push(monster);
+        for (let i = 0; i < 10; i++) {
+            await this.createMonster();
         }
         this.addRender();
     }
 
     public addRender() {
+        this.clearRender();
         let renders:Laya.BaseRender[] = [];
 		let materials:Laya.Material[] = [];
 
@@ -160,10 +220,10 @@ export class Main extends Laya.Script {
 
     onUpdate() {
         // 增加人为的耗时操作5ms
-        const startTime = performance.now();
-        while (performance.now() - startTime < 8) {
-            // 空循环,消耗时间
-        }
+        // const startTime = performance.now();
+        // while (performance.now() - startTime < 8) {
+        //     // 空循环,消耗时间
+        // }
         if (this.player && this.player.model) {
             // 获取摇杆输入
             const moveX = this.joystick.getMoveX();
@@ -211,5 +271,90 @@ export class Main extends Laya.Script {
             this.camera.transform.position = cameraPosition;
             this.camera.transform.lookAt(playerPosition, new Laya.Vector3(0, 1, 0));
         }
+    }
+
+    async onStartGame() {
+        console.log("开始游戏");
+        // 初始化摇杆
+        this.joystick = this.joystickSprite.addComponent(Joystick);
+
+        // 创建怪物
+        this.createMonsters();
+
+        // 添加帧循环
+        Laya.timer.frameLoop(1, this, this.onUpdate);
+
+
+        // 初始化玩家实体
+        this.player = new PlayerEntity();
+        this.box.visible = false;
+
+        // 加载玩家模型
+        await this.player.load(this.playerRes);
+
+        // 将玩家添加到场景
+        this.player.addToScene(this.scene3d);
+
+        // 播放一个动画 (假设有一个名为 "idle" 的动画)
+        this.player.playAnimation("Idle");
+
+        // 初始化相机
+        this.initializeCamera();
+    }
+
+    private clearRender(): void {
+        if (this.commandBuffer) {
+            // 从相机中移除 CommandBuffer
+            this.camera.removeCommandBuffer(this.cameraEventFlag, this.commandBuffer);
+            
+            // 清除 CommandBuffer
+            this.commandBuffer.clear();
+            this.commandBuffer = null;
+        }
+
+        // 如果有其他需要清理的渲染资源，可以在这里添加
+        // 例如，如果您有存储材质的数组，可以清空它
+        // this.materials = [];
+    }
+
+    private resetCamera(): void {
+        console.log("Resetting camera");
+        
+        // 保存当前相机的属性
+        const oldPosition = this.camera.transform.position.clone();
+        const oldRotation = this.camera.transform.rotation.clone();
+        const oldFov = this.camera.fieldOfView;
+        const oldNear = this.camera.nearPlane;
+        const oldFar = this.camera.farPlane;
+
+        // 从场景中移除旧相机
+        this.scene3d.removeChild(this.camera);
+
+        // 创建新相机
+        this.camera = new Laya.Camera();
+        this.scene3d.addChild(this.camera);
+
+        // 设置新相机的属性
+        this.camera.transform.position = oldPosition;
+        this.camera.transform.rotation = oldRotation;
+        this.camera.fieldOfView = oldFov;
+        this.camera.nearPlane = oldNear;
+        this.camera.farPlane = oldFar;
+
+        // 重新添加 CommandBuffer
+        if (this.commandBuffer) {
+            this.camera.addCommandBuffer(this.cameraEventFlag, this.commandBuffer);
+        }
+
+        console.log("Camera reset complete");
+    }
+
+    private initializeCamera(): void {
+        // 设置相机的初始位置和属性
+        this.camera.transform.position = new Laya.Vector3(0, 18, 0);
+        this.camera.transform.rotationEuler = new Laya.Vector3(-63, 180, 0);
+        this.camera.fieldOfView = 60;
+        this.camera.nearPlane = 0.1;
+        this.camera.farPlane = 1000;
     }
 }

@@ -47,4 +47,14 @@ export class PlayerEntity  {
     public get model(): Laya.Sprite3D {
         return this._model;
     }
+
+    destroy() {
+        // 移除模型
+        if (this.model) {
+            this.model.removeSelf();
+            this.model.destroy();
+        }
+
+        // 清理其他资源...
+    }
 }
