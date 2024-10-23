@@ -85,7 +85,7 @@ export class MonsterEntity {
         }
 
         // 随机受到伤害（用于测试）
-        if (Math.random() < 0.001) { // 每帧有0.1%的概率受到伤害
+        if (Math.random() < 0.0001) { // 每帧有0.1%的概率受到伤害
             this.takeDamage(10);
         }
     }

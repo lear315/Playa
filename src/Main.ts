@@ -56,10 +56,13 @@ export class Main extends Laya.Script {
         // 开启性能统计
         Laya.Stat.show();
         
-        // 设置微信环境下的CDN basepath
-        if (Laya.Browser.onWeiXin) {
-            Laya.URL.basePath = "http://192.168.3.101:8989/";
-        }
+        // // 设置微信环境下的CDN basepath
+        // if (Laya.Browser.onWeiXin) {
+        //     Laya.URL.basePath = "http://192.168.3.101:8989/";
+        // }
+
+        // Laya.URL.basePath = "http://192.168.3.101:8989/";
+        // Laya.URL.basePath = "https://seaclear-1255444941.cos.ap-nanjing.myqcloud.com/laya32test/resources/";
     }
 
     onStart() {
@@ -110,13 +113,13 @@ export class Main extends Laya.Script {
     }
 
     async createMonsters() {
-        for (let i = 0; i < 350; i++) {
+        for (let i = 0; i < 100; i++) {
             const monster = new MonsterEntity();
             const randomModelIndex = Math.floor(Math.random() * this.monsterRes.length);
             await monster.load(this.monsterRes[randomModelIndex]);
             
             // 随机位置
-            const x = (Math.random() - 0.5) * 100;
+            const x = (Math.random() - 0.5) * 100; // 假设场景范围是 -50 到 50
             const z = (Math.random() - 0.5) * 100;
             monster.model.transform.position = new Laya.Vector3(x, 0, z);
             
@@ -156,6 +159,11 @@ export class Main extends Laya.Script {
     }
 
     onUpdate() {
+        // 增加人为的耗时操作5ms
+        const startTime = performance.now();
+        while (performance.now() - startTime < 8) {
+            // 空循环,消耗时间
+        }
         if (this.player && this.player.model) {
             // 获取摇杆输入
             const moveX = this.joystick.getMoveX();
