@@ -37,6 +37,8 @@ export class MonsterEntity {
     private static readonly tempVector3 = new Laya.Vector3();
     private static readonly tempVector4 = new Laya.Vector4();
 
+    private isSkillEnabled: boolean = true;
+
     constructor() {
         this.model = new Laya.Sprite3D();
         this.createHealthBar();
@@ -69,7 +71,7 @@ export class MonsterEntity {
         }
     }
 
-    update(deltaTime: number, playerPosition: Laya.Vector3, monsters: MonsterEntity[]): void {
+    update(deltaTime: number, playerPosition: Laya.Vector3, monsters: MonsterEntity[], isUsingSkill: boolean): void {
         if (this.moveDuration > 0) {
             this.moveTowardsTarget(deltaTime, playerPosition, monsters);
             this.moveDuration -= deltaTime;
@@ -85,7 +87,7 @@ export class MonsterEntity {
 
         if (this.skillCooldown > 0) {
             this.skillCooldown -= deltaTime;
-        } else if (Math.random() < 0.055) {
+        } else if (isUsingSkill && this.isSkillEnabled && Math.random() < 0.055) {
             this.useSkill();
         }
 
@@ -240,5 +242,15 @@ export class MonsterEntity {
         this.skillRes = null;
 
         console.log("Monster entity destroyed");
+    }
+
+    public setSkillEnabled(enabled: boolean): void {
+        this.isSkillEnabled = enabled;
+    }
+
+    public setHealthBarVisible(visible: boolean): void {
+        if (this.healthBar) {
+            this.healthBar.visible = visible;
+        }
     }
 }

@@ -51,6 +51,17 @@ export class Main extends Laya.Script {
     private commandBuffer: Laya.CommandBuffer;
 	private cameraEventFlag:Laya.CameraEventFlags = Laya.CameraEventFlags.BeforeImageEffect;
 
+    private useSkillBtn: Laya.Button;
+    private showHealthBarBtn: Laya.Button;
+    private isUsingSkill: boolean = true;
+    private isShowingHealthBar: boolean = true;
+
+    private fpsText: Laya.Text;
+    private frameCount: number = 0;
+    private totalTime: number = 0;
+    private fpsUpdateInterval: number = 1000; // 每秒更新一次FPS
+    private lastFpsUpdateTime: number = 0;
+
     onAwake() {
         console.log("游戏初始化");
         
@@ -87,6 +98,7 @@ export class Main extends Laya.Script {
         this.button.on(Laya.Event.CLICK, this, this.onStartGame);
         this.createUI();
         this.createMonsterCountDisplay();
+        this.createFpsDisplay(); // 添加这行
     }
 
     private createUI(): void {
@@ -119,6 +131,26 @@ export class Main extends Laya.Script {
         this.resetCameraBtn.pos(Laya.stage.width - 210, Laya.stage.height - 90);
         this.resetCameraBtn.on(Laya.Event.CLICK, this, this.resetCamera);
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.resetCameraBtn);
+
+        // 创建"切换技能"按钮
+        this.useSkillBtn = new Laya.Button("common/common_btn_blue.png", "关闭技能");
+        this.useSkillBtn.stateNum = 1;
+        this.useSkillBtn.size(100, 40);
+        this.useSkillBtn.labelSize = 22;
+        this.useSkillBtn.labelColors = "#ffffff";
+        this.useSkillBtn.pos(Laya.stage.width / 2 - 105, Laya.stage.height - 45);
+        this.useSkillBtn.on(Laya.Event.CLICK, this, this.toggleSkill);
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.useSkillBtn);
+
+        // 创建"切换血条"按钮
+        this.showHealthBarBtn = new Laya.Button("common/common_btn_blue.png", "隐藏血条");
+        this.showHealthBarBtn.stateNum = 1;
+        this.showHealthBarBtn.size(100, 40);
+        this.showHealthBarBtn.labelSize = 22;
+        this.showHealthBarBtn.labelColors = "#ffffff";
+        this.showHealthBarBtn.pos(Laya.stage.width / 2 + 5, Laya.stage.height - 45);
+        this.showHealthBarBtn.on(Laya.Event.CLICK, this, this.toggleHealthBar);
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.showHealthBarBtn);
     }
 
     private createMonsterCountDisplay(): void {
@@ -179,6 +211,9 @@ export class Main extends Laya.Script {
         monster.addToScene(this.scene3d);
         this.monsters.push(monster);
         this.updateMonsterCountDisplay();
+
+        monster.setSkillEnabled(this.isUsingSkill);
+        monster.setHealthBarVisible(this.isShowingHealthBar);
     }
 
     async createMonsters() {
@@ -254,10 +289,15 @@ export class Main extends Laya.Script {
             const deltaTime = Laya.timer.delta;
             const playerPosition = this.player.model.transform.position;
             this.monsters.forEach(monster => {
-                monster.update(deltaTime, playerPosition, this.monsters);
-                monster.updateHealthBarPosition(this.camera);
+                monster.update(deltaTime, playerPosition, this.monsters, this.isUsingSkill);
+                if (this.isShowingHealthBar) {
+                    monster.updateHealthBarPosition(this.camera);
+                }
             });
         }
+
+        // 更新FPS计算
+        this.updateFps();
     }
 
     updateCameraPosition() {
@@ -356,5 +396,47 @@ export class Main extends Laya.Script {
         this.camera.fieldOfView = 60;
         this.camera.nearPlane = 0.1;
         this.camera.farPlane = 1000;
+    }
+
+    private toggleSkill(): void {
+        this.isUsingSkill = !this.isUsingSkill;
+        this.useSkillBtn.label = this.isUsingSkill ? "关闭技能" : "开启技能";
+        console.log(`Skill usage is now ${this.isUsingSkill ? "enabled" : "disabled"}`);
+    }
+
+    private toggleHealthBar(): void {
+        this.isShowingHealthBar = !this.isShowingHealthBar;
+        this.showHealthBarBtn.label = this.isShowingHealthBar ? "隐藏血条" : "显示血条";
+        this.monsters.forEach(monster => {
+            if (monster.healthBar) {
+                monster.healthBar.visible = this.isShowingHealthBar;
+            }
+        });
+        console.log(`Health bars are now ${this.isShowingHealthBar ? "visible" : "hidden"}`);
+    }
+
+    private createFpsDisplay(): void {
+        this.fpsText = new Laya.Text();
+        this.fpsText.fontSize = 30;
+        this.fpsText.color = "#ffffff";
+        this.fpsText.pos(Laya.stage.width - 200, 50); // 放在怪物数量显示下方
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.fpsText);
+        this.fpsText.text = "FPS: 0";
+    }
+
+    private updateFps(): void {
+        this.frameCount++;
+        this.totalTime += Laya.timer.delta;
+
+        const currentTime = Laya.Browser.now();
+        if (currentTime - this.lastFpsUpdateTime >= this.fpsUpdateInterval) {
+            const averageFps = Math.round((this.frameCount / this.totalTime) * 1000);
+            this.fpsText.text = `平均FPS: ${averageFps}`;
+
+            // 重置计数器
+            this.frameCount = 0;
+            this.totalTime = 0;
+            this.lastFpsUpdateTime = currentTime;
+        }
     }
 }
