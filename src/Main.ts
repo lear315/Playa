@@ -57,9 +57,9 @@ export class Main extends Laya.Script {
     private isShowingHealthBar: boolean = true;
 
     private fpsText: Laya.Text;
+    private totalFrameTime: number = 0;
     private frameCount: number = 0;
-    private totalTime: number = 0;
-    private fpsUpdateInterval: number = 1000; // 每秒更新一次FPS
+    private fpsUpdateInterval: number = 1000; // 每分钟更新一次FPS
     private lastFpsUpdateTime: number = 0;
 
     onAwake() {
@@ -92,7 +92,7 @@ export class Main extends Laya.Script {
 
         OutlineMaterial.initShader();
         ShadowMaterial.initShader();
-        // ThroughMaterial.initShader();
+        ThroughMaterial.initShader();
 
        // this.onStartGame();
         this.button.on(Laya.Event.CLICK, this, this.onStartGame);
@@ -232,10 +232,11 @@ export class Main extends Laya.Script {
             // renders.push(monster.model.getChildByName("Base").getComponent(Laya.BaseRender));
             renders.push(monster.model.getChildByName("Mihuwang").getChildByName("Mihuwang").getChildByName("Mihuwang_0").getComponent(Laya.BaseRender));
         }
+        renders.push(this.player.model.getChildByName("Base").getComponent(Laya.BaseRender));
 
         materials.push(new OutlineMaterial());
         materials.push(new ShadowMaterial());
-        //  materials.push(new ThroughMaterial());
+        materials.push(new ThroughMaterial());
         //创建commandBuffer
 		this.commandBuffer = this.createDrawMeshCommandBuffer(renders, materials);
 		//将commandBuffer加入渲染流程
@@ -278,7 +279,7 @@ export class Main extends Laya.Script {
 
             // 设置玩家朝向
             if (moveX !== 0 || moveY !== 0) {
-                const rotation = Math.atan2(-moveX, moveY); // 注意这里使用了负的moveY
+                const rotation = Math.atan2(-moveX, moveY); // 注这里使用了负的moveY
                 this.player.model.transform.rotationEuler = new Laya.Vector3(0, rotation * 180 / Math.PI, 0);
             }
 
@@ -425,17 +426,21 @@ export class Main extends Laya.Script {
     }
 
     private updateFps(): void {
-        this.frameCount++;
-        this.totalTime += Laya.timer.delta;
-
         const currentTime = Laya.Browser.now();
-        if (currentTime - this.lastFpsUpdateTime >= this.fpsUpdateInterval) {
-            const averageFps = Math.round((this.frameCount / this.totalTime) * 1000);
-            this.fpsText.text = `平均FPS: ${averageFps}`;
+        const deltaTime = currentTime - this.lastFpsUpdateTime;
+        
+        this.frameCount++;
+        this.totalFrameTime += deltaTime;
+
+        if (this.totalFrameTime >= this.fpsUpdateInterval) {
+            const averageFps = Math.round((this.frameCount / this.totalFrameTime) * 1000);
+            this.fpsText.text = `FPS: ${averageFps}`;
 
             // 重置计数器
             this.frameCount = 0;
-            this.totalTime = 0;
+            this.totalFrameTime = 0;
+            this.lastFpsUpdateTime = currentTime;
+        } else {
             this.lastFpsUpdateTime = currentTime;
         }
     }

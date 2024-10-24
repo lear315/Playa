@@ -34,7 +34,7 @@ export class ThroughMaterial extends Laya.Material
   
         #define SHADER_NAME ThroughShaderFS
         void main() {
-            gl_FragColor = vec4(0.2, 0.6, 1.0, 0.5);
+            gl_FragColor = vec4(0.2, 0.6, 1.0, 0.1);
         }
         `
         
