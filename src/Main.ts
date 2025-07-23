@@ -10,7 +10,6 @@ import { ShadowMaterial } from "./shader/ShadowMaterial";
 import { ThroughMaterial } from "./shader/ThroughMaterial";
 
 const { regClass, property } = Laya;
-
 @regClass()
 export class Main extends Laya.Script {
 
@@ -35,7 +34,7 @@ export class Main extends Laya.Script {
     private joystick: Joystick;
 
     public monsterRes: string[] = [
-        "resources/role/bake/RootNode.lh"
+         "resources/role/bake/RootNode.lh"
         // "resources/3d/Adventurer Male 01.lh",
         // "resources/3d/Angel Female 01.lh",
         // "resources/3d/Archer Female 01.lh",
@@ -64,17 +63,7 @@ export class Main extends Laya.Script {
 
     onAwake() {
         console.log("游戏初始化");
-        
-        // 开启性能统计
-        Laya.Stat.show();
-        
-        // // 设置微信环境下的CDN basepath
-        // if (Laya.Browser.onWeiXin) {
-        //     Laya.URL.basePath = "http://192.168.3.101:8989/";
-        // }
-
-        // Laya.URL.basePath = "http://192.168.3.101:8989/resources";
-        // Laya.URL.basePath = "https://seaclear-1255444941.cos.ap-nanjing.myqcloud.com/laya32test/resources/";
+    
     }
 
     onStart() {
@@ -99,11 +88,13 @@ export class Main extends Laya.Script {
         this.createUI();
         this.createMonsterCountDisplay();
         this.createFpsDisplay(); // 添加这行
+        this.onStartGame();
+        this.button.visible = false;
     }
 
     private createUI(): void {
         // 创建"增加10个monster"按钮
-        const addMonstersBtn = new Laya.Button("common/common_btn_blue.png", "增加10个");
+        const addMonstersBtn = new Laya.Button("resources/common/common_btn_blue.png", "增加10个");
         addMonstersBtn.stateNum =1;
         addMonstersBtn.size(200, 80);
         addMonstersBtn.labelSize = 33;
@@ -113,7 +104,7 @@ export class Main extends Laya.Script {
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(addMonstersBtn);
 
         // 创建"清除monster"按钮
-        const clearMonstersBtn = new Laya.Button("common/common_btn_blue.png", "清除monster");
+        const clearMonstersBtn = new Laya.Button("resources/common/common_btn_blue.png", "清除monster");
         clearMonstersBtn.stateNum =1;
         clearMonstersBtn.size(200, 80);
         clearMonstersBtn.labelSize = 33;
@@ -123,7 +114,7 @@ export class Main extends Laya.Script {
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(clearMonstersBtn);
         
         // 创建"重置相机"按钮
-        this.resetCameraBtn = new Laya.Button("common/common_btn_blue.png", "重置相机");
+        this.resetCameraBtn = new Laya.Button("resources/common/common_btn_blue.png", "重置相机");
         this.resetCameraBtn.stateNum = 1;
         this.resetCameraBtn.size(200, 80);
         this.resetCameraBtn.labelSize = 33;
@@ -133,22 +124,22 @@ export class Main extends Laya.Script {
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.resetCameraBtn);
 
         // 创建"切换技能"按钮
-        this.useSkillBtn = new Laya.Button("common/common_btn_blue.png", "关闭技能");
+        this.useSkillBtn = new Laya.Button("resources/common/common_btn_blue.png", "关闭技能");
         this.useSkillBtn.stateNum = 1;
         this.useSkillBtn.size(100, 40);
         this.useSkillBtn.labelSize = 22;
         this.useSkillBtn.labelColors = "#ffffff";
-        this.useSkillBtn.pos(Laya.stage.width / 2 - 105, Laya.stage.height - 45);
+        this.useSkillBtn.pos(Laya.stage.width / 2 - 105, Laya.stage.height - 55);
         this.useSkillBtn.on(Laya.Event.CLICK, this, this.toggleSkill);
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.useSkillBtn);
 
         // 创建"切换血条"按钮
-        this.showHealthBarBtn = new Laya.Button("common/common_btn_blue.png", "隐藏血条");
+        this.showHealthBarBtn = new Laya.Button("resources/common/common_btn_blue.png", "隐藏血条");
         this.showHealthBarBtn.stateNum = 1;
         this.showHealthBarBtn.size(100, 40);
         this.showHealthBarBtn.labelSize = 22;
         this.showHealthBarBtn.labelColors = "#ffffff";
-        this.showHealthBarBtn.pos(Laya.stage.width / 2 + 5, Laya.stage.height - 45);
+        this.showHealthBarBtn.pos(Laya.stage.width / 2 + 5, Laya.stage.height - 55);
         this.showHealthBarBtn.on(Laya.Event.CLICK, this, this.toggleHealthBar);
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.showHealthBarBtn);
     }
@@ -157,7 +148,7 @@ export class Main extends Laya.Script {
         this.monsterCountText = new Laya.Text();
         this.monsterCountText.fontSize = 30;
         this.monsterCountText.color = "#ffffff";
-        this.monsterCountText.pos(Laya.stage.width - 200, 10);
+        this.monsterCountText.pos(Laya.stage.width - 200, 20);
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.monsterCountText);
         this.updateMonsterCountDisplay();
     }
@@ -319,9 +310,6 @@ export class Main extends Laya.Script {
         // 初始化摇杆
         this.joystick = this.joystickSprite.addComponent(Joystick);
 
-        // 创建怪物
-        this.createMonsters();
-
         // 添加帧循环
         Laya.timer.frameLoop(1, this, this.onUpdate);
 
@@ -338,6 +326,9 @@ export class Main extends Laya.Script {
 
         // 播放一个动画 (假设有一个名为 "idle" 的动画)
         this.player.playAnimation("Idle");
+
+        // 创建怪物
+        this.createMonsters();
 
         // 初始化相机
         this.initializeCamera();
@@ -420,7 +411,7 @@ export class Main extends Laya.Script {
         this.fpsText = new Laya.Text();
         this.fpsText.fontSize = 30;
         this.fpsText.color = "#ffffff";
-        this.fpsText.pos(Laya.stage.width - 200, 50); // 放在怪物数量显示下方
+        this.fpsText.pos(Laya.stage.width - 200, 60); // 放在怪物数量显示下方
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.fpsText);
         this.fpsText.text = "FPS: 0";
     }

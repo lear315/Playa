@@ -1,10 +1,11 @@
 {
   "name": "Playa",
-  "startupScene": "res://667dd568-a3f4-4bb3-b4e4-56d0b0b06a9b",
+  "minifyJS": true,
+  "startupScene": "res://87364cab-0068-4e2d-a6a2-789a556e445b",
   "alwaysIncluded": [
     "resources"
   ],
   "wxgame": {
-    "appid": "wx491e7940f675b562"
+    "appid": "wxb7961c2b8d628ce3"
   }
 }
