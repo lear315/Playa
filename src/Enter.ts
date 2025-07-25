@@ -16,13 +16,23 @@ export class Enter extends Laya.Script {
         
         // // 设置微信环境下的CDN basepath
         //if (Laya.Browser.onPC) {
-            Laya.URL.basePath = "http://192.168.3.101:8090/";
+           // Laya.URL.basePath = "http://192.168.3.101:8090/";
         //}
 
         // Laya.URL.basePath = "http://192.168.3.101:8989/resources";
+        // if (Laya.Browser.onMiniGame) {
+        //     Laya.URL.basePath = "https://seaclear-1255444941.cos.ap-nanjing.myqcloud.com/20250721/";
+        // }
+
+
         if (Laya.Browser.onMiniGame) {
-            Laya.URL.basePath = "https://seaclear-1255444941.cos.ap-nanjing.myqcloud.com/20250721/";
+            Laya.URL.basePath = "https://seaclear-1255444941.file.myqcloud.com/20250721/";
+        } else if (Laya.Browser.onIOS) {
+            
+        } else {
+            Laya.URL.basePath = "https://seaclear-1255444941.file.myqcloud.com/20250722win/";
         }
+
 
         // 打开场景
   

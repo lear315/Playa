@@ -5,6 +5,10 @@
   "alwaysIncluded": [
     "resources"
   ],
+  "ios": {
+    "version": "release-v3.1.6",
+    "screenOrientation": "portrait"
+  },
   "wxgame": {
     "appid": "wxb7961c2b8d628ce3"
   }

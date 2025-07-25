@@ -19,29 +19,20 @@ declare class Laya {
     private static _initCallbacks;
     private static _beforeInitCallbacks;
     private static _afterInitCallbacks;
-    private static isNativeRender_enable;
     /**
-     * 初始化引擎。使用引擎需要先初始化引擎。/Initialize the engine.
-     * @param   stageConfig 初始化引擎的舞台设置/Stage settings used to initialize the engine
+     * 初始化引擎。使用引擎需要先初始化引擎。
      */
     static init(stageConfig?: Laya.IStageConfig): Promise<void>;
     /**
-     * @en Initialize the engine. To use the engine, you need to initialize it first.
-     * @param width design width.The width of the initialized game window
-     * @param height  design height.The height of the initialized game window
-     * @zh 初始化引擎。使用引擎需要先初始化引擎。
+     * 初始化引擎。使用引擎需要先初始化引擎。
      * @param	width 初始化的游戏窗口宽度，又称设计宽度。
      * @param	height 初始化的游戏窗口高度，又称设计高度。
      */
     static init(width: number, height: number): Promise<void>;
-    /**
-     * 初始化2D
-     * @param stageConfig 用于初始化2D的设置
-     */
     static initRender2D(stageConfig: Laya.IStageConfig): void;
     /**
-     * 弹出错误信息，适用于移动设备等不方便调试的时候，
-     * @param value 表示是否捕获全局错误并弹出提示。设置为true后，如有未知错误，可以弹窗抛出详细错误堆栈,默认为false。
+     * 表示是否捕获全局错误并弹出提示。默认为false。
+     * 适用于移动设备等不方便调试的时候，设置为true后，如有未知错误，可以弹窗抛出详细错误堆栈。
      */
     static alertGlobalError(value: boolean): void;
     /**
@@ -49,20 +40,22 @@ declare class Laya {
      * @param	debugJsPath laya.debugtool.js文件路径
      */
     static enableDebugPanel(debugJsPath?: string): void;
+    private static isNativeRender_enable;
+    /**@private */
     private static enableNative;
     /**
-     * 新增初始化函数，引擎各个模块，例如物理，寻路等，如果有初始化逻辑可以在这里注册初始化函数。开发者一般不直接使用。
+     * 引擎各个模块，例如物理，寻路等，如果有初始化逻辑可以在这里注册初始化函数。开发者一般不直接使用。
      * @param callback 模块的初始化函数
      */
     static addInitCallback(callback: () => void | Promise<void>): void;
     /**
      * 在引擎初始化前执行自定义逻辑。此时Stage尚未创建，因为可以修改stageConfig实现动态舞台配置。
-     * @param callback 模块的初始化函数
+     * @param callback
      */
     static addBeforeInitCallback(callback: (stageConfig: Laya.IStageConfig) => void | Promise<void>): void;
     /**
      * 在引擎初始化后执行自定义逻辑
-     * @param callback 模块的初始化函数
+     * @param callback
      */
     static addAfterInitCallback(callback: () => void | Promise<void>): void;
 }
@@ -355,12 +348,10 @@ declare module Laya {
         toTemplate: string;
         /** 显示位置。语法：before xxx/after xxx/first/last。 */
         position: string;
-        /** 增加缩进，单位是层级，不是像素。 */
-        addIndent?: number;
-        /** 子属性默认折叠状态 */
-        collapsed?: boolean;
         /** 表示属性是私有属性。私有属性不会显示在Inspector里，但会序列化保存。 */
         "private": boolean;
+        /** 增加缩进，单位是层级，不是像素。 */
+        addIndent: number;
         /** 表示属性是否允许多选情况下编辑。默认true。 */
         allowMultipleObjects: boolean;
         /** 表示属性不显示在派生类的属性表中 */
@@ -414,27 +405,14 @@ declare module Laya {
      */
     function classInfo(info?: Partial<FTypeDescriptor>): any;
     /**
-     * 设置组件可以在编辑器环境中执行完整生命周期。
-     * @param constructor
+     * 设置组件可以在编辑器环境中执行完整声明周期。
      */
     function runInEditor(constructor: Function): void;
-    /**
-     * 设置组件可以添加多个实例到同一个节点上。
-     * @param constructor
-     */
-    function allowMultiple(constructor: Function): void;
     /**
      * 使用这个装饰器，可以使属性显示在编辑器属性设置面板上，并且能序列化保存。
      * @param info 属性的类型，如: Number,"number",[Number],["Record", Number]等。或传递对象描述详细信息，例如{ type: "string", multiline: true }。
      */
     function property(info: FPropertyType | Partial<FPropertyDescriptor>): any;
-    /**
-     * 注册一种资源装载器。
-     * @param fileExtensions 扩展名
-     * @param type 类型标识。如果这种资源需要支持识别没有扩展名的情况，或者一个扩展名对应了多种资源类型的情况，那么指定type参数是个最优实践。
-     * @param hotReloadable 是否支持热重载
-     */
-    function regLoader(fileExtensions: string[], type?: string, hotReloadable?: boolean): (constructor: Function) => void;
     /**开始播放时调度。
      * @eventType Event.PLAYED
      * */
@@ -927,6 +905,7 @@ declare module Laya {
      * 骨骼动画由<code>Templet</code>，<code>AnimationPlayer</code>，<code>Skeleton</code>三部分组成。
      */
     class Skeleton extends Sprite {
+        protected _source: string;
         private _animationName;
         private _loop;
         /**
@@ -1103,9 +1082,8 @@ declare module Laya {
          */
         resume(): void;
         /**
+         * 销毁当前动画
          * @override
-         * 销毁当前动画节点
-         * @param destroyChild 是否销毁子节点
          */
         destroy(destroyChild?: boolean): void;
     }
@@ -1483,6 +1461,11 @@ declare module Laya {
     }
     class AnimationClip2D extends Resource {
         /**
+         * @param data
+         * @returns
+         */
+        static _parse(data: ArrayBuffer): AnimationClip2D;
+        /**
          * 动画补帧函数
          */
         static tween: {
@@ -1529,7 +1512,7 @@ declare module Laya {
         constructor();
         /**
          * 动画时长
-         * @returns 动画时长
+         * @returns
          */
         duration(): number;
         /**
@@ -1593,21 +1576,7 @@ declare module Laya {
          * @param isFirstLayer 是否是第一层
          */
         private _setClipDatasToNode;
-        /**
-         * 跳转到指定帧并停止播放动画
-         * @param name 动画名称
-         * @param layerIndex 动画层
-         * @param frame 指定帧
-         * @returns
-         */
         gotoAndStopByFrame(name: string, layerIndex: number, frame: number): void;
-        /**
-         * 跳转到指定时间并停止播放动画
-         * @param name 动画名称
-         * @param layerIndex 层索引
-         * @param normalizedTime 归一化播放动画时间
-         * @returns
-         */
         gotoAndStop(name: string, layerIndex: number, normalizedTime: number): void;
         /**
          * 播放动画
@@ -1628,27 +1597,19 @@ declare module Laya {
         onUpdate(): void;
         /**
          * 添加控制器层。
-         * @param 动画层
          */
         addControllerLayer(controllderLayer: AnimatorControllerLayer2D): void;
         /**
          * 在当前动画状态和目标动画状态之间进行融合过渡播放。
          * @param	name 目标动画状态。
-         * @param	layerIndex 层索引。
-         * @param	normalizedTime 归一化的播放起始时间。
          * @param	transitionDuration 过渡时间,该值为当前动画状态的归一化时间，值在0.0~1.0之间。
-         */
-        crossFade(name: string, layerIndex: number, normalizedTime: number, transitionDuration: number): boolean;
-        /**
-         * 在当前动画状态和目标动画状态之间进行融合过渡播放。
-         * @param	name 目标动画状态。
          * @param	layerIndex 层索引。
          * @param	normalizedTime 归一化的播放起始时间。
          */
-        crossFade(name: string, layerIndex: number, normalizedTime: number): boolean;
+        crossFade(name: string, transitionDuration: number, layerIndex?: number, normalizedTime?: number): boolean;
         /**
          * 默认状态机
-         * @param layerIndex 层索引
+         * @param layerIndex
          * @returns
          */
         getDefaultState(layerIndex?: number): AnimatorState2D;
@@ -1724,7 +1685,6 @@ declare module Laya {
         get states(): ReadonlyArray<AnimatorState2D>;
         /**
          * 默认状态名称
-         * @param str 默认状态名称
          */
         set defaultStateName(str: string);
         get defaultStateName(): string;
@@ -1764,9 +1724,9 @@ declare module Laya {
          */
         removeState(state: AnimatorState2D): void;
         /**
-         * 克隆。
-         * @return 克隆副本。
-         */
+             * 克隆。
+             * @return	 克隆副本。
+             */
         clone(): AnimatorControllerLayer2D;
         /**
          * 克隆。
@@ -1893,7 +1853,7 @@ declare module Laya {
      * <code>Animator</code> 类用于创建动画组件。
      */
     class AnimatorState2D extends EventDispatcher implements IClone {
-        /**启动时播放偏移 play on awake start offset*/
+        /**play on awake start offset*/
         cycleOffset: number;
         /**
          * 名称
@@ -1992,7 +1952,7 @@ declare module Laya {
         static conditionNameToID(name: string): number;
         /**
          * 通过ID获得唯一名称。
-         * @param id 条件ID
+         * @param id
          * @returns
          */
         static conditionIDToName(id: number): string;
@@ -2019,7 +1979,7 @@ declare module Laya {
         get type(): AniStateConditionType;
         /**
          * 检查状态是否触发
-         * @param value 数值或bool
+         * @param value
          * @returns
          */
         checkState(value: number | boolean): boolean;
@@ -2042,7 +2002,7 @@ declare module Laya {
         set compareFlag(value: AniStateConditionNumberCompressType);
         /**
          * 检查状态是否触发
-         * @param value 数值
+         * @param value
          * @returns
          */
         checkState(value: number): boolean;
@@ -2060,7 +2020,7 @@ declare module Laya {
         set compareFlag(value: boolean);
         /**
          * 检查状态是否触发
-         * @param value bool
+         * @param value
          * @returns
          */
         checkState(value: boolean): boolean;
@@ -2073,50 +2033,37 @@ declare module Laya {
         constructor(name: string);
         /**
          * 检查状态是否触发,tigger 如果是true,就算条件达成
-         * @param value bool
+         * @param value
          * @returns
          */
         checkState(value: boolean): boolean;
     }
     class AnimatorTransition2D {
-        /**禁用 */
         mute: boolean;
-        /**退出时间 */
         exitTime: number;
-        /**是否设置生效时间 */
         exitByTime: boolean;
-        /**归一化的时间的下一个state播放位置 */
         transstartoffset: number;
-        /**归一化过度时间 TODO 0-1 */
         transduration: number;
-        /**过渡条件 */
         conditions: AnimatorStateCondition[];
-        /**目标状态 */
         destState: AnimatorState2D;
-        /**
-         * 当有多个条件的时候是否使用与操作
-         */
-        isAndOperEnabled: boolean;
         /**
          * 创建一个新的Animatortransition2D
          */
         constructor();
         /**
          * 增加一个条件
-         * @param condition 状态转换条件
+         * @param condition
          */
         addCondition(condition: AnimatorStateCondition): void;
         /**
          * 删除一个条件
-         * @param condition 状态转换条件
+         * @param condition
          */
         removeCondition(condition: AnimatorStateCondition): void;
         /**
         * 是否启用过渡
-        * @param normalizeTime 归一化时间
-        * @param paramsMap 条件组
-        * @param isReplay 是否重复播放
-        * @returns
+        * @param normalizeTime
+        * @param paramsMap
         */
         check(normalizeTime: number, paramsMap: Record<string, Animation2DParm>, isReplay: boolean): boolean;
     }
@@ -2135,6 +2082,8 @@ declare module Laya {
      * <code>Component</code> 类用于创建组件的基类。
      */
     class Component {
+        /** @private */
+        _id: number;
         /**@private */
         private _hideFlags;
         /**@private */
@@ -2144,19 +2093,21 @@ declare module Laya {
          */
         owner: Node;
         /**
-         * 隐藏状态
+         * 是否单例，即同一个节点只能添加此类型的脚本一次
          */
+        _singleton?: boolean;
+        /**
+         * 是否可以在IDE环境中运行
+         */
+        runInEditor: boolean;
+        scriptPath: string;
+        _extra: IComponentExtra;
         get hideFlags(): number;
         set hideFlags(value: number);
         /**
          * 创建一个新的 <code>Component</code> 实例。
          */
         constructor();
-        /**
-         * 是否存在隐藏标志
-         * @param flag 标签
-         * @returns
-         */
         hasHideFlag(flag: number): boolean;
         /**
          * 唯一标识ID。
@@ -2167,14 +2118,13 @@ declare module Laya {
          */
         get enabled(): boolean;
         set enabled(value: boolean);
-        /**
-         * 是否已唤醒
-         */
         get awaked(): boolean;
         /**
          * 是否已经销毁 。
          */
         get destroyed(): boolean;
+        _setOwner(node: Node): void;
+        protected setupScript(): void;
         /**
          * 销毁组件
          */
@@ -2336,44 +2286,30 @@ declare module Laya {
      * <code>Script</code> 类用于创建脚本的父类，该类为抽象类，不允许实例。
      */
     class Script extends Component {
-        /**
-         * 脚本所属精灵
-         */
         owner: Sprite | Sprite3D;
+        protected setupScript(): void;
         /**
          * 3D物理触发器事件与2D物理碰撞事件，开始碰撞时执行
-         * @param other 碰撞机
-         * @param self 自身碰撞机
-         * @param contact
          */
         onTriggerEnter?(other: PhysicsColliderComponent | ColliderBase, self?: ColliderBase, contact?: any): void;
         /**
          * 3D物理触发器事件与2D物理碰撞事件，持续碰撞时执行
-         * @param other 碰撞机
-         * @param self 自身碰撞机
-         * @param contact
          */
         onTriggerStay?(other: PhysicsColliderComponent | ColliderBase, self?: ColliderBase, contact?: any): void;
         /**
          * 3D物理触发器事件与2D物理碰撞事件，结束碰撞时执行
-         * @param other 碰撞机
-         * @param self 自身碰撞机
-         * @param contact
          */
         onTriggerExit?(other: PhysicsColliderComponent | ColliderBase, self?: ColliderBase, contact?: any): void;
         /**
          * 3D物理碰撞器事件（不适用2D），开始碰撞时执行
-         * @param collision 碰撞机
          */
         onCollisionEnter?(collision: Collision): void;
         /**
          * 3D物理碰撞器事件（不适用2D），持续碰撞时执行
-         * @param collision 碰撞机
          */
         onCollisionStay?(collision: Collision): void;
         /**
-         * 3D物理碰撞器事件（不适用2D），结束碰撞时执行
-         * @param collision 碰撞机
+         *3D物理碰撞器事件（不适用2D），结束碰撞时执行
          */
         onCollisionExit?(collision: Collision): void;
         /**
@@ -2382,77 +2318,62 @@ declare module Laya {
         onJointBreak?(): void;
         /**
          * 鼠标按下时执行
-         * @param 鼠标事件
          */
         onMouseDown?(evt: Event): void;
         /**
          * 鼠标抬起时执行
-         * @param 鼠标事件
          */
         onMouseUp?(evt: Event): void;
         /**
          * 鼠标右键或中键按下时执行
-         * @param 鼠标事件
          */
         onRightMouseDown?(evt: Event): void;
         /**
          * 鼠标右键或中键抬起时执行
-         * @param 鼠标事件
          */
         onRightMouseUp?(evt: Event): void;
         /**
          * 鼠标在节点上移动时执行
-         * @param 鼠标事件
          */
         onMouseMove?(evt: Event): void;
         /**
          * 鼠标进入节点时执行
-         * @param 鼠标事件
          */
         onMouseOver?(evt: Event): void;
         /**
          * 鼠标离开节点时执行
-         * @param 鼠标事件
          */
         onMouseOut?(evt: Event): void;
         /**
          * 鼠标按住一个物体后，拖拽时执行
-         * @param 鼠标事件
          */
         onMouseDrag?(evt: Event): void;
         /**
          * 鼠标按住一个物体，拖拽一定距离，释放鼠标按键后执行
-         * @param 鼠标事件
          */
         onMouseDragEnd?(evt: Event): void;
         /**
          * 鼠标点击时执行
-         * @param 鼠标事件
          */
         onMouseClick?(evt: Event): void;
         /**
          * 鼠标双击时执行
-         * @param 鼠标事件
          */
         onMouseDoubleClick?(evt: Event): void;
         /**
          * 鼠标右键点击时执行
-         * @param 鼠标事件
          */
         onMouseRightClick?(evt: Event): void;
         /**
          * 键盘按下时执行
-         * @param 鼠标事件
          */
         onKeyDown?(evt: Event): void;
         /**
          * 键盘产生一个字符时执行
-         * @param 鼠标事件
          */
         onKeyPress?(evt: Event): void;
         /**
          * 键盘抬起时执行
-         * @param 鼠标事件
          */
         onKeyUp?(evt: Event): void;
     }
@@ -2518,7 +2439,8 @@ declare module Laya {
         static ENUM_TEXTALIGN_DEFAULT: number;
         static ENUM_TEXTALIGN_CENTER: number;
         static ENUM_TEXTALIGN_RIGHT: number;
-        static INDEX_BYTES: number;
+        static BYTES_PE: number;
+        static BYTES_PIDX: number;
         static MAX_CLIP_SIZE: number;
     }
     /**
@@ -2555,6 +2477,10 @@ declare module Laya {
      * <code>AnimationClip</code> 类用于动画片段资源。
      */
     class AnimationClip extends Resource {
+        /**
+         * @inheritDoc
+         */
+        static _parse(data: any): AnimationClip;
         /**
          * 加载动画片段。
          * @param url 动画片段地址。
@@ -2593,6 +2519,11 @@ declare module Laya {
          * @param event 动画事件
          */
         addEvent(event: AnimationEvent): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _disposeResource(): void;
     }
     /**
      * <code>AnimationEvent</code> 类用于实现动画事件。
@@ -2708,9 +2639,7 @@ declare module Laya {
         static CULLINGMODE_CULLCOMPLETELY: number;
         /**	裁剪模式*/
         cullingMode: number;
-        /**
-         * 动画控制器
-         */
+        _controller: AnimatorController;
         set controller(val: AnimatorController);
         get controller(): AnimatorController;
         /**
@@ -2726,9 +2655,6 @@ declare module Laya {
          * 低更新模式
          */
         set lowUpdateDelty(value: number);
-        /**
-         * 状态机动画层数量
-         */
         get controllerLayerCount(): number;
         /**
          * 状态机参数map
@@ -2763,6 +2689,8 @@ declare module Laya {
          * @param isFirstLayer 是否是第一层
          */
         private _setClipDatasToNode;
+        protected _onEnable(): void;
+        protected _onDestroy(): void;
         private _applyUpdateMode;
         /**
          * 获取默认动画状态。
@@ -2784,12 +2712,10 @@ declare module Laya {
         removeState(state: AnimatorState, layerIndex?: number): void;
         /**
          * 添加控制器层。
-         * @param controllderLayer 动画控制层
          */
         addControllerLayer(controllderLayer: AnimatorControllerLayer): void;
         /**
          * 获取控制器层。
-         * @param 层索引
          */
         getControllerLayer(layerInex?: number): AnimatorControllerLayer;
         /**
@@ -2808,27 +2734,25 @@ declare module Laya {
          */
         crossFade(name: string, transitionDuration: number, layerIndex?: number, normalizedTime?: number): void;
         /**
-         * 启用触发条件
-         * @param name 触发条件的名字或者索引
+         * set params value
+         * @param name
          */
         setParamsTrigger(name: number): void;
         setParamsTrigger(name: string): void;
         /**
-         * 设置值条件属性值
-         * @param name 属性的名字或者索引
-         * @param value 属性值
+         * set params value
+         * @param name
          */
         setParamsNumber(name: number, value: number): void;
         setParamsNumber(name: string, value: number): void;
         /**
-         * 设置布尔条件属性值
-         * @param name 属性的名字或者索引
-         * @param value 属性值
+         * set params value
+         * @param name
          */
         setParamsBool(name: number, value: boolean): void;
         setParamsBool(name: string, value: boolean): void;
         /**
-         * 得到条件属性值
+         * get params value
          * @param name
          */
         getParamsvalue(name: number): number | boolean;
@@ -2887,6 +2811,10 @@ declare module Laya {
          * @param 动画层名称
          */
         constructor(name: string);
+        _getReferenceCount(): number;
+        _addReference(count?: number): void;
+        _removeReference(count?: number): void;
+        _clearReference(): void;
         /**
          * 获取当前的播放状态。
          * @return 动画播放状态。
@@ -2894,7 +2822,6 @@ declare module Laya {
         getCurrentPlayState(): AnimatorPlayState;
         /**
          * 获取动画状态。
-         * @param name 动画状态机名称
          * @return 动画状态。
          */
         getAnimatorState(name: string): AnimatorState | null;
@@ -2974,9 +2901,8 @@ declare module Laya {
          * 动画事件 离开时调用
          */
         static EVENT_OnStateExit: string;
-        /**
-         * 当前过渡内容
-         */
+        /**是否循环播放,为0时则使用_clip.islooping，1为循环，2为不循环 */
+        _isLooping: 0 | 1 | 2;
         curTransition: AnimatorTransition;
         /**名称。*/
         name: string;
@@ -2993,17 +2919,14 @@ declare module Laya {
          */
         get clip(): AnimationClip | null;
         set clip(value: AnimationClip | null);
-        /**
-         * 是否循环
-         */
         get islooping(): boolean;
         /**
-         * 动画过渡内容(IDE使用)
+         * IDE
          */
         get transitions(): AnimatorTransition[];
         set transitions(value: AnimatorTransition[]);
         /**
-         * 优先动画过渡内容(IDE使用)
+         * IDE
          */
         get soloTransitions(): AnimatorTransition[];
         set soloTransitions(value: AnimatorTransition[]);
@@ -3090,23 +3013,18 @@ declare module Laya {
         get exitTime(): number;
         /**
          * 增加一个条件
-         * @param condition 条件
+         * @param condition
          */
         addCondition(condition: AnimatorStateCondition): void;
         /**
          * 删除一个条件
-         * @param condition 条件
+         * @param condition
          */
         removeCondition(condition: AnimatorStateCondition): void;
         /**
-         * 当有多个条件的时候是否使用与操作
-         */
-        get isAndOperEnabled(): boolean;
-        set isAndOperEnabled(vlaue: boolean);
-        /**
          * 是否启用过渡
-         * @param normalizeTime 归一化时间
-         * @param paramsMap 条件组
+         * @param normalizeTime
+         * @param paramsMap
          */
         check(normalizeTime: number, paramsMap: {
             [key: number]: number | boolean;
@@ -3122,24 +3040,24 @@ declare module Laya {
         constructor(data?: any);
         /**
          * 查找节点路径遮罩
-         * @param path 节点路径
+         * @param path
          * @returns
          */
         getTransformActive(path: string): boolean;
         /**
-         * 设置遮罩
-         * @param path 节点路径
-         * @param value 是否启用遮罩
+         * 设置
+         * @param path
+         * @param value
          */
         setTransformActive(path: string, value: boolean): void;
         /**
          * 获得遮罩信息
-         * @returns 遮罩信息
+         * @returns
          */
         getAllTranfromPath(): Record<string, boolean>;
         /**
        * 克隆。
-       * @return 克隆副本。
+       * @return	 克隆副本。
        */
         clone(): any;
         /**
@@ -3235,7 +3153,7 @@ declare module Laya {
          * @param context
          * @param transform
          */
-        _renderUpdate(context: IRenderContext3D): void;
+        _renderUpdate(context: RenderContext3D, transform: Transform3D): void;
         _needRender(boundFrustum: BoundFrustum, context: RenderContext3D): boolean;
         onEnable(): void;
         onDisable(): void;
@@ -3333,7 +3251,7 @@ declare module Laya {
     /**
      * <code>SpotLight</code> 类用于构建LOD组件
      */
-    class LODGroup extends Component {
+    class LODGroup extends Component implements IBoundsCell {
         /**
          * 是否需要重新计算_lodBoundsRadius，和_bounds
          * 在LOD值里面位置有相对改动的时候是需要重新计算的
@@ -3371,10 +3289,6 @@ declare module Laya {
          * 实例化一个LODGroup
          */
         constructor();
-        /**
-         * 阴影裁剪pass
-         * @returns
-         */
         shadowCullPass(): boolean;
         /**
         * get LODInfo 数组
@@ -3386,9 +3300,6 @@ declare module Laya {
          * @param data
          */
         set lods(data: LODInfo[]);
-        /**
-         * lod节点比例
-         */
         get nowRate(): number;
         /**
          * 获得LOD包围盒
@@ -3440,18 +3351,16 @@ declare module Laya {
         get cameraDepthTextureMode(): DepthTextureMode;
         /**
          * 添加后期处理效果。
-         * @param effect 后期处理效果
          */
         addEffect(effect: PostProcessEffect): void;
         /**
          * 根据类型获得后期处理实例
-         * @param classReg 注册的后期处理类型
+         * @param classReg
          * @returns
          */
         getEffect(classReg: any): any;
         /**
          * 移除后期处理效果。
-         * @param effect 后期处理效果
          */
         removeEffect(effect: PostProcessEffect): void;
         /**
@@ -3481,7 +3390,7 @@ declare module Laya {
         _singleton: boolean;
         private constructor();
         _calculateBoundingBox(): void;
-        _renderUpdate(context: IRenderContext3D): void;
+        _renderUpdate(context: RenderContext3D, transform: Transform3D): void;
         _getMeshDefine(mesh: StaticBatchMesh, out: Array<ShaderDefine>): void;
         _needRender(boundFrustum: BoundFrustum, context: RenderContext3D): boolean;
         onEnable(): void;
@@ -3533,6 +3442,16 @@ declare module Laya {
      * 类用来描述合批的渲染节点
      */
     class BatchRender extends BaseRender {
+        protected _lodCount: number;
+        protected _lodRateArray: number[];
+        protected _batchList: SingletonList<BaseRender>;
+        protected _batchbit: RenderBitFlag;
+        protected _RenderBitFlag: RenderBitFlag;
+        protected _lodInstanceRenderElement: {
+            [key: number]: InstanceRenderElement[];
+        };
+        protected _lodsize: number;
+        private _cacheLod;
         /**
          * 创建一个 <code>BatchRender</code> 实例。
          */
@@ -3548,18 +3467,43 @@ declare module Laya {
         set lodCullRateArray(value: number[]);
         get lodCullRateArray(): number[];
         /**
-         * 渲染前调用
+         * Overrid it
+         *  是否满足batch条件
          */
+        protected _canBatch(render: BaseRender): boolean;
+        protected _onEnable(): void;
+        protected _onDisable(): void;
+        /**
+         * 根据lod的改变
+         */
+        protected _changeLOD(lod: number): void;
         onPreRender(): void;
         /**
+         * @param render
+         */
+        _batchOneRender(render: BaseRender): boolean;
+        /**
+         * @param render
+         */
+        _removeOneRender(render: BaseRender): void;
+        /**
+         * @param render
+         */
+        _updateOneRender(render: BaseRender): void;
+        /**
          * 合批队列传入
-         * @param renderNodes 渲染节点队列
+         * @param renderNodes
          */
         addList(renderNode: BaseRender[]): void;
         /**
          * 根据_batchList合批
          */
         reBatch(): void;
+        /**
+         * Restoring the Batch Render State
+         */
+        _restorRenderNode(): void;
+        _clear(): void;
     }
     /**
      * 类用来描述一个可合并渲染节点的体积
@@ -3609,6 +3553,16 @@ declare module Laya {
          * @param renderNode
          */
         private __removeRenderNodeFromBatch;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onEnable(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onDisable(): void;
         /**
          * 重新合批,将清理前面状态
          * 必要时需要手动调用,根据Volume里面的值,进行合批
@@ -3670,8 +3624,19 @@ declare module Laya {
          */
         private _createInstanceElement;
         /**
+         * 是否满足batch条件
+         * @override
+         * @param render
+         * @returns
+         */
+        protected _canBatch(render: BaseRender): boolean;
+        /**
+         * destroy
+         */
+        protected _onDestroy(): void;
+        /**
         * 合批队列传入
-        * @param renderNodes 渲染队列
+        * @param renderNodes
         */
         addList(renderNodes: BaseRender[]): void;
         /**
@@ -3701,16 +3666,34 @@ declare module Laya {
      * @miner
      */
     class ReflectionProbe extends Volume {
-        /**反射探针数量 */
         static reflectionCount: number;
         /**获取一个全局唯一ID。*/
         static getID(): number;
+        static TEMPVECTOR3: Vector3;
         /** 默认解码数据 */
         static defaultTextureHDRDecodeValues: Vector4;
+        /** 盒子反射是否开启 */
+        private _boxProjection;
+        /** 包围盒 */
+        protected _bounds: Bounds;
+        /** 探针重要度 */
+        protected _importance: number;
         /**漫反射顔色 */
         private _ambientColor;
         /**漫反射SH */
         private _ambientSH;
+        /**漫反射强度 */
+        private _ambientIntensity;
+        /**ibl反射 */
+        private _iblTex;
+        /**ibl是否压缩 */
+        private _iblTexRGBD;
+        /**反射强度 */
+        private _reflectionIntensity;
+        /** 是否是场景探针 */
+        _isScene: boolean;
+        /**修改了值，需要更新shader，需要和updateMask对应 */
+        _updateMark: number;
         constructor();
         /**
          * 是否开启正交反射。
@@ -3732,7 +3715,6 @@ declare module Laya {
          */
         get reflectionIntensity(): number;
         set reflectionIntensity(value: number);
-        _reCaculateBoundBox(): void;
         /**
          * 获得反射探针的包围盒
          */
@@ -3767,7 +3749,6 @@ declare module Laya {
         */
         get ambientMode(): AmbientMode;
         set ambientMode(value: AmbientMode);
-        private _iblTex;
         /**
          * Image base Light
          */
@@ -3778,6 +3759,73 @@ declare module Laya {
          */
         get iblTexRGBD(): boolean;
         set iblTexRGBD(value: boolean);
+        applyReflectionShaderData(shaderData: ShaderData): void;
+        /**
+        * @inheritDoc
+        * @override
+        */
+        protected _onEnable(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onDisable(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onDestroy(): void;
+        /**
+         * @deprecated
+         *  反射探针图片 */
+        private _reflectionTexture;
+        /**
+         * @deprecated
+         *  反射参数
+         */
+        private _reflectionHDRParams;
+        /**
+         * @deprecated 反射探针解码格式
+         */
+        private _reflectionDecodeFormat;
+        /**
+         * @deprecated
+         * 设置反射贴图
+         */
+        get reflectionTexture(): TextureCube;
+        set reflectionTexture(value: TextureCube);
+        /**
+        * @deprecated
+        */
+        get customReflection(): TextureCube;
+        set customReflection(value: TextureCube);
+        /**
+         * @deprecated
+         * 反射参数
+         */
+        get reflectionHDRParams(): Vector4;
+        /**
+         * 反射立方体纹理解码格式。
+         * @deprecated
+         */
+        get reflectionDecodingFormat(): TextureDecodeFormat;
+        set reflectionDecodingFormat(value: TextureDecodeFormat);
+        /**
+        * @deprecated
+        * 球谐环境光,修改后必须重新赋值。
+        * use scene.ambientSH
+        */
+        get ambientSphericalHarmonics(): SphericalHarmonicsL2;
+        /**
+         * @deprecated
+         * use scene.ambientSH
+         */
+        set ambientSphericalHarmonics(value: SphericalHarmonicsL2);
+        /**
+       * @deprecated
+       * 设置 天空， 地平线， 地面 环境光颜色
+       */
+        setGradientAmbient(skyColor: Vector3, equatorColor: Vector3, groundColor: Vector3): void;
     }
     /**
      *<code>ReflectionProbeManager</code> 类用于反射探针管理
@@ -3815,6 +3863,18 @@ declare module Laya {
         intersectRate: number;
     }
     class Volume extends Component {
+        /** 包围盒 */
+        protected _bounds: Bounds;
+        /**cache number of around Volume */
+        protected _aroundVolumeCacheNum: number;
+        /** around Volume */
+        protected _aroundVolume: Volume[];
+        /** volume manager */
+        protected _volumeManager: VolumeManager;
+        /** volume intersect Comonent */
+        protected _type: number;
+        /** 重要性 */
+        protected _importance: number;
         /**
          * 创建一个<code>Volume</code>实例
          */
@@ -3823,25 +3883,49 @@ declare module Laya {
          * volume Type
          */
         get type(): number;
-        /**
-         * 体积组件自身包围盒最大点
-         */
         get boundsMax(): Vector3;
+        /**
+         * primitive包围盒max
+         */
         set boundsMax(value: Vector3);
         /**
-         * 体积组件自身包围盒最小点
+         * primitiveBoxMax
          */
-        get boundsMin(): Vector3;
         set boundsMin(value: Vector3);
-        /**
-         * 探针位置
-         */
+        get boundsMin(): Vector3;
         get probePosition(): Vector3;
-        /**
-         * 体积块探针重要度
-         */
         get importance(): number;
         set importance(value: number);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onEnable(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onDisable(): void;
+        /**
+         * 当一个渲染节点进入体积
+         * @param renderNode
+         */
+        _addRenderNode?(renderNode: BaseRender): void;
+        /**
+         * 当一个渲染节点移除体积
+         * @param renderNode
+         */
+        _removeRenderNode?(renderNode: BaseRender): void;
+        /**
+         * 当一个渲染节点在体积中移动
+         * @param renderNode
+         */
+        _motionInVolume?(renderNode: BaseRender): void;
+        /**
+         * Volume change
+         */
+        _VolumeChange(): void;
+        _reCaculateBoundBox(): void;
     }
     /**
      * <code>VolumeManager</code> 类用于管理体积组件
@@ -3888,21 +3972,25 @@ declare module Laya {
         needreCaculateAllRenderObjects(): boolean;
     }
     class VolumetricGI extends Volume {
-        /**体积全局光照探针个数 */
         static volumetricCount: number;
         /**获取一个全局唯一ID。*/
         static getID(): number;
+        /**密度 */
+        private _intensity;
         /**
          * <code>实例化一个体积光照探针<code>
          */
         constructor();
-        private _irradiance;
+        /**
+        * @inheritDoc
+        * @override
+        */
+        protected _onEnable(): void;
         /**
          * light probe texture
          */
         get irradiance(): Texture2D;
         set irradiance(value: Texture2D);
-        private _distance;
         /**
          * distance texture
          */
@@ -3941,7 +4029,28 @@ declare module Laya {
          */
         get probeStep(): Vector3;
         set probeStep(value: Vector3);
-        _reCaculateBoundBox(): void;
+        /**
+         * @interanl
+         * upload volumetric GI data
+         * @param shaderData
+         */
+        applyVolumetricGI(shaderData: ShaderData): void;
+        /**
+         * @interanl
+         */
+        _onDestroy(): void;
+    }
+    class VolumetricGIManager implements IVolumeManager {
+        _needUpdateAllRender: boolean;
+        private _GIVolumes;
+        constructor();
+        removeVolumetricGI(renderer: BaseRender): void;
+        add(volume: VolumetricGI): void;
+        remove(volume: VolumetricGI): void;
+        _updateRenderObject(renderer: BaseRender): void;
+        handleMotionlist(motionObjects: SingletonList<BaseRender>): void;
+        reCaculateAllRenderObjects(renders: SingletonList<BaseRender>): void;
+        destroy(): void;
     }
     /**
      * <code>BaseCamera</code> 类用于创建摄像机的父类。
@@ -3962,10 +4071,11 @@ declare module Laya {
         /**渲染引擎 */
         protected _renderEngine: IRenderEngine;
         /** 视野。*/
-        protected _fieldOfView: number;
+        private _fieldOfView;
         /** 正交投影的垂直尺寸。*/
         private _orthographicVerticalSize;
-        private _skyRenderElement;
+        /** skyRender */
+        private _skyRenderer;
         /** 前向量*/
         _forward: Vector3;
         /** up向量 */
@@ -3983,7 +4093,7 @@ declare module Laya {
         /**
          * 天空渲染器。
          */
-        get skyRenderElement(): SkyRenderElement;
+        get skyRenderer(): SkyRenderer;
         /**
          * 视野。
          */
@@ -4102,7 +4212,9 @@ declare module Laya {
      * <code>Camera</code> 类用于创建摄像机。
      */
     class Camera extends BaseCamera {
+        static _contextScissorPortCatch: Vector4;
         static set _updateMark(value: number);
+        static get _updateMark(): number;
         /**
          * 根据相机、scene信息获得scene中某一位置的渲染结果
          * @param camera 相机
@@ -4110,60 +4222,42 @@ declare module Laya {
          * @param shader 着色器
          * @param replacementTag 替换标记。
          */
-        static drawRenderTextureByScene(camera: Camera, scene: Scene3D, renderTexture: RenderTexture): RenderTexture;
+        static drawRenderTextureByScene(camera: Camera, scene: Scene3D, renderTexture: RenderTexture, shader?: Shader3D, replaceFlag?: string): RenderTexture;
         /**
-         * @deprecated 请使用getTexturePixelAsync函数代替
          * get PixelTexture
-         * 获得纹理的像素
-         * @param texture 纹理
+         * @param texture
          * @returns
          */
         static getTexturePixel(texture: Texture2D): ArrayBufferView;
         /**
-         * get PixelTexture
-         * 获得纹理的像素
-         * @param texture 纹理
-         * @returns
-         */
-        static getTexturePixelAsync(texture: Texture2D): Promise<ArrayBufferView>;
-        /**
-         * 根据场景中相机的位置绘制场景内容并返回
-         * @param position 位置
-         * @param scene 场景
-         * @param renderCubeSize 立方体纹理像素大小
-         * @param format 颜色格式
-         * @returns 输出纹理像素顺序bake front left right up down
+         * 根据场景中的位置
+         * @param position
+         * @param scene
+         * @param renderCubeSize
+         * @param format
+         * @returns bake front left right up down
          */
         static drawTextureCubePixelByScene(camera: Camera, scene: Scene3D, renderCubeSize: number, format: TextureFormat, cullingMask: number): ArrayBufferView[];
-        /**
-         * 绘制指定场景的内容到立方体贴图
-         * @param camera 相机
-         * @param position 相机位置
-         * @param scene 指定的场景
-         * @param renderCubeSize 立方体贴图的大小
-         * @param format 立方体贴图的格式
-         * @param cullingMask 相机剔除遮罩
-         * @returns 立方体贴图
-         */
         static drawTextureCubeByScene(camera: Camera, position: Vector3, scene: Scene3D, renderCubeSize: number, format: TextureFormat, cullingMask?: number): TextureCube;
+        /**深度贴图模式 */
+        protected _depthTextureFormat: RenderTargetFormat;
         /** 深度贴图*/
         private _depthTexture;
         /** 深度法线贴图*/
         private _depthNormalsTexture;
+        /** 非透明物体贴图 */
+        private _opaqueTexture;
         /** 是否开启非透明物体通道 */
         private _opaquePass;
+        private _cameraEventCommandBuffer;
         /**是否允许渲染。*/
         enableRender: boolean;
         /**清除标记。*/
         clearFlag: CameraClearFlags;
-        _renderDataModule: ICameraNodeData;
-        private _Render3DProcess;
-        set nearPlane(value: number);
-        get nearPlane(): number;
-        set farPlane(value: number);
-        get farPlane(): number;
-        set fieldOfView(value: number);
-        get fieldOfView(): number;
+        /**是否缓存上一帧的Depth纹理 */
+        _cacheDepth: boolean;
+        /**cache 上一帧纹理 */
+        _cacheDepthTexture: RenderTexture;
         /**
          * 横纵比。
          */
@@ -4174,13 +4268,7 @@ declare module Laya {
          */
         get viewport(): Viewport;
         set viewport(value: Viewport);
-        /**
-         * 相机显示宽度
-         */
         get clientWidth(): number;
-        /**
-         * 相机显示高度
-         */
         get clientHeight(): number;
         /**
          * 多重采样抗锯齿
@@ -4246,7 +4334,6 @@ declare module Laya {
          */
         set opaquePass(value: boolean);
         get opaquePass(): boolean;
-        opaqueTextureSize: number;
         /**
          * 深度贴图格式
          */
@@ -4257,9 +4344,6 @@ declare module Laya {
          */
         set enableBlitDepth(value: boolean);
         get enableBlitDepth(): boolean;
-        /**
-         * 设置是否可以绘制深度贴图
-         */
         get canblitDepth(): boolean;
         /**
          * 创建一个 <code>Camera</code> 实例。
@@ -4269,20 +4353,39 @@ declare module Laya {
          */
         constructor(aspectRatio?: number, nearPlane?: number, farPlane?: number);
         /**
-         * 克隆相机
-         * @returns
+         *	通过蒙版值获取蒙版是否显示。
+         * 	@param  layer 层。
+         * 	@return 是否显示。
          */
+        _isLayerVisible(layer: number): boolean;
         clone(): Camera;
+        /**
+         * 渲染结果是否是Gamma
+         * @param rt
+         */
+        _needRenderGamma(rt: RenderTargetFormat): boolean;
+        /**
+         * update Camera Render
+         * @param context
+         */
+        _updateCameraRenderData(context: RenderContext3D): void;
+        /**
+         * 调用渲染命令流
+         * @param event
+         * @param renderTarget
+         * @param context
+         */
+        _applyCommandBuffer(event: number, context: RenderContext3D): void;
+        recoverRenderContext3D(context: RenderContext3D, renderTexture: RenderTexture): void;
         set depthTexture(value: BaseTexture);
         set depthNormalTexture(value: RenderTexture);
+        _createOpaqueTexture(currentTarget: RenderTexture, renderContext: RenderContext3D): void;
         /**
          * @override
-         * 渲染
          * @param shader 着色器
          * @param replacementTag 替换标记。
-         * @perfTag PerformanceDefine.T_CameraRender
          */
-        render(scene: Scene3D): void;
+        render(shader?: Shader3D, replacementTag?: string): void;
         /**
          * 计算从屏幕空间生成的射线。
          * @param point 屏幕空间的位置位置。
@@ -4315,8 +4418,6 @@ declare module Laya {
          */
         convertScreenCoordToOrthographicCoord(source: Vector3, out: Vector3): boolean;
         /**
-         * 删除Camera节点
-         * @param destroyChild 是否删除子节点
          * @inheritDoc
          * @override
          */
@@ -4361,15 +4462,10 @@ declare module Laya {
         constructor();
         /**
          * 克隆数据
-         * @param destObject 拷贝数据结构
          * @inheritDoc
          * @override
          */
         cloneTo(destObject: any): void;
-        /**
-         * 克隆
-         * @returns
-         */
         clone(): FloatKeyframe;
     }
     /**
@@ -4379,7 +4475,6 @@ declare module Laya {
         protected _owner: any;
         static _typeCounter: number;
         _geometryElementOBj: IRenderGeometryElement;
-        protected _bufferState: BufferState;
         /**
          * VAO OBJ
          */
@@ -4503,19 +4598,17 @@ declare module Laya {
         updateColorAlpha(index: number, key: number, value: number): void;
         /**
          * 通过插值获取RGB颜色。
-         * @param lerpFactor 插值因子。
-         * @param out 颜色结果。
-         * @param startSearchIndex 开始查找索引。
-         * @param reverseSearch 反向插值。
-         * @returns
+         * @param  lerpFactor 插值因子。
+         * @param  out 颜色结果。
+         * @param  开始查找索引。
+         * @return 结果索引。
          */
         evaluateColorRGB(lerpFactor: number, out: Color, startSearchIndex?: number, reverseSearch?: boolean): number;
         /**
          * 通过插值获取透明值。
          * @param  lerpFactor 插值因子。
          * @param  out 颜色结果。
-         * @param  startSearchIndex 开始查找索引。
-         * @param  reverseSearch 是否反向插值
+         * @param  开始查找索引。
          * @return 结果索引 。
          */
         evaluateColorAlpha(lerpFactor: number, outColor: Color, startSearchIndex?: number, reverseSearch?: boolean): number;
@@ -4587,7 +4680,6 @@ declare module Laya {
          * 创建一个 <code>AreaLightCoponent</code> 实例。
          */
         constructor();
-        protected _creatModuleData(): void;
         /**
           * 灯光烘培类型。
           */
@@ -4620,14 +4712,10 @@ declare module Laya {
         get maxBounces(): number;
     }
     /**
+     * @deprecated
      * <code>DirectionLight</code> 类用于创建平行光。
      */
-    class DirectionLightCom extends Light {
-        /**
-         * 直射光方向
-         */
-        set direction(value: Vector3);
-        get direction(): Vector3;
+    class DirectionLight extends LightSprite {
         /**
          * 阴影级联数量。
          */
@@ -4647,7 +4735,30 @@ declare module Laya {
          * 创建一个 <code>DirectionLight</code> 实例。
          */
         constructor();
-        protected _creatModuleData(): void;
+    }
+    /**
+     * <code>DirectionLight</code> 类用于创建平行光。
+     */
+    class DirectionLightCom extends Light {
+        /**
+         * 阴影级联数量。
+         */
+        get shadowCascadesMode(): ShadowCascadesMode;
+        set shadowCascadesMode(value: ShadowCascadesMode);
+        /**
+         * 二级级联阴影分割比例。
+         */
+        get shadowTwoCascadeSplits(): number;
+        set shadowTwoCascadeSplits(value: number);
+        /**
+         * 四级级联阴影分割比例,X、Y、Z依次为其分割比例,Z必须大于Y,Y必须大于X。
+         */
+        get shadowFourCascadeSplits(): Vector3;
+        set shadowFourCascadeSplits(value: Vector3);
+        /**
+         * 创建一个 <code>DirectionLight</code> 实例。
+         */
+        constructor();
     }
     enum LightType {
         Directional = 0,
@@ -4711,19 +4822,15 @@ declare module Laya {
          */
         get lightmapBakedType(): LightMode;
         set lightmapBakedType(value: LightMode);
-        /**
-         * 获取灯光世界矩阵
-         */
         get lightWorldMatrix(): Matrix4x4;
-        /**
-         * 获取灯光类型
-         */
         get lightType(): LightType;
         /**
          * 创建一个 <code>LightSprite</code> 实例。
          */
         constructor();
-        protected _creatModuleData(): void;
+        protected _onEnable(): void;
+        protected _onDisable(): void;
+        protected _onDestroy(): void;
     }
     /**
      * @deprecated
@@ -4735,9 +4842,6 @@ declare module Laya {
          */
         get color(): Color;
         set color(value: Color);
-        /**
-         * 灯光烘焙模式
-         */
         get mode(): LightMode;
         set mode(value: LightMode);
         /**
@@ -4785,17 +4889,17 @@ declare module Laya {
          */
         get lightmapBakedType(): number;
         set lightmapBakedType(value: number);
-        /**
-         * 获取灯光世界矩阵
-         */
         get lightWorldMatrix(): Matrix4x4;
         /**
          * 创建一个 <code>LightSprite</code> 实例。
          */
         constructor();
     }
-    class PointLightCom extends Light {
-        _dataModule: IPointLightData;
+    /**
+     * @deprecated
+     * <code>PointLight</code> 类用于创建点光。
+     */
+    class PointLight extends LightSprite {
         /**
          * 点光的范围。
          * @return 点光的范围。
@@ -4806,7 +4910,18 @@ declare module Laya {
          * 创建一个 <code>PointLight</code> 实例。
          */
         constructor();
-        protected _creatModuleData(): void;
+    }
+    class PointLightCom extends Light {
+        /**
+         * 点光的范围。
+         * @return 点光的范围。
+         */
+        get range(): number;
+        set range(value: number);
+        /**
+         * 创建一个 <code>PointLight</code> 实例。
+         */
+        constructor();
     }
     /**
      * 阴影得级联模式。
@@ -4838,15 +4953,10 @@ declare module Laya {
         bit32 = 2
     }
     /**
+     * @deprecated
      * <code>SpotLight</code> 类用于创建聚光。
      */
-    class SpotLightCom extends Light {
-        _dataModule: ISpotLightData;
-        /**
-         * 直射光方向
-         */
-        set direction(value: Vector3);
-        get direction(): Vector3;
+    class SpotLight extends LightSprite {
         /**
           * 聚光灯的锥形角度。
           */
@@ -4861,7 +4971,25 @@ declare module Laya {
          * 创建一个 <code>SpotLight</code> 实例。
          */
         constructor();
-        protected _creatModuleData(): void;
+    }
+    /**
+     * <code>SpotLight</code> 类用于创建聚光。
+     */
+    class SpotLightCom extends Light {
+        /**
+          * 聚光灯的锥形角度。
+          */
+        get spotAngle(): number;
+        set spotAngle(value: number);
+        /**
+         * 聚光的范围。
+         */
+        get range(): number;
+        set range(value: number);
+        /**
+         * 创建一个 <code>SpotLight</code> 实例。
+         */
+        constructor();
     }
     /**
      * <code>BlinnPhongMaterial</code> 类用于实现Blinn-Phong材质。
@@ -5470,7 +5598,6 @@ declare module Laya {
         static ALBEDOTEXTURE: number;
         static ALBEDOCOLOR: number;
         static TILINGOFFSET: number;
-        static defaultMaterial: UnlitMaterial;
         private _albedoIntensity;
         /**
          * 反照率颜色。
@@ -5531,6 +5658,52 @@ declare module Laya {
         set renderMode(value: number);
     }
     /**
+     * <code>WaterPrimaryMaterial</code> 类用于实现水材质。
+     */
+    class WaterPrimaryMaterial extends Material {
+        static HORIZONCOLOR: number;
+        static MAINTEXTURE: number;
+        static NORMALTEXTURE: number;
+        static WAVESCALE: number;
+        static WAVESPEED: number;
+        static SHADERDEFINE_MAINTEXTURE: ShaderDefine;
+        static SHADERDEFINE_NORMALTEXTURE: ShaderDefine;
+        /** 默认材质，禁止修改*/
+        static defaultMaterial: WaterPrimaryMaterial;
+        /**
+         * 地平线颜色。
+         */
+        get horizonColor(): Vector4;
+        set horizonColor(value: Vector4);
+        /**
+         * 主贴图。
+         */
+        get mainTexture(): BaseTexture;
+        set mainTexture(value: BaseTexture);
+        /**
+         * 法线贴图。
+         */
+        get normalTexture(): BaseTexture;
+        set normalTexture(value: BaseTexture);
+        /**
+         * 波动缩放系数。
+         */
+        get waveScale(): number;
+        set waveScale(value: number);
+        /**
+         * 波动速率。
+         */
+        get waveSpeed(): Vector4;
+        set waveSpeed(value: Vector4);
+        constructor();
+        /**
+         * 克隆。
+         * @return	 克隆副本。
+         * @override
+         */
+        clone(): any;
+    }
+    /**
      * <code>MeshFilter</code> 类用于创建网格过滤器。
      */
     class MeshFilter extends Component {
@@ -5540,6 +5713,7 @@ declare module Laya {
          */
         get sharedMesh(): Mesh;
         set sharedMesh(value: Mesh);
+        protected _onDestroy(): void;
     }
     /**
      * <code>MeshRenderer</code> 类用于网格渲染器。
@@ -5550,18 +5724,13 @@ declare module Laya {
         private morphTargetActiveIndex;
         private morphtargetChannels;
         private _morphWeightChange;
-        private _moduleData;
         /**
          * 创建一个新的 <code>MeshRender</code> 实例。
          */
         constructor();
-        /**
-         * override it
-         * @returns
-         */
-        protected _createBaseRenderNode(): IMeshRenderNode;
         /**@intermal */
         getMesh(): Mesh;
+        protected _changeVertexDefine(mesh: Mesh): void;
         private _morphTargetValues;
         /**
          * 设置 morph target 通道 权重
@@ -5569,8 +5738,21 @@ declare module Laya {
          * @param weight 权重值
          */
         setMorphChannelWeight(channelName: string, weight: number): void;
-        _setBelongScene(scene: any): void;
-        renderUpdate(context: RenderContext3D): void;
+        /**
+         * 更新 morph target 数据
+         */
+        protected _applyMorphdata(): void;
+        /**
+         * 更新 mesh 时 更新 morph target data (shader define)
+         * @param mesh
+         */
+        protected _changeMorphData(mesh: Mesh): void;
+        protected _onDestroy(): void;
+        /**
+         * @override
+         * @param dest
+         */
+        _cloneTo(dest: Component): void;
     }
     /**
      * @deprecated
@@ -5694,9 +5876,6 @@ declare module Laya {
          * @return 粒子发射速率 (个/秒)。
          */
         get emissionRate(): number;
-        /**
-         * 粒子基于距离的发射速率（个/米）
-         */
         get emissionRateOverDistance(): number;
         set emissionRateOverDistance(value: number);
         /**
@@ -5892,30 +6071,22 @@ declare module Laya {
          * @param	gradientYMax  最大Y轴渐变角速度。
          * @param	gradientZMin  最小Z轴渐变角速度。
          * @param	gradientZMax  最大Z轴渐变角速度。
-         * @param	gradientWMin  预留数据
-         * @param	gradientWMax  预留数据
          * @return  渐变角速度。
          */
         static createByRandomTwoGradientSeparate(gradientXMin: GradientDataNumber, gradientXMax: GradientDataNumber, gradientYMin: GradientDataNumber, gradientYMax: GradientDataNumber, gradientZMin: GradientDataNumber, gradientZMax: GradientDataNumber, gradientWMin: GradientDataNumber, gradientWMax: GradientDataNumber): GradientAngularVelocity;
         private _type;
         private _separateAxes;
-        private __constantSeparate;
-        get _constantSeparate(): Vector3;
-        set _constantSeparate(value: Vector3);
+        private _constant;
+        private _constantSeparate;
         private _gradient;
         private _gradientX;
         private _gradientY;
         private _gradientZ;
         private _gradientW;
-        private __constant;
-        private __constantMin;
-        private __constantMax;
-        private __constantMinSeparate;
-        private __constantMaxSeparate;
-        get _constantMinSeparate(): Vector3;
-        set _constantMinSeparate(value: Vector3);
-        get _constantMaxSeparate(): Vector3;
-        set _constantMaxSeparate(value: Vector3);
+        private _constantMin;
+        private _constantMax;
+        private _constantMinSeparate;
+        private _constantMaxSeparate;
         private _gradientMin;
         private _gradientMax;
         private _gradientXMin;
@@ -6355,7 +6526,6 @@ declare module Laya {
         constructor();
         /**
          * 获取最大尺寸。
-         * @param	meshMode 是否是网格模式
          */
         getMaxSizeInGradient(meshMode?: boolean): number;
         /**
@@ -6406,27 +6576,12 @@ declare module Laya {
          */
         static createByRandomTwoGradient(gradientXMin: GradientDataNumber, gradientXMax: GradientDataNumber, gradientYMin: GradientDataNumber, gradientYMax: GradientDataNumber, gradientZMin: GradientDataNumber, gradientZMax: GradientDataNumber): GradientVelocity;
         private _type;
-        private __constant;
-        get _constant(): Vector3;
-        set _constant(value: Vector3);
-        private __constantMin;
-        get _constantMin(): Vector3;
-        set _constantMin(value: Vector3);
-        private __constantMax;
-        get _constantMax(): Vector3;
-        set _constantMax(value: Vector3);
-        private _gradientConstantX;
-        private _gradientConstantY;
-        private _gradientConstantZ;
-        private _gradientConstantXMin;
-        private _gradientConstantXMax;
-        private _gradientConstantYMin;
-        private _gradientConstantYMax;
-        private _gradientConstantZMin;
-        private _gradientConstantZMax;
+        private _constant;
         private _gradientX;
         private _gradientY;
         private _gradientZ;
+        private _constantMin;
+        private _constantMax;
         private _gradientXMin;
         private _gradientXMax;
         private _gradientYMin;
@@ -6550,13 +6705,11 @@ declare module Laya {
          * 用于生成粒子初始位置和方向。
          * @param	position 粒子位置。
          * @param	direction 粒子方向。
-         * @param	rand 随机数
-         * @param 	randomSeeds 随机种子
          */
         generatePositionAndDirection(position: Vector3, direction: Vector3, rand?: Rand, randomSeeds?: Uint32Array): void;
         /**
          * 克隆。
-         * @param	destObject 克隆目标。
+         * @param	destObject 克隆源。
          */
         cloneTo(destObject: any): void;
         /**
@@ -6583,13 +6736,11 @@ declare module Laya {
          *  用于生成粒子初始位置和方向。
          * @param	position 粒子位置。
          * @param	direction 粒子方向。
-         * @param rand 随机数
-         * @param randomSeeds 随机种子队列
+         * @override
          */
         generatePositionAndDirection(position: Vector3, direction: Vector3, rand?: Rand, randomSeeds?: Uint32Array): void;
         /**
-         * 克隆
-         * @param destObject 克隆目标
+         * @param destObject
          * @override
          */
         cloneTo(destObject: any): void;
@@ -6625,21 +6776,14 @@ declare module Laya {
          * @param	direction 粒子方向。
          * @override
          */
-        /**
-         * 用于生成粒子初始位置和方向。
-         * @param position  粒子位置。
-         * @param direction 粒子方向。
-         * @param rand 随机数
-         * @param randomSeeds 随机种子队列
-         */
         generatePositionAndDirection(position: Vector3, direction: Vector3, rand?: Rand, randomSeeds?: Uint32Array): void;
         /**
-         * 克隆
-         * @param destObject 克隆目标
+         * @param destObject
          * @override
          */
         cloneTo(destObject: any): void;
         /**
+         * @override
          * 克隆。
          * @return	 克隆副本。
          */
@@ -6672,17 +6816,8 @@ declare module Laya {
          * @param	direction 粒子方向。
          * @override
          */
-        /**
-         * 用于生成粒子初始位置和方向。
-         * @param	position 粒子位置。
-         * @param	direction 粒子方向。
-         * @param 	rand 随机数
-         * @param 	randomSeeds 随机数种子队列
-         */
         generatePositionAndDirection(position: Vector3, direction: Vector3, rand?: Rand, randomSeeds?: Uint32Array): void;
         /**
-         * 克隆
-         * @param destObject 克隆目标
          * @override
          */
         cloneTo(destObject: any): void;
@@ -6709,15 +6844,11 @@ declare module Laya {
          *  用于生成粒子初始位置和方向。
          * @param	position 粒子位置。
          * @param	direction 粒子方向。
-         * @param 	rand	随机数
-         * @param	randomSeeds 随机数种子队列
          * @override
          */
         generatePositionAndDirection(position: Vector3, direction: Vector3, rand?: Rand, randomSeeds?: Uint32Array): void;
         /**
          * @override
-         * 克隆
-         * @param destObject 克隆目标
          */
         cloneTo(destObject: any): void;
         /**
@@ -6745,17 +6876,8 @@ declare module Laya {
          * @param	direction 粒子方向。
          * @override
          */
-        /**
-         *  用于生成粒子初始位置和方向。
-         * @param position 粒子位置
-         * @param direction 粒子方向
-         * @param rand 随机数
-         * @param randomSeeds 随机数种子队列
-         */
         generatePositionAndDirection(position: Vector3, direction: Vector3, rand?: Rand, randomSeeds?: Uint32Array): void;
         /**
-         * 克隆
-         * @param destObject 克隆目标
          * @override
          */
         cloneTo(destObject: any): void;
@@ -6955,6 +7077,7 @@ declare module Laya {
         protected _retireActiveParticles(): void;
         protected _freeRetiredParticles(): void;
         addParticle(position: Vector3, direction: Vector3, time: number): boolean;
+        addNewParticlesToVertexBuffer(): void;
         _updateRenderParams(stage: RenderContext3D): void;
         destroy(): void;
     }
@@ -7064,9 +7187,6 @@ declare module Laya {
         stretchedBillboardSpeedScale: number;
         /**拉伸广告牌模式长度缩放。*/
         stretchedBillboardLengthScale: number;
-        /**
-         * 粒子管理系统
-         */
         get particleSystem(): ShurikenParticleSystem;
         /**
          * 获取渲染模式,0为BILLBOARD、1为STRETCHEDBILLBOARD、2为HORIZONTALBILLBOARD、3为VERTICALBILLBOARD、4为MESH。
@@ -7082,29 +7202,12 @@ declare module Laya {
          * 创建一个 <code>ShurikenParticleRender</code> 实例。
          */
         constructor();
-        /**
-         * @override
-         */
         protected _getcommonUniformMap(): Array<string>;
-        /**
-        * @override
-        */
         protected _onAdded(): void;
-        /**
-        * @override
-        */
         protected _onEnable(): void;
-        /**
-        * @override
-        */
         protected _onDisable(): void;
         /**
-         * @param context
-         * @perfTag PerformanceDefine.T_ShurikenUpdate
-         */
-        renderUpdate(context: RenderContext3D): void;
-        /**
-         * 包围盒,只读,不允许修改其值。
+         * @inheritDoc
          * @override
          */
         get bounds(): Bounds;
@@ -7193,7 +7296,7 @@ declare module Laya {
         simulationSpace: number;
         /**粒子的播放速度。 */
         simulationSpeed: number;
-        /**缩放模式，0为Hiercachy(world),1为Local,2为World。*/
+        /**缩放模式，0为Hiercachy,1为Local,2为World。*/
         scaleMode: number;
         /**激活时是否自动播放。*/
         playOnAwake: boolean;
@@ -7357,10 +7460,6 @@ declare module Laya {
         startColor: Color;
         /**线结束颜色 */
         endColor: Color;
-        /**线开始法线 */
-        startNormal: Vector3;
-        /**线结束法线 */
-        endNormal: Vector3;
         /**
          * 克隆。
          * @param	destObject 克隆源。
@@ -7398,7 +7497,7 @@ declare module Laya {
      */
     class PixelLineMaterial extends Material {
         /** 默认材质，禁止修改*/
-        static defaultMaterial: Material;
+        static defaultMaterial: PixelLineMaterial;
         /**
          * 获取颜色。
          * @return 颜色。
@@ -7428,11 +7527,7 @@ declare module Laya {
          * @param owner 线渲染精灵
          */
         constructor();
-        get bounds(): Bounds;
         private _lines;
-        /**
-         * 线段数据
-         */
         get pixelLinesDatas(): PixelLineData[];
         set pixelLinesDatas(value: PixelLineData[]);
         /**
@@ -7444,8 +7539,13 @@ declare module Laya {
          * 获取线数量。
          */
         get lineCount(): number;
-        protected _createBaseRenderNode(): IMeshRenderNode;
-        renderUpdate(context: RenderContext3D): void;
+        protected _onAdded(): void;
+        protected _onEnable(): void;
+        protected _onDisable(): void;
+        /**
+         * @inheritDoc
+         */
+        _changeRenderObjects(index: number, material: Material): void;
         /**
          * 增加一条线。
          * @param	startPosition  初始点位置
@@ -7454,16 +7554,6 @@ declare module Laya {
          * @param	endColor	   结束点颜色
          */
         addLine(startPosition: Vector3, endPosition: Vector3, startColor: Color, endColor: Color): void;
-        /**
-         * 增加一条线。
-         * @param	startPosition  初始点位置
-         * @param	endPosition	   结束点位置
-         * @param	startColor	   初始点颜色
-         * @param	endColor	   结束点颜色
-         * @param startNormal   初始点法线
-         * @param endNormal     结束点法线
-         */
-        addLineWithNormal(startPosition: Vector3, endPosition: Vector3, startColor: Color, endColor: Color, startNormal: Vector3, endNormal: Vector3): void;
         /**
          * 添加多条线段。
          * @param	lines  线段数据
@@ -7484,17 +7574,6 @@ declare module Laya {
          */
         setLine(index: number, startPosition: Vector3, endPosition: Vector3, startColor: Color, endColor: Color): void;
         /**
-         * 更新线
-         * @param	index  		   索引
-         * @param	startPosition  初始点位置
-         * @param	endPosition	   结束点位置
-         * @param	startColor	   初始点颜色
-         * @param	endColor	   结束点颜色
-         * @param startNormal   初始点法线
-         * @param endNormal     结束点法线
-         */
-        setLineWithNormal(index: number, startPosition: Vector3, endPosition: Vector3, startColor: Color, endColor: Color, startNormal: Vector3, endNormal: Vector3): void;
-        /**
          * 获取线段数据
          * @param out 线段数据。
          */
@@ -7503,12 +7582,17 @@ declare module Laya {
          * 清除所有线段。
          */
         clear(): void;
+        protected _onDestroy(): void;
+        /**
+         * @override
+         * @param dest
+         */
+        _cloneTo(dest: Component): void;
     }
     /**
      * <code>PixelLineSprite3D</code> 类用于像素线渲染精灵。
      */
     class PixelLineSprite3D extends RenderableSprite3D {
-        _render: PixelLineRenderer;
         /** @private 是否调用active */
         private _isRenderActive;
         /** @private 是否加入渲染队列*/
@@ -7611,64 +7695,42 @@ declare module Laya {
     /**
      * <code>Render</code> 类用于渲染器的父类，抽象类不允许实例。
      */
-    class BaseRender extends Component {
+    class BaseRender extends Component implements IBoundsCell {
         /**
          * BaseRender Init
          */
         static __init__(): void;
-        /**
-         * 更改顶点宏定义
-         * @param oldMesh 旧Mesh
-         * @param mesh 新Mesh
-         * @param defineDatas 宏数据
-         */
         static changeVertexDefine(oldMesh: Mesh, mesh: Mesh, defineDatas: ShaderData): void;
-        /**
-         * 宏定义初始化
-         */
         static shaderValueInit(): void;
-        /**@interface */
-        _receiveShadow: boolean;
-        _renderElements: RenderElement[];
-        set enabled(value: boolean);
-        get enabled(): boolean;
         /**排序矫正值。*/
-        set sortingFudge(value: number);
-        get sortingFudge(): number;
+        sortingFudge: number;
         /**
-         * 获取渲染节点的渲染禁用位
+         * DistanceVolumCull
+         * 根据距离和包围盒进行裁剪，越大越容易被裁
          */
+        set ratioIgnor(value: number);
+        get ratioIgnor(): number;
         get renderbitFlag(): number;
-        /**
-         * 包围盒是否更新
-         */
         set boundsChange(value: boolean);
         get boundsChange(): boolean;
-        /**
-         * 渲染数据
-         */
-        /**
-         * 获取渲染节点
-         */
+        shadowCullPass(): boolean;
+        /**@interface */
+        _receiveShadow: boolean;
         get renderNode(): IBaseRenderNode;
-        /**
-         * 排序距离
-         */
         set distanceForSort(value: number);
         get distanceForSort(): number;
-        /**
-         * 设置GeometryBounds，
-         * 如果设置了此bounds，渲染包围盒会根据geometryBounds和transform来更新，native层会下沉
-         */
-        set geometryBounds(value: Bounds);
         get geometryBounds(): Bounds;
+        /**
+         * 获取唯一标识ID,通常用于识别。
+         */
+        get id(): number;
         /**
          * 光照贴图的索引。
          */
         get lightmapIndex(): number;
         set lightmapIndex(value: number);
         /**
-         * 间接光照功能查询
+         * 光照功能查询
          */
         get irradientMode(): IrradianceMode;
         /**
@@ -7677,12 +7739,22 @@ declare module Laya {
         get lightmapScaleOffset(): Vector4;
         set lightmapScaleOffset(value: Vector4);
         /**
+         * 返回第一个实例材质,第一次使用会拷贝实例对象。
+         */
+        get material(): Material;
+        set material(value: Material);
+        /**
+         * 潜拷贝实例材质列表,第一次使用会拷贝实例对象。
+         */
+        get materials(): Material[];
+        set materials(value: Material[]);
+        /**
          * 返回第一个材质。
          */
         get sharedMaterial(): Material;
         set sharedMaterial(value: Material);
         /**
-         * 返回所以渲染材质
+         * 浅拷贝材质列表。
          */
         get sharedMaterials(): Material[];
         set sharedMaterials(value: Material[]);
@@ -7690,11 +7762,11 @@ declare module Laya {
          * 包围盒,只读,不允许修改其值。
          */
         get bounds(): Bounds;
+        set receiveShadow(value: boolean);
         /**
          * 是否接收阴影属性
          */
         get receiveShadow(): boolean;
-        set receiveShadow(value: boolean);
         /**
          * 是否产生阴影。
          */
@@ -7703,58 +7775,43 @@ declare module Laya {
         /**
          * 反射模式
          */
-        get reflectionMode(): ReflectionProbeMode;
         set reflectionMode(value: ReflectionProbeMode);
-        /**
-         * 体积光探针
-         */
-        /**
-         * 获得所属包围盒
-         */
-        get volume(): Volume;
+        get reflectionMode(): ReflectionProbeMode;
         set volume(value: Volume);
-        set probReflection(value: ReflectionProbe);
-        /**
-         * 设置探针
-         */
-        get lightProbe(): VolumetricGI;
-        set lightProbe(volumetricGI: VolumetricGI);
+        get volume(): Volume;
+        set lightProb(volumetricGI: VolumetricGI);
         /**
          * 创建一个新的 <code>BaseRender</code> 实例。
          */
         constructor();
+        private _getIrradientMode;
+        protected _getcommonUniformMap(): Array<string>;
+        protected _createBaseRenderNode(): IBaseRenderNode;
+        private _changeLayer;
+        private _changeStaticMask;
+        protected _onAdded(): void;
+        protected _onEnable(): void;
+        protected _onDisable(): void;
         /**
-         * 每一帧计算包围盒会调用的函数
+         * 设置渲染flag,每一位都代表不同的淘汰原因，1表示lod淘汰
          */
-        _calculateBoundingBox?(): void;
-        /**
-         * 每一帧渲染前更新SpriteShaderData的调用函数
-         * @param context3D
-         */
-        _renderUpdate?(context3D: IRenderContext3D): void;
-        /**
-      * set BaseRenderElement
-      * @param mesh
-      */
-        protected _setRenderElements(): void;
-        /**
-         * protected
-         * @param context
-         */
-        renderUpdate(context: RenderContext3D): void;
-        /**
-        * 设置渲染flag,每一位都代表不同的淘汰原因，1表示lod淘汰
-        * @param flag 标记，可以查RenderBitFlag相关，也可以自定义标签位
-        * @param pass 设置标签值
-        */
         setRenderbitFlag(flag: number, pass: boolean): void;
         /**
-         * @deprecated 请使用shareMaterial接口
-         * 返回第一个实例材质,第一次使用会拷贝实例对象。
+         * apply lightProb
+         * @returns
          */
-        get material(): Material;
-        set material(value: Material);
-        set materials(value: Material[]);
+        _applyLightProb(): void;
+        /**
+         * apply reflection
+         * @returns
+         */
+        _applyReflection(): void;
+        protected _onDestroy(): void;
+        /**
+         * @override
+         * @param dest
+         */
+        _cloneTo(dest: Component): void;
     }
     /**
      * 类用于创建从渲染源输出到渲染目标的指令
@@ -7798,11 +7855,8 @@ declare module Laya {
         */
         static create(source: BaseTexture, dest: RenderTexture, offsetScale?: Vector4, shader?: Shader3D, shaderData?: ShaderData, subShader?: number, screenType?: number, commandbuffer?: CommandBuffer): BlitScreenQuadCMD;
         constructor();
-        get offsetScale(): Vector4;
-        set offsetScale(value: Vector4);
-        get dest(): RenderTexture;
-        set dest(value: RenderTexture);
         set shaderData(value: ShaderData);
+        setshader(shader: Shader3D, subShader: number, shaderData: ShaderData): void;
         /**
          * @inheritDoc
          * @override
@@ -7824,19 +7878,23 @@ declare module Laya {
          */
         constructor();
         /**
-         * 组织渲染指令
+         * 运行渲染指令
          */
-        run?(): void;
+        run(): void;
         /**
          * 回收渲染指令
          */
         recover(): void;
+        /**
+         * 设置渲染上下文
+         * @param context 渲染上下文
+         */
+        setContext(context: RenderContext3D): void;
     }
     /**
      * <code>CommandBuffer</code> 类用于创建命令流。
      */
     class CommandBuffer {
-        static instance: CommandBuffer;
         /**
          * 创建一个 <code>CommandBuffer</code> 实例。
          */
@@ -7847,9 +7905,8 @@ declare module Laya {
         get context(): RenderContext3D;
         /**
          * 调用所有渲染指令
-         *
          */
-        _apply(render?: boolean): void;
+        _apply(): void;
         _applyOne(): boolean;
         getCommandsSize(): number;
         /**
@@ -7950,7 +8007,7 @@ declare module Laya {
          * @param value 数据
          */
         setShaderDataMatrix(shaderData: ShaderData, nameID: number, value: Matrix4x4): void;
-        setShaderDefine(shaderData: ShaderData, define: ShaderDefine, value: boolean): void;
+        setShaderDefine(shaderData: ShaderData, define: string, value: boolean): void;
         /**
          * 设置全局Matrix属性
          * @param nameID 数据ID
@@ -7990,7 +8047,15 @@ declare module Laya {
          * 设置指令渲染目标
          * @param renderTexture RT渲染目标
          */
-        setRenderTarget(renderTexture: RenderTexture, clearColor: boolean, clearDepth: boolean, backgroundColor?: Color, depth?: number): void;
+        setRenderTarget(renderTexture: RenderTexture): void;
+        /**
+         * clear渲染纹理
+         * @param clearColor
+         * @param clearDepth
+         * @param backgroundColor
+         * @param depth
+         */
+        clearRenderTarget(clearColor: boolean, clearDepth: boolean, backgroundColor: Color, depth?: number): void;
         /**
          * 渲染一个Mesh
          * @param mesh 原始网格信息
@@ -8006,12 +8071,7 @@ declare module Laya {
          * @param material 材质
          * @param subShaderIndex 子shader索引 一般为0
          */
-        drawRender(render: BaseRender, material: Material, subMeshIndex?: number): void;
-        /**
-         * 渲染一个RenderElement
-         * @param renderElement
-         */
-        drawRenderElement(renderElement: RenderElement): void;
+        drawRender(render: BaseRender, material: Material, subShaderIndex: number): void;
         /**
          * 使用instance动态合批的方式渲染一个Mesh
          * @param mesh 原始网格信息
@@ -8047,24 +8107,6 @@ declare module Laya {
          * @param drawNums
          */
         setDrawNums(drawNums: number): void;
-        renderUpdateElement(renderElement: RenderElement, context: RenderContext3D): IRenderElement3D;
-        run(): void;
-        /**
-         * @inheritDoc
-         * @override
-         */
-        recover(): void;
-    }
-    class DrawRenderCMD extends Command {
-        set render(render: BaseRender);
-        get render(): BaseRender;
-        set material(value: Material);
-        get material(): Material;
-        private _subMeshIndex;
-        get subMeshIndex(): number;
-        set subMeshIndex(value: number);
-        constructor();
-        getRenderCMD(): DrawNodeCMDData;
         run(): void;
         /**
          * @inheritDoc
@@ -8073,16 +8115,20 @@ declare module Laya {
         recover(): void;
         destroy(): void;
     }
-    class DrawRenderElementCMD extends Command {
-        static create(renderElement: RenderElement): DrawRenderElementCMD;
-        get renderElement(): RenderElement;
-        set renderElement(value: RenderElement);
+    class DrawRenderCMD extends Command {
         constructor();
+        set material(value: Material);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        run(): void;
         /**
          * @inheritDoc
          * @override
          */
         recover(): void;
+        destroy(): void;
     }
     enum InstanceLocation {
         CUSTOME0 = 12,
@@ -8144,14 +8190,6 @@ declare module Laya {
         getPropertyArray(attributeLocation: InstanceLocation): Vector4[] | Vector3[] | Vector2[] | Float32Array;
         clear(): void;
     }
-    class SetDefineCMD extends Command {
-        constructor();
-        /**
-         * @inheritDoc
-         * @override
-         */
-        recover(): void;
-    }
     class InstanceRenderElement extends RenderElement {
         static create(): InstanceRenderElement;
         constructor();
@@ -8171,6 +8209,8 @@ declare module Laya {
          * bloom resource init
          */
         static init(): void;
+        static CompositeInit(): void;
+        static __initDefine__(): void;
         /**泛光颜色。*/
         private _color;
         /**是否开启快速模式。该模式通过降低质量来提升性能。*/
@@ -8263,7 +8303,6 @@ declare module Laya {
         constructor();
         /**
          * 添加到后期处理栈时,会调用
-         * @param postprocess 后期处理组件
          */
         effectInit(postprocess: PostProcess): void;
         /**
@@ -8275,7 +8314,6 @@ declare module Laya {
         getCameraDepthTextureModeFlag(): number;
         /**
          * 释放Effect
-         * @param postprocess 后期处理组件
          */
         release(postprocess: PostProcess): void;
     }
@@ -8287,8 +8325,20 @@ declare module Laya {
      * <code>ColorGradEffect</code> 类用于创建调色Effect
      */
     class ColorGradEffect extends PostProcessEffect {
+        static SHADERDEFINE_ACES: ShaderDefine;
+        static SHADERDEFINE_CUSTOMLUT: ShaderDefine;
+        static SHADERVALUE_LUT: number;
+        static SHADERVALUE_LUTPARAMS: number;
+        static SHADERVALUE_CUSTOMLUT: number;
+        static SHADERVALUE_CUSTOMLUTPARAMS: number;
+        /**
+         * bloom resource init
+         */
+        static init(): void;
         static __initDefine__(): void;
         private _needBuildLUT;
+        private _lutCommond;
+        _lutTex: RenderTexture;
         private _lutBuilderMat;
         private _LUTShader;
         private _lutShaderData;
@@ -8327,10 +8377,6 @@ declare module Laya {
          */
         get splitBalance(): number;
         set splitBalance(value: number);
-        /**
-         * shadows, midtones, highlights
-         * 暗处，中亮，高亮调节
-         */
         get enableSMH(): boolean;
         set enableSMH(value: boolean);
         /**
@@ -8368,9 +8414,6 @@ declare module Laya {
          */
         get highLightLimitEnd(): number;
         set highLightLimitEnd(value: number);
-        /**
-         * lift gamma gain
-         */
         get enableLiftGammaGain(): boolean;
         set enableLiftGammaGain(value: boolean);
         /**
@@ -8391,10 +8434,6 @@ declare module Laya {
         private _StandardIlluminantY;
         private _CIExyToLMS;
         private _ColorBalanceToLMSCoeffs;
-        /**
-         * balance
-         * 白平衡开启
-         */
         get enableBalance(): boolean;
         set enableBalance(value: boolean);
         /**
@@ -8407,10 +8446,6 @@ declare module Laya {
          */
         get temperature(): number;
         set temperature(value: number);
-        /**
-         * Color Adjustments
-         * 开启颜色调整
-         */
         get enableColorAdjust(): boolean;
         set enableColorAdjust(value: boolean);
         /**
@@ -8454,15 +8489,12 @@ declare module Laya {
         private default_gain;
         private default_ColorFilter;
         private default_HueSatCon;
-        private _postProcess;
         /**
          * 添加到后期处理栈时,会调用
-         * @param 后期处理节点
          */
         effectInit(postprocess: PostProcess): void;
         /**
          * 释放Effect
-         * @param postprocess 后期处理节点
          */
         release(postprocess: PostProcess): void;
     }
@@ -8498,8 +8530,13 @@ declare module Laya {
          */
         set maxRadius(value: number);
         get maxRadius(): number;
+        /**
+        * @override
+        * @param context
+        */
+        render(context: PostProcessRenderContext): void;
     }
-    class LensFlareCMD {
+    class LensFlareCMD extends Command {
         /**instance绘制的个数 */
         private _instanceCount;
         get instanceCount(): number;
@@ -8521,7 +8558,7 @@ declare module Laya {
          * @inheritDoc
          * @override
          */
-        run(cmd: CommandBuffer): void;
+        run(): void;
     }
     /**
      * lens Flare Element
@@ -8587,9 +8624,6 @@ declare module Laya {
      */
     class LensFlareData extends Resource {
         constructor();
-        /**
-         * 光耀元素集合
-         */
         elements: LensFlareElement[];
     }
     /**
@@ -8625,28 +8659,27 @@ declare module Laya {
         constructor();
         /**
          * 计算直射光中心点
-         * @param camera 摄像机
+         * @param camera
          */
         caculateDirCenter(camera: Camera): void;
         /**
          * 计算点光
-         * @param camera 相机
+         * @param camera
          */
         caculatePointCenter(camera: Camera): void;
         /**
          * 计算spot光
-         * @param value 屏幕点
+         * @param value
          */
         caculateSpotCenter(value: Vector2): void;
         /**
          * 渲染流程
-         * @param context 后期处理渲染上下文
+         * @param context
          * @returns
          */
         render(context: PostProcessRenderContext): void;
         /**
        * 释放Effect
-       * @param postprocess 后期处理节点
        * @inheritDoc
        * @override
        */
@@ -8715,6 +8748,15 @@ declare module Laya {
          */
         get aoQuality(): AOQUALITY;
         set aoQuality(value: AOQUALITY);
+        /**
+         * @override
+         */
+        getCameraDepthTextureModeFlag(): DepthTextureMode;
+        /**
+         * @override
+         * @param context
+         */
+        render(context: PostProcessRenderContext): void;
     }
     /**
          * <code>PostProcessEffect</code> 类用于创建后期处理渲染效果。
@@ -8736,23 +8778,19 @@ declare module Laya {
          * @override
          * @returns
          */
-        getCameraDepthTextureModeFlag?(): number;
+        getCameraDepthTextureModeFlag(): number;
         /**
          * 添加到后期处理栈时,会调用
          * @inheritDoc
          * @override
          */
-        effectInit?(postprocess: PostProcess): void;
+        effectInit(postprocess: PostProcess): void;
         /**
          * 释放Effect
          * @inheritDoc
          * @override
          */
-        release?(postprocess: PostProcess): void;
-        /**
-         * 渲染
-         */
-        render?(context: PostProcessRenderContext): void;
+        release(postprocess: PostProcess): void;
     }
     /**
      * * <code>PostProcessRenderContext</code> 类用于创建后期处理渲染上下文。
@@ -8801,9 +8839,9 @@ declare module Laya {
         applyContext(cameraUpdateMark: number): void;
         /**
          * 渲染一个
-         * @param renderelemt
+         * @param element
          */
-        drawRenderElement(renderelemt: IRenderElement3D): void;
+        drawRenderElement(element: RenderElement): void;
         /**
          * 创建一个 <code>RenderContext3D</code> 实例。
          */
@@ -8816,7 +8854,9 @@ declare module Laya {
         /**
          * 可提交底层的渲染节点
          */
-        _renderElementOBJ: IRenderElement3D;
+        _renderElementOBJ: IRenderElement;
+        _batchElement: RenderElement;
+        _transform: Transform3D;
         /**
          * set RenderElement Material/Shaderdata
          */
@@ -8842,12 +8882,29 @@ declare module Laya {
          * 设置渲染几何信息
          */
         setGeometry(geometry: GeometryElement): void;
+        /**
+         * 编译shader
+         * @param context
+         */
+        compileShader(context: IRenderContext3D): void;
+        /**
+         * 切换Shader
+         * @param customShader
+         * @param replacementTag
+         * @param subshaderIndex
+         * @returns
+         */
+        _convertSubShader(customShader: Shader3D, replacementTag: string, subshaderIndex?: number): void;
+        /**
+         * pre update data
+         * @param context
+         */
+        _renderUpdatePre(context: RenderContext3D): void;
     }
     /**
      * <code>ScreenQuad</code> 类用于创建全屏四边形。
      */
     class ScreenQuad extends GeometryElement {
-        static InvertInstance: ScreenQuad;
         /**
          * 创建一个 <code>ScreenQuad</code> 实例,禁止使用。
          */
@@ -8861,16 +8918,6 @@ declare module Laya {
          * @override
          */
         destroy(): void;
-    }
-    class SkyRenderElement extends RenderElement {
-        _renderElementOBJ: IRenderElement3D;
-        private _viewMatrix;
-        private _projectionMatrix;
-        private _projectViewMatrix;
-        constructor();
-        calculateViewMatrix(cameraViewMat: Matrix4x4): void;
-        caluclateProjectionMatrix(cameraProjMat: Matrix4x4, aspectRatio: number, nearPlane: number, farPlane: number, fov: number, orthographic: boolean): void;
-        renderpre(context: RenderContext3D): void;
     }
     class Sprite3DRenderDeclaration {
         /**盒子反射宏 */
@@ -8926,6 +8973,21 @@ declare module Laya {
          * 创建一个 <code>RenderableSprite3D</code> 实例。
          */
         constructor(name: string);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onInActive(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onActive(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onActiveInScene(): void;
     }
     /**
      * 环境光模式
@@ -8934,7 +8996,387 @@ declare module Laya {
         /** 固定颜色。*/
         SolidColor = 0,
         /** 球谐光照, 通过天空盒生成的球谐数据。 */
-        SphericalHarmonics = 1
+        SphericalHarmonics = 1,
+        /** 分别设置天空, 地平线, 地面的环境光颜色 */
+        TripleColor = 2
+    }
+    /**
+     * BVH系统
+     */
+    class BVHSpatial {
+        /**
+         * Override it
+         * @returns
+         */
+        protected _creatChildNode(): BVHSpatialBox<IBoundsCell>;
+        /**
+         * 创建BVH系统实例
+         */
+        constructor(bvhConfig?: BVHSpatialConfig, bvhManager?: BVHSpatialManager);
+        /**
+         * 获得空间节点
+         */
+        get bvhSpatialBox(): BVHSpatialBox<IBoundsCell>;
+        /**
+         * 是否合法
+         * @param cell
+         * @returns
+         */
+        cellLegal(cell: IBoundsCell): boolean;
+        /**
+         * add one
+         * @param cell
+         */
+        addOne(cell: IBoundsCell): boolean;
+        /**
+         * remove one
+         * @param cell
+         * @returns
+         */
+        removeOne(cell: IBoundsCell): boolean;
+        /**
+         * remove
+         * @param cell
+         */
+        motionOne(cell: IBoundsCell): void;
+        /**
+        * 通过CameraCull查找逻辑对象
+        * @override
+        * @param frustum 视锥
+        * @param out 输出逻辑对象组
+        */
+        getItemByCameraCullInfo(cameraCullInfo: ICameraCullInfo, out: SingletonList<IBoundsCell>): void;
+        /**
+         * 通过视锥查找逻辑对象
+         * @override
+         * @param frustum 视锥
+         * @param out 输出逻辑对象组
+         */
+        getItemByFrustum(frustum: BoundFrustum, out: SingletonList<IBoundsCell>): void;
+        /**
+         * 通过阴影裁剪信息查找逻辑对象
+         * @override
+         * @param sci
+         * @param out
+         */
+        getItemBySCI(sci: IShadowCullInfo, out: SingletonList<IBoundsCell>): void;
+        /**
+         * 帧循环，根据具体需求，选适合频率调用
+         */
+        update(): void;
+        /**
+         * rebuild
+         */
+        rebuild(): void;
+        /**
+         * destroy
+         */
+        destroy(): void;
+    }
+    /**
+     * BVH子空间
+     */
+    class BVHSpatialBox<T> {
+        private static _tempV3;
+        private static _tempV3_2;
+        /**
+         * 包围盒和阴影相机的关系
+         * @param box
+         * @param cullInfo
+         * @returns 0: 不相交，1：包含， 2：相交
+         */
+        static sciContainsBox(box: Bounds, cullInfo: IShadowCullInfo): number;
+        /**
+         * 包围盒是否和阴影相机相交
+         * @param box
+         * @param cullInfo
+        */
+        static sciIntersectsBox(box: Bounds, cullInfo: IShadowCullInfo): boolean;
+        protected _children1: BVHSpatialBox<T>;
+        /**此BVH设置 */
+        protected _config: BVHSpatialConfig;
+        /**BVH管理 */
+        protected _bvhmanager: BVHSpatialManager;
+        /**
+         * 创建BVHSpaticalBox实例
+         * @param bvhmanager
+         * @param config
+         */
+        constructor(bvhmanager: BVHSpatialManager, config: BVHSpatialConfig);
+        /**
+         * 父节点
+         */
+        set parent(value: BVHSpatialBox<IBoundsCell>);
+        get parent(): BVHSpatialBox<IBoundsCell>;
+        /**
+         * 去重
+         * @param cell
+         * @returns
+         */
+        private _isRepeat;
+        /**
+         * add one cell to list
+         * @param cell
+         */
+        private _addOneCell;
+        /**
+         * remove one cell to list
+         * @param cell
+         * @returns
+         */
+        private _removeOneCell;
+        /**
+         * 清除队列
+         * TODO 是否要清理bvhmanager
+         */
+        private _clearList;
+        /**
+         * 判断Float是否接近
+         * @param x
+         * @param y
+         * @returns
+         */
+        private _isFloatMax;
+        /**
+         * 这个包围盒是否影响Box的包围盒大小
+         */
+        private _isBoundsContainedBySpatialBox;
+        /**
+         * 给box增加一个Bounds
+         * @param cell
+         */
+        private _addBounds;
+        /**
+         * 给box减少一个bounds
+         * @param cell
+         */
+        private _removeBounds;
+        /**
+         * 获得渲染list
+         * @returns
+         */
+        getList(): IBoundsCell[];
+        /**
+         * 获得child0
+         * @returns
+         */
+        getchild0(): BVHSpatialBox<T>;
+        /**
+         * 获得child1
+         * @returns
+         */
+        getchild1(): BVHSpatialBox<T>;
+        /**
+         * fill one Cell
+         * add but dont Split immediately
+         */
+        fillCell(cell: IBoundsCell): void;
+        /**
+         * fill remove one cell
+         * remove but dont split imediately
+         * @param cell
+         */
+        fillRemove(cell: IBoundsCell): void;
+        /**
+         * add one Cell
+         * @param cell
+         * @returns
+         */
+        addCell(cell: IBoundsCell): void;
+        /**
+         * remove one Cell
+         * @param cell
+         */
+        removeCell(cell: IBoundsCell): void;
+        /**
+         * 构建BVHBox
+         * @returns
+         */
+        splitBox(): void;
+        /**
+         * 获得最近的Content BVHBox
+         * @param checkPos
+         * @returns
+         */
+        getNearlist(checkPos: Vector3): BVHSpatialBox<T>;
+        /**
+         * 获得这个节点包含的所有content
+         * @param out
+         * @param conditionalFun条件函数
+         */
+        traverseBoundsCell(out: SingletonList<IBoundsCell>, conditionalFun?: Function): void;
+        /**
+         * Override it
+         * @returns
+         */
+        protected _creatChildNode(): BVHSpatialBox<T>;
+        /**
+         * 通过CameraCull查找逻辑对象
+         * @override
+         * @param frustum 视锥
+         * @param out 输出逻辑对象组
+         */
+        getItemByCameraCullInfo(cameraCullInfo: ICameraCullInfo, out: SingletonList<IBoundsCell>): void;
+        /**
+         * 通过视锥查找逻辑对象
+         * @override
+         * @param frustum 视锥
+         * @param out 输出逻辑对象组
+         */
+        getItemByFrustum(frustum: BoundFrustum, out: SingletonList<IBoundsCell>): void;
+        /**
+         * 通过阴影裁剪信息查找逻辑对象
+         * @override
+         * @param sci
+         * @param out
+         */
+        getItemBySCI(sci: IShadowCullInfo, out: SingletonList<IBoundsCell>): void;
+        /**
+         * 重算包围盒
+         * null need Update by child
+         * contents need Update by List
+         */
+        recaculateBox(): void;
+        /**
+         * 是否是根节点
+         * @returns
+         */
+        isRoot(): boolean;
+        /**
+         * 是否是叶节点
+         * @returns
+         */
+        isContentBox(): boolean;
+        /**
+         * 删除box
+         */
+        destroy(): void;
+    }
+    /**
+     * 接受空间分割管理的逻辑对象   容器
+     */
+    class BVHSpatialManager {
+        /**
+         * 实例化BVHSpatialManager
+         */
+        constructor();
+        /**
+         * clear
+         */
+        clear(): void;
+        /**
+         * destroy
+         */
+        destroy(): void;
+    }
+    /**
+     * BVHConfig
+     */
+    class BVHSpatialConfig {
+    }
+    /**
+     * 类实现BVH架构的裁剪Pass
+     */
+    class BVHCullPass extends CullPassBase {
+        protected _cullList: SingletonList<BaseRender>;
+        /**
+         * 获得裁剪队列
+         */
+        get cullList(): SingletonList<BaseRender>;
+        /**
+         * 基于相机视锥裁剪
+         * @param cameraCullInfo
+         * @param renderManager
+         */
+        cullByCameraCullInfo(cameraCullInfo: ICameraCullInfo, renderManager: BVHSceneRenderManager): void;
+        /**
+         * 基于阴影视锥裁剪
+         * @param cullInfo
+         * @param renderManager
+         */
+        cullByShadowCullInfo(cullInfo: IShadowCullInfo, renderManager: BVHSceneRenderManager): void;
+        /**
+         * 基于Spot视锥的裁剪
+         * @param cameraCullInfo
+         * @param renderManager
+         */
+        cullingSpotShadow(cameraCullInfo: ICameraCullInfo, renderManager: ISceneRenderManager): void;
+    }
+    class BVHRenderSpatial extends BVHSpatial {
+        /**
+         * Override it
+         * @returns
+         */
+        protected _creatChildNode(): BVHRenderBox<BaseRender>;
+        /**
+         * 是否合法
+         * @param cell
+         * @returns
+         */
+        cellLegal(cell: BaseRender): boolean;
+    }
+    class BVHRenderBox<T> extends BVHSpatialBox<T> {
+        /**
+         * Override it
+         * @returns
+         */
+        protected _creatChildNode(): BVHSpatialBox<T>;
+        /**
+         * 通过CameraCull查找逻辑对象
+         * @override
+         * @param frustum 视锥
+         * @param out 输出逻辑对象组
+         */
+        getItemByCameraCullInfo(cameraCullInfo: ICameraCullInfo, out: SingletonList<BaseRender>): void;
+        /**
+        * 通过阴影裁剪信息查找逻辑对象
+        * @override
+        * @param sci
+        * @param out
+        */
+        getItemBySCI(sci: IShadowCullInfo, out: SingletonList<BaseRender>): void;
+    }
+    class BVHSceneRenderManager extends SceneRenderManager {
+        private _allRenderList;
+        /**
+         * 实例化
+         */
+        constructor(bvhConfig?: BVHSpatialConfig);
+        /**
+        * get RenderList
+        */
+        get list(): SingletonList<BaseRender>;
+        set list(value: SingletonList<BaseRender>);
+        get bvhSpatial(): BVHRenderSpatial;
+        get otherList(): SingletonList<BaseRender>;
+        /**
+         * add Render Node
+         * @param object
+         */
+        addRenderObject(object: BaseRender): void;
+        /**
+         * remove Render Node
+         * @param object
+         */
+        removeRenderObject(object: BaseRender): void;
+        /**
+         * remove motion Object
+         * @param object
+         */
+        removeMotionObject(object: BaseRender): void;
+        /**
+         * update All Motion Render Data
+         */
+        updateMotionObjects(): void;
+        /**
+         * add motion Render Data
+         * @param object
+         */
+        addMotionObject(object: BaseRender): void;
+        /**
+         * destroy
+         */
+        destroy(): void;
     }
     /**
      * Interface Overall management of a type of component
@@ -8945,14 +9387,11 @@ declare module Laya {
      * 光照贴图。
      */
     class Lightmap {
+        static ApplyLightmapEvent: string;
         /** 光照贴图颜色。 */
-        private _lightmapColor;
-        get lightmapColor(): Texture2D;
-        set lightmapColor(value: Texture2D);
+        lightmapColor: Texture2D;
         /** 光照贴图方向。 */
-        private _lightmapDirection;
-        get lightmapDirection(): Texture2D;
-        set lightmapDirection(value: Texture2D);
+        lightmapDirection: Texture2D;
     }
     enum FogMode {
         Linear = 0,
@@ -8962,17 +9401,23 @@ declare module Laya {
     /**
      * 用于实现3D场景。
      */
-    class Scene3D extends Sprite {
+    class Scene3D extends Sprite implements ISubmit {
+        /** reflection mode */
+        static REFLECTIONMODE_SKYBOX: number;
+        static REFLECTIONMODE_CUSTOM: number;
+        /** RenderQueue mode */
+        static SCENERENDERFLAG_RENDERQPAQUE: number;
+        static SCENERENDERFLAG_SKYBOX: number;
+        static SCENERENDERFLAG_RENDERTRANSPARENT: number;
         /**Scene3D UniformMap */
         static sceneUniformMap: CommandUniformMap;
-        /**场景组件管理表 */
+        static SceneUBOData: UnifromBufferData;
         static componentManagerMap: Map<string, any>;
-        static get _updateMark(): number;
         /**
-         * 注册场景内的管理器
-         * @param type 管理器类型
-         * @param cla 实例
+         * 场景更新标记
          */
+        static set _updateMark(value: number);
+        static get _updateMark(): number;
         static regManager(type: string, cla: any): void;
         /**
          * init shaderData
@@ -8988,6 +9433,12 @@ declare module Laya {
          * @param complete 完成回调。
          */
         static load(url: string, complete: Handler): void;
+        /**ide配置文件使用 */
+        _reflectionsSource: number;
+        /**ide配置文件使用 */
+        _reflectionsResolution: string;
+        /**ide配置文件使用 */
+        _reflectionsIblSamples: number;
         /**@interanl */
         _sundir: Vector3;
         /** @interanl */
@@ -8996,6 +9447,7 @@ declare module Laya {
         currentCreationLayer: number;
         /** 是否启用灯光。*/
         enableLight: boolean;
+        componentElementMap: Map<string, IElementComponentManager>;
         /**
          * Scene3D所属的2D场景，使用IDE编辑的场景载入后具有此属性。
          */
@@ -9005,6 +9457,10 @@ declare module Laya {
          */
         set sceneRenderableManager(manager: SceneRenderManager);
         get sceneRenderableManager(): SceneRenderManager;
+        /**
+         * set ICullPass
+         */
+        set cullPass(cullPass: ICullPass);
         /**
          * 是否允许雾化。
          */
@@ -9036,9 +9492,6 @@ declare module Laya {
         get fogDensity(): number;
         set fogDensity(value: number);
         set fogParams(value: Vector4);
-        /**
-         * 0-2PI
-         */
         set GIRotate(value: number);
         get GIRotate(): number;
         /**
@@ -9047,9 +9500,6 @@ declare module Laya {
          */
         get ambientMode(): AmbientMode;
         set ambientMode(value: AmbientMode);
-        /**
-         * 场景反射探针
-         */
         get sceneReflectionProb(): ReflectionProbe;
         /**
          * 固定颜色环境光。
@@ -9110,32 +9560,50 @@ declare module Laya {
          */
         constructor();
         get componentElementDatasMap(): any;
-        private _cullInfoCamera;
         /**
-         * 获取cullCamera
+         * @inheritDoc
+         * @override
          */
+        protected _onActive(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onInActive(): void;
+        private _cullInfoCamera;
         get cullInfoCamera(): Camera;
+        /**
+         * scence外的Camera渲染场景,需要设置这个接口
+         * @param camera
+         */
+        _setCullCamera(camera: Camera): void;
         /**
          * 重新计算CullCamera
          */
         recaculateCullCamera(): void;
         /**
-         *
          * @inheritDoc
          * @override
          * 删除资源
-         * @param destroyChild 是否删除子节点
          */
         destroy(destroyChild?: boolean): void;
         /**
          * 获得某个组件的管理器
-         * @param type 组件管理类
+         * @param type
          */
         getComponentElementManager(type: string): IElementComponentManager;
         /**
          * 渲染入口
          */
-        renderSubmit(): void;
+        renderSubmit(): number;
+        /**
+         * 获得渲染类型
+         */
+        getRenderType(): number;
+        /**
+         * 删除渲染
+         */
+        releaseRender(): void;
         /**
          * 设置全局渲染数据
          * @param name 数据对应着色器名字
@@ -9145,7 +9613,6 @@ declare module Laya {
         setGlobalShaderValue(name: string, type: ShaderDataType, value: ShaderDataItem): void;
         /**
          * @deprecated
-         * 雾效范围
          */
         get fogRange(): number;
         set fogRange(value: number);
@@ -9175,7 +9642,6 @@ declare module Laya {
          */
         get list(): SingletonList<BaseRender>;
         set list(value: SingletonList<BaseRender>);
-        get renderBaselist(): SingletonList<IBaseRenderNode>;
         /**
          * add Render Node
          * @param object
@@ -9195,7 +9661,6 @@ declare module Laya {
          * update All Motion Render Data
          */
         updateMotionObjects(): void;
-        renderUpdate(): void;
         /**
          * add motion Render Data
          * @param object
@@ -9206,38 +9671,23 @@ declare module Laya {
          */
         destroy(): void;
     }
-    class SceneRenderManagerOBJ implements ISceneRenderManager {
-        _motionRenders: SingletonList<BaseRender>;
-        constructor();
-        baseRenderList: SingletonList<IBaseRenderNode>;
-        get list(): SingletonList<BaseRender>;
-        set list(value: SingletonList<BaseRender>);
-        addRenderObject(object: BaseRender): void;
-        removeRenderObject(object: BaseRender): void;
-        removeMotionObject(object: BaseRender): void;
-        updateMotionObjects(): void;
-        addMotionObject(object: BaseRender): void;
-        destroy(): void;
-    }
     class SimpleSkinnedMeshRenderer extends SkinnedMeshRenderer {
-        private _ownerSimpleRenderNode;
-        protected _isISkinRenderNode(): any;
         /**
          * 创建一个 <code>SkinnedMeshRender</code> 实例。
          */
         constructor();
-        protected _computeSkinnedData(): void;
-        /**
-      * @param context
-      * @perfTag PerformanceDefine.T_SkinBoneUpdate
-      */
-        renderUpdate(context: RenderContext3D): void;
+        protected _getcommonUniformMap(): string[];
         /**
          * 自定义数据
          * @param value1 自定义数据1
          * @param value2 自定义数据1
          */
         setCustomData(value1: number, value2?: number): void;
+        _cloneTo(dest: Component): void;
+        /**
+         * 删除节点
+         */
+        protected _onDestroy(): void;
     }
     /**
      * <code>SkinnedMeshSprite3D</code> 类用于创建网格。
@@ -9271,8 +9721,7 @@ declare module Laya {
      * <code>SkinMeshRenderer</code> 类用于蒙皮渲染器。
      */
     class SkinnedMeshRenderer extends MeshRenderer {
-        owner: Sprite3D;
-        private _ownerSkinRenderNode;
+        _bones: Sprite3D[];
         /**
          * 局部边界。
          */
@@ -9287,27 +9736,14 @@ declare module Laya {
          * 用于蒙皮的骨骼。
          */
         get bones(): Sprite3D[];
-        set bones(value: Sprite3D[]);
         /**
          * 创建一个 <code>SkinnedMeshRender</code> 实例。
          */
         constructor();
-        /**
-         * override it
-         * @returns
-         */
-        protected _createBaseRenderNode(): IBaseRenderNode;
-        protected _isISkinRenderNode(): any;
-        /**
-         * @param context
-         * @perfTag PerformanceDefine.T_SkinBoneUpdate
-         */
-        renderUpdate(context: RenderContext3D): void;
-        /**
-         * @override
-         * @param dest
-         */
-        _cloneTo(dest: SkinnedMeshRenderer): void;
+        protected _computeSkinnedData(): void;
+        protected _computeSkinnedDataForNative(): void;
+        _setBelongScene(scene: Scene3D): void;
+        protected _onDestroy(): void;
     }
     /**
      * <code>SkinnedMeshSprite3D</code> 类用于绑点骨骼节点精灵。
@@ -9344,7 +9780,6 @@ declare module Laya {
      * <code>Sprite3D</code> 类用于实现3D精灵。
      */
     class Sprite3D extends Node {
-        /**-1为翻转了反面，1为正常情况 */
         static WORLDINVERTFRONT: number;
         /**
          * 创建精灵的克隆实例。
@@ -9379,9 +9814,6 @@ declare module Laya {
          * 精灵变换。
          */
         get transform(): Transform3D;
-        /**
-         * 获取精灵所属的场景
-         */
         get scene(): Scene3D;
         /**
          * 创建一个 <code>Sprite3D</code> 实例。
@@ -9390,13 +9822,30 @@ declare module Laya {
          */
         constructor(name?: string, isStatic?: boolean);
         /**
+        * @private
+        */
+        protected _onActive(): void;
+        /**
+         * @private
+         */
+        protected _onInActive(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onAdded(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _onRemoved(): void;
+        protected onStartListeningToType(type: string): void;
+        /**
          * 克隆。
          * @return	 克隆副本。
          */
         clone(): Node;
         /**
-         * 删除
-         * @param destroyChild 是否删除子节点
          * @inheritDoc
          * @override
          */
@@ -9412,6 +9861,14 @@ declare module Laya {
      * <code>TrailFilter</code> 类用于创建拖尾过滤器。
      */
     class TrailFilter {
+        static CURTIME: number;
+        static LIFETIME: number;
+        static WIDTHCURVE: number;
+        static WIDTHCURVEKEYLENGTH: number;
+        static __init__(): void;
+        _ownerRender: TrailRenderer;
+        _lastPosition: Vector3;
+        _curtime: number;
         /**轨迹准线。*/
         alignment: TrailAlignment;
         /**
@@ -9475,9 +9932,6 @@ declare module Laya {
          */
         set textureMode(value: TrailTextureMode);
         constructor(owner: TrailRenderer);
-        /**
-         * 清除拖尾
-         */
         clear(): void;
     }
     /**
@@ -9566,12 +10020,13 @@ declare module Laya {
      * <code>TrailRenderer</code> 类用于创建拖尾渲染器。
      */
     class TrailRenderer extends BaseRender {
+        protected _projectionViewWorldMatrix: Matrix4x4;
         /**
          * 实例化一个拖尾渲染器
          */
         constructor();
         protected _getcommonUniformMap(): Array<string>;
-        protected _createBaseRenderNode(): IBaseRenderNode;
+        protected _onAdded(): void;
         /**
          * 获取淡出时间。单位s
          * @return  淡出时间。
@@ -9632,23 +10087,30 @@ declare module Laya {
          * @param value 纹理模式。
          */
         set textureMode(value: TrailTextureMode);
-        /**
-         * 拖尾轨迹准线
-         */
         get alignment(): TrailAlignment;
         set alignment(value: TrailAlignment);
-        /**
-         * 渲染更新
-         * @param context 3D渲染上下文
-         */
-        renderUpdate(context: RenderContext3D): void;
+        protected _onEnable(): void;
+        onUpdate(): void;
         /**
          * 包围盒,只读,不允许修改其值。
          */
         get bounds(): Bounds;
+        clear(): void;
+        _cloneTo(dest: Component): void;
+    }
+    /**
+     * <code>TrailSprite3D</code> 类用于创建拖尾渲染精灵。
+     */
+    class TrailSprite3D extends RenderableSprite3D {
         /**
-         * 清除拖尾
+         * Trail过滤器。
          */
+        get trailFilter(): TrailFilter;
+        /**
+         * Trail渲染器。
+         */
+        get trailRenderer(): TrailRenderer;
+        constructor(name?: string);
         clear(): void;
     }
     class TrailTextureMode {
@@ -9665,10 +10127,8 @@ declare module Laya {
      * <code>Transform3D</code> 类用于实现3D变换。
      */
     class Transform3D extends EventDispatcher {
-        /**
-         * 获取是否前向顺时针面
-         * @returns
-         */
+        protected _faceInvert: boolean;
+        protected _frontFaceValue: number;
         getFrontFaceValue(): number;
         /**
          * 所属精灵。
@@ -9825,9 +10285,9 @@ declare module Laya {
         lookAt(target: Vector3, up: Vector3, isLocal?: boolean, isCamera?: boolean): void;
         /**
          * 对象朝向目标
-         * @param target 朝向目标位置
-         * @param up 向上向量
-         * @param isLocal 是否局部空间
+         * @param target
+         * @param up
+         * @param isLocal
          */
         objLookat(target: Vector3, up: Vector3, isLocal?: boolean): void;
         /**
@@ -9843,7 +10303,6 @@ declare module Laya {
          */
         setWorldLossyScale(value: Vector3): void;
         /**
-         * 世界坐标系缩放。
          * @deprecated
          */
         get scale(): Vector3;
@@ -9851,30 +10310,23 @@ declare module Laya {
          * @deprecated
          */
         set scale(value: Vector3);
-        /**
-         * 局部转换位全局向量
-         * @param value 局部向量
-         * @param out 输出的全局向量
-         */
         localToGlobal(value: Vector3, out: Vector3): void;
         /**
-         * 转化成局部坐标
-         * @param pos 世界坐标
-         * @param out 输出的局部坐标
-        */
+         *转化成局部坐标
+            * @param pos
+            * @param out
+            *
+            */
         globalToLocal(pos: Vector3, out: Vector3): void;
         /**
-         * 转化成局部向量
+         *转化成局部向量
          * @param pos
          * @param out
+         *
          */
         toLocalNormal(pos: Vector3, out: Vector3): void;
-        /**
-         * 朝向指定方向
-         * @param forward 前向向量
-         * @param dir 朝向方向
-         */
         toDir(forward: Vector3, dir: Vector3): void;
+        static tmpVec3: Vector3;
         /**
          * 这是一个 glmatrix中的函数
          * a,b都是规格化以后的向量
@@ -9894,11 +10346,9 @@ declare module Laya {
      * <code>BaseCamera</code> 类用于创建摄像机的父类。
      */
     class UI3D extends BaseRender {
-        owner: Sprite3D;
         /**@intrtnal */
         static TempMatrix: Matrix4x4;
         private _shellSprite;
-        protected _worldParams: Vector4;
         /**
          * 3D渲染的UI节点
          */
@@ -9944,7 +10394,6 @@ declare module Laya {
          * 实例化一个UI3D
          */
         constructor();
-        private _creatDefaultMat;
         /**
         * 分析碰撞点
         * @param hit
@@ -9954,6 +10403,12 @@ declare module Laya {
          * 获得ui渲染图
          */
         getUITexture(): BaseTexture;
+        /**
+         * get camera distance
+         * @param rayOri
+         * @returns
+         */
+        _getCameraDistance(rayOri: Vector3): number;
         private _transByRotate;
     }
     class UI3DGeometry extends GeometryElement {
@@ -9965,7 +10420,7 @@ declare module Laya {
         destroy(): void;
     }
     class UI3DManager {
-        _UI3Dlist: FastSinglelist<UI3D>;
+        _UI3Dlist: SingletonList<UI3D>;
         constructor();
         add(value: UI3D): void;
         remove(value: UI3D): void;
@@ -10064,11 +10519,24 @@ declare module Laya {
         static DepthCasterUBOData: UnifromBufferData;
     }
     /**
+     * 深度贴图模式
+     */
+    enum DepthTextureMode {
+        /**不生成深度贴图 */
+        None = 0,
+        /**生成深度贴图 */
+        Depth = 1,
+        /**生成深度+法线贴图 */
+        DepthNormals = 2,
+        /**是否应渲染运动矢量  TODO*/
+        DepthAndDepthNormals = 3,
+        MotionVectors = 4
+    }
+    /**
      * <code>ShadowCasterPass</code> 类用于实现阴影渲染管线
      */
     class DepthPass {
-        static SHADOW_BIAS: Vector4;
-        private _zBufferParams;
+        private static SHADOW_BIAS;
         static __init__(): void;
         constructor();
         /**
@@ -10076,17 +10544,34 @@ declare module Laya {
          * @param camera
          * @param depthType
          */
-        getTarget(camera: Camera, depthType: DepthTextureMode, depthTextureFormat: RenderTargetFormat): void;
+        update(camera: Camera, depthType: DepthTextureMode, depthTextureFormat: RenderTargetFormat): void;
+        /**
+         * 渲染深度帧缓存
+         * @param context
+         * @param depthType
+         */
+        render(context: RenderContext3D, depthType: DepthTextureMode): void;
+    }
+    class RenderElementBatch {
+        static instance: RenderElementBatch;
+        private _instanceBatchManager;
+        private _recoverList;
+        constructor();
+        /**
+         * after batchRender
+         */
+        recoverData(): void;
+        /**
+         * BatchData
+         * @param elements
+         */
+        batch(elements: FastSinglelist<RenderElement>): void;
     }
     /**
      * 请使用LayaGL.RenderOBJCreate.createIndexBuffer3D来创建
      * <code>IndexBuffer3D</code> 类用于创建索引缓冲。
      */
-    class IndexBuffer3D {
-        private _indexType;
-        _byteLength: number;
-        _buffer: Float32Array | Uint16Array | Uint8Array | Uint32Array;
-        bufferUsage: BufferUsage;
+    class IndexBuffer3D extends IndexBuffer {
         /**
          * 索引类型。
          */
@@ -10123,7 +10608,7 @@ declare module Laya {
          * 获取索引数据。
          * @return	索引数据。
          */
-        getData(): Uint16Array | Uint32Array;
+        getData(): Uint16Array;
         /**
          * @inheritDoc
          * @override
@@ -10169,7 +10654,7 @@ declare module Laya {
         setCoefficients(i: number, coefficient0: number, coefficient1: number, coefficient2: number, coefficient3: number, coefficient4: number, coefficient5: number, coefficient6: number, coefficient7: number, coefficient8: number): void;
         /**
          * 克隆
-         * @param dest 克隆目标数据
+         * @param dest
          */
         cloneTo(dest: SphericalHarmonicsL2): void;
     }
@@ -10177,17 +10662,12 @@ declare module Laya {
      * 请使用LayaGL.RenderOBJCreate.createIndexBuffer3D来创建
      * <code>VertexBuffer3D</code> 类用于创建顶点缓冲。
      */
-    class VertexBuffer3D {
-        _byteLength: number;
-        _buffer: Float32Array | Uint16Array | Uint8Array | Uint32Array;
-        bufferUsage: BufferUsage;
+    class VertexBuffer3D extends VertexBuffer {
         /**
          * 获取顶点声明。
          */
         get vertexDeclaration(): VertexDeclaration | null;
         set vertexDeclaration(value: VertexDeclaration | null);
-        get instanceBuffer(): boolean;
-        set instanceBuffer(value: boolean);
         /**
          * 是否可读。
          */
@@ -10199,6 +10679,10 @@ declare module Laya {
          * @param	canRead 是否可读。
          */
         constructor(byteLength: number, bufferUsage: BufferUsage, canRead?: boolean);
+        /**
+         * 剥离内存块存储。
+         */
+        orphanStorage(): void;
         /**
          * 设置数据。
          * @param	data 顶点数据。
@@ -10259,23 +10743,19 @@ declare module Laya {
         getCorners(corners: Vector3[]): void;
         /**
          * 获取中心点。
-         * @param	out 输出中心点
+         * @param	out
          */
         getCenter(out: Vector3): void;
         /**
          * 获取范围。
-         * @param	out 输出轴半径
+         * @param	out
          */
         getExtent(out: Vector3): void;
         /**
          * 设置中心点和范围。
-         * @param center 设置中心点
-         * @param extent 轴半径
+         * @param	center
          */
         setCenterAndExtent(center: Vector3, extent: Vector3): void;
-        /**
-         * 恢复默认值
-         */
         toDefault(): void;
         /**
          * 从顶点生成包围盒。
@@ -10438,19 +10918,13 @@ declare module Laya {
         static merge(box1: Bounds, box2: Bounds, out: Bounds): void;
         /**
          * 包围盒是否包含点
-         * @param box 包围盒
-         * @param point 检测点
+         * @param box
+         * @param point
          * @returns
          */
         static containPoint(box: Bounds, point: Vector3): boolean;
-        /**
-         * 最小点
-         */
         get min(): Vector3;
         set min(value: Vector3);
-        /**
-         * 最大点
-         */
         get max(): Vector3;
         set max(value: Vector3);
         /**
@@ -10499,19 +10973,20 @@ declare module Laya {
          * @param	max  max 最大坐标。
          */
         constructor(min?: Vector3, max?: Vector3);
-        /**
-         * 包围盒的8个顶点。
-         * @param  corners  返回顶点的输出队列。
-         */
+        protected _getUpdateFlag(type: number): boolean;
+        protected _setUpdateFlag(type: number, value: boolean): void;
+        protected _getCenter(min: Vector3, max: Vector3, out: Vector3): void;
+        protected _getExtent(min: Vector3, max: Vector3, out: Vector3): void;
+        protected _getMin(center: Vector3, extent: Vector3, out: Vector3): void;
+        protected _getMax(center: Vector3, extent: Vector3, out: Vector3): void;
+        protected _rotateExtents(extents: Vector3, rotation: Matrix4x4, out: Vector3): void;
         getCorners(corners: Vector3[]): void;
         /**
-         * 获取包围盒
+         * TODO
          * @param box
          */
         getBoundBox(box: BoundBox): void;
         /**
-         * 计算两个包围盒是否相交
-         * @param bounds 需要计算包围盒
          * @returns -1为不相交 不为0的时候返回值为相交体积
          */
         calculateBoundsintersection(bounds: Bounds): number;
@@ -10530,14 +11005,11 @@ declare module Laya {
      * <code>BoundsImp</code> 类用于创建包围体。
      */
     class BoundsImpl implements IClone {
-        /**
-         * 最小点
-         */
+        protected _updateFlag: number;
+        /***/
+        _boundBox: BoundBox;
         get min(): Vector3;
         set min(value: Vector3);
-        /**
-         * 最大点
-         */
         get max(): Vector3;
         set max(value: Vector3);
         /**
@@ -10586,6 +11058,13 @@ declare module Laya {
          * @param	max  max 最大坐标。
          */
         constructor(min?: Vector3, max?: Vector3);
+        protected _getUpdateFlag(type: number): boolean;
+        protected _setUpdateFlag(type: number, value: boolean): void;
+        protected _getCenter(min: Vector3, max: Vector3, out: Vector3): void;
+        protected _getExtent(min: Vector3, max: Vector3, out: Vector3): void;
+        protected _getMin(center: Vector3, extent: Vector3, out: Vector3): void;
+        protected _getMax(center: Vector3, extent: Vector3, out: Vector3): void;
+        protected _rotateExtents(extents: Vector3, rotation: Matrix4x4, out: Vector3): void;
         /**
          * @returns -1为不相交 不为0的时候返回值为相交体积
          */
@@ -10606,14 +11085,12 @@ declare module Laya {
      */
     class BoundSphere implements IClone {
         private static _tempVector3;
-        /**
-        * 中心
-        */
+        /**包围球的中心。*/
+        _center: Vector3;
+        /**包围球的半径。*/
+        _radius: number;
         set center(value: Vector3);
         get center(): Vector3;
-        /**
-        * 半径
-        */
         set radius(value: number);
         get radius(): number;
         /**
@@ -10622,9 +11099,6 @@ declare module Laya {
          * @param	radius 包围球的半径。
          */
         constructor(center?: Vector3, radius?: number);
-        /**
-         * default
-         */
         toDefault(): void;
         /**
          * 从顶点的子队列生成包围球。
@@ -10954,15 +11428,25 @@ declare module Laya {
         static Intersects: number;
     }
     /**
+     * 裁剪接口
+     */
+    interface IBoundsCell {
+        bounds: Bounds;
+        id: number;
+        shadowCullPass(): boolean;
+    }
+    /**
      * 平面。
      */
     class Plane {
-        /**平面与其他几何体相交类型，后面*/
+        /**平面与其他几何体相交类型*/
         static PlaneIntersectionType_Back: number;
-        /**平面与其他几何体相交类型，前面*/
         static PlaneIntersectionType_Front: number;
-        /**平面与其他几何体相交类型，相交*/
         static PlaneIntersectionType_Intersecting: number;
+        /** 平面的向量*/
+        normal: Vector3;
+        /** 平面到坐标系原点的距离*/
+        distance: number;
         /**
          * 创建一个 <code>Plane</code> 实例。
          * @param	normal 平面的向量
@@ -11084,12 +11568,64 @@ declare module Laya {
         at(t: number, out: Vector3): void;
     }
     /**
+     * <code>Viewport</code> 类用于创建视口。
+     */
+    class Viewport {
+        static _tempViewport: Viewport;
+        /**X轴坐标*/
+        x: number;
+        /**Y轴坐标*/
+        y: number;
+        /**宽度*/
+        width: number;
+        /**高度*/
+        height: number;
+        /**最小深度*/
+        minDepth: number;
+        /**最大深度*/
+        maxDepth: number;
+        /**
+         * 创建一个 <code>Viewport</code> 实例。
+         * @param	x x坐标。
+         * @param	y y坐标。
+         * @param	width 宽度。
+         * @param	height 高度。
+         */
+        constructor(x?: number, y?: number, width?: number, height?: number);
+        /**
+         * 投影一个三维向量到视口空间。
+         * @param	source 三维向量。
+         * @param	matrix 变换矩阵。
+         * @param	out x、y、z为视口空间坐标,透视投影下w为相对于变换矩阵的z轴坐标。
+         */
+        project(source: Vector3, matrix: Matrix4x4, out: Vector4): void;
+        /**
+         * 反变换一个三维向量。
+         * @param	source 源三维向量。
+         * @param	matrix 变换矩阵。
+         * @param	out 输出三维向量。
+         */
+        unprojectFromMat(source: Vector3, matrix: Matrix4x4, out: Vector3): void;
+        /**
+         * 反变换一个三维向量。
+         * @param	source 源三维向量。
+         * @param	projection  透视投影矩阵。
+         * @param	view 视图矩阵。
+         * @param	world 世界矩阵,可设置为null。
+         * @param   out 输出向量。
+         */
+        unprojectFromWVP(source: Vector3, projection: Matrix4x4, view: Matrix4x4, world: Matrix4x4, out: Vector3): void;
+        set(x: number, y: number, width: number, height: number): void;
+        /**
+         * 克隆
+         * @param	out
+         */
+        cloneTo(out: Viewport): void;
+    }
+    /**
      * <code>CharacterController</code> 类用于创建角色控制器。
      */
     class CharacterController extends PhysicsColliderComponent {
-        /**
-         * 帧循环
-         */
         onUpdate(): void;
         /**
          * 胶囊半径。
@@ -11102,7 +11638,7 @@ declare module Laya {
         get height(): number;
         set height(value: number);
         /**
-         * 最小距离
+         *
          */
         get minDistance(): number;
         set minDistance(value: number);
@@ -11212,7 +11748,7 @@ declare module Laya {
         private _setAxis;
         private _setTargetVelocirty;
         /**
-         * 主轴
+         * main Axis
          */
         set axis(value: Vector3);
         get axis(): Vector3;
@@ -11222,248 +11758,139 @@ declare module Laya {
          */
         get secondaryAxis(): Vector3;
         /**
-         * X 位移运动类型
+         * X Motion
          */
         set XMotion(value: D6Axis);
         get XMotion(): D6Axis;
         /**
-         * Y 位移运动类型
+         * Y Motion
          */
         set YMotion(value: D6Axis);
         get YMotion(): D6Axis;
         /**
-         * Z 位移运动类型
+         * Z Motion
          */
         set ZMotion(value: D6Axis);
         get ZMotion(): D6Axis;
         /**
-         * X 角度运动类型
+         * X 角度motion
          */
         set angularXMotion(value: D6Axis);
         get angularXMotion(): D6Axis;
         /**
-         * Y 角度运动类型
+         * Y 角度motion
          */
         set angularYMotion(value: D6Axis);
         get angularYMotion(): D6Axis;
         /**
-         * Z 角度运动类型
+         * Z 角度motion
          */
         set angularZMotion(value: D6Axis);
         get angularZMotion(): D6Axis;
-        /**
-         * 关节位移值
-         */
         set distanceLimit(value: number);
         get distanceLimit(): number;
-        /**
-         * 关节位移限制后的弹力值
-         */
         set distanceBounciness(value: number);
         get distanceBounciness(): number;
-        /**
-         * 关节位移限制后弹力阈值
-         */
         set distanceBounceThreshold(value: number);
         get distanceBounceThreshold(): number;
-        /**
-         * 关节位移弹簧系数值
-         */
         set distanceSpring(value: number);
         get distanceSpring(): number;
-        /**
-         * 关节位移阻尼值
-         */
         set distanceDamper(value: number);
         get distanceDamper(): number;
-        /**
-         * 关节X轴最大角度值
-         * -180° ~ 180°
-         */
+        /**-180 ---- 180 */
         set angularXMaxLimit(value: number);
         get angularXMaxLimit(): number;
-        /**
-         * 关节X轴最小角度值
-         */
         set angularXMinLimit(value: number);
         get angularXMinLimit(): number;
-        /**
-         * 关节X轴角度最大值后的弹力值
-         */
         set AngleXLimitBounceness(value: number);
         get AngleXLimitBounceness(): number;
-        /**
-         * 关节X轴角度最大值后弹力阈值
-         */
         set AngleXLimitBounceThreshold(value: number);
         get AngleXLimitBounceThreshold(): number;
-        /**
-         * 关节X轴角度弹簧系数值
-         */
         set AngleXLimitSpring(value: number);
         get AngleXLimitSpring(): number;
-        /**
-         * 关节X轴角度阻尼值
-         */
         set AngleXLimitDamp(value: number);
         get AngleXLimitDamp(): number;
-        /**
-         * 关节Y轴角度限制值
-         */
         set AngleYLimit(value: number);
         get AngleYLimit(): number;
-        /**
-         * 关节Z轴角度限制值
-         */
         set AngleZLimit(value: number);
         get AngleZLimit(): number;
-        /**
-         * 关节YZ平面角度最大值后弹力值
-         */
         set AngleYZLimitBounciness(value: number);
         get AngleYZLimitBounciness(): number;
-        /**
-         * 关节YZ平面角度限制后弹力阈值
-         */
         set AngleYZLimitBounceThreshold(value: number);
         get AngleYZLimitBounceThreshold(): number;
-        /**
-         * 关节的YZ轴旋转的弹簧系数值
-         */
         set AngleYZLimitSpring(value: number);
         get AngleYZLimitSpring(): number;
-        /**
-         * 关节的YZ轴旋转的阻尼值
-         */
         set AngleYZLimitDamping(value: number);
         get AngleYZLimitDamping(): number;
-        /**
-         * 关节移动到目标的位置
-         */
         set targetPosition(value: Vector3);
         get targetPosition(): Vector3;
-        /**
-         * 关节旋转驱动的方向
-         */
         set targetRotation(value: Vector3);
         get targetRotation(): Vector3;
-        /**
-         * 关节移动到目标位置的移动速度
-         */
         set targetPositionVelocity(value: Vector3);
         get targetPositionVelocity(): Vector3;
-        /**
-         * 关节旋转到目标角度驱动的角速度
-         */
         set targetAngularVelocity(value: Vector3);
         get targetAngularVelocity(): Vector3;
-        /**
-         * 关节在X轴方向上的弹簧系数值
-         */
         set XDriveSpring(value: number);
         get XDriveSpring(): number;
-        /**
-         * 关节在Y轴方向上的弹簧系数值
-         */
         set YDriveSpring(value: number);
         get YDriveSpring(): number;
-        /**
-         * 关节在Z轴方向上的
-         */
         set ZDriveSpring(value: number);
         get ZDriveSpring(): number;
-        /**
-         * 关节在X轴方向上的阻尼值
-         */
         set XDriveDamp(value: number);
         get XDriveDamp(): number;
-        /**
-         * 关节在Y轴方向上的阻尼值
-         */
         set YDriveDamp(value: number);
         get YDriveDamp(): number;
-        /**
-         * 关节在Z轴方向上的阻尼值
-         */
         set ZDriveDamp(value: number);
         get ZDriveDamp(): number;
-        /**
-         * 关节在X轴方向上的最大驱动力值
-         */
         set XDriveForceLimit(value: number);
         get XDriveForceLimit(): number;
-        /**
-         * 关节在Y轴方向上的最大驱动力值
-         */
         set YDriveForceLimit(value: number);
         get YDriveForceLimit(): number;
-        /**
-         * 关节在Z轴方向上的最大驱动力值
-         */
         set ZDriveForceLimit(value: number);
         get ZDriveForceLimit(): number;
-        /**
-         * 关节在X轴角度的最大驱动力
-         */
         get angularXDriveForceLimit(): number;
         set angularXDriveForceLimit(value: number);
-        /**
-         * 关节在X轴的角度驱动力
-         */
         get angularXDriveForce(): number;
         set angularXDriveForce(value: number);
-        /**
-         * 关节在X轴方向的角度阻尼值
-         */
         get angularXDriveDamp(): number;
         set angularXDriveDamp(value: number);
-        /**
-         * 关节在YZ平面旋转驱动力最大值
-         */
         get angularYZDriveForceLimit(): number;
         set angularYZDriveForceLimit(value: number);
-        /**
-         * 关节在YZ平面旋转驱动力
-         */
         get angularYZDriveForce(): number;
         set angularYZDriveForce(value: number);
-        /**
-         * 关节在YZ平面上的阻尼
-         */
         get angularYZDriveDamp(): number;
         set angularYZDriveDamp(value: number);
-        /**
-         * 关节的角度插值驱动力最大值
-         */
         get angularSlerpDriveForceLimit(): number;
         set angularSlerpDriveForceLimit(value: number);
-        /**
-         * 关节的角度插值驱动力
-         */
         get angularSlerpDriveForce(): number;
         set angularSlerpDriveForce(value: number);
-        /**
-         * 角度插值阻尼
-         */
         get angularSlerpDriveDamp(): number;
         set angularSlerpDriveDamp(value: number);
+        _initAllConstraintInfo(): void;
+        protected _onEnable(): void;
+        protected _onDisable(): void;
+        /**
+        * create joint
+        */
+        protected _initJoint(): void;
     }
     /**
      * <code>ConstraintComponent</code> 类用于创建约束的父类。
      */
     class ConstraintComponent extends Component {
+        protected _physicsManager: IPhysicsManager;
+        protected _connectCollider: PhysicsColliderComponent;
+        protected _breakForce: number;
+        protected _breakTorque: number;
+        protected _ownColliderLocalPos: Vector3;
+        protected _connectColliderLocalPos: Vector3;
         /**
          * instance joint
          */
         initJoint(): void;
-        /**
-         * 关节连接的物理组件刚体
-         */
+        protected _initJoint(): void;
         set connectedBody(value: PhysicsColliderComponent);
         get connectedBody(): PhysicsColliderComponent;
-        /**
-         * 关节所属的物理组件刚体
-         */
         get ownBody(): PhysicsColliderComponent;
         set ownBody(value: PhysicsColliderComponent);
         /**
@@ -11505,6 +11932,7 @@ declare module Laya {
          * 创建一个 <code>ConstraintComponent</code> 实例。
          */
         constructor();
+        protected _onAdded(): void;
         /**
          * 设置迭代的次数，次数越高，越精确
          * @param overideNumIterations
@@ -11515,12 +11943,15 @@ declare module Laya {
          * @param enable
          */
         setConstraintEnabled(enable: boolean): void;
+        protected _onDestroy(): void;
     }
     class FixedConstraint extends ConstraintComponent {
         /**
          * 创建一个<code>FixedConstraint</code>实例
          */
         constructor();
+        protected _onEnable(): void;
+        protected _onDisable(): void;
     }
     class HingeConstraint extends ConstraintComponent {
         /**
@@ -11528,55 +11959,60 @@ declare module Laya {
         */
         constructor();
         /**
-         * 主轴
-         * set Hinge Rotation Axis,value by local rigibody0
+         * create joint
          */
+        protected _initJoint(): void;
+        /**
+         * overrid it
+         */
+        protected _onEnable(): void;
+        /**
+         * overrid it
+         */
+        protected _onDisable(): void;
+        /**
+        * set Hinge Rotation Axis,value by local rigibody0
+        */
         set Axis(value: Vector3);
         get Axis(): Vector3;
         /**
-         * 关节的最小限制值
-         * @param lowerLimit 最小限制值
+         * set limitLower
+         * @param lowerLimit
          */
         set lowerLimit(value: number);
         get lowerLimit(): number;
         /**
-         * 关节的最大限制值
-         * @param lowerLimit 最大限制值
+         * set uperLimit
+         * @param lowerLimit
          */
         set uperLimit(value: number);
         get uperLimit(): number;
         /**
-         * 关节限制值后弹力值
          * @param value
          */
         set bounceness(value: number);
         get bounceness(): number;
         /**
-         * 关节限制值后弹力反弹最小速度
          * @param value
          */
         set bouncenMinVelocity(value: number);
         get bouncenMinVelocity(): number;
         /**
-         * 关节的接触距离值，距离值内持续碰撞
          * @param value
          */
         set contactDistance(value: number);
         get contactDistance(): number;
         /**
-         * 关节的旋转限制值
          * @param value
          */
         set limit(value: boolean);
         get limit(): boolean;
         /**
-         * 是否自驱动
          * @param value
          */
         set motor(value: boolean);
         get motor(): boolean;
         /**
-         * 自驱动加速(不保持恒定驱动速度)
          * @param value
          */
         set freeSpin(value: boolean);
@@ -11597,33 +12033,29 @@ declare module Laya {
         getVelocity(): Vector3;
     }
     class SpringConstraint extends ConstraintComponent {
+        protected _onAdded(): void;
         /**
-         * 弹簧关节不受力的最小值
          * set spring min Distance
          */
         set minDistance(value: number);
         get minDistance(): number;
         /**
-         * 弹簧关节不受力的最大值
          * set spring max Distance
          */
         set maxDistance(value: number);
         get maxDistance(): number;
         /**
-         * 弹簧的静止长度
          * set sprint default length
          * Set the error tolerance of the joint.
          */
         set tolerance(value: number);
         get tolerance(): number;
         /**
-         * 弹簧关节的弹簧系数值
          * set spring stifness
          */
         set spring(value: number);
         get spring(): number;
         /**
-         * 弹簧关节的阻尼值
          * set damping in spring
          */
         set damping(value: number);
@@ -11673,6 +12105,16 @@ declare module Laya {
      * <code>PhysicsCollider</code> 类用于创建物理碰撞器。
      */
     class PhysicsCollider extends PhysicsColliderComponent {
+        /**
+         * @override
+         * @interanl
+         */
+        _collider: IStaticCollider;
+        /**
+         * @override
+         * @interanl
+         */
+        protected _initCollider(): void;
         constructor();
         /**
          * 是否为触发器。
@@ -11701,9 +12143,6 @@ declare module Laya {
      * <code>PhysicsColliderComponent</code> 类用于创建物理组件的父类。
      */
     class PhysicsColliderComponent extends Component {
-        /**
-         * 获取碰撞体
-         */
         get collider(): ICollider;
         /**
          * 弹力。也叫Bounciness
@@ -11756,6 +12195,12 @@ declare module Laya {
         get canCollideWith(): number;
         set canCollideWith(value: number);
         constructor();
+        initCollider(): void;
+        protected _initCollider(): void;
+        protected _onAdded(): void;
+        protected _onEnable(): void;
+        protected _onDisable(): void;
+        protected _onDestroy(): void;
     }
     /**
      * <code>PhysicsSettings</code> 类用于创建物理配置信息。
@@ -11841,9 +12286,6 @@ declare module Laya {
          * 直接设置物理位置
          */
         set position(pos: Vector3);
-        /**
-         * 直接设置物理旋转
-         */
         set orientation(q: Quaternion);
         /**
          * 是否触发器
@@ -11856,6 +12298,8 @@ declare module Laya {
         get collisionDetectionMode(): number;
         set collisionDetectionMode(value: number);
         constructor();
+        protected _onAdded(): void;
+        protected _onDestroy(): void;
         /**
          * 应用作用力。
          * @param	force 作用力。
@@ -11875,7 +12319,7 @@ declare module Laya {
         applyImpulse(impulse: Vector3, localOffset?: Vector3): void;
         /**
          * 应用扭转冲量。
-         * @param	torqueImpulse 冲量值
+         * @param	torqueImpulse
          */
         applyTorqueImpulse(torqueImpulse: Vector3): void;
         /**
@@ -11897,10 +12341,10 @@ declare module Laya {
         /**
          * @deprecated
          * 应用作用力
-         * @param fx x轴方向的力
-         * @param fy y轴方向的力
-         * @param fz z轴方向的力
-         * @param localOffset 受力点距离质点的偏移
+         * @param fx
+         * @param fy
+         * @param fz
+         * @param localOffset
          */
         applyForceXYZ(fx: number, fy: number, fz: number, localOffset?: Vector3): void;
     }
@@ -11915,22 +12359,17 @@ declare module Laya {
          * @param sizeZ 盒子Z轴尺寸。
          */
         constructor(sizeX?: number, sizeY?: number, sizeZ?: number);
+        protected _createShape(): void;
         /**
-         * 盒子尺寸
          * Box size
          */
         get size(): Vector3;
         set size(value: Vector3);
         /**
-         * 克隆
          * @inheritDoc
          * @override
          */
         clone(): any;
-        /**
-         * 克隆数据到目标
-         * @param destObject 目标对象
-         */
         cloneTo(destObject: any): void;
         /**
          * @description
@@ -11955,6 +12394,7 @@ declare module Laya {
      * <code>CapsuleColliderShape</code> 类用于创建胶囊形状碰撞器。
      */
     class CapsuleColliderShape extends Physics3DColliderShape {
+        _shape: ICapsuleColliderShape;
         /**
          * 半径。
          */
@@ -11978,14 +12418,15 @@ declare module Laya {
          */
         constructor(radius?: number, length?: number, orientation?: number);
         /**
-         * 克隆
+         * @override
+         */
+        protected _createShape(): void;
+        /**
          * @inheritDoc
          * @override
          */
         clone(): any;
         /**
-         * 克隆数据到目标
-         * @param destObject 克隆目标
          * @inheritDoc
          * @override
          */
@@ -12025,8 +12466,6 @@ declare module Laya {
          */
         getChildShapeCount(): number;
         /**
-         * 将数据克隆到目标节点
-         * @param 目标节点
          * @inheritDoc
          * @override
          */
@@ -12076,7 +12515,6 @@ declare module Laya {
         clone(): any;
         /**
          * 克隆
-         * @param destObject 克隆目标
          * @inheritDoc
          * @override
          * @returns 克隆的ConeColliderShape实例
@@ -12109,14 +12547,12 @@ declare module Laya {
          */
         constructor(radius?: number, height?: number, orientation?: number);
         /**
-         * 克隆
          * @inheritDoc
          * @override
          */
         clone(): any;
         /**
          * 克隆
-         * @param destObject  克隆目标
          * @inheritDoc
          * @override
          * @returns 克隆的ConeColliderShape实例
@@ -12152,6 +12588,7 @@ declare module Laya {
      * <code>MeshColliderShape</code> 类用于创建网格碰撞器。
      */
     class MeshColliderShape extends Physics3DColliderShape {
+        _shape: IMeshColliderShape;
         /**
          * 网格。
          */
@@ -12159,7 +12596,7 @@ declare module Laya {
         set mesh(value: Mesh);
         private _changeShape;
         /**
-         * 凸多边形最大值。
+         * 是否使用凸多边形。
          */
         get convexVertexMax(): number;
         set convexVertexMax(value: number);
@@ -12173,14 +12610,15 @@ declare module Laya {
          */
         constructor();
         /**
-         * 克隆数据到目标对象
+         * @override
+         */
+        protected _createShape(): void;
+        /**
          * @inheritDoc
          * @override
-         * @param destObject 目标对象
          */
         cloneTo(destObject: any): void;
         /**
-         * 克隆
          * @inheritDoc
          * @override
          */
@@ -12196,6 +12634,8 @@ declare module Laya {
         static SHAPEORIENTATION_UPY: number;
         /** 形状方向_Z轴正向 */
         static SHAPEORIENTATION_UPZ: number;
+        _shape: IColliderShape;
+        get shape(): IColliderShape;
         /**
          * Shape的本地偏移。
          */
@@ -12205,6 +12645,7 @@ declare module Laya {
          * 创建一个新的 <code>ColliderShape</code> 实例。
          */
         constructor();
+        protected _createShape(): void;
         /**
          * 克隆。
          * @param	destObject 克隆源。
@@ -12235,24 +12676,769 @@ declare module Laya {
          */
         constructor(radius?: number);
         /**
-         * 克隆
          * @inheritDoc
          * @override
          */
         clone(): any;
     }
+    interface IRenderEngine3DOBJFactory {
+        createTransform(owner: Sprite3D): Transform3D;
+        createBounds(min: Vector3, max: Vector3): any;
+        createRenderElement(): IRenderElement;
+        createSkinRenderElement(): IRenderElement;
+        createInstanceRenderElement(): IRenderElement;
+        createBaseRenderQueue(isTransparent: boolean): IRenderQueue;
+        createVertexBuffer3D(byteLength: number, bufferUsage: BufferUsage, canRead: boolean): VertexBuffer3D;
+        createIndexBuffer3D(indexType: IndexFormat, indexCount: number, bufferUsage: BufferUsage, canRead: boolean): IndexBuffer3D;
+        createSceneRenderManager(): ISceneRenderManager;
+        createCullPass(): ICullPass;
+        createSortPass(): ISortPass;
+        createShadowCullInfo(): IShadowCullInfo;
+        createCameraCullInfo(): ICameraCullInfo;
+        createRenderGeometry(mode: MeshTopology, drayType: DrawType): IRenderGeometryElement;
+        createBaseRenderNode(): IBaseRenderNode;
+        createRenderContext3D(): IRenderContext3D;
+    }
     class Laya3DRender {
-        static Render3DModuleDataFactory: I3DRenderModuleFactory;
-        static Render3DPassFactory: I3DRenderPassFactory;
-        /**
-         * @deprecated
-         */
         static renderOBJCreate: IRenderEngine3DOBJFactory;
+    }
+    class NativeBaseRenderNode implements IBaseRenderNode {
+        private _nativeObj;
+        private _bounds;
+        private _geometryBounds;
+        private _transform;
+        constructor();
+        set boundsChange(value: boolean);
+        get boundsChange(): boolean;
+        set layer(value: number);
+        get layer(): number;
+        get renderId(): number;
+        set renderId(value: number);
+        get receiveShadow(): boolean;
+        set receiveShadow(value: boolean);
+        get castShadow(): boolean;
+        set castShadow(value: boolean);
+        get bounds(): Bounds;
+        set bounds(value: Bounds);
+        sortingFudge: number;
+        get distanceForSort(): number;
+        set distanceForSort(value: number);
+        get transform(): Transform3D;
+        set transform(value: Transform3D);
+        get owner(): BaseRender | null;
+        set owner(value: BaseRender | null);
+        get geometryBounds(): Bounds | null;
+        set geometryBounds(value: Bounds | null);
+        get renderbitFlag(): number;
+        set renderbitFlag(value: number | null);
+        get staticMask(): number;
+        set staticMask(value: number | null);
+    }
+    class NativeBaseRenderQueue implements IRenderQueue {
+        /** @interanl */
+        _isTransparent: boolean;
+        /**sort function*/
+        _sortPass: ISortPass;
+        /** context*/
+        _context: IRenderContext3D;
+        _batch: RenderElementBatch;
+        private _nativeObj;
+        set sortPass(value: ISortPass);
+        constructor(isTransparent: boolean);
+        destroy(): void;
+        set context(value: RenderContext3D);
+        addRenderElement(renderelement: RenderElement): void;
+        clear(): void;
+        renderQueue(context: RenderContext3D): number;
+        private _batchQueue;
+    }
+    class NativeBounds implements IClone {
+        /**native Share Memory */
+        static MemoryBlock_size: number;
+        get min(): Vector3;
+        set min(value: Vector3);
+        get max(): Vector3;
+        set max(value: Vector3);
+        /**
+         * 设置包围盒的最小点。
+         * @param value	包围盒的最小点。
+         */
+        setMin(value: Vector3): void;
+        /**
+         * 获取包围盒的最小点。
+         * @return	包围盒的最小点。
+         */
+        getMin(): Vector3;
+        /**
+         * 设置包围盒的最大点。
+         * @param value	包围盒的最大点。
+         */
+        setMax(value: Vector3): void;
+        /**
+         * 获取包围盒的最大点。
+         * @return	包围盒的最大点。
+         */
+        getMax(): Vector3;
+        /**
+         * 设置包围盒的中心点。
+         * @param value	包围盒的中心点。
+         */
+        setCenter(value: Vector3): void;
+        /**
+         * 获取包围盒的中心点。
+         * @return	包围盒的中心点。
+         */
+        getCenter(): Vector3;
+        /**
+         * 设置包围盒的范围。
+         * @param value	包围盒的范围。
+         */
+        setExtent(value: Vector3): void;
+        /**
+         * 获取包围盒的范围。
+         * @return	包围盒的范围。
+         */
+        getExtent(): Vector3;
+        /**
+         * 创建一个 <code>Bounds</code> 实例。
+         * @param	min  min 最小坐标
+         * @param	max  max 最大坐标。
+         */
+        constructor(min?: Vector3, max?: Vector3);
+        _getBoundBox(): BoundBox;
+        /**
+         * @returns -1为不相交 不为0的时候返回值为相交体积
+         */
+        calculateBoundsintersection(bounds: Bounds): number;
+        /**
+         * 克隆。
+         * @param	destObject 克隆源。
+         */
+        cloneTo(destObject: any): void;
+        /**
+         * 克隆。
+         * @return	 克隆副本。
+         */
+        clone(): any;
+    }
+    /**
+     * camera裁剪数据
+     */
+    class NativeCameraCullInfo implements ICameraCullInfo {
+        /**位置 */
+        private _position;
+        private _useOcclusionCulling;
+        private _cullingMask;
+        /**静态标记 */
+        private _staticMask;
+        private _nativeObj;
+        private static MemoryBlock_size;
+        /**native Share Memory */
+        private nativeMemory;
+        private float64Array;
+        boundFrustum: BoundFrustum;
+        constructor();
+        set position(position: Vector3);
+        get position(): Vector3;
+        set useOcclusionCulling(useOcclusionCulling: Boolean);
+        get useOcclusionCulling(): Boolean;
+        set cullingMask(cullingMask: number);
+        get cullingMask(): number;
+        set staticMask(value: number);
+        get staticMask(): number;
+    }
+    class NativeCullPassBase implements ICullPass {
+        private _nativeObj;
+        private _tempRenderList;
+        get cullList(): SingletonList<BaseRender>;
+        constructor();
+        cullByCameraCullInfo(cameraCullInfo: ICameraCullInfo, renderManager: ISceneRenderManager): void;
+        cullByShadowCullInfo(cullInfo: IShadowCullInfo, renderManager: ISceneRenderManager): void;
+        cullingSpotShadow(cameraCullInfo: ICameraCullInfo, renderManager: ISceneRenderManager): void;
+    }
+    class NativeGLRenderEngine3DOBJFactory implements IRenderEngine3DOBJFactory {
+        createTransform(owner: Sprite3D): Transform3D;
+        createBounds(min: Vector3, max: Vector3): any;
+        createRenderElement(): IRenderElement;
+        createSkinRenderElement(): IRenderElement;
+        createInstanceRenderElement(): IRenderElement;
+        createBaseRenderQueue(isTransparent: boolean): IRenderQueue;
+        createVertexBuffer3D(byteLength: number, bufferUsage: BufferUsage, canRead?: boolean): NativeVertexBuffer3D;
+        createIndexBuffer3D(indexType: IndexFormat, indexCount: number, bufferUsage?: BufferUsage, canRead?: boolean): IndexBuffer3D;
+        createSceneRenderManager(): ISceneRenderManager;
+        createCullPass(): ICullPass;
+        createSortPass(): ISortPass;
+        createShadowCullInfo(): IShadowCullInfo;
+        createCameraCullInfo(): ICameraCullInfo;
+        createBaseRenderNode(): NativeBaseRenderNode;
+        createRenderContext3D(): NativeRenderContext3DOBJ;
+        createRenderGeometry(mode: MeshTopology, drayType: DrawType): NativeRenderGeometryElementOBJ;
+    }
+    class NativeIndexBuffer3D extends IndexBuffer3D {
+        _conchIndexBuffer3D: any;
+        /**
+         * 创建一个 <code>VertexBuffer3D</code> 实例。
+         * @param	byteLength 字节长度。
+         * @param	bufferUsage VertexBuffer3D用途类型。
+         * @param	canRead 是否可读。
+         */
+        constructor(indexType: IndexFormat, indexCount: number, bufferUsage?: BufferUsage, canRead?: boolean);
+    }
+    class NativeInstanceRenderElementOBJ extends NativeRenderElementOBJ {
+        private _updateData;
+        private _updateNums;
+        /**
+         * 增加UpdateBuffer
+         * @param vb
+         * @param length 每个instance属性的数据长度
+         */
+        addUpdateBuffer(vb: VertexBuffer3D, length: number): void;
+        /**
+         *
+         * @param index index of Buffer3D
+         * @param length length of array
+         */
+        getUpdateData(index: number, length: number): Float32Array;
+        constructor();
+        clear(): void;
+        init(): void;
+        set drawCount(drawCount: number);
+        get drawCount(): number;
+    }
+    class NativeRenderContext3DOBJ implements IRenderContext3D {
+        private _destTarget;
+        private _viewPort;
+        private _scissor;
+        private _confifShaderData;
+        private _cameraShaderData;
+        private _sceneShaderData;
+        private _globalShaderData;
+        private _nativeObj;
+        constructor();
+        end(): void;
+        drawRenderElement(renderelemt: NativeRenderElementOBJ): void;
+        /**设置IRenderContext */
+        applyContext(cameraUpdateMark: number): void;
+        set destTarget(destTarget: IRenderTarget);
+        get destTarget(): IRenderTarget;
+        set viewPort(viewPort: Viewport);
+        get viewPort(): Viewport;
+        set scissor(scissor: Vector4);
+        get scissor(): Vector4;
+        set invertY(invertY: boolean);
+        get invertY(): boolean;
+        set pipelineMode(pipelineMode: PipelineMode);
+        get pipelineMode(): PipelineMode;
+        get configShaderData(): ShaderData;
+        set configShaderData(value: ShaderData);
+        set globalShaderData(globalShaderData: ShaderData);
+        get globalShaderData(): ShaderData;
+        set sceneShaderData(sceneShaderData: ShaderData);
+        get sceneShaderData(): ShaderData;
+        set cameraShaderData(cameraShaderData: ShaderData);
+        get cameraShaderData(): ShaderData;
+        set sceneID(sceneID: number);
+        get sceneID(): number;
+        set cameraUpdateMark(cameraUpdateMark: number);
+        get cameraUpdateMark(): number;
+    }
+    enum RenderElementType {
+        Base = 0,
+        Skin = 1,
+        Instance = 2
+    }
+    class NativeRenderElementOBJ implements IRenderElement {
+        private geometry;
+        private materialShaderData;
+        private renderShaderData;
+        private transform;
+        private owner;
+        set _geometry(data: IRenderGeometryElement);
+        get _geometry(): IRenderGeometryElement;
+        set _materialShaderData(data: NativeShaderData);
+        get _materialShaderData(): NativeShaderData;
+        set _renderShaderData(data: NativeShaderData);
+        get _renderShaderData(): NativeShaderData;
+        set _transform(data: Transform3D);
+        get _transform(): Transform3D;
+        get _isRender(): boolean;
+        set _isRender(data: boolean);
+        get _invertFront(): boolean;
+        set _invertFront(data: boolean);
+        _nativeObj: any;
+        _shaderInstances: SingletonList<ShaderInstance>;
+        constructor();
+        init(): void;
+        _owner: IBaseRenderNode;
+        _addShaderInstance(shader: ShaderInstance): void;
+        _clearShaderInstance(): void;
+        /**
+         * render RenderElement
+         * @param renderqueue
+         */
+        _render(context: IRenderContext3D): void;
+        _destroy(): void;
+    }
+    class NativeRenderGeometryElementOBJ implements IRenderGeometryElement {
+        _nativeObj: any;
+        clearRenderParams(): void;
+        set bufferState(value: BufferState);
+        get bufferState(): BufferState;
+        set mode(value: MeshTopology);
+        get mode(): MeshTopology;
+        set drawType(value: DrawType);
+        get drawType(): DrawType;
+        set instanceCount(value: number);
+        get instanceCount(): number;
+        set indexFormat(value: IndexFormat);
+        get indexFormat(): IndexFormat;
+    }
+    class NativeSceneRenderManager implements ISceneRenderManager {
+        _customUpdateList: SingletonList<BaseRender>;
+        _customCullList: SingletonList<BaseRender>;
+        private _nativeObj;
+        constructor();
+        get list(): SingletonList<BaseRender>;
+        set list(value: SingletonList<BaseRender>);
+        addRenderObject(object: BaseRender): void;
+        removeRenderObject(object: BaseRender): void;
+        removeMotionObject(object: BaseRender): void;
+        updateMotionObjects(): void;
+        addMotionObject(object: BaseRender): void;
+        destroy(): void;
+    }
+    class NativeShadowCullInfo implements IShadowCullInfo {
+        private _position;
+        private _cullPlanes;
+        private _direction;
+        private _nativeObj;
+        private _cullSphere;
+        private _cullPlaneCount;
+        /**native Share Memory */
+        static MemoryBlock_size: number;
+        private nativeMemory;
+        private float64Array;
+        constructor();
+        set cullPlanes(cullPlanes: Plane[]);
+        get cullPlanes(): Plane[];
+        set cullSphere(cullSphere: BoundSphere);
+        get cullSphere(): BoundSphere;
+        set position(position: Vector3);
+        get position(): Vector3;
+        set direction(direction: Vector3);
+        get direction(): Vector3;
+        set cullPlaneCount(cullPlaneCount: number);
+        get cullPlaneCount(): number;
+    }
+    class NativeSkinRenderElementOBJ extends NativeRenderElementOBJ {
+        _skinnedData: Float32Array[];
+        constructor();
+        get skinnedData(): Float32Array[];
+        set skinnedData(data: Float32Array[]);
+        init(): void;
+    }
+    /**
+     * <code>Transform3D</code> 类用于实现3D变换。
+     */
+    class NativeTransform3D extends Transform3D {
+        static MemoryBlock_size: number;
+        /**native Share Memory */
+        private nativeMemory;
+        private float32Array;
+        private float64Array;
+        private int32Array;
+        private eventDispatcher;
+        _nativeObj: any;
+        /**
+         * 所属精灵。
+         */
+        get owner(): Sprite3D;
+        /**
+         * 局部位置X轴分量。
+         */
+        get localPositionX(): number;
+        set localPositionX(x: number);
+        /**
+         * 局部位置Y轴分量。
+         */
+        get localPositionY(): number;
+        set localPositionY(y: number);
+        /**
+         * 局部位置Z轴分量。
+         */
+        get localPositionZ(): number;
+        set localPositionZ(z: number);
+        /**
+         * 局部位置。
+         */
+        get localPosition(): Vector3;
+        set localPosition(value: Vector3);
+        /**
+         * 局部旋转四元数X分量。
+         */
+        get localRotationX(): number;
+        set localRotationX(x: number);
+        /**
+         * 局部旋转四元数Y分量。
+         */
+        get localRotationY(): number;
+        set localRotationY(y: number);
+        /**
+         * 局部旋转四元数Z分量。
+         */
+        get localRotationZ(): number;
+        set localRotationZ(z: number);
+        /**
+         * 局部旋转四元数W分量。
+         */
+        get localRotationW(): number;
+        set localRotationW(w: number);
+        /**
+         * 局部旋转。
+         */
+        get localRotation(): Quaternion;
+        set localRotation(value: Quaternion);
+        /**
+         * 局部缩放X。
+         */
+        get localScaleX(): number;
+        set localScaleX(value: number);
+        /**
+         * 局部缩放Y。
+         */
+        get localScaleY(): number;
+        set localScaleY(value: number);
+        /**
+         * 局部缩放Z。
+         */
+        get localScaleZ(): number;
+        set localScaleZ(value: number);
+        /**
+         * 局部缩放。
+         */
+        get localScale(): Vector3;
+        set localScale(value: Vector3);
+        /**
+         * 局部空间的X轴欧拉角。
+         */
+        get localRotationEulerX(): number;
+        set localRotationEulerX(value: number);
+        /**
+         * 局部空间的Y轴欧拉角。
+         */
+        get localRotationEulerY(): number;
+        set localRotationEulerY(value: number);
+        /**
+         * 局部空间的Z轴欧拉角。
+         */
+        get localRotationEulerZ(): number;
+        set localRotationEulerZ(value: number);
+        /**
+         * 局部空间欧拉角。
+         */
+        get localRotationEuler(): Vector3;
+        set localRotationEuler(value: Vector3);
+        /**
+         * 局部矩阵。
+         */
+        get localMatrix(): Matrix4x4;
+        set localMatrix(value: Matrix4x4);
+        /**
+         * 世界位置。
+         */
+        get position(): Vector3;
+        set position(value: Vector3);
+        /**
+         * 世界旋转。
+         */
+        get rotation(): Quaternion;
+        set rotation(value: Quaternion);
+        /**
+         * 世界空间的旋转角度，顺序为x、y、z。
+         */
+        get rotationEuler(): Vector3;
+        set rotationEuler(value: Vector3);
+        /**
+         * 世界矩阵。
+         */
+        get worldMatrix(): Matrix4x4;
+        set worldMatrix(value: Matrix4x4);
+        /**
+         * 创建一个 <code>Transform3D</code> 实例。
+         * @param owner 所属精灵。
+         */
+        constructor(owner: Sprite3D);
+        /**
+         * 平移变换。
+         * @param 	translation 移动距离。
+         * @param 	isLocal 是否局部空间。
+         */
+        translate(translation: Vector3, isLocal?: boolean): void;
+        /**
+         * 旋转变换。
+         * @param 	rotations 旋转幅度。
+         * @param 	isLocal 是否局部空间。
+         * @param 	isRadian 是否弧度制。
+         */
+        rotate(rotation: Vector3, isLocal?: boolean, isRadian?: boolean): void;
+        /**
+         * 获取向前方向。
+         * @param forward 前方向。
+         */
+        getForward(forward: Vector3): void;
+        /**
+         * 获取向上方向。
+         * @param up 上方向。
+         */
+        getUp(up: Vector3): void;
+        /**
+         * 获取向右方向。
+         * @param 右方向。
+         */
+        getRight(right: Vector3): void;
+        /**
+         * 观察目标位置。
+         * @param	target 观察目标。
+         * @param	up 向上向量。
+         * @param	isLocal 是否局部空间。
+         */
+        lookAt(target: Vector3, up: Vector3, isLocal?: boolean, isCamera?: boolean): void;
+        /**
+         * 对象朝向目标
+         * @param target
+         * @param up
+         * @param isLocal
+         */
+        objLookat(target: Vector3, up: Vector3, isLocal?: boolean): void;
+        /**
+         * 世界缩放。
+         * 某种条件下获取该值可能不正确（例如：父节点有缩放，子节点有旋转），缩放会倾斜，无法使用Vector3正确表示,必须使用Matrix3x3矩阵才能正确表示。
+         * @return	世界缩放。
+         */
+        getWorldLossyScale(): Vector3;
+        /**
+         * 设置世界缩放。
+         * 某种条件下设置该值可能不正确（例如：父节点有缩放，子节点有旋转），缩放会倾斜，无法使用Vector3正确表示,必须使用Matrix3x3矩阵才能正确表示。
+         * @return	世界缩放。
+         */
+        setWorldLossyScale(value: Vector3): void;
+        hasListener(type: string): boolean;
+        event(type: string, data?: any): boolean;
+        on(type: string, listener: Function): EventDispatcher;
+        on(type: string, caller: any, listener: Function, args?: any[]): EventDispatcher;
+        once(type: string, listener: Function): EventDispatcher;
+        once(type: string, caller: any, listener: Function, args?: any[]): EventDispatcher;
+        off(type: string, listener: Function): EventDispatcher;
+        off(type: string, caller: any, listener?: Function, args?: any[]): EventDispatcher;
+        offAll(type?: string): EventDispatcher;
+        offAllCaller(caller: any): EventDispatcher;
+    }
+    class NativeVertexBuffer3D extends VertexBuffer3D {
+        _conchVertexBuffer3D: any;
+        /**
+         * 获取顶点声明。
+         */
+        get vertexDeclaration(): VertexDeclaration | null;
+        set vertexDeclaration(value: VertexDeclaration | null);
+        serilizeVertexDeclaration(value: VertexDeclaration): Int32Array;
+        get instanceBuffer(): boolean;
+        set instanceBuffer(value: boolean);
+        /**
+         * 创建一个 <code>VertexBuffer3D</code> 实例。
+         * @param	byteLength 字节长度。
+         * @param	bufferUsage VertexBuffer3D用途类型。
+         * @param	canRead 是否可读。
+         */
+        constructor(byteLength: number, bufferUsage: BufferUsage, canRead?: boolean);
+    }
+    class BaseRenderNode implements IBaseRenderNode {
+        /**@interanl */
+        boundsChange: boolean;
+    }
+    class BaseRenderQueue implements IRenderQueue {
+        /** @interanl */
+        _isTransparent: boolean;
+        /**sort function*/
+        _sortPass: ISortPass;
+        /** context*/
+        _context: IRenderContext3D;
+        _batch: RenderElementBatch;
+        set sortPass(value: ISortPass);
+        constructor(isTransparent: boolean);
+        set context(value: RenderContext3D);
+        addRenderElement(renderelement: RenderElement): void;
+        clear(): void;
+        renderQueue(context: RenderContext3D): number;
+        private _batchQueue;
+        private _sort;
+        destroy(): void;
+    }
+    /**
+     * camera裁剪数据
+     */
+    class CameraCullInfo implements ICameraCullInfo {
+        /**位置 */
+        position: Vector3;
+        /**是否遮挡剔除 */
+        useOcclusionCulling: Boolean;
+        /**锥体包围盒 */
+        boundFrustum: BoundFrustum;
+        /**遮挡标记 */
+        cullingMask: number;
+        /**静态标记 */
+        staticMask: number;
+    }
+    class CullPassBase implements ICullPass {
+        protected _cullList: FastSinglelist<BaseRender>;
+        get cullList(): FastSinglelist<BaseRender>;
+        /**
+         * TODO
+         * 视距与包围提裁剪
+         * @param context
+         * @param render
+         * @returns
+         */
+        static cullDistanceVolume(context: RenderContext3D, render: BaseRender): boolean;
+        cullByCameraCullInfo(cameraCullInfo: ICameraCullInfo, renderManager: ISceneRenderManager): void;
+        cullByShadowCullInfo(cullInfo: IShadowCullInfo, renderManager: ISceneRenderManager): void;
+        cullingSpotShadow(cameraCullInfo: ICameraCullInfo, renderManager: ISceneRenderManager): void;
+    }
+    class InstanceRenderElementOBJ extends RenderElementOBJ {
+        private _updateData;
+        private _updateDataNum;
+        drawCount: number;
+        updateNums: number;
+        /**
+         * 增加UpdateBuffer
+         * @param vb
+         * @param length 每个instance属性的数据长度
+         */
+        addUpdateBuffer(vb: VertexBuffer3D, length: number): void;
+        /**
+         *
+         * @param index index of Buffer3D
+         * @param length length of array
+         */
+        getUpdateData(index: number, length: number): Float32Array;
+        constructor();
+        /**
+         * draw geometry
+         * @param shaderIns
+         */
+        drawGeometry(shaderIns: ShaderInstance): void;
+        clear(): void;
+    }
+    class QuickSort implements ISortPass {
+        private elementArray;
+        private isTransparent;
+        /**
+         * 快速排序
+         * @param elements
+         * @param isTransparent
+         * @param left
+         * @param right
+         */
+        sort(elements: SingletonList<RenderElement>, isTransparent: boolean, left: number, right: number): void;
+    }
+    class RenderContext3DOBJ implements IRenderContext3D {
+        destTarget: IRenderTarget;
+        viewPort: Viewport;
+        scissor: Vector4;
+        invertY: boolean;
+        pipelineMode: PipelineMode;
+        configShaderData: ShaderData;
+        cameraShaderData: ShaderData;
+        sceneID: number;
+        sceneShaderData: ShaderData;
+        cameraUpdateMark: number;
+        globalShaderData: ShaderData;
+        constructor();
+        end(): void;
+        /**设置IRenderContext */
+        applyContext(cameraUpdateMark: number): void;
+        drawRenderElement(renderelemt: RenderElementOBJ): void;
+    }
+    class RenderElementOBJ implements IRenderElement {
+        _geometry: IRenderGeometryElement;
+        _shaderInstances: SingletonList<ShaderInstance>;
+        _materialShaderData: ShaderData;
+        _renderShaderData: ShaderData;
+        _transform: Transform3D;
+        _isRender: boolean;
+        _owner: IBaseRenderNode;
+        _invertFront: boolean;
+        constructor();
+        _addShaderInstance(shader: ShaderInstance): void;
+        _clearShaderInstance(): void;
+        /**
+         * render RenderElement
+         * @param renderqueue
+         */
+        _render(context: IRenderContext3D): void;
+        drawGeometry(shaderIns: ShaderInstance): void;
+        _destroy(): void;
+    }
+    class RenderGeometryElementOBJ implements IRenderGeometryElement {
+        /**
+         * index format
+         */
+        get indexFormat(): IndexFormat;
+        set indexFormat(value: IndexFormat);
+        /**
+         * Mesh Topology mode
+         */
+        get mode(): MeshTopology;
+        set mode(value: MeshTopology);
+    }
+    class SceneRenderManagerOBJ implements ISceneRenderManager {
+        _motionRenders: SingletonList<BaseRender>;
+        constructor();
+        get list(): SingletonList<BaseRender>;
+        set list(value: SingletonList<BaseRender>);
+        addRenderObject(object: BaseRender): void;
+        removeRenderObject(object: BaseRender): void;
+        removeMotionObject(object: BaseRender): void;
+        updateMotionObjects(): void;
+        addMotionObject(object: BaseRender): void;
+        destroy(): void;
+    }
+    class ShadowCullInfo implements IShadowCullInfo {
+        position: Vector3;
+        cullPlanes: Plane[];
+        cullSphere: BoundSphere;
+        cullPlaneCount: number;
+        direction: Vector3;
+    }
+    class SkinRenderElementOBJ extends RenderElementOBJ {
+        skinnedData: Float32Array[];
+        constructor();
+        /** 更新数据并且 */
+        drawGeometry(shaderIns: ShaderInstance): void;
+    }
+    class WebGLRenderEngine3DFactory implements IRenderEngine3DOBJFactory {
+        createTransform(owner: Sprite3D): Transform3D;
+        createBounds(min: Vector3, max: Vector3): any;
+        createRenderElement(): IRenderElement;
+        createSkinRenderElement(): IRenderElement;
+        createInstanceRenderElement(): InstanceRenderElementOBJ;
+        createBaseRenderQueue(isTransparent: boolean): IRenderQueue;
+        createVertexBuffer3D(byteLength: number, bufferUsage: BufferUsage, canRead?: boolean): VertexBuffer3D;
+        createIndexBuffer3D(indexType: IndexFormat, indexCount: number, bufferUsage?: BufferUsage, canRead?: boolean): IndexBuffer3D;
+        createSceneRenderManager(): ISceneRenderManager;
+        createCullPass(): ICullPass;
+        createSortPass(): ISortPass;
+        createShadowCullInfo(): IShadowCullInfo;
+        createCameraCullInfo(): ICameraCullInfo;
+        createRenderGeometry(mode: MeshTopology, drayType: DrawType): IRenderGeometryElement;
+        createBaseRenderNode(): IBaseRenderNode;
+        createRenderContext3D(): IRenderContext3D;
     }
     /**
      * <code>Mesh</code> 类用于创建文件网格数据模板。
      */
     class Mesh extends Resource implements IClone {
+        static MESH_INSTANCEBUFFER_TYPE_NORMAL: number;
+        static MESH_INSTANCEBUFFER_TYPE_SIMPLEANIMATOR: number;
         /**@interanl */
         _triangleMesh: any;
         /**
@@ -12261,9 +13447,6 @@ declare module Laya {
          * @param complete 完成回调。
          */
         static load(url: string, complete: Handler): void;
-        /**
-         * 变形目标数据
-         */
         morphTargetData: MorphTargetData;
         /**
          * 网格的全局默认绑定动作逆矩阵。
@@ -12275,32 +13458,23 @@ declare module Laya {
         get vertexCount(): number;
         /**
          * 获取索引个数。
-         * @returns 索引个数
          */
         get indexCount(): number;
         /**
          * SubMesh的个数。
-         * @returns SubMesh的个数
          */
         get subMeshCount(): number;
         /**
          * 边界。
-         * @returns 边界
          */
         get bounds(): Bounds;
-        /**
-         * 设置边界
-         * @param 边界
-         */
         set bounds(value: Bounds);
         /**
          * 索引格式。
-         * @returns 索引格式
          */
         get indexFormat(): IndexFormat;
         /**
          * 设置indexformat
-         * @param 索引格式
          */
         set indexFormat(value: IndexFormat);
         /**
@@ -12308,6 +13482,11 @@ declare module Laya {
          * @param isReadable 是否可读。
          */
         constructor(isReadable?: boolean);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _disposeResource(): void;
         /**
          * 根据获取子网格。
          * @param index 索引。
@@ -12423,7 +13602,6 @@ declare module Laya {
         calculateBounds(): void;
         /**
          * 获得Corve模型
-         * @returns Corve模型
          */
         getCorveMesh(): Mesh;
         /**
@@ -12572,8 +13750,9 @@ declare module Laya {
      */
     class SkyRenderer {
         private _renderData;
-        private _renderGeometry;
-        private _cacheRenderElement;
+        static SUNLIGHTDIRECTION: number;
+        static SUNLIGHTDIRCOLOR: number;
+        static __init__(): void;
         /**
          * 材质。
          */
@@ -12588,11 +13767,6 @@ declare module Laya {
          * 创建一个新的 <code>SkyRenderer</code> 实例。
          */
         constructor();
-        /**
-         * 设置天空盒渲染元素
-         * @param skyRenderElement
-         */
-        setRenderElement(skyRenderElement: SkyRenderElement): void;
     }
     /**
      * <code>SubMesh</code> 类用于创建子网格数据模板。
@@ -12702,49 +13876,6 @@ declare module Laya {
         SpotLight = 1,
         /**点光 */
         PointLight = 2
-    }
-    /**
-     * camera裁剪数据
-     */
-    class CameraCullInfo {
-        /**位置 */
-        position: Vector3;
-        /**是否遮挡剔除 */
-        useOcclusionCulling: Boolean;
-        /**锥体包围盒 */
-        boundFrustum: BoundFrustum;
-        /**遮挡标记 */
-        cullingMask: number;
-        /**静态标记 */
-        staticMask: number;
-        constructor();
-    }
-    /**
-     * 阴影裁剪信息
-     */
-    class ShadowCullInfo {
-        position: Vector3;
-        direction: Vector3;
-        cullPlanes: Plane[];
-        cullSphere: BoundSphere;
-        cullPlaneCount: number;
-    }
-    /**
-     * 聚光灯阴影数据
-     */
-    class ShadowSpotData {
-        cameraShaderValue: ShaderData;
-        position: Vector3;
-        offsetX: number;
-        offsetY: number;
-        resolution: number;
-        viewMatrix: Matrix4x4;
-        projectionMatrix: Matrix4x4;
-        viewProjectMatrix: Matrix4x4;
-        cameraCullInfo: CameraCullInfo;
-        cameraUBO: UniformBufferObject;
-        cameraUBData: UnifromBufferData;
-        constructor();
     }
     /**
      * <code>TextMesh</code> 类用于创建文本网格。
@@ -13036,18 +14167,11 @@ declare module Laya {
         static _getNodeByHierarchyPath(rootSprite: Node, invPath: number[]): Node;
         static _getParentNodeByHierarchyPath(rootSprite: Node, path: number[]): Node;
         /**
-         * @deprecated 请使用uint8ArrayToArrayBufferAsync函数代替
          * 将RenderTexture转换为Base64
          * @param rendertexture 渲染Buffer
          * @returns
          */
         static uint8ArrayToArrayBuffer(rendertexture: RenderTexture): String;
-        /**
-         * 将RenderTexture转换为Base64
-         * @param rendertexture
-         * @returns
-         */
-        static uint8ArrayToArrayBufferAsync(rendertexture: RenderTexture): Promise<String>;
     }
     /**
      * @author miner
@@ -13076,7 +14200,7 @@ declare module Laya {
          * @param shader
          * @param replacementTag
          */
-        render(): void;
+        render(shader?: Shader3D, replacementTag?: string): void;
         /**
          * null function
          */
@@ -13943,21 +15067,16 @@ declare module Laya {
          * <p>使用loadImages(...)、loadAtlas(...)、loadAnimation(...)、set source方法可以创建动画模版。使用play(...)可以播放指定动画。</p>
          */
         static framesMap: any;
+        /**@private */
+        protected _frames: any[];
         private _source;
         private _autoPlay;
-        /**
-         * 当前正在使用的atlas资源
-         */
-        private _atlasCatch;
         /**
          * 创建一个新的 <code>Animation</code> 实例。
          */
         constructor();
-        /**
-         * 销毁
-         * @param 是否销毁子节点
-         * @inheritDoc
-         * @override
+        /** @inheritDoc
+         *  @override
          */
         destroy(destroyChild?: boolean): void;
         /**
@@ -13971,7 +15090,17 @@ declare module Laya {
          */
         play(start?: any, loop?: boolean, name?: string): void;
         /**@private */
+        protected _setFramesFromCache(name: string, showWarn?: boolean): boolean;
+        /**@private */
         private _copyLabels;
+        /**@private
+        *  @override
+        */
+        protected _frameLoop(): void;
+        /**@private
+         * @override
+        */
+        protected _displayToIndex(value: number): void;
         /**
          * 当前动画的帧图像数组。本类中，每个帧图像是一个Graphics对象，而动画播放就是定时切换Graphics对象的过程。
          */
@@ -14163,23 +15292,16 @@ declare module Laya {
      * @see http://ldc2.layabox.com/doc/?nav=ch-js-1-2-5
      */
     class BitmapFont extends Resource {
-        /**位图字体纹理 */
         texture: Texture;
-        /**位图字体键值对映射 */
         dict: Record<string, BMGlyph>;
-        /**字体边距 */
         padding: any[];
         /**当前位图字体字号，使用时，如果字号和设置不同，并且autoScaleSize=true，则按照设置字号比率进行缩放显示。*/
         fontSize: number;
         /**表示是否根据实际使用的字体大小缩放位图字体大小。*/
         autoScaleSize: boolean;
-        /**是否是字体 */
         tint: boolean;
-        /**最大宽度 */
         maxWidth: number;
-        /**行高 */
         lineHeight: number;
-        /**字符间隔 */
         letterSpacing: number;
         /**
          * 通过指定位图字体文件路径，加载位图字体文件，加载完成后会自动解析。
@@ -14195,20 +15317,21 @@ declare module Laya {
          */
         parseFont(xml: XML, texture: Texture): void;
         /**
+         * 销毁位图字体，调用Text.unregisterBitmapFont 时，默认会销毁。
+         */
+        protected _disposeResource(): void;
+        /**
          * 获取指定文本内容的宽度。
          * @param	text 文本内容。
-         * @param   fontSize 字体大小
          * @return  宽度。
          */
         getTextWidth(text: string, fontSize?: number): number;
         /**
          * 获取最大字符宽度。
-         * @param fontSize 字体大小
          */
         getMaxWidth(fontSize?: number): number;
         /**
          * 获取最大字符高度。
-         * @param fontSize 字体大小
          */
         getMaxHeight(fontSize?: number): number;
     }
@@ -14223,7 +15346,7 @@ declare module Laya {
     /**
      * 透明命令
      */
-    class AlphaCmd implements IGraphicCMD {
+    class AlphaCmd {
         static ID: string;
         /**
          * 透明度
@@ -14243,7 +15366,7 @@ declare module Laya {
     /**
      * 裁剪命令
      */
-    class ClipRectCmd implements IGraphicCMD {
+    class ClipRectCmd {
         static ID: string;
         /**
          * X 轴偏移量。
@@ -14275,8 +15398,7 @@ declare module Laya {
     /**
      * 绘制圆形
      */
-    class DrawCircleCmd implements IGraphicCMD {
-        /**CMD标识符 */
+    class DrawCircleCmd {
         static ID: string;
         /**
          * 圆点X 轴位置。
@@ -14306,21 +15428,16 @@ declare module Laya {
          * 位置和大小是否是百分比
          */
         percent: boolean;
-        /**@private 创建绘制圆形CMD*/
+        /**@private */
         static create(x: number, y: number, radius: number, fillColor: any, lineColor: any, lineWidth: number): DrawCircleCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行cmd*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取CMD标识符*/
+        /**@private */
         get cmdID(): string;
-        /**
-         * 获取包围盒的顶点数据
-         * @param sp 绘制cmd的精灵
-         * @returns
-         */
         getBoundPoints(sp?: {
             width: number;
             height?: number;
@@ -14329,7 +15446,7 @@ declare module Laya {
     /**
      * 绘制曲线
      */
-    class DrawCurvesCmd implements IGraphicCMD {
+    class DrawCurvesCmd {
         static ID: string;
         /**
          * 开始绘制的 X 轴位置。
@@ -14366,8 +15483,7 @@ declare module Laya {
             height?: number;
         }): number[];
     }
-    class DrawEllipseCmd implements IGraphicCMD {
-        /**绘制椭圆CMD的标识符 */
+    class DrawEllipseCmd {
         static ID: string;
         /**
          * 圆点X 轴位置。
@@ -14401,75 +15517,25 @@ declare module Laya {
          * 位置和大小是否是百分比
          */
         percent: boolean;
-        /**@private 创建绘制椭圆CMD*/
+        /**@private */
         static create(x: number, y: number, width: number, height: number, fillColor: any, lineColor: any, lineWidth: number, percent?: boolean): DrawEllipseCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行cmd*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取CMD的标识符*/
+        /**@private */
         get cmdID(): string;
-        /**
-         * 获取包围盒的顶点数据
-         * @param sp 绘制cmd的精灵
-         * @returns
-         */
         getBoundPoints(sp?: {
             width: number;
             height?: number;
         }): number[];
     }
-    class DrawGeoCmd implements IGraphicCMD {
-        static ID: string;
-        geo: IRenderGeometryElement;
-        material: Material;
-        /**@private */
-        static create(geo: IRenderGeometryElement, material: Material): DrawGeoCmd;
-        static creatGEO(decl: VertexDeclaration, vbArray: Float32Array, vblen: number, ibArray: Uint16Array, iblen: number): IRenderGeometryElement;
-        init(geo: IRenderGeometryElement, material: Material): void;
-        /**
-         * 回收到对象池
-         */
-        recover(): void;
-        /**@private */
-        run(context: Context, gx: number, gy: number): void;
-        /**@private */
-        get cmdID(): string;
-    }
-    class DrawGeosCmd implements IGraphicCMD {
-        static ID: string;
-        geo: IRenderGeometryElement;
-        elements: [
-            Material,
-            number,
-            number
-        ][];
-        /**@private */
-        static create(geo: IRenderGeometryElement, elements: [
-            Material,
-            number,
-            number
-        ][]): DrawGeosCmd;
-        init(geo: IRenderGeometryElement, elements: [
-            Material,
-            number,
-            number
-        ][]): void;
-        /**
-         * 回收到对象池
-         */
-        recover(): void;
-        /**@private */
-        run(context: Context, gx: number, gy: number): void;
-        /**@private */
-        get cmdID(): string;
-    }
     /**
      * 绘制图片
      */
-    class DrawImageCmd implements IGraphicCMD {
+    class DrawImageCmd {
         static ID: string;
         /**
          * 纹理。
@@ -14507,8 +15573,7 @@ declare module Laya {
     /**
      * 绘制单条曲线
      */
-    class DrawLineCmd implements IGraphicCMD {
-        /**绘制单条曲线标识符 */
+    class DrawLineCmd {
         static ID: string;
         /**
          * X轴开始位置。
@@ -14538,21 +15603,16 @@ declare module Laya {
          * 位置是否是百分比
          */
         percent: boolean;
-        /**@private 创建绘制单条曲线CMD*/
+        /**@private */
         static create(fromX: number, fromY: number, toX: number, toY: number, lineColor: string, lineWidth: number): DrawLineCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行绘制单条曲线cmd*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取绘制单条曲线的标识符*/
+        /**@private */
         get cmdID(): string;
-        /**
-         * 获取包围盒顶点数据
-         * @param sp 绘制cmd的精灵
-         * @returns
-         */
         getBoundPoints(sp?: {
             width: number;
             height?: number;
@@ -14561,8 +15621,7 @@ declare module Laya {
     /**
      * 绘制连续曲线
      */
-    class DrawLinesCmd implements IGraphicCMD {
-        /**绘制连续曲线的标识符 */
+    class DrawLinesCmd {
         static ID: string;
         /**
          * 开始绘制的X轴位置。
@@ -14584,15 +15643,33 @@ declare module Laya {
          * （可选）线段宽度。
          */
         lineWidth: number;
-        /**@private 创建绘制连续曲线的CMD*/
+        /**@private */
         static create(x: number, y: number, points: any[], lineColor: any, lineWidth: number): DrawLinesCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行绘制连续曲线cmd*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取绘制连续曲线CMD的标识符*/
+        /**@private */
+        get cmdID(): string;
+    }
+    /**
+     * 绘制粒子
+     * @private
+     */
+    class DrawParticleCmd {
+        static ID: string;
+        private _templ;
+        /**@private */
+        static create(_temp: any): DrawParticleCmd;
+        /**
+         * 回收到对象池
+         */
+        recover(): void;
+        /**@private */
+        run(context: Context, gx: number, gy: number): void;
+        /**@private */
         get cmdID(): string;
     }
     /**
@@ -14695,7 +15772,6 @@ declare module Laya {
      * 绘制多边形
      */
     class DrawPolyCmd {
-        /**绘制多边形CMD的标识符 */
         static ID: string;
         /**
          * 开始绘制的 X 轴位置。
@@ -14721,22 +15797,21 @@ declare module Laya {
          * 可选）边框宽度。
          */
         lineWidth: number;
-        /**@private 创建绘制多边形CMD*/
+        /**@private */
         static create(x: number, y: number, points: any[], fillColor: any, lineColor: any, lineWidth: number): DrawPolyCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行绘制多边形CMD*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取绘制多边形CMD的标识符*/
+        /**@private */
         get cmdID(): string;
     }
     /**
      * 绘制矩形
      */
     class DrawRectCmd {
-        /**绘制矩形CMD的标识符 */
         static ID: string;
         /**
          * 开始绘制的 X 轴位置。
@@ -14770,28 +15845,22 @@ declare module Laya {
          * 位置和大小是否是百分比
          */
         percent: boolean;
-        /**@private 创建绘制矩形的CMD*/
+        /**@private */
         static create(x: number, y: number, width: number, height: number, fillColor: any, lineColor: any, lineWidth: number, percent?: boolean): DrawRectCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行绘制矩形CMD*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取绘制矩形CMD的标识符*/
+        /**@private */
         get cmdID(): string;
-        /**
-         * 获取包围盒的顶点数据
-         * @param sp 绘制cmd的精灵
-         * @returns
-         */
         getBoundPoints(sp?: {
             width: number;
             height?: number;
         }): number[];
     }
     class DrawRoundRectCmd {
-        /**绘制圆角矩形的标识符 */
         static ID: string;
         /**
          * 圆点X 轴位置。
@@ -14841,21 +15910,16 @@ declare module Laya {
          * 位置和大小是否是百分比
          */
         percent: boolean;
-        /**@private 创建绘制圆角矩形CMD*/
+        /**@private */
         static create(x: number, y: number, width: number, height: number, lt: number, rt: number, lb: number, rb: number, fillColor: any, lineColor: any, lineWidth: number, percent?: boolean): DrawRoundRectCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行绘制圆角矩形CMD*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取绘制圆角矩形CMD的标识符*/
+        /**@private */
         get cmdID(): string;
-        /**
-         * 获取包围盒的顶点数据
-         * @param sp 绘制cmd的精灵
-         * @returns
-         */
         getBoundPoints(sp?: {
             width: number;
             height?: number;
@@ -15004,7 +16068,6 @@ declare module Laya {
      * 绘制文字
      */
     class FillTextCmd {
-        /**绘制文字CMD的标识符 */
         static ID: string;
         /**
          * 开始绘制文本的 x 坐标位置（相对于画布）。
@@ -15022,46 +16085,22 @@ declare module Laya {
         private _stroke;
         private _align;
         private _fontObj;
-        /**
-         * 文本内容
-         */
         set text(value: string);
         get text(): string;
-        /**
-         * 描边颜色
-         */
         set strokeColor(value: string);
         get strokeColor(): string;
-        /**
-         * 描边宽度
-         */
         set stroke(value: number);
         get stroke(): number;
-        /**
-         * 对齐方式
-         */
         set align(value: number);
         get align(): number;
-        /**
-         * 创建绘制文本的CMD
-         * @param text 文本内容
-         * @param x x位置
-         * @param y y位置
-         * @param font 字体
-         * @param color 文本颜色
-         * @param align 对齐方式
-         * @param stroke 描边宽度
-         * @param strokeColor 描边颜色
-         * @returns
-         */
         static create(text: string | WordText | null, x: number, y: number, font: string, color: string | null, align: string, stroke: number, strokeColor: string | null): FillTextCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行绘制文本CMD*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取绘制文本CMD的标识符*/
+        /**@private */
         get cmdID(): string;
         /**
          * 定义字号和字体，比如"20px Arial"。
@@ -15078,7 +16117,6 @@ declare module Laya {
      * 填充贴图
      */
     class FillTextureCmd {
-        /**绘制填充纹理CMD的标识符 */
         static ID: string;
         /**
          * 纹理。
@@ -15114,21 +16152,16 @@ declare module Laya {
         percent: boolean;
         /** （可选）绘图颜色 */
         color: number;
-        /**@private 创建绘制填充贴图的CMD*/
+        /**@private */
         static create(texture: Texture, x: number, y: number, width: number, height: number, type: string, offset: Point, color: string): FillTextureCmd;
         /**
          * 回收到对象池
          */
         recover(): void;
-        /**@private 执行绘制填充贴图CMD*/
+        /**@private */
         run(context: Context, gx: number, gy: number): void;
-        /**@private 获取绘制填充贴图CMD标识符*/
+        /**@private */
         get cmdID(): string;
-        /**
-         * 获取包围盒的顶点数据
-         * @param sp 绘制cmd的精灵
-         * @returns
-         */
         getBoundPoints(sp?: {
             width: number;
             height?: number;
@@ -15337,12 +16370,17 @@ declare module Laya {
         bold: boolean;
         /**
          * 表示使用此文本格式的文本是否为斜体。
+         * @default false
          */
         italic: boolean;
         /**是否显示下划线*/
         underline: boolean;
         /**下划线颜色*/
         underlineColor: string;
+        /**是否显示删除线 */
+        strikethrough: boolean;
+        /** 删除线颜色 */
+        strikethroughColor: string;
         /**
          * <p>表示使用此文本格式的文本段落的水平对齐方式。</p>
          * @default  "left"
@@ -15372,7 +16410,6 @@ declare module Laya {
          * @default "#000000";
          */
         strokeColor: string;
-        strikethrough: boolean;
         constructor();
     }
     /**
@@ -15561,10 +16598,6 @@ declare module Laya {
          * @param uniformtype
          */
         static add2DGlobalUniformData(propertyID: number, propertyKey: string, uniformtype: ShaderDataType): void;
-        /**
-         * get global shaderData
-         */
-        static get globalShaderData(): import("../RenderDriver/DriverDesign/RenderDevice/ShaderData").ShaderData;
         /**@private */
         private _cmds;
         /**@private */
@@ -15589,8 +16622,8 @@ declare module Laya {
         /**
          * 命令流。存储了所有绘制命令。
          */
-        get cmds(): IGraphicCMD[];
-        set cmds(value: IGraphicCMD[]);
+        get cmds(): any[];
+        set cmds(value: any[]);
         /**
          * 保存到命令流。
          */
@@ -15647,25 +16680,13 @@ declare module Laya {
          */
         drawTextures(texture: Texture, pos: any[], colors?: number[]): DrawTexturesCmd | null;
         /**
-         *
-         * @param geo
-         * @param material
-         * @returns
-         */
-        drawGeo(geo: IRenderGeometryElement, material: Material): any;
-        drawGeos(geo: IRenderGeometryElement, elements: [
-            Material,
-            number,
-            number
-        ][]): any;
-        /**
          * 绘制一组三角形
          * @param texture	纹理。
          * @param x			X轴偏移量。
          * @param y			Y轴偏移量。
          * @param vertices  顶点数组。
          * @param indices	顶点索引。
-         * @param uvData	UV数据。注意这里的uv是直接使用的，如果texture是图集中的资源，这里的uv也是图集中的，即不需要转换直接用。
+         * @param uvData	UV数据。
          * @param matrix	缩放矩阵。
          * @param alpha		alpha
          * @param color		颜色变换
@@ -16134,435 +17155,352 @@ declare module Laya {
         set type(value: string);
     }
     /**
-     * @en The `Node` class is the base class for all objects that can be placed in the display list.
-     * The display list manages all objects displayed in the runtime of Laya.
-     * Use the Node class to arrange the display list. A Node object can have child display objects.
-     * @zh `Node` 类是可放在显示列表中的所有对象的基类。
-     * 该显示列表管理 Laya 运行时中显示的所有对象。使用 Node 类排列显示列表中的显示对象。Node 对象可以有子显示对象。
+     * 添加到父对象后调度。
+     * @eventType Event.ADDED
+     */
+    /**
+     * 被父对象移除后调度。
+     * @eventType Event.REMOVED
+     */
+    /**
+     * 加入节点树时调度。
+     * @eventType Event.DISPLAY
+     */
+    /**
+     * 从节点树移除时调度。
+     * @eventType Event.UNDISPLAY
+     */
+    /**
+     *  <code>Node</code> 类是可放在显示列表中的所有对象的基类。该显示列表管理 Laya 运行时中显示的所有对象。使用 Node 类排列显示列表中的显示对象。Node 对象可以有子显示对象。
      */
     class Node extends EventDispatcher {
+        static EVENT_SET_ACTIVESCENE: string;
+        static EVENT_SET_IN_ACTIVESCENE: string;
         /**@private */
         private _bits;
         /**@private */
         private _hideFlags;
-        /**
-         * @en Node name.
-         * @zh 节点名称。
-         */
+        _url: string;
+        _extra: INodeExtra;
+        /**节点名称。*/
         name: string;
-        /**
-         * @en Node tag.
-         * @zh 节点标签。
-         */
+        /** 节点标签 */
         tag: string;
         /**
-         * @en The URL of the resource.
-         * @zh 资源的URL。
+         * 如果节点从资源中创建，这里记录是他的url
          */
         get url(): string;
-        set url(path: string);
         /**
-         * @en Hide flags.
-         * @zh 隐藏标志。
+         * 设置资源的URL
          */
+        set url(path: string);
         get hideFlags(): number;
         set hideFlags(value: number);
-        /**
-         * @en Whether it is a 3D node, i.e., Scene3D, Sprite3D and their derived classes.
-         * @zh 是否是3D节点，即Scene3D、Sprite3D及其衍生类。
-         */
+        /** 是否3D节点，即Scene3D和Sprite3D及其衍生类 */
         get is3D(): boolean;
-        /**
-         * @en Whether it has been destroyed. The object cannot be used after being destroyed.
-         * @zh 是否已经销毁。对象销毁后不能再使用。
-         */
+        /** 是否已经销毁。对象销毁后不能再使用。*/
         get destroyed(): boolean;
         constructor();
-        /**
-         * @private
-         * @en Update the display status of the node in the stage.
-         * This method checks the node's hierarchy to determine if it or any of its parents are displayed in the stage,
-         * and updates the DISPLAYED_INSTAGE flag accordingly.
-         * @zh 更新节点在舞台中的显示状态。
-         * 此方法检查节点的层次结构，以确定它或其任何父节点是否显示在舞台中，并相应地更新 DISPLAYED_INSTAGE 标志。
-         */
-        private _updateDisplayedInstage;
-        /**
-         * @en Bubble an event up the parent chain.
-         * @param type The event type.
-         * @param data The event data. If not provided, a new Event object will be created.
-         * @zh 事件冒泡到父节点链。
-         * @param type 事件类型。
-         * @param data 事件数据。如果未提供,将创建一个新的Event对象。
-         */
+        _setBit(type: number, value: boolean): void;
+        _getBit(type: number): boolean;
+        protected onStartListeningToType(type: string): void;
         bubbleEvent(type: string, data?: any): void;
-        /**
-         * @en Check whether the node has a specific hide flag.
-         * @param flag The hide flag to check.
-         * @returns Whether the node has the specified hide flag.
-         * @zh 检查节点是否具有特定的隐藏标志。
-         * @param flag 要检查的隐藏标志。
-         * @returns 节点是否具有指定的隐藏标志。
-         */
         hasHideFlag(flag: number): boolean;
         /**
-         * @en Destroy this node. When a node is destroyed, it will be removed from its parent node and the references will be cleared, waiting for the garbage collector to recycle it.
-         * When destroying a node, its own event listeners, timer listeners, child objects will be removed, and it will be removed from its parent node.
-         * @param destroyChild Whether to destroy child nodes as well. If true, all child nodes will be destroyed recursively; otherwise, they will only be removed from the parent.
-         * @zh 销毁此节点。destroy对象默认会把自己从父节点移除,并且清理自身引用关系,等待js自动垃圾回收机制回收。destroy后不能再使用。
-         * destroy时会移除自身的事情监听,自身的timer监听,移除子对象及从父节点移除自己。
-         * @param destroyChild 是否同时销毁子节点,若值为true,则销毁子节点,否则不销毁子节点。
+         * <p>销毁此对象。destroy对象默认会把自己从父节点移除，并且清理自身引用关系，等待js自动垃圾回收机制回收。destroy后不能再使用。</p>
+         * <p>destroy时会移除自身的事情监听，自身的timer监听，移除子对象及从父节点移除自己。</p>
+         * @param destroyChild	（可选）是否同时销毁子节点，若值为true,则销毁子节点，否则不销毁子节点。
          */
         destroy(destroyChild?: boolean): void;
         /**
-        * @en The callback function when the node is destroyed. This is a virtual method. You can override it for custom logic when the node is about to be destroyed.
-        * @zh 节点被销毁时执行的回调函数。此方法为虚方法，使用时重写覆盖即可。
-        */
+         * 销毁时执行
+         * 此方法为虚方法，使用时重写覆盖即可
+         */
         onDestroy(): void;
         /**
-         * @en Destroy all child nodes, without destroying the node itself.
-         * @zh 销毁所有子节点,但不销毁节点本身。
+         * 销毁所有子对象，不销毁自己本身。
          */
         destroyChildren(): void;
         /**
-         * @en Add a child node.
-         * @param node The node to be added as a child.
-         * @returns The added child node.
-         * @zh 添加子节点。
-         * @param node 节点对象。
-         * @returns 返回添加的节点。
+         * 添加子节点。
+         * @param	node 节点对象
+         * @return	返回添加的节点
          */
         addChild<T extends Node>(node: T): T;
         /**
-         * @en Add multiple child nodes.
-         * @param ...args A variable number of child nodes to be added.
-         * @zh 批量增加子节点。
-         * @param ...args 无数子节点。
+         * 批量增加子节点
+         * @param	...args 无数子节点。
          */
         addChildren(...args: any[]): void;
         /**
-         * @en Insert a child node at a specific index.
-         * @param node The child node to be inserted.
-         * @param index The index at which the child node will be inserted.
-         * @returns The inserted child node.
-         * @zh 在指定的索引位置插入子节点。
-         * @param node 节点对象。
-         * @param index 索引位置。
-         * @returns 返回添加的节点。
+         * 添加子节点到指定的索引位置。
+         * @param	node 节点对象。
+         * @param	index 索引位置。
+         * @return	返回添加的节点。
          */
         addChildAt(node: Node, index: number): Node;
         /**
-         * @en Get the index of a child node.
-         * @param node The child node to query.
-         * @returns The index of the child node.
-         * @zh 获取子节点的索引位置。
-         * @param node 子节点。c
-         * @returns 子节点所在的索引位置。
+         * 根据子节点对象，获取子节点的索引位置。
+         * @param	node 子节点。
+         * @return	子节点所在的索引位置。
          */
         getChildIndex(node: Node): number;
         /**
-        * @en Get a child node by its name.
-        * @param name The name of the child node.
-        * @returns The child node with the specified name, or null if not found.
-        * @zh 根据子节点的名字获取子节点对象。
-        * @param name 子节点的名字。
-        * @returns 节点对象。
-        */
+         * 根据子节点的名字，获取子节点对象。
+         * @param	name 子节点的名字。
+         * @return	节点对象。
+         */
         getChildByName(name: string): Node;
         /**
-         * @en Get a child node by its index.
-         * @param index The index of the child node.
-         * @returns The child node at the specified index, or null if the index is out of range.
-         * @zh 根据子节点的索引位置获取子节点对象。
-         * @param index 索引位置。
-         * @returns 指定索引处的子节点，如果索引超出范围，则为空。
+         * 根据子节点的索引位置，获取子节点对象。
+         * @param	index 索引位置
+         * @return	子节点
          */
         getChildAt(index: number): Node;
         /**
-         * @en Set the index of a child node.
-         * @param node The child node to set the index for.
-         * @param index The new index of the child node.
-         * @returns The child node itself.
-         * @zh 设置子节点的索引位置。
-         * @param node 子节点。
-         * @param index 新的索引。
-         * @returns 返回子节点本身。
+         * 设置子节点的索引位置。
+         * @param	node 子节点。
+         * @param	index 新的索引。
+         * @return	返回子节点本身。
          */
         setChildIndex(node: Node, index: number): Node;
         /**
-         * @en Remove a child node.
-         * @param node The child node to be removed.
-         * @returns The removed node.
-         * @zh 删除子节点。
-         * @param node 子节点。
-         * @returns 被删除的节点。
+         * 子节点发生改变。
+         * @private
+         * @param	child 子节点。
+         */
+        protected _childChanged(child?: Node): void;
+        /**
+         * 删除子节点。
+         * @param	node 子节点
+         * @return	被删除的节点
          */
         removeChild(node: Node): Node;
         /**
-         * @en Remove itself from its parent node. If it hasn't been added to any parent node, nothing happens.
-         * @returns The node itself.
-         * @zh 从父容器删除自己,如果已经被删除不会抛出异常。
-         * @returns 当前节点。
+         * 从父容器删除自己，如已经被删除不会抛出异常。
+         * @return 当前节点（ Node ）对象。
          */
         removeSelf(): Node;
         /**
-         * @en Remove a child node by its name.
-         * @param name The name of the child node.
-         * @returns The removed node.
-         * @zh 根据子节点名字删除对应的子节点对象,如果找不到不会抛出异常。
-         * @param name 对象名字。
-         * @returns 查找到的节点。
+         * 根据子节点名字删除对应的子节点对象，如果找不到不会抛出异常。
+         * @param	name 对象名字。
+         * @return 查找到的节点（ Node ）对象。
          */
         removeChildByName(name: string): Node;
         /**
-         * @en Remove a child node by its index.
-         * @param index The index of the child node.
-         * @returns The removed node.
-         * @zh 根据子节点索引位置,删除对应的子节点对象。
-         * @param index 节点索引位置。
-         * @returns 被删除的节点。
+         * 根据子节点索引位置，删除对应的子节点对象。
+         * @param	index 节点索引位置。
+         * @return	被删除的节点。
          */
         removeChildAt(index: number): Node;
         /**
-         * @en Remove all children from this node.
-         * @param beginIndex The begin index.
-         * @param endIndex The end index.
-         * @returns The node itself.
-         * @zh 删除指定索引区间的所有子对象。
-         * @param beginIndex 开始索引。
-         * @param endIndex 结束索引。
-         * @returns 当前节点对象。
+         * 删除指定索引区间的所有子对象。
+         * @param	beginIndex 开始索引。
+         * @param	endIndex 结束索引。
+         * @return 当前节点对象。
          */
         removeChildren(beginIndex?: number, endIndex?: number): Node;
         /**
-         * @en Replace a child node.
-         * @param newNode The new node to replace the old one.
-         * @param oldNode The old node to be replaced.
-         * @returns The new node.
-         * @zh 替换子节点。
-         * @param newNode 新节点。
-         * @param oldNode 老节点。
-         * @returns 返回新节点。
+         * 替换子节点。
+         * 将传入的新节点对象替换到已有子节点索引位置处。
+         * @param	newNode 新节点。
+         * @param	oldNode 老节点。
+         * @return	返回新节点。
          */
         replaceChild(newNode: Node, oldNode: Node): Node;
         /**
-         * @en The number of child nodes.
-         * @zh 子对象数量。
+         * 子对象数量。
          */
         get numChildren(): number;
-        /**
-         * @en The parent node.
-         * @zh 父节点。
-         */
+        /**父节点。*/
         get parent(): Node;
-        /**
-         * @en Check if this node is an ancestor of the given node.
-         * @returns True if this node is an ancestor of the given node, false otherwise.
-         * @param node The node to check.
-         * @zh 检查本节点是否是某个节点的上层节点。
-         * @param node 要检查的节点。
-         * @returns 一个布尔值，表示本节点是否是某个节点的上层节点。
+        /**检查本节点是否是某个节点的上层节点
+         * @param node
+         * @return
          */
         isAncestorOf(node: Node): boolean;
-        /**
-         * @en Indicates whether the node is displayed in the scene.
-         * @zh 表示是否在显示列表中显示。
-         */
+        /**@private */
+        protected _setParent(value: Node): void;
+        /**表示是否在显示列表中显示。*/
         get displayedInStage(): boolean;
+        /**@private */
+        private _updateDisplayedInstage;
         /**
-         * @en Checks whether the current node contains the specified node.
-         * @returns A Boolean value indicating whether the current node contains the specified node.
-         * @param node The specified node.
-         * @zh 当前容器是否包含指定的节点对象。
-         * @param node 指定的节点对象。
-         * @returns 一个布尔值，表示是否包含指定的节点对象。
+         * 设置指定节点对象是否可见(是否在渲染列表中)。
+         * @private
+         * @param	node 节点。
+         * @param	display 是否可见。
+         */
+        private _displayChild;
+        /**
+         * 当前容器是否包含指定的 <code>Node</code> 节点对象 。
+         * @param	node  指定的 <code>Node</code> 节点对象 。
+         * @return	一个布尔值表示是否包含指定的 <code>Node</code> 节点对象 。
          */
         contains(node: Node): boolean;
         /**
-         * @en Repeatedly execute a callback function at a fixed interval. This is a wrapper of the `loop` method in the timer property of the node.
-         * @param delay The interval between executions, in milliseconds.
-         * @param caller The execution scope of the callback function (this).
-         * @param method The callback function.
-         * @param args The parameters passed to the callback function.
-         * @param coverBefore Whether to override the previous delayed execution. The default value is true.
-         * @param jumpFrame Whether the callback should be executed when the timer jumps frames. The default value is false. If set to true, the callback will be executed multiple times in a single frame if possible, for performance reasons.
-         * @zh 定时重复执行某函数。这是对节点 timer 属性的 `loop` 方法的封装。
-         * @param delay 执行间隔时间,以毫秒为单位。
-         * @param caller 回调函数的执行域(this)。
-         * @param method 回调函数。
-         * @param args 传递给回调函数的参数。
-         * @param coverBefore 是否覆盖之前的延迟执行,默认为 true。
-         * @param jumpFrame 时钟是否跳帧。基于时间的循环回调,单位时间间隔内,如能执行多次回调,出于性能考虑,引擎默认只执行一次,设置jumpFrame为true后,则回调会连续执行多次。默认为false。
+         * 定时重复执行某函数。功能同Laya.timer.timerLoop()。
+         * @param	delay		间隔时间(单位毫秒)。
+         * @param	caller		执行域(this)。
+         * @param	method		结束时的回调方法。
+         * @param	args		（可选）回调参数。
+         * @param	coverBefore	（可选）是否覆盖之前的延迟执行，默认为true。
+         * @param	jumpFrame 时钟是否跳帧。基于时间的循环回调，单位时间间隔内，如能执行多次回调，出于性能考虑，引擎默认只执行一次，设置jumpFrame=true后，则回调会连续执行多次
          */
         timerLoop(delay: number, caller: any, method: Function, args?: any[], coverBefore?: boolean, jumpFrame?: boolean): void;
         /**
-         * @en Executes a callback function once after a specified delay.
-         * @param delay The delay time, in milliseconds.
-         * @param caller The execution scope of the callback function (this).
-         * @param method The callback function.
-         * @param args The parameters passed to the callback function.
-         * @param coverBefore Whether to override the previous delayed execution. The default value is true.
-         * @zh 在指定延迟时间后执行一次回调函数。功能同Laya.timer.once()。
-         * @param delay 延迟时间,以毫秒为单位。
-         * @param caller 回调函数的执行域(this)。
-         * @param method 回调函数。
-         * @param args 传递给回调函数的参数。
-         * @param coverBefore 是否覆盖之前的延迟执行,默认为 true。
+         * 定时执行某函数一次。功能同Laya.timer.timerOnce()。
+         * @param	delay		延迟时间(单位毫秒)。
+         * @param	caller		执行域(this)。
+         * @param	method		结束时的回调方法。
+         * @param	args		（可选）回调参数。
+         * @param	coverBefore	（可选）是否覆盖之前的延迟执行，默认为true。
          */
         timerOnce(delay: number, caller: any, method: Function, args?: any[], coverBefore?: boolean): void;
         /**
-         * @en Repeatedly executes a callback function at a fixed interval based on frame rate.
-         * @param delay The interval between executions, in frames.
-         * @param caller The execution scope of the callback function (this).
-         * @param method The callback function.
-         * @param args The parameters passed to the callback function.
-         * @param coverBefore Whether to override the previous delayed execution. The default value is true.
-         * @zh 基于帧率,定时重复执行回调函数。功能同Laya.timer.frameLoop()。
-         * @param delay 执行间隔时间,以帧为单位。
-         * @param caller 回调函数的执行域(this)。
-         * @param method 回调函数。
-         * @param args 传递给回调函数的参数。
-         * @param coverBefore 是否覆盖之前的延迟执行,默认为 true。
+         * 定时重复执行某函数(基于帧率)。功能同Laya.timer.frameLoop()。
+         * @param	delay		间隔几帧(单位为帧)。
+         * @param	caller		执行域(this)。
+         * @param	method		结束时的回调方法。
+         * @param	args		（可选）回调参数。
+         * @param	coverBefore	（可选）是否覆盖之前的延迟执行，默认为true。
          */
         frameLoop(delay: number, caller: any, method: Function, args?: any[], coverBefore?: boolean): void;
         /**
-         * @en Executes a callback function once after a specified delay based on frame rate.
-         * @param delay The delay time, in frames.
-         * @param caller The execution scope of the callback function (this).
-         * @param method The callback function.
-         * @param args The parameters passed to the callback function.
-         * @param coverBefore Whether to override the previous delayed execution. The default value is true.
-         * @zh 基于帧率,在指定延迟时间后执行一次回调函数。功能同Laya.timer.frameOnce()。
-         * @param delay 延迟时间,以帧为单位。
-         * @param caller 回调函数的执行域(this)。
-         * @param method 回调函数。
-         * @param args 传递给回调函数的参数。
-         * @param coverBefore 是否覆盖之前的延迟执行,默认为 true。
+         * 定时执行一次某函数(基于帧率)。功能同Laya.timer.frameOnce()。
+         * @param	delay		延迟几帧(单位为帧)。
+         * @param	caller		执行域(this)
+         * @param	method		结束时的回调方法
+         * @param	args		（可选）回调参数
+         * @param	coverBefore	（可选）是否覆盖之前的延迟执行，默认为true
          */
         frameOnce(delay: number, caller: any, method: Function, args?: any[], coverBefore?: boolean): void;
         /**
-         * @en Clears a timer.
-         * @param caller The execution scope of the callback function (this).
-         * @param method The callback function.
-         * @zh 清除定时器。功能同Laya.timer.clear()。
-         * @param caller 回调函数的执行域(this)。
-         * @param method 回调函数。
+         * 清理定时器。功能同Laya.timer.clearTimer()。
+         * @param	caller 执行域(this)。
+         * @param	method 结束时的回调方法。
          */
         clearTimer(caller: any, method: Function): void;
         /**
-         * @en Delays the execution of a callback function until the next frame after the current execution block is finished.
-         * The callback function will only be executed once.
-         * @param method The callback function.
-         * @param args The parameters passed to the callback function.
-         * @zh 在当前执行块完成后,延迟执行回调函数到下一帧。
-         * 回调函数只会被执行一次。一般在控件被显示在屏幕之前调用，用于延迟计算数据。
-         * @param method 回调函数。
-         * @param args 传递给回调函数的参数。
+         * <p>延迟运行指定的函数。</p>
+         * <p>在控件被显示在屏幕之前调用，一般用于延迟计算数据。</p>
+         * @param method 要执行的函数的名称。例如，functionName。
+         * @param args 传递给 <code>method</code> 函数的可选参数列表。
+         *
+         * @see #runCallLater()
          */
         callLater(method: Function, args?: any[]): void;
         /**
-         * @en If there are callback functions delayed by `callLater`, they will be executed immediately.
-         * @param method The name of the callback function to be executed, such as `functionName`.
-         * @zh 如果有通过 `callLater` 延迟执行的回调函数,将立即执行它们。
-         * @param method 要执行的回调函数名称,例如 `functionName`。
+         * <p>如果有需要延迟调用的函数（通过 <code>callLater</code> 函数设置），则立即执行延迟调用函数。</p>
+         * @param method 要执行的函数名称。例如，functionName。
+         * @see #callLater()
          */
         runCallLater(method: Function): void;
+        /** @private */
+        protected _components: Component[];
         /**@private */
         private _activeChangeScripts;
+        _scene: Node;
         /**
-         * @en Get the scene this node belongs to.
-         * @zh 获取该节点所属的场景。
+         * 获得所属场景。
+         * @return	场景。
          */
         get scene(): any;
         /**
-         * @en Get whether this node is active.
-         * @zh 获取该节点自身是否激活。
+         * 获取自身是否激活。
+         *   @return	自身是否激活。
          */
         get active(): boolean;
         /**
-         * @en Set whether this node is active.
-         * @zh 设置该节点是否激活。
+         * 设置是否激活。
+         * @param	value 是否激活。
          */
         set active(value: boolean);
         /**
-         * @en Get whether this node is active in the hierarchy.
-         * @zh 获取该节点在层级中是否激活。
+         * 获取在场景中是否激活。
+         *   @return	在场景中是否激活。
          */
         get activeInHierarchy(): boolean;
         /**
-         * @en The callback function that is executed when the component is activated, at which point all nodes and components have been created.
-         * This is a virtual method that needs to be overridden in the subclass.
-         * @zh 组件被激活后执行，此时所有节点和组件均已创建完毕，此方法只执行一次。
-         * 此方法为虚方法，使用时重写覆盖即可。
+         * @private
          */
+        protected _onActive(): void;
+        /**
+         * @private
+         */
+        protected _onInActive(): void;
+        /**
+         * @private
+         */
+        protected _onActiveInScene(): void;
+        /**
+         * @private
+         */
+        protected _onInActiveInScene(): void;
+        /**
+        * 组件被激活后执行，此时所有节点和组件均已创建完毕，次方法只执行一次
+        * 此方法为虚方法，使用时重写覆盖即可
+        */
         onAwake(): void;
         /**
-        * @en The callback function that is executed when the component is enabled, such as when a node is added to the stage.
-        * This is a virtual method that needs to be overridden in the subclass.
-        * @zh 组件被启用后执行，比如节点被添加到舞台后。
-        * 此方法为虚方法，使用时重写覆盖即可。
-        */
+         * 组件被启用后执行，比如节点被添加到舞台后
+         * 此方法为虚方法，使用时重写覆盖即可
+         */
         onEnable(): void;
         /**
-         * @en The callback function that is executed when the component is disabled, such as when a node is removed from the stage.
-         * This is a virtual method that needs to be overridden in the subclass.
-         * @zh 组件被禁用时执行，比如从节点从舞台移除后。
-         * 此方法为虚方法，使用时重写覆盖即可。
+         * 组件被禁用时执行，比如从节点从舞台移除后
+         * 此方法为虚方法，使用时重写覆盖即可
          */
         onDisable(): void;
+        _processActive(active: boolean, fromSetter?: boolean): void;
         /**
-         * @en Add a component instance to the node.
-         * @param component The component instance.
-         * @returns The added component instance.
-         * @zh 添加组件实例到节点。
-         * @param component 组件实例。
-         * @returns 添加的组件实例。
+         * @private
+         */
+        protected _onAdded(): void;
+        /**
+         * @private
+         */
+        protected _onRemoved(): void;
+        /**
+         * 组件列表发生改变。
+         * @private
+         */
+        protected _componentsChanged?(comp: Component, action: 0 | 1 | 2): void;
+        /**
+         * 添加组件实例。
+         * @param	component 组建实例。
+         * @return	组件。
          */
         addComponentInstance(component: Component): Component;
         /**
-         * @en Add a component to the node.
-         * @param componentType The type of the component.
-         * @returns The added component instance.
-         * @zh 添加组件到节点。
-         * @param componentType 组件类型。
-         * @returns 添加的组件实例。
+         * 添加组件。
+         * @param	componentType 组件类型。
+         * @return	组件。
          */
         addComponent<T extends Component>(componentType: new () => T): T;
         /**
-         * @en Get a component instance by type. Returns null if not found.
-         * @param componentType The type of the component.
-         * @returns The component instance.
-         * @zh 根据类型获取组件实例。如果没有找到则返回null。
-         * @param componentType 组件类型。
-         * @returns 组件实例。
+         * 获得组件实例，如果没有则返回为null
+         * @param	componentType 组建类型
+         * @return	返回组件
          */
         getComponent<T extends Component>(componentType: new () => T): T;
         /**
-         * @en Get all component instances on the node.
-         * @returns An array of component instances.
-         * @zh 获取节点上的所有组件实例。
-         * @returns 组件实例数组。
+         * 返回所有组件实例。
+         * @return 返回组件实例数组。
          */
         get components(): ReadonlyArray<Component>;
         /**
-         * @en Get all component instances by type. Returns an empty array if none are found.
-         * @param componentType The type of the component.
-         * @returns An array of component instances.
-         * @zh 根据类型获取所有组件实例。如果没有找到则返回空数组。
-         * @param componentType 组件类型。
-         * @returns 组件实例数组。
+         * 获得组件实例，如果没有则返回为null
+         * @param	componentType 组件类型
+         * @return	返回组件数组
          */
         getComponents(componentType: typeof Component): Component[];
         /**
-         * @en Get the timer associated with the node.
-         * @returns The timer.
-         * @zh 获取与节点关联的计时器。
-         * @returns 计时器。
+         * 获取timer
          */
         get timer(): Timer;
         /**
-         * @en Called after deserialization.
-         * @zh 反序列化后调用。
+         * 反序列化后会调用
          */
         onAfterDeserialize(): void;
     }
@@ -16581,6 +17519,9 @@ declare module Laya {
         private static _loadPage;
         /**场景被关闭后，是否自动销毁（销毁节点和使用到的资源），默认为false*/
         autoDestroyAtClosed: boolean;
+        _scene3D: any;
+        /**@private 相对布局组件*/
+        protected _widget: Widget;
         /**场景时钟*/
         private _timer;
         /**@private */
@@ -16610,7 +17551,6 @@ declare module Laya {
         createView(view: any): void;
         /**
         * 根据IDE内的节点id，获得节点实例
-        * @param id 节点ID
         */
         getNodeByID(id: number): any;
         /**
@@ -16619,10 +17559,7 @@ declare module Laya {
          * @param	param		打开页面的参数，会传递给onOpened方法（可选）
          */
         open(closeOther?: boolean, param?: any): void;
-        /**
-         * 场景打开完成后，调用此方法（如果有弹出动画，则在动画完成后执行）
-         * @param param 参数
-         */
+        /**场景打开完成后，调用此方法（如果有弹出动画，则在动画完成后执行）*/
         onOpened(param: any): void;
         /**
          * 关闭场景
@@ -16636,12 +17573,20 @@ declare module Laya {
          */
         onClosed(type?: string): void;
         /**
-         * 场景销毁
-         * @param destroyChild 是否删除节点
          * @inheritDoc
          * @override
          */
         destroy(destroyChild?: boolean): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        get_width(): number;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        get_height(): number;
         /**
          * 场景时钟
          * @override
@@ -16682,6 +17627,12 @@ declare module Laya {
          */
         get centerY(): number;
         set centerY(value: number);
+        protected _shouldRefreshLayout(): void;
+        /**
+         * @private
+         * @override
+        */
+        protected _sizeChanged(): void;
         /**
          * 重新排版
          */
@@ -16753,712 +17704,477 @@ declare module Laya {
          */
         static hideLoadingPage(delay?: number): void;
     }
-    /**
-     * @en Sprite is a basic display list node for displaying graphical content. By default, Sprite does not accept mouse events. Through the graphics API, images or vector graphics can be drawn, supporting operations like rotation, scaling, translation, and more. Sprite also functions as a container class, allowing the addition of multiple child nodes.
-     * @zh Sprite是基本的显示图形的显示列表节点。Sprite默认不接受鼠标事件。通过graphics可以绘制图片或者矢量图，支持旋转，缩放，位移等操作。Sprite同时也是容器类，可用来添加多个子节点。
-     */
+    /**在显示对象上按下后调度。
+     * @eventType Event.MOUSE_DOWN
+     * */
+    /**在显示对象抬起后调度。
+     * @eventType Event.MOUSE_UP
+     * */
+    /**鼠标在对象身上进行移动后调度
+     * @eventType Event.MOUSE_MOVE
+     * */
+    /**鼠标经过对象后调度。
+     * @eventType Event.MOUSE_OVER
+     * */
+    /**鼠标离开对象后调度。
+     * @eventType Event.MOUSE_OUT
+     * */
+    /**鼠标点击对象后调度。
+     * @eventType Event.CLICK
+     * */
+    /**开始拖动后调度。
+     * @eventType Event.DRAG_START
+     * */
+    /**拖动中调度。
+     * @eventType Event.DRAG_MOVE
+     * */
+    /**拖动结束后调度。
+     * @eventType Event.DRAG_END
+     * */
     class Sprite extends Node {
-        private _filterArr;
+        _ownGraphics: boolean;
         /**
-         @en For non-UI component display object nodes (container objects or display objects without image resources), specifies whether the mouse events penetrate this object's collision detection. `true` means the object is penetrable, `false` means it is not penetrable.
-        * When penetrable, the engine will no longer detect this object and will recursively check its child objects until it finds the target object or misses all objects.
-        * When not penetrable, the node's width and height define the mouse collision area (a non-penetrable rectangular area). If the rectangular collision area does not meet the requirements, you can use the drawing area of the hit area as the collision area. The hit area takes precedence over width and height of node as the non-penetrable mouse collision area.
-        * Note that for UI object nodes with a set skin property, once a skin texture resource is set, this property becomes ineffective, and the rectangular area drawn by the texture will always be non-penetrable unless it does not accept mouse events or a non-clickable area is set.
-        *@zh 用于非UI组件显示对象节点（容器对象或没有设置图像资源的显示对象），鼠标事件与此对象在碰撞检测时，是否穿透。ture为可穿透，false为不可穿透。
-         * 可穿透时，引擎不再检测本对象，而会递归检测子对象，直到找到命中的目标对象或者未命中任何对象。
-         * 不可穿透时，以节点宽高为鼠标碰撞区（矩形的不可穿透区域）。如果矩形碰撞区不能满足需求，可以将点击区域的绘制图形作为碰撞区，绘制区域优先于宽高作为不可穿透的鼠标碰撞区域。
-         * 注意，可以设置skin属性的UI对象节点，当设置了skin纹理资源之后，该属性设置失效，纹理绘制的矩形区域内会始终处于不可穿透状态。除非不接受鼠标事件或设置不可点击区域。
+         * <p>鼠标事件与此对象的碰撞检测是否可穿透。碰撞检测发生在鼠标事件的捕获阶段，此阶段引擎会从stage开始递归检测stage及其子对象，直到找到命中的目标对象或者未命中任何对象。</p>
+         * <p>穿透表示鼠标事件发生的位置处于本对象绘图区域内时，才算命中，而与对象宽高和值为Rectangle对象的hitArea属性无关。如果sprite.hitArea值是HitArea对象，表示显式声明了此对象的鼠标事件响应区域，而忽略对象的宽高、mouseThrough属性。</p>
+         * <p>影响对象鼠标事件响应区域的属性为：width、height、hitArea，优先级顺序为：hitArea(type:HitArea)>hitArea(type:Rectangle)>width/height。</p>
+         * @default false	不可穿透，此对象的鼠标响应区域由width、height、hitArea属性决定。</p>
          */
         mouseThrough: boolean;
         /**
-         * @en Under the premise that this object is non-penetrable (mouseThrough is false), specify whether the mouse event capture detection prioritizes this object.  When set to true, the object itself is prioritized for detection.  When set to false, the child objects are prioritized.
-         * When set to prioritize the object itself, the object is detected first.  If the object itself is not hit, the detection is directly interrupted, indicating that no target was hit.  If the object itself is hit, further recursive detection is performed on its child objects until the final mouse hit target is found or all child nodes have been checked.
-         * When set to prioritize child objects, the child objects are recursively detected first.  If a child object is hit, the detection is interrupted and the hit target is obtained.  If all child nodes have been checked and no child object is hit, then the detection checks if the object itself is hit.
-         * In most cases, prioritizing the detection of child objects is advisable unless the developer does not care about the mouse event detection results of the current node's child nodes.  For example, when child nodes are certainly within the width and height range of the parent node's container, there is no need for recursive detection layer by layer if the mouse click does not occur within the parent node's area.
-         * Using this property appropriately can reduce the nodes for mouse event detection and improve performance.
-         * @zh 在本对象为不可穿透（mouseThrough为false）的前提下，指定鼠标事件捕获检测是否优先检测本对象。为`true`时优先检测本对象，为`false`时优先检测子对象。
-         * 优先检测本对象时，如果本对象没有被检测命中，会中断检测，表示没有命中目标；如果本对象被检测命中，则进一步递归检测其子对象，直到找到鼠标最终的命中目标或所有子节点都检测完毕。
-         * 优先检测子对象时，先递归检测其子对象，如果子对象被检测命中，则中断检测，获得命中目标。如果所有子节点都检测完毕，仍未检测命中任何子对象，最后再检测本对象是否被命中；
-         * 大多数情况下需要优先检测子对象，除非开发者并不关心当前节点的子节点的鼠标事件检测结果，也就是以当前节点作为其子节点的鼠标事件检测依据。例如，子节点肯定在父节点的容器宽高范围内，当鼠标点击不发生在父节点范围内的区域时，就不必层层递归检测了。
-         * 合理使用本属性，能减少鼠标事件检测的节点，提高性能。
-         */
-        hitTestPrior: boolean;
-        /**
-         * @en Whether to automatically calculate the width and height of the node. The default value is `false`, which does not automatically calculate and offers better performance.
-         * If you want to get the width and height based on the drawn content, you can set this property to `true`, or use the getBounds method to obtain them, which has some impact on performance.
-         * @zh 是否自动计算节点的宽高数据。默认值为 false，不自动计算，性能更佳。
-         * 如果想根据绘制内容获取宽高，可以设置本属性为true，或者通过getBounds方法获取，对性能有一定影响。
+         * <p>指定是否自动计算宽高数据。默认值为 false 。</p>
+         * <p>Sprite宽高默认为0，并且不会随着绘制内容的变化而变化，如果想根据绘制内容获取宽高，可以设置本属性为true，或者通过getBounds方法获取。设置为true，对性能有一定影响。</p>
          */
         autoSize: boolean;
         /**
-         * @override
+         * <p>指定鼠标事件检测是优先检测自身，还是优先检测其子对象。鼠标事件检测发生在鼠标事件的捕获阶段，此阶段引擎会从stage开始递归检测stage及其子对象，直到找到命中的目标对象或者未命中任何对象。</p>
+         * <p>如果为false，优先检测子对象，当有子对象被命中时，中断检测，获得命中目标。如果未命中任何子对象，最后再检测此对象；如果为true，则优先检测本对象，如果本对象没有被命中，直接中断检测，表示没有命中目标；如果本对象被命中，则进一步递归检测其子对象，以确认最终的命中目标。</p>
+         * <p>合理使用本属性，能减少鼠标事件检测的节点，提高性能。可以设置为true的情况：开发者并不关心此节点的子节点的鼠标事件检测结果，也就是以此节点作为其子节点的鼠标事件检测依据。</p>
+         * <p>Stage对象和UI的View组件默认为true。</p>
+         * @default false	优先检测此对象的子对象，当递归检测完所有子对象后，仍然没有找到目标对象，最后再检测此对象。
+         */
+        hitTestPrior: boolean;
+        /** 如果节点需要加载相关的皮肤，但放在不同域，这里可以设置 **/
+        _skinBaseUrl: string;
+        /**
          * @inheritDoc
-         * @en Destroy the sprite.
-         * @param destroyChild Whether to destroy child nodes. Default is true.
-         * @zh 销毁精灵。
-         * @param destroyChild 是否删除子节点。默认为 true。
+         * @override
          */
         destroy(destroyChild?: boolean): void;
         constructor();
-        /**
-         * @en Get the scene the sprite belongs to.
-         * @returns {Scene} The scene object.
-         * @zh 获取所属的场景。
-         * @returns {Scene} 场景对象。
-         */
         get scene(): Scene;
-        /**
-         * @en Re-sort by zOrder.
-         * @zh 根据 zOrder 进行重新排序。
-         */
+        /**根据zOrder进行重新排序。*/
         updateZOrder(): void;
         /**
-         * @en Enable or disable custom rendering. Custom rendering must be enabled to use the customRender function.
-         * @param {boolean} b Whether to enable custom rendering.
-         * @zh 设置是否开启自定义渲染，只有开启自定义渲染，才能使用 customRender 函数渲染。
-         * @param {boolean} b 是否开启自定义渲染。
+         * 设置是否开启自定义渲染，只有开启自定义渲染，才能使用customRender函数渲染。
          */
         set customRenderEnable(b: boolean);
         /**
-         * @en Specifies whether the display object is cached as a static image. When cacheAs is set, changes in child objects will automatically update the cache. You can also manually call the reCache method to update the cache.
-         * It is recommended to cache "complex content" that does not change frequently as a static image to greatly improve rendering performance. cacheAs has three values: "none", "normal", and "bitmap".
-         * The default is "none," which does not perform any caching.
-         * When set to "normal," command caching is used.
-         * When set to "bitmap," renderTarget caching is used.
-         * Disadvantages of the renderTarget caching mode: it creates additional renderTarget objects, increasing memory overhead, has a maximum cache area limit of 2048, and can increase CPU overhead with constant redrawing. Advantages: it significantly reduces draw calls and provides the highest rendering performance.
-         * Disadvantages of the command caching mode: it only reduces node traversal and command organization and does not reduce the number of draw calls, resulting in moderate performance. Advantages: it has no additional memory overhead and does not require renderTarget support.
-         * @zh 指定显示对象是否缓存为静态图像，cacheAs 时，子对象发生变化，会自动重新缓存，同时也可以手动调用 reCache 方法更新缓存。
-         * 建议把不经常变化的“复杂内容”缓存为静态图像，能极大提高渲染性能。cacheAs 有 "none"，"normal" 和 "bitmap" 三个值可选。
-         * 默认为 "none"，不做任何缓存。
-         * 当值为 "normal" 时，使用命令缓存。
-         * 当值为 "bitmap" 时，使用 renderTarget 缓存。
-         * renderTarget 缓存模式缺点：会额外创建 renderTarget 对象，增加内存开销，缓存面积有最大 2048 限制，不断重绘时会增加 CPU 开销。优点：大幅减少 drawcall，渲染性能最高。
-         * 命令缓存模式缺点：只会减少节点遍历及命令组织，不会减少 drawcall 数，性能中等。优点：没有额外内存开销，无需 renderTarget 支持。
+         * 指定显示对象是否缓存为静态图像，cacheAs时，子对象发生变化，会自动重新缓存，同时也可以手动调用reCache方法更新缓存。
+         * 建议把不经常变化的“复杂内容”缓存为静态图像，能极大提高渲染性能。cacheAs有"none"，"normal"和"bitmap"三个值可选。
+         * 默认为"none"，不做任何缓存。
+         * 当值为"normal"时，canvas模式下进行画布缓存，webgl模式下进行命令缓存。
+         * 当值为"bitmap"时，canvas模式下进行依然是画布缓存，webgl模式下使用renderTarget缓存。
+         * webgl下renderTarget缓存模式缺点：会额外创建renderTarget对象，增加内存开销，缓存面积有最大2048限制，不断重绘时会增加CPU开销。优点：大幅减少drawcall，渲染性能最高。
+         * webgl下命令缓存模式缺点：只会减少节点遍历及命令组织，不会减少drawcall数，性能中等。优点：没有额外内存开销，无需renderTarget支持。
          */
         get cacheAs(): string;
         set cacheAs(value: string);
         /**
-         * 设置cacheAs为非空时此值才有效，staticCache=true时，子对象变化时不会自动更新缓存，只能通过调用reCache方法手动刷新。
-         * @deprecated
+         * 更新_cnavas相关的状态
          */
+        private _checkCanvasEnable;
+        /**设置cacheAs为非空时此值才有效，staticCache=true时，子对象变化时不会自动更新缓存，只能通过调用reCache方法手动刷新。*/
         get staticCache(): boolean;
-        /**@deprecated */
         set staticCache(value: boolean);
-        /**
-         * @en The rendering component node of the sprite.
-         * @zh 精灵的渲染组件节点。
-         */
-        get renderNode2D(): BaseRenderNode2D;
-        set renderNode2D(value: BaseRenderNode2D);
-        /**
-         * @deprecated
-         * @en Call this method to refresh the cache when cacheAs is set.
-         * @zh 在设置 cacheAs 的情况下，调用此方法会重新刷新缓存。
-         */
+        /**在设置cacheAs的情况下，调用此方法会重新刷新缓存。*/
         reCache(): void;
-        /**
-         * @en Get the repaint type.
-         * @returns The repaint type.
-         * @zh 获取重绘类型。
-         * @returns 重绘类型。
-         */
         getRepaint(): number;
-        /**
-         * @en The x coordinate value relative to the parent container.
-         * @returns The x coordinate value.
-         * @zh 表示显示对象相对于父容器的水平方向坐标值。
-         * @returns 水平方向坐标值。
-         */
+        /**表示显示对象相对于父容器的水平方向坐标值。*/
         get x(): number;
         set x(value: number);
-        /**
-         * @en The y coordinate value relative to the parent container.
-         * @returns The y coordinate value.
-         * @zh 表示显示对象相对于父容器的垂直方向坐标值。
-         * @returns 垂直方向坐标值。
-         */
+        /**表示显示对象相对于父容器的垂直方向坐标值。*/
         get y(): number;
         set y(value: number);
         /**
-         * @en The width of the Node, in pixels
-         * @zh 节点的宽度，单位为像素。
+         * <p>显示对象的宽度，单位为像素，默认为0。</p>
+         * <p>此宽度用于鼠标碰撞检测，并不影响显示对象图像大小。需要对显示对象的图像进行缩放，请使用scale、scaleX、scaleY。</p>
+         * <p>可以通过getbounds获取显示对象图像的实际宽度。</p>
          */
         get width(): number;
         set width(value: number);
+        set_width(value: number): void;
+        get_width(): number;
         /**
          * <p>显示对象的高度，单位为像素，默认为0。</p>
          * <p>此高度用于鼠标碰撞检测，并不影响显示对象图像大小。需要对显示对象的图像进行缩放，请使用scale、scaleX、scaleY。</p>
          * <p>可以通过getbounds获取显示对象图像的实际高度。</p>
          */
-        /**
-         * @en The height of the Node, in pixels.
-         * @zh 节点的高度，单位为像素。
-         */
         get height(): number;
         set height(value: number);
+        set_height(value: number): void;
+        get_height(): number;
+        get _isWidthSet(): boolean;
+        get _isHeightSet(): boolean;
+        protected _shouldRefreshLayout(): void;
         /**
-         * @en The display width of the object, in pixels, including X axis scaling.
-         * @returns The display width.
-         * @zh 对象的显示宽度（以像素为单位），包含X轴缩放。
-         * @returns 显示宽度。
+         * <p>对象的显示宽度（以像素为单位）。</p>
          */
         get displayWidth(): number;
         /**
-        * @en The display height of the object, in pixels, including Y axis scaling.
-        * @returns The display height.
-        * @zh 对象的显示高度（以像素为单位），包含Y轴缩放。
-        * @returns 显示高度。
-        */
+         * <p>对象的显示高度（以像素为单位）。</p>
+         */
         get displayHeight(): number;
         /**
-         * @en Set the bounds of the object. If set, getBounds will not be used to calculate the bounds. Proper use can improve performance.
-         * @param bound The bounds rectangle.
-         * @zh 设置对象的边界大小，如果设置，则不再通过getBounds计算边界。合理使用能提高性能。
-         * @param bound 边界矩形区域
+         * 设置对象bounds大小，如果有设置，则不再通过getBounds计算，合理使用能提高性能。
+         * @param	bound bounds矩形区域
          */
         setSelfBounds(bound: Rectangle): void;
         /**
-         * @en Get the rectangle display area of the object in the parent container's coordinate system.
-         * Note: This calculation is complex, use sparingly.
-         * @return The rectangle area.
-         * @zh 获取本对象在父容器坐标系的矩形显示区域。
-         * 注意：计算量较大，尽量少用。
-         * @returns 矩形区域。
+         * <p>获取本对象在父容器坐标系的矩形显示区域。</p>
+         * <p><b>注意：</b>计算量较大，尽量少用。</p>
+         * @return 矩形区域。
          */
         getBounds(): Rectangle;
         /**
-         * @en Get the rectangle display area of the object in its own coordinate system.
-         * Note: This calculation is complex, use sparingly.
-         * @returns The rectangle area.
-         * @zh 获取本对象在自己坐标系的矩形显示区域。
-         * 注意：计算量较大，尽量少用。
-         * @returns 矩形区域。
+         * 获取本对象在自己坐标系的矩形显示区域。
+         * <p><b>注意：</b>计算量较大，尽量少用。</p>
+         * @return 矩形区域。
          */
         getSelfBounds(): Rectangle;
         /**
-         * @en Returns the display area of the drawing object (`Graphics`) in this instance, excluding child objects.
-         * @param realSize (Optional) Use the actual size of the image, default is false.
-         * @returns A Rectangle object representing the obtained display area.
-         * @zh 返回此实例中绘图对象（`Graphics`）的显示区域，不包括子对象。
-         * @param realSize （可选）使用图片的真实大小，默认为false。
-         * @returns 一个 Rectangle 对象，表示获取到的显示区域。
+         * 返回此实例中的绘图对象（ <code>Graphics</code> ）的显示区域，不包括子对象。
+         * @param realSize	（可选）使用图片的真实大小，默认为false
+         * @return 一个 Rectangle 对象，表示获取到的显示区域。
          */
         getGraphicBounds(realSize?: boolean): Rectangle;
         /**
          * @private
-         * @en Get the sprite style.
-         * @return The sprite style (SpriteStyle).
-         * @zh 获取精灵样式。
-         * @return 精灵样式 (SpriteStyle)。
+         * 获取样式。
+         * @return  样式 Style 。
          */
         getStyle(): SpriteStyle;
         /**
          * @private
-         * @en Set the sprite style.
-         * @param value The sprite style to set.
-         * @zh 设置精灵样式。
-         * @param value 要设置的精灵样式。
+         * 设置样式。
+         * @param	value 样式。
          */
         setStyle(value: SpriteStyle): void;
-        /**
-         * @en The scale factor on the X axis, with a default value of 1. Setting a negative value can achieve a horizontal flip effect, e.g., scaleX=-1.
-         * @zh X轴缩放值，默认值为1。设置为负数可以实现水平反转效果，例如scaleX=-1。
-         */
+        /**X轴缩放值，默认值为1。设置为负数，可以实现水平反转效果，比如scaleX=-1。*/
         get scaleX(): number;
         set scaleX(value: number);
-        /**
-         * @en The scale factor on the Y axis, with a default value of 1. Setting a negative value can achieve a vertical flip effect, e.g., scaleY=-1.
-         * @zh Y轴缩放值，默认值为1。设置为负数可以实现垂直反转效果，例如scaleY=-1。
-         */
+        /**Y轴缩放值，默认值为1。设置为负数，可以实现垂直反转效果，比如scaleX=-1。*/
         get scaleY(): number;
         set scaleY(value: number);
-        /**
-         * @en The rotation angle, in degrees, with a default value of 0.
-         * @zh 旋转角度，默认值为0。以角度为单位。
-         */
+        set_scaleX(value: number): void;
+        get_scaleX(): number;
+        set_scaleY(value: number): void;
+        get_scaleY(): number;
+        /**旋转角度，默认值为0。以角度为单位。*/
         get rotation(): number;
         set rotation(value: number);
-        /**
-         * @en The horizontal skew angle, in degrees, with a default value of 0.
-         * @zh 水平倾斜角度，默认值为0。以角度为单位。
-         */
+        /**水平倾斜角度，默认值为0。以角度为单位。*/
         get skewX(): number;
         set skewX(value: number);
-        /**
-          * @en The vertical skew angle, in degrees, with a default value of 0.
-          * @zh 垂直倾斜角度,默认值为0。以角度为单位。
-          */
+        /**垂直倾斜角度，默认值为0。以角度为单位。*/
         get skewY(): number;
         set skewY(value: number);
+        /**@private */
+        protected _adjustTransform(): Matrix;
         /**
-         * @en The matrix information of the object. By setting the matrix, node rotation, scaling, and displacement effects can be achieved.
-         * @zh 对象的矩阵信息。通过设置矩阵可以实现节点旋转，缩放，位移效果。
+         * <p>对象的矩阵信息。通过设置矩阵可以实现节点旋转，缩放，位移效果。</p>
+         * <p>矩阵更多信息请参考 <code>Matrix</code></p>
          */
         get transform(): Matrix;
         set transform(value: Matrix);
-        /**
-         * @en The x-axis pivot point position, in pixels, with a default value of 0. The pivot point affects the object's position, scaling center, and rotation center.
-         * @zh X 轴轴心点的位置，以像素为单位，默认为 0。轴心点会影响对象的位置、缩放中心和旋转中心。
-         */
+        get_transform(): Matrix;
+        set_transform(value: Matrix): void;
+        /**X轴 轴心点的位置，单位为像素，默认为0。轴心点会影响对象位置，缩放中心，旋转中心。*/
         get pivotX(): number;
         set pivotX(value: number);
-        /**
-         * @en The y-axis pivot point position, in pixels, with a default value of 0. The pivot point affects the object's position, scaling center, and rotation center.
-         * @zh Y 轴轴心点的位置，以像素为单位，默认为 0。轴心点会影响对象的位置、缩放中心和旋转中心。
-         */
+        /**Y轴 轴心点的位置，单位为像素，默认为0。轴心点会影响对象位置，缩放中心，旋转中心。*/
         get pivotY(): number;
         set pivotY(value: number);
-        /**
-         * @en The anchor point's x-coordinate, ranging from 0 to 1. Setting anchorX will ultimately change the node's pivot point through the pivotX value.
-         * @zh X 轴锚点,值为 0-1。设置 anchorX 值最终会通过 pivotX 值来改变节点的轴心点。
-         */
+        /**X锚点，值为0-1，设置anchorX值最终通过pivotX值来改变节点轴心点。*/
         get anchorX(): number;
+        get_anchorX(): number;
         set anchorX(value: number);
-        /**
-         * @en The anchor point's y-coordinate, ranging from 0 to 1. Setting anchorY will ultimately change the node's pivot point through the pivotY value.
-         * @zh Y 轴锚点，值为 0-1。设置 anchorY 值最终会通过 pivotY 值来改变节点的轴心点。
-         */
+        set_anchorX(value: number): void;
+        /**Y锚点，值为0-1，设置anchorY值最终通过pivotY值来改变节点轴心点。*/
         get anchorY(): number;
+        get_anchorY(): number;
         set anchorY(value: number);
-        /**
-         * @en The transparency value, ranging from 0 to 1, with a default value of 1 (opaque). Changing the alpha value will affect the drawcall.
-         * @zh 透明度,值为 0-1,默认值为 1(不透明)。更改 alpha 值会影响 drawcall。
-         */
+        set_anchorY(value: number): void;
+        /**透明度，值为0-1，默认值为1，表示不透明。更改alpha值会影响drawcall。*/
         get alpha(): number;
         set alpha(value: number);
-        /**
-         * @en Indicates whether the object is visible. The default value is true. If set to false, the node will not be rendered.
-         * @zh 表示对象是否可见,默认为 true。如果设置为 false,节点将不会被渲染。
-         */
+        /**表示是否可见，默认为true。如果设置不可见，节点将不被渲染。*/
         get visible(): boolean;
         set visible(value: boolean);
-        /**
-         * @en Specifies the blending mode to be used. Only "lighter" is currently supported.
-         * @zh 指定要使用的混合模式，目前只支持 "lighter"。
-         */
+        get_visible(): boolean;
+        set_visible(value: boolean): void;
+        /**指定要使用的混合模式。目前只支持"lighter"。*/
         get blendMode(): string;
         set blendMode(value: string);
-        /**
-         * @en The drawing object, which encapsulates the interfaces for drawing bitmaps and vector graphics. All drawing operations of Sprite are implemented through Graphics.
-         * @zh 绘图对象。封装了绘制位图和矢量图的接口,Sprite 的所有绘图操作都是通过 Graphics 实现的。
-         */
+        /**绘图对象。封装了绘制位图和矢量图的接口，Sprite所有的绘图操作都通过Graphics来实现的。*/
         get graphics(): Graphics;
         set graphics(value: Graphics);
-        /**
-         * @en Set the Graphics object for drawing.
-         * @param value The Graphics object to set.
-         * @param transferOwnership Whether to set the Graphics object to the belonging node (i.e., transfer the ownership of the Graphics object to the Sprite). If true, the Sprite will be responsible for destroying the Graphics object when it's no longer needed.
-         * @zh 设置用于绘制的 Graphics 对象。
-         * @param value 要设置的 Graphics 对象。
-         * @param transferOwnership 是否将 Graphics 对象设置到所属节点上(即将 Graphics 对象的所有权转移给 Sprite)。如果为 true,则 Sprite 将负责在不再需要 Graphics 对象时销毁它。
-         */
         setGraphics(value: Graphics, transferOwnership: boolean): void;
-        /**
-         * @en 2D sprite material
-         * @zh 2D精灵材质
-         */
         get material(): Material;
+        /**
+         *
+         */
         set material(value: Material);
         /**
-         * @en The scroll rectangle range of the display object, with a clipping effect (if you only want to limit the rendering area of child objects, please use viewport).
-         * Differences between srollRect and viewport:
-         * 1. srollRect has a clipping effect, viewport only affects whether child objects are rendered, and does not have a clipping effect (higher performance).
-         * 2. Setting the x and y properties of the rect can achieve scrolling effect, but scrollRect will keep the position of point 0,0 unchanged.
-         * @zh 显示对象的滚动矩形范围，具有裁剪效果(如果只想限制子对象渲染区域，请使用viewport)
-         * srollRect和viewport的区别：
-         * 1.srollRect自带裁剪效果，viewport只影响子对象渲染是否渲染，不具有裁剪效果（性能更高）。
-         * 2.设置rect的x,y属性均能实现区域滚动效果，但scrollRect会保持0,0点位置不变。
+         * <p>显示对象的滚动矩形范围，具有裁剪效果(如果只想限制子对象渲染区域，请使用viewport)</p>
+         * <p> srollRect和viewport的区别：<br/>
+         * 1.srollRect自带裁剪效果，viewport只影响子对象渲染是否渲染，不具有裁剪效果（性能更高）。<br/>
+         * 2.设置rect的x,y属性均能实现区域滚动效果，但scrollRect会保持0,0点位置不变。</p>
          */
         get scrollRect(): Rectangle;
         set scrollRect(value: Rectangle);
         /**
-        * @en The viewport size. Child objects outside the viewport will not be rendered (if you want to achieve a clipping effect, please use scrollRect). Proper use can improve rendering performance. For example, map tiles composed of small images will not render small images outside the viewport.
-        * The default value is null.
-        * The differences between scrollRect and viewport:
-        * 1. scrollRect comes with a clipping effect, while viewport only affects whether child objects are rendered without clipping (better performance).
-        * 2. Setting the x and y properties of the rect can achieve a scrolling effect in the area, but scrollRect will keep the position of point 0,0 unchanged.
-        * @zh 视口大小，视口外的子对象将不被渲染（如果想实现裁剪效果，请使用scrollRect），合理使用能提高渲染性能。例如，由一个个小图片拼成的地图块，viewport外面的小图片将不渲染。
-        * 默认值为null。
-        * scrollRect和viewport的区别：
-        * 1. scrollRect自带裁剪效果，viewport只影响子对象是否渲染，不具有裁剪效果（性能更高）。
-        * 2. 设置rect的x,y属性均能实现区域滚动效果，但scrollRect会保持0,0点位置不变。
-        */
-        get viewport(): Rectangle;
-        set viewport(value: Rectangle);
-        /**
-         * @en Set the position. Equivalent to setting the x and y properties separately.
-         * Since the return value is the Sprite object itself, you can use the following syntax: spr.pos(...).scale(...);
-         * @param x X-axis coordinate.
-         * @param y Y-axis coordinate.
-         * @param speedMode (Optional) Whether to use speed mode. Normally, this.x=value is called to assign values. Speed mode directly calls the internal function to handle it. If the x and y properties are not overridden, it is recommended to set to speed mode for higher performance.
-         * @returns The object itself.
-         * @zh 设置坐标位置。相当于分别设置x和y属性。
-         * 因为返回值为Sprite对象本身，所以可以使用如下语法：spr.pos(...).scale(...);
-         * @param x X轴坐标。
-         * @param y Y轴坐标。
-         * @param speedMode （可选）是否极速模式，正常是调用this.x=value进行赋值，极速模式直接调用内部函数处理，如果未重写x,y属性，建议设置为极速模式性能更高。
-         * @returns 返回对象本身。
+         * <p>设置坐标位置。相当于分别设置x和y属性。</p>
+         * <p>因为返回值为Sprite对象本身，所以可以使用如下语法：spr.pos(...).scale(...);</p>
+         * @param	x			X轴坐标。
+         * @param	y			Y轴坐标。
+         * @param 	speedMode	（可选）是否极速模式，正常是调用this.x=value进行赋值，极速模式直接调用内部函数处理，如果未重写x,y属性，建议设置为急速模式性能更高。
+         * @return	返回对象本身。
          */
         pos(x: number, y: number, speedMode?: boolean): Sprite;
         /**
-         * @en Set the pivot point. Equivalent to setting the pivotX and pivotY properties separately.
-         * Since the return value is the Sprite object itself, you can use the following syntax: spr.pivot(...).pos(50, 100);
-         * @param x X-axis pivot point.
-         * @param y Y-axis pivot point.
-         * @returns The object itself.
-         * @zh 设置轴心点。相当于分别设置pivotX和pivotY属性。
-         * 因为返回值为Sprite对象本身，所以可以使用如下语法：spr.pivot(...).pos(50, 100);
-         * @param x X轴心点。
-         * @param y Y轴心点。
-         * @returns 返回对象本身。
+         * <p>设置轴心点。相当于分别设置pivotX和pivotY属性。</p>
+         * <p>因为返回值为Sprite对象本身，所以可以使用如下语法：spr.pivot(...).pos(50, 100);</p>
+         * @param	x X轴心点。
+         * @param	y Y轴心点。
+         * @return	返回对象本身。
          */
         pivot(x: number, y: number): Sprite;
         /**
-         * @en Set the size. Equivalent to setting the width and height properties separately.
-         * Since the return value is the Sprite object itself, you can use the following syntax: spr.size(...).pos(50, 100);
-         * @param width Width value.
-         * @param height Height value.
-         * @returns The object itself.
-         * @zh 设置宽高。相当于分别设置width和height属性。
-         * 因为返回值为Sprite对象本身，所以可以使用如下语法：spr.size(...).pos(50, 100);
-         * @param width 宽度值。
-         * @param height 高度值。
-         * @returns 返回对象本身。
+         * <p>设置宽高。相当于分别设置width和height属性。</p>
+         * <p>因为返回值为Sprite对象本身，所以可以使用如下语法：spr.size(...).pos(50, 100);</p>
+         * @param	width 宽度值。
+         * @param	hegiht 高度值。
+         * @return	返回对象本身。
          */
         size(width: number, height: number): Sprite;
         /**
-         * @en Set the scale. Equivalent to setting the scaleX and scaleY properties separately.
-         * Since the return value is the Sprite object itself, you can use the following syntax: spr.scale(...).pos(50, 100);
-         * @param scaleX X-axis scale ratio.
-         * @param scaleY Y-axis scale ratio.
-         * @param speedMode (Optional) Whether to use speed mode. Normally, this.scaleX=value is called to assign values. Speed mode directly calls the internal function to handle it. If the scaleX and scaleY properties are not overridden, it is recommended to set to speed mode for higher performance.
-         * @returns The object itself.
-         * @zh 设置缩放。相当于分别设置scaleX和scaleY属性。
-         * 因为返回值为Sprite对象本身，所以可以使用如下语法：spr.scale(...).pos(50, 100);
-         * @param scaleX X轴缩放比例。
-         * @param scaleY Y轴缩放比例。
-         * @param speedMode （可选）是否极速模式，正常是调用this.scaleX=value进行赋值，极速模式直接调用内部函数处理，如果未重写scaleX,scaleY属性，建议设置为极速模式性能更高。
-         * @returns 返回对象本身。
+         * <p>设置缩放。相当于分别设置scaleX和scaleY属性。</p>
+         * <p>因为返回值为Sprite对象本身，所以可以使用如下语法：spr.scale(...).pos(50, 100);</p>
+         * @param	scaleX		X轴缩放比例。
+         * @param	scaleY		Y轴缩放比例。
+         * @param 	speedMode	（可选）是否极速模式，正常是调用this.scaleX=value进行赋值，极速模式直接调用内部函数处理，如果未重写scaleX,scaleY属性，建议设置为急速模式性能更高。
+         * @return	返回对象本身。
          */
         scale(scaleX: number, scaleY: number, speedMode?: boolean): Sprite;
         /**
-         * @en Set the skew angle. Equivalent to setting the skewX and skewY properties separately.
-         * Since the return value is the Sprite object itself, you can use the following syntax: spr.skew(...).pos(50, 100);
-         * @param skewX Horizontal skew angle.
-         * @param skewY Vertical skew angle.
-         * @returns The object itself.
-         * @zh 设置倾斜角度。相当于分别设置skewX和skewY属性。
-         * 因为返回值为Sprite对象本身，所以可以使用如下语法：spr.skew(...).pos(50, 100);
-         * @param skewX 水平倾斜角度。
-         * @param skewY 垂直倾斜角度。
-         * @returns 返回对象本身。
+         * <p>设置倾斜角度。相当于分别设置skewX和skewY属性。</p>
+         * <p>因为返回值为Sprite对象本身，所以可以使用如下语法：spr.skew(...).pos(50, 100);</p>
+         * @param	skewX 水平倾斜角度。
+         * @param	skewY 垂直倾斜角度。
+         * @return	返回对象本身
          */
         skew(skewX: number, skewY: number): Sprite;
         /**
-         * @en Update and render the display object. Called by the system.
-         * @param ctx The rendering context reference.
-         * @param x The X-axis coordinate.
-         * @param y The Y-axis coordinate.
-         * The meaning of x and y is complex. Without rotation, it is the world position of the current node.
-         * If any parent node has rotation, x and y will be reset to [0,0] there and then accumulated again.
-         * So, x and y can be considered as the cumulative value from the current node to a node with rotation (or the root node).
-         * @zh 更新、呈现显示对象。由系统调用。
-         * @param ctx 渲染的上下文引用。
-         * @param x X轴坐标。
-         * @param y Y轴坐标。
-         * 关于上面的x、y的含义比较复杂，在没有旋转的情况下，它就是当前节点的世界坐标的位置。
-         * 如果此节点的某个父节点有旋转，x、y会在那里被重置为[0,0]，然后继续累加。
-         * 所以可以认为这个x、y是表示当前节点到某个有旋转的节点（或者根节点）的累加值。
+         * 更新、呈现显示对象。由系统调用。
+         * @param	context 渲染的上下文引用。
+         * @param	x X轴坐标。
+         * @param	y Y轴坐标。
          */
         render(ctx: Context, x: number, y: number): void;
         /**
-         * @en Draws the current Sprite to a Canvas and returns an HtmlCanvas object.
-         * The drawing result can be used as an image source to be drawn into other Sprites.
-         * It can also obtain the original image data, send it to the server, or save it as an image to achieve a screenshot effect.
-         * @param canvasWidth The width of the canvas.
-         * @param canvasHeight The height of the canvas.
-         * @param offsetX The X-axis offset for drawing.
-         * @param offsetY The Y-axis offset for drawing.
-         * @returns The HTMLCanvas object.
-         * @zh 绘制当前 Sprite 到 Canvas 上,并返回一个 HtmlCanvas 对象。
-         * 绘制的结果可以当作图片源,再次绘制到其他 Sprite 里面。也可以获取原始图片数据,发给服务器或者保存为图片,从而实现截图效果。
-         * @param canvasWidth 画布宽度。
-         * @param canvasHeight 画布高度。
-         * @param offsetX 绘制的 X 轴偏移量。
-         * @param offsetY 绘制的 Y 轴偏移量。
-         * @returns HTMLCanvas 对象。
+         * <p>绘制 当前<code>Sprite</code> 到 <code>Canvas</code> 上，并返回一个HtmlCanvas。</p>
+         * <p>绘制的结果可以当作图片源，再次绘制到其他Sprite里面，示例：</p>
+         *
+         * var htmlCanvas:HTMLCanvas = sprite.drawToCanvas(100, 100, 0, 0);//把精灵绘制到canvas上面
+         * var sp:Sprite = new Sprite();//创建精灵
+         * sp.graphics.drawTexture(htmlCanvas.getTexture());//把截图绘制到精灵上
+         * Laya.stage.addChild(sp);//把精灵显示到舞台
+         *
+         * <p>也可以获取原始图片数据，分享到网上，从而实现截图效果，示例：</p>
+         *
+         * var htmlCanvas:HTMLCanvas = sprite.drawToCanvas(100, 100, 0, 0);//把精灵绘制到canvas上面
+         * htmlCanvas.toBase64("image/png",0.9);//打印图片base64信息，可以发给服务器或者保存为图片
+         *
+         * @param	canvasWidth 画布宽度。
+         * @param	canvasHeight 画布高度。
+         * @param	x 绘制的 X 轴偏移量。
+         * @param	y 绘制的 Y 轴偏移量。
+         * @return  HTMLCanvas 对象。
          */
         drawToCanvas(canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number): HTMLCanvas;
         /**
-         * @private
-         * @en Draws the specified Sprite to a Canvas and returns an HtmlCanvas object.
-         * @param sprite The Sprite to draw.
-         * @param canvasWidth The width of the canvas.
-         * @param canvasHeight The height of the canvas.
-         * @param offsetX The X-axis offset for drawing.
-         * @param offsetY The Y-axis offset for drawing.
-         * @returns The HTMLCanvas object.
-         * @zh 绘制指定的 Sprite 到 Canvas 上,并返回一个 HtmlCanvas 对象。
-         * @param sprite 要绘制的 Sprite。
-         * @param canvasWidth 画布宽度。
-         * @param canvasHeight 画布高度。
-         * @param offsetX 绘制的 X 轴偏移量。
-         * @param offsetY 绘制的 Y 轴偏移量。
-         * @returns HTMLCanvas 对象。
+         * 绘制到一个Texture对象
+         * @param canvasWidth
+         * @param canvasHeight
+         * @param offsetX
+         * @param offsetY
          */
-        static drawToCanvas(sprite: Sprite, canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number): HTMLCanvas;
+        drawToTexture(canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt?: RenderTexture2D | null, flipY?: boolean): Texture | RenderTexture2D;
         /**
-         * @en Draws the current object to a Texture object.
-         * @param canvasWidth The width of the canvas.
-         * @param canvasHeight The height of the canvas.
-         * @param offsetX The X-axis offset for drawing.
-         * @param offsetY The Y-axis offset for drawing.
-         * @param rt The render target.
-         * @returns The drawn Texture or RenderTexture2D object.
-         * @zh 绘制当前对象到一个 Texture 对象上。
-         * @param canvasWidth 画布宽度。
-         * @param canvasHeight 画布高度。
-         * @param offsetX 绘制的 X 轴偏移量。
-         * @param offsetY 绘制的 Y 轴偏移量。
-         * @param rt 渲染目标。
-         * @returns 绘制的 Texture 或 RenderTexture2D 对象。
+         * 把当前对象渲染到指定的贴图上。贴图由外部指定，避免每次都创建。
+         * @param offx
+         * @param offy
+         * @param tex 输出渲染结果
          */
-        drawToTexture(canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt?: RenderTexture2D | null): Texture | RenderTexture2D;
+        drawToTexture3D(offx: number, offy: number, tex: Texture2D): void;
         /**
          * @private
-         * @en Draws the specified Sprite to a Texture or RenderTexture2D object.
-         * @param sprite The Sprite to draw.
-         * @param canvasWidth The width of the canvas.
-         * @param canvasHeight The height of the canvas.
-         * @param offsetX The X-axis offset for drawing.
-         * @param offsetY The Y-axis offset for drawing.
-         * @param rt The render target. If not provided, a new RenderTexture2D will be created.
-         * @returns The drawn Texture or RenderTexture2D object.
-         * @zh 将指定的 Sprite 绘制到 Texture 或 RenderTexture2D 对象上。
-         * @param sprite 要绘制的 Sprite。
-         * @param canvasWidth 画布宽度。
-         * @param canvasHeight 画布高度。
-         * @param offsetX 绘制的 X 轴偏移量。
-         * @param offsetY 绘制的 Y 轴偏移量。
-         * @param rt 渲染目标。如果未提供,将创建一个新的 RenderTexture2D。
-         * @returns 绘制的 Texture 或 RenderTexture2D 对象。
+         * 绘制到画布。
          */
-        static drawToTexture(sprite: Sprite, canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt?: RenderTexture2D | null): Texture | RenderTexture2D;
-        /**
-         * 绘制到Canvas的上下文
-         */
+        static drawToCanvas(sprite: Sprite, _renderType: number, canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number): HTMLCanvas;
         static drawtocanvCtx: Context;
         /**
-         * @en Custom update and render display objects. Generally used to extend rendering modes. Please use it reasonably as it may cause inability to render on accelerators.
-         * Note: Do not add or remove tree nodes in this function, otherwise it will affect the traversal of tree nodes.
-         * @param context The rendering context reference.
-         * @param x The X-axis coordinate.
-         * @param y The Y-axis coordinate.
-         * @zh 自定义更新、呈现显示对象。一般用来扩展渲染模式,请合理使用,可能会导致在加速器上无法渲染。
-         * 注意: 不要在此函数内增加或删除树节点,否则会对树节点遍历造成影响。
-         * @param context 渲染的上下文引用。
-         * @param x X轴坐标。
-         * @param y Y轴坐标。
+         * @private
+         *
+         */
+        static drawToTexture(sprite: Sprite, _renderType: number, canvasWidth: number, canvasHeight: number, offsetX: number, offsetY: number, rt?: RenderTexture2D | null, flipY?: boolean): Texture | RenderTexture2D;
+        /**
+         * <p>自定义更新、呈现显示对象。一般用来扩展渲染模式，请合理使用，可能会导致在加速器上无法渲染。</p>
+         * <p><b>注意</b>不要在此函数内增加或删除树节点，否则会对树节点遍历造成影响。</p>
+         * @param	context  渲染的上下文引用。
+         * @param	x X轴坐标。
+         * @param	y Y轴坐标。
          */
         customRender(context: Context, x: number, y: number): void;
+        /**滤镜集合。可以设置多个滤镜组合。*/
+        get filters(): any[];
+        set filters(value: any[]);
         /**
-         * @en The filter collection. Multiple filters can be combined.
-         * @zh 滤镜集合。可以设置多个滤镜组合。
-         */
-        get filters(): Filter[];
-        set filters(value: Filter[]);
-        /**
-         * @en Converts the local coordinates to the global coordinates relative to the stage.
-         * @param point The local coordinate point.
-         * @param createNewPoint (Optional) Whether to create a new Point object as the return value. The default is false, which uses the input point object as the return value to reduce object creation overhead.
-         * @param globalNode The global node, default is Laya.stage
-         * @return The converted global coordinate point.
-         * @zh 把本地坐标转换为相对stage的全局坐标。
-         * @param point 本地坐标点。
-         * @param createNewPoint （可选）是否创建一个新的Point对象作为返回值，默认为false，使用输入的point对象返回，减少对象创建开销。
-         * @param globalNode global节点，默认为Laya.stage
+         * 把本地坐标转换为相对stage的全局坐标。
+         * @param point				本地坐标点。
+         * @param createNewPoint	（可选）是否创建一个新的Point对象作为返回值，默认为false，使用输入的point对象返回，减少对象创建开销。
+         * @param globalNode		global节点，默认为Laya.stage
          * @return 转换后的坐标的点。
          */
         localToGlobal(point: Point, createNewPoint?: boolean, globalNode?: Sprite | null): Point;
         /**
-         * @en Converts the global coordinates relative to the stage to the local coordinates.
-         * @param point The global coordinate point.
-         * @param createNewPoint (Optional) Whether to create a new Point object as the return value. The default is false, which uses the input point object as the return value to reduce object creation overhead.
-         * @param globalNode The global node, default is Laya.stage.
-         * @return The converted local coordinate point.
-         * @zh 把stage的全局坐标转换为本地坐标。
-         * @param point 全局坐标点。
-         * @param createNewPoint （可选）是否创建一个新的Point对象作为返回值，默认为false，使用输入的point对象返回，减少对象创建开销。
-         * @param globalNode global节点，默认为Laya.stage。
+         * 把stage的全局坐标转换为本地坐标。
+         * @param point				全局坐标点。
+         * @param createNewPoint	（可选）是否创建一个新的Point对象作为返回值，默认为false，使用输入的point对象返回，减少对象创建开销。
+         * @param globalNode		global节点，默认为Laya.stage
          * @return 转换后的坐标的点。
          */
         globalToLocal(point: Point, createNewPoint?: boolean, globalNode?: Sprite | null): Point;
         /**
-         * @en Converts the coordinates in the local coordinate system to the coordinates in the parent container coordinate system.
-         * @param point The local coordinate point.
-         * @return The converted point in the parent container coordinate system.
-         * @zh 将本地坐标系坐标转换到父容器坐标系。
+         * 将本地坐标系坐标转转换到父容器坐标系。
          * @param point 本地坐标点。
-         * @return 转换后的点。
+         * @return  转换后的点。
          */
         toParentPoint(point: Point): Point;
         /**
-         * @en Converts the coordinates in the parent container coordinate system to the coordinates in the local coordinate system.
-         * @param point The point in the parent container coordinate system.
-         * @return The converted point in the local coordinate system.
-         * @zh 将父容器坐标系坐标转换到本地坐标系。
+         * 将父容器坐标系坐标转换到本地坐标系。
          * @param point 父容器坐标点。
-         * @return 转换后的点。
+         * @return  转换后的点。
          */
         fromParentPoint(point: Point): Point;
+        protected onStartListeningToType(type: string): void;
+        /** @private */
+        protected _onDisplay(v?: boolean): void;
+        /**@private
+         * @override
+        */
+        protected _setParent(value: Node): void;
         /**
-         * @en Load and display an image. Equivalent to loading the image and then setting the texture property. Note: calling this method multiple times will only display one image.
-         * @param url The image URL.
-         * @param complete (Optional) The callback function when loading is complete.
-         * @returns Returns the Sprite object itself.
-         * @zh 加载并显示一个图片。相当于加载图片后，设置texture属性。注意：多次调用，只会显示一个图片。
-         * @param url 图片地址。
-         * @param complete （可选）加载完成回调。
-         * @returns 返回精灵对象本身。
+         * <p>加载并显示一个图片。相当于加载图片后，设置texture属性</p>
+         * <p>注意：2.0改动：多次调用，只会显示一个图片（1.0会显示多个图片）,x,y,width,height参数取消。</p>
+         * @param url		图片地址。
+         * @param complete	（可选）加载完成回调。
+         * @return	返回精灵对象本身。
          */
         loadImage(url: string, complete?: Handler): Sprite;
         /**
-         * @en Create a new `Sprite` object based on the image URL to load and display the image.
-         * @param url The image URL.
-         * @returns Returns a new `Sprite` object.
-         * @zh 根据图片地址创建一个新的 `Sprite` 对象用于加载并显示此图片。
-         * @param url 图片地址。
-         * @returns 返回新的 `Sprite`  对象。
+         * 根据图片地址创建一个新的 <code>Sprite</code> 对象用于加载并显示此图片。
+         * @param	url 图片地址。
+         * @return	返回新的 <code>Sprite</code> 对象。
          */
         static fromImage(url: string): Sprite;
-        /**
-        * @en Redraw the Sprite and invalidate its own and parent's cache after setting cacheAs.
-        * @param type The redraw type.
-        * @zh 重新绘制，cacheAs后，设置自己和父对象缓存失效。
-        * @param type 重新绘制类型。
-        */
+        /**cacheAs后，设置自己和父对象缓存失效。*/
         repaint(type?: number): void;
-        /**
+        /**@private
          * @override
-         * @en Repaint the parent node. When `cacheAs` is enabled, set all parent object caches to invalid.
-         * @param type The type of repaint. Default is SpriteConst.REPAINT_CACHE.
-         * @zh 重新绘制父节点。启用 `cacheAs` 时，设置所有父对象缓存失效。
-         * @param type 重新绘制类型。默认为 SpriteConst.REPAINT_CACHE。
-         */
+        */
+        protected _childChanged(child?: Node): void;
+        /**cacheAs时，设置所有父对象缓存失效。 */
         parentRepaint(type?: number): void;
+        /**对舞台 <code>stage</code> 的引用。*/
+        get stage(): Stage;
         /**
-         * @en Reference to the stage.
-         * @zh 对舞台的引用。
-         */
-        get stage(): import("./Stage").Stage;
-        /**
-         * @enYou can set a rectangular area as the clickable region, or set a HitArea instance as the clickable region. The HitArea can have both clickable and non-clickable areas defined. If the hitArea is not set, the mouse collision detection will be based on the area formed by the width and height of the object.
-         * @zh 可以设置一个矩形区域作为点击区域，或者设置一个 `HitArea` 实例作为点击区域，HitArea 内可以设置可点击和不可点击区域。如果不设置 hitArea，则根据宽高形成的区域进行鼠标碰撞检测。
+         * <p>可以设置一个Rectangle区域作为点击区域，或者设置一个<code>HitArea</code>实例作为点击区域，HitArea内可以设置可点击和不可点击区域。</p>
+         * <p>如果不设置hitArea，则根据宽高形成的区域进行碰撞。</p>
          */
         get hitArea(): IHitArea;
         set hitArea(value: IHitArea);
         /**
-         * @en Masking allows setting an object (bitmap or vector graphic) as a mask, displaying content based on the object's shape.
-         * @zh 遮罩，可以设置一个对象（支持位图和矢量图），根据对象形状进行遮罩显示。
+         * <p>遮罩，可以设置一个对象(支持位图和矢量图)，根据对象形状进行遮罩显示。</p>
+         * <p>【注意】遮罩对象坐标系是相对遮罩对象本身的，和Flash机制不同</p>
          */
         get mask(): Sprite;
         set mask(value: Sprite);
         /**
-         * @en Indicates whether the object receives mouse events.
-         * The default is false. If you listen to mouse events, this value and the value of mouseEnable for parent nodes will be automatically set to true (unless the parent node is manually set to false).
-         * @zh 是否接受鼠标事件。
-         * 默认为 false，如果监听鼠标事件，则会自动设置本对象及父节点的属性 mouseEnable 的值都为 true（如果父节点手动设置为 false，则不会更改）。
-         */
+         * 是否接受鼠标事件。
+         * 默认为false，如果监听鼠标事件，则会自动设置本对象及父节点的属性 mouseEnable 的值都为 true（如果父节点手动设置为false，则不会更改）。
+         * */
         get mouseEnabled(): boolean;
         set mouseEnabled(value: boolean);
         /**
-         * @en Starts dragging this object.
-         * @param area (Optional) The drag area, which is the active area of the object's registration point (excluding the object's width and height).
-         * @param hasInertia (Optional) Whether the object has inertia when the mouse is released. The default is false.
-         * @param elasticDistance (Optional) The distance value of the elastic effect. A value of 0 means no elastic effect. The default is 0.
-         * @param elasticBackTime (Optional) The bounce-back time for the elastic effect in milliseconds. The default is 300 milliseconds.
-         * @param data (Optional) The data carried by the drag event.
-         * @param ratio (Optional) The inertia damping coefficient, which affects the strength and duration of inertia.
-         * @zh 开始拖动此对象。
-         * @param area				（可选）拖动区域，此区域为当前对象注册点活动区域（不包括对象宽高） 。
-         * @param hasInertia		（可选）鼠标松开后，是否还惯性滑动，默认为false。
-         * @param elasticDistance	（可选）橡皮筋效果的距离值，0为无橡皮筋效果，默认为0。
-         * @param elasticBackTime	（可选）橡皮筋回弹时间，单位为毫秒，默认为300毫秒。
-         * @param data				（可选）拖动事件携带的数据。
+         * 开始拖动此对象。
+         * @param area				（可选）拖动区域，此区域为当前对象注册点活动区域（不包括对象宽高），可选。
+         * @param hasInertia		（可选）鼠标松开后，是否还惯性滑动，默认为false，可选。
+         * @param elasticDistance	（可选）橡皮筋效果的距离值，0为无橡皮筋效果，默认为0，可选。
+         * @param elasticBackTime	（可选）橡皮筋回弹时间，单位为毫秒，默认为300毫秒，可选。
+         * @param data				（可选）拖动事件携带的数据，可选。
          * @param ratio				（可选）惯性阻尼系数，影响惯性力度和时长。
          */
         startDrag(area?: Rectangle, hasInertia?: boolean, elasticDistance?: number, elasticBackTime?: number, data?: any, ratio?: number): void;
-        /**
-         * @en Stops dragging this object.
-         * @zh 停止拖动此对象。
-         */
+        /**停止拖动此对象。*/
         stopDrag(): void;
         /**
-         * @en Checks whether a point is within this object.
-         * @param x Global x-coordinate.
-         * @param y Global y-coordinate.
-         * @returns Indicates whether the point is inside the object.
-         * @zh 检测某个点是否在此对象内。
-         * @param x 全局x坐标。
-         * @param y 全局y坐标。
-         * @returns 表示是否在对象内。
+         * 检测某个点是否在此对象内。
+         * @param	x 全局x坐标。
+         * @param	y 全局y坐标。
+         * @return  表示是否在对象内。
          */
         hitTestPoint(x: number, y: number): boolean;
-        /**
-         * @en Get the mouse coordinates relative to this object.
-         * @returns The screen point information.
-         * @zh 获得相对于本对象上的鼠标坐标信息。
-         * @returns 屏幕点信息。
-         */
+        /**获得相对于本对象上的鼠标坐标信息。*/
         getMousePoint(): Point;
         /**
-         * @en Get the X-axis coordinate of the mouse in this object's coordinate system.
-         * @zh 返回鼠标在此对象坐标系上的 X 轴坐标信息。
+         * 返回鼠标在此对象坐标系上的 X 轴坐标信息。
          */
         get mouseX(): number;
         /**
-         * @en Get the Y-axis coordinate of the mouse in this object's coordinate system.
-         * @zh 返回鼠标在此对象坐标系上的 Y 轴坐标信息。
+         * 返回鼠标在此对象坐标系上的 Y 轴坐标信息。
          */
         get mouseY(): number;
-        /**
-         * @en The z-order. If this value is changed, all objects of the same container will be re-sorted according to the value. The larger the value, the higher it is. The default is 0, which is sorted according to the order of addition.
-         * @zh z排序，更改此值，则会按照值的大小对同一容器的所有对象重新排序。值越大，越靠上。默认为0，则根据添加顺序排序。
-         */
+        /**z排序，更改此值，则会按照值的大小对同一容器的所有对象重新排序。值越大，越靠上。默认为0，则根据添加顺序排序。*/
         get zOrder(): number;
         set zOrder(value: number);
         /**
-         * @en Set a Texture instance and display the image (if there are other drawings before, it will be cleared).
-         * Equivalent to graphics.clear();graphics.drawImage(), but with better performance.
-         * You can also assign an image address, which will automatically load the image and then display it.
-         * @zh 设置一个Texture实例，并显示此图片（如果之前有其他绘制，则会被清除掉）。
-         * 等同于graphics.clear();graphics.drawImage()，但性能更高。
-         * 还可以赋值一个图片地址，则会自动加载图片，然后显示。
+         * 设置一个Texture实例，并显示此图片（如果之前有其他绘制，则会被清除掉）。
+         * 等同于graphics.clear();graphics.drawImage()，但性能更高
+         * 还可以赋值一个图片地址，则会自动加载图片，然后显示
          */
         get texture(): Texture;
         set texture(value: Texture);
         /**
-         * @en Draw call optimization: when set to true, draw call optimization is enabled. During engine rendering, all text is automatically brought to the top layer to avoid interruptions by text when drawing images from the same atlas, thus reducing the number of draw calls.
-         * Enabling this will cause text to be non-obstructable. Use this feature cautiously if your project requires text to be obstructed.
-         * @zh 绘制调用优化，为true时，开启drawcall优化。引擎绘制时自动将所有文本提到显示最上层，避免同一个图集内的图像绘制时被文本打断，可以减少drawcall数量。
-         * 开启后，会导致文本无法被遮挡，存在文本遮挡需求的项目，请谨慎使用该功能。
+         * <p>视口大小，视口外的子对象，将不被渲染(如果想实现裁剪效果，请使用srollRect)，合理使用能提高渲染性能。比如由一个个小图片拼成的地图块，viewport外面的小图片将不渲染</p>
+         * <p>srollRect和viewport的区别：<br/>
+         * 1. srollRect自带裁剪效果，viewport只影响子对象渲染是否渲染，不具有裁剪效果（性能更高）。<br/>
+         * 2. 设置rect的x,y属性均能实现区域滚动效果，但scrollRect会保持0,0点位置不变。</p>
+         * @default null
          */
+        get viewport(): Rectangle;
+        set viewport(value: Rectangle);
         set drawCallOptimize(value: boolean);
         get drawCallOptimize(): boolean;
-        set cacheGlobal(value: boolean);
-        set globalRotation(value: number);
+        onAfterDeserialize(): void;
+        get cacheGlobal(): boolean;
+        CustomMaterial(): void;
         /**
-         * @en Gets the global X-axis scale relative to the stage (this value includes the scaling of parent nodes).
-         * @returns The global X-axis scale.
-         * @zh 获得相对于stage的全局X轴缩放值（会叠加父亲节点的缩放值）。
-         * @returns 全局X轴缩放值。
+         * 获得相对于stage的全局X轴缩放值（会叠加父亲节点的缩放值）。
          */
         get globalScaleX(): number;
         /**
-         * @en Gets the global Y-axis scale relative to the stage (this value includes the scaling of parent nodes).
-         * @returns The global Y-axis scale.
-         * @zh 获得相对于stage的全局Y轴缩放值（会叠加父亲节点的缩放值）。
-         * @returns 全局Y轴缩放值。
+         * 获得相对于stage的全局Y轴缩放值（会叠加父亲节点的缩放值）。
          */
         get globalScaleY(): number;
     }
@@ -17481,13 +18197,17 @@ declare module Laya {
         /** @private */
         static CLIP: number;
         /** @private */
+        static STYLE: number;
+        /** @private */
         static TEXTURE: number;
         /** @private */
         static GRAPHICS: number;
         /** @private */
-        static RENDERNODE2D: number;
+        static LAYAGL3D: number;
         /** @private */
         static CUSTOM: number;
+        /** @private */
+        static ONECHILD: number;
         /** @private */
         static HITAREA: number;
         /** @private */
@@ -17547,6 +18267,8 @@ declare module Laya {
         static SCALE_FIXED_HEIGHT: string;
         /**应用保持设计比例不变，全屏显示全部内容(类似showall，但showall非全屏，会有黑边)，根据屏幕长宽比，自动选择使用SCALE_FIXED_WIDTH或SCALE_FIXED_HEIGHT*/
         static SCALE_FIXED_AUTO: string;
+        static SCALE_FIXED_AUTO_LAYAME: string;
+        static SCALE_FIXED_AUTO_LAYAVERSE: string;
         /**画布水平居左对齐。*/
         static ALIGN_LEFT: string;
         /**画布水平居右对齐。*/
@@ -17629,13 +18351,21 @@ declare module Laya {
          * 在移动端输入时，输入法弹出期间不进行画布尺寸重置。
          */
         private _isInputting;
+        /**@inheritDoc @override*/
+        set_width(value: number): void;
         /**
+         * @inheritDoc
          * @override
-         * @en The matrix information of the object. By setting the matrix, node rotation, scaling, and displacement effects can be achieved.
-         * @zh 对象的矩阵信息。通过设置矩阵可以实现节点旋转，缩放，位移效果。
          */
-        get transform(): Matrix;
+        get_width(): number;
+        /**@inheritDoc @override */
+        set_height(value: number): void;
+        /** @override*/
+        get_height(): number;
+        /**@override*/
         set transform(value: Matrix);
+        /**@inheritDoc @override*/
+        get transform(): Matrix;
         /**
          * 舞台是否获得焦点。
          */
@@ -17645,14 +18375,7 @@ declare module Laya {
          */
         get isVisibility(): boolean;
         private _needUpdateCanvasSize;
-        /**
-         * 更新canvas大小
-         * @param delay 是否立即执行改动，如果是true，将延迟执行
-         */
         updateCanvasSize(delay?: boolean): void;
-        /**
-         * 同步最终canvas大小
-         */
         needUpdateCanvasSize(): void;
         /**
          * 设置屏幕大小，场景会根据屏幕大小进行适配。可以动态调用此方法，来更改游戏显示的大小。
@@ -17662,12 +18385,12 @@ declare module Laya {
         setScreenSize(screenWidth: number, screenHeight: number): void;
         /**
          * 屏幕旋转用layaverse 需要
-         * @param screenWidth 屏幕宽度
-         * @param screenHeight 屏幕高度
-         * @param _screenMode 屏幕模式 "none"为默认值，horizontal为横屏，vertical为竖屏
+         * @param screenWidth
+         * @param screenHeight
+         * @param _screenMode
          * @returns
          */
-        setScreenSizeForScene(screenWidth: number, screenHeight: number, screenMode: string): {
+        setScreenSizeForScene(screenWidth: number, screenHeight: number, _screenMode: string): {
             stageWidth: number;
             stageHeight: number;
             canvasWidth: number;
@@ -17719,18 +18442,11 @@ declare module Laya {
         get mouseX(): number;
         /**鼠标在 Stage 上的 Y 轴坐标。@override*/
         get mouseY(): number;
-        /**
-         * 获得屏幕上的鼠标坐标信息
-         * @returns 屏幕点信息
-         */
+        /**@inheritDoc @override*/
         getMousePoint(): Point;
-        /**
-         * 当前视窗由缩放模式导致的 X 轴缩放系数。
-         */
+        /**当前视窗由缩放模式导致的 X 轴缩放系数。*/
         get clientScaleX(): number;
-        /**
-         * 当前视窗由缩放模式导致的 Y 轴缩放系数。
-         */
+        /**当前视窗由缩放模式导致的 Y 轴缩放系数。*/
         get clientScaleY(): number;
         /**
          * <p>场景布局类型。</p>
@@ -17742,17 +18458,9 @@ declare module Laya {
          */
         get screenMode(): string;
         set screenMode(value: string);
-        /**
-         * @override
-         * 重新绘制
-         * @param type 重新绘制类型
-         */
+        /**@inheritDoc @override*/
         repaint(type?: number): void;
-        /**
-         * @override
-         * 重新绘制父节点
-         * @param type 重新绘制类型
-         */
+        /**@inheritDoc @override*/
         parentRepaint(type?: number): void;
         /**@private */
         getFrameTm(): number;
@@ -17761,28 +18469,18 @@ declare module Laya {
          * <p>可以用来判断函数内时间消耗，通过合理控制每帧函数处理消耗时长，避免一帧做事情太多，对复杂计算分帧处理，能有效降低帧率波动。</p>
          */
         getTimeFromFrameStart(): number;
-        /**
-         * @override
-         * 表示是否可见，默认为true。如果设置不可见，节点将不被渲染。
-         */
-        get visible(): boolean;
+        /**@inheritDoc @override*/
         set visible(value: boolean);
         /**
-         * 渲染舞台上的所有显示对象
-         * @param context2D 渲染的上下文
-         * @param x 横轴坐标
-         * @param y 纵轴坐标
-         * @returns
-         */
-        render(context2D: Context, x: number, y: number): void;
-        /**
+         * @inheritDoc
          * @override
-         * @param context2D
-         * @param x
-         * @param y
-         * @perfTag PerformanceDefine.T_UIRender
          */
-        private _render2d;
+        get visible(): boolean;
+        /** @private */
+        static clear: Function;
+        /**@inheritDoc @override*/
+        render(context: Context, x: number, y: number): void;
+        renderToNative(context: Context, x: number, y: number): void;
         private _runComponents;
         private _updateTimers;
         /**
@@ -17904,10 +18602,67 @@ declare module Laya {
         static langPacks: Record<string, string>;
         /**是否是从右向左的显示顺序*/
         static RightToLeft: boolean;
+        static _passwordChar: string;
+        /**@private 位图字体字典。*/
+        private static _bitmapFonts;
         /** 标记此文本是否忽略语言包 */
         ignoreLang: boolean;
+        /**表示文本内容字符串。*/
+        protected _text: string;
+        protected _overflow: string;
+        protected _singleCharRender: boolean;
+        protected _textStyle: TextStyle;
+        protected _prompt: string;
+        /**输入提示符颜色。*/
+        protected _promptColor: string;
+        /**
+         * 文本背景颜色，以字符串表示。
+         */
+        protected _bgColor: string;
+        /**
+         * 文本边框背景颜色，以字符串表示。
+         */
+        protected _borderColor: string;
+        /**
+         * <p>默认边距信息</p>
+         * <p>[上边距，右边距，下边距，左边距]（边距以像素为单位）</p>
+         */
+        protected _padding: number[];
+        /**
+         * <p>表示使用此文本格式的文本字段是否自动换行。</p>
+         * 如果 wordWrap 的值为 true，则该文本字段自动换行；如果值为 false，则该文本字段不自动换行。
+         * @default false。
+         */
+        protected _wordWrap: boolean;
+        /**
+         * <p>指定文本字段是否是密码文本字段。</p>
+         * 如果此属性的值为 true，则文本字段被视为密码文本字段，并使用星号而不是实际字符来隐藏输入的字符。如果为 false，则不会将文本字段视为密码文本字段。
+         */
+        protected _asPassword: boolean;
+        protected _htmlParseOptions: HtmlParseOptions;
+        protected _templateVars: Record<string, string>;
+        /**表示文本内容是否发生改变。*/
+        protected _isChanged: boolean;
+        /**表示文本的宽度，以像素为单位。*/
+        protected _textWidth: number;
+        /**表示文本的高度，以像素为单位。*/
+        protected _textHeight: number;
+        protected _realFont: string;
+        protected _bitmapFont: BitmapFont;
+        protected _scrollPos: Point | null;
+        protected _bgDrawCmd: DrawRectCmd;
+        protected _html: boolean;
+        protected _ubb: boolean;
+        protected _lines: Array<ITextLine>;
+        protected _elements: Array<HtmlElement>;
+        protected _objContainer: Sprite;
+        protected _maxWidth: number;
+        protected _hideText: boolean;
         private _updatingLayout;
         private _fontSizeScale;
+        /**是否将字符串中的\n,\t转换为实际功能的字符 */
+        _parseEscapeChars: boolean;
+        _onPostLayout: () => void;
         /**
          * 创建一个新的 <code>Text</code> 实例。
          */
@@ -17925,19 +18680,33 @@ declare module Laya {
          */
         static unregisterBitmapFont(name: string, destroy?: boolean): void;
         /**
-         * 销毁文本
-         * @param destroyChild 是否销毁子节点
          * @inheritDoc
          * @override
         */
         destroy(destroyChild?: boolean): void;
         /**
-         * 获取滚动可视视窗
-         * @param realSize	（可选）使用图片的真实大小，默认为false
          * @inheritDoc
          * @override
          */
         getGraphicBounds(realSize?: boolean): Rectangle;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        get_width(): number;
+        /**
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        get_height(): number;
+        /**
+         * @override
+         */
+        _setHeight(value: number): void;
         /**
          * 表示文本的宽度，以像素为单位。
          */
@@ -17946,15 +18715,10 @@ declare module Laya {
          * 表示文本的高度，以像素为单位。
          */
         get textHeight(): number;
-        /**
-         * 当前文本的内容字符串。
-         */
+        /** 当前文本的内容字符串。*/
         get text(): string;
         set text(value: string);
-        /**
-         * @deprecated
-         * @param text 文本
-         */
+        /** @deprecated **/
         changeText(text: string): void;
         /**
          * <p>文本的字体名称，以字符串形式表示。</p>
@@ -17975,6 +18739,7 @@ declare module Laya {
          */
         get color(): string;
         set color(value: string);
+        set_color(value: string): void;
         /**
          * <p>指定文本是否为粗体字。</p>
          * <p>默认值为 false，这意味着不使用粗体字。如果值为 true，则文本为粗体字。</p>
@@ -18060,52 +18825,36 @@ declare module Laya {
          */
         get overflow(): string;
         set overflow(value: string);
-        /**
-         * 是否显示下划线。
-         */
+        /**是否显示下划线。*/
         get underline(): boolean;
         set underline(value: boolean);
+        /**下划线的颜色，为null则使用字体颜色。*/
+        get underlineColor(): string;
+        set underlineColor(value: string);
+        get strikethrough(): boolean;
+        set strikethrough(value: boolean);
         /**
          * 下划线的颜色，为null则使用字体颜色。
          */
-        get underlineColor(): string;
-        set underlineColor(value: string);
+        get strikethroughColor(): string;
+        set strikethroughColor(value: string);
         get singleCharRender(): boolean;
-        /**
-         * 设置是否单个字符渲染，如果Textd的内容一直改变，例如是一个增加的数字，就设置这个，防止无效占用缓存
-         */
+        /** 设置是否单个字符渲染，如果Textd的内容一直改变，例如是一个增加的数字，就设置这个，防止无效占用缓存 */
         set singleCharRender(value: boolean);
-        /**
-         * 设置是否富文本，支持html语法
-         */
         get html(): boolean;
+        /** 设置是否富文本，支持html语法 */
         set html(value: boolean);
-        /**
-         * 设置是否使用UBB语法解析文本
-         */
         get ubb(): boolean;
+        /** 设置是否使用UBB语法解析文本 */
         set ubb(value: boolean);
         get maxWidth(): number;
-        /**
-         * 设置当文本达到最大允许的宽度时，自定换行，设置为0则此限制不生效。
-         */
+        /** 设置当文本达到最大允许的宽度时，自定换行，设置为0则此限制不生效。*/
         set maxWidth(value: number);
-        /**
-         * 富文本HTML模式选项
-         */
         get htmlParseOptions(): HtmlParseOptions;
         set htmlParseOptions(value: HtmlParseOptions);
-        /**
-         * 文本模板
-         */
+        protected parseTemplate(template: string): string;
         get templateVars(): Record<string, any>;
         set templateVars(value: Record<string, any> | boolean);
-        /**
-         * 设置模板值
-         * @param name 模板名
-         * @param value 值
-         * @returns
-         */
         setVar(name: string, value: any): Text;
         /**
         * <p>设置横向滚动量。</p>
@@ -18135,17 +18884,30 @@ declare module Laya {
         /**返回文字行信息*/
         get lines(): ReadonlyArray<ITextLine>;
         /**
-         * 排版文本
+         * @private
          */
+        protected markChanged(): void;
         typeset(): void;
-        /**
-         * 延迟刷新排版
-         */
         refreshLayout(): void;
-        /**
-         * 获取对象容器
-         */
         get objContainer(): Sprite;
+        /**
+         * <p>排版文本。</p>
+         * <p>进行宽高计算，渲染、重绘文本。</p>
+         */
+        protected _typeset(): void;
+        /**
+         * @private
+         * 分析文本换行。
+         */
+        protected doLayout(): void;
+        /**
+        * @private
+        * 渲染文字。
+        * @param	begin 开始渲染的行索引。
+        * @param	visibleLineCount 渲染的行数。
+        */
+        protected renderText(): void;
+        protected drawBg(): void;
     }
     interface ITextCmd {
         x: number;
@@ -18250,571 +19012,279 @@ declare module Laya {
         readonly pos: Point;
     }
     /**
-     * @en `Event` is a collection of event types. Generally, when an event occurs, the `Event` object is passed as a parameter to the event listener.
-     * @zh `Event` 是事件类型的集合。一般当发生事件时,`Event` 对象将作为参数传递给事件侦听器。
+     * <code>Event</code> 是事件类型的集合。一般当发生事件时，<code>Event</code> 对象将作为参数传递给事件侦听器。
      */
     class Event {
-        /**
-         * @en An empty Event object. Used for event dispatch transfer.
-         * @zh 一个空的 Event 对象。用于事件派发中转使用。
-         */
+        /** 一个空的 Event 对象。用于事件派发中转使用。*/
         static readonly EMPTY: Readonly<Event>;
-        /**
-         * @en Defines the value of the `type` property of a `mousedown` event object, triggered when pressed on a display object.
-         * @zh 定义 `mousedown` 事件对象的 `type` 属性值，用于在显示对象上按下后触发。
-         */
+        /** 定义 mousedown 事件对象的 type 属性值。*/
         static MOUSE_DOWN: string;
-        /**
-         * @en Defines the value of the `type` property of a `mouseup` event object, triggered when released on a display object.
-         * @zh 定义 `mouseup` 事件对象的 `type` 属性值，用于在显示对象抬起后触发。
-         */
+        /** 定义 mouseup 事件对象的 type 属性值。*/
         static MOUSE_UP: string;
-        /**
-         * @en Defines the value of the `type` property of a `rightmousedown` event object.
-         * @zh 定义 `rightmousedown` 事件对象的 `type` 属性值。
-         */
+        /** 定义 rightmousedown 事件对象的 type 属性值。*/
         static RIGHT_MOUSE_DOWN: string;
-        /**
-         * @en Defines the value of the `type` property of a `rightmouseup` event object.
-         * @zh 定义 `rightmouseup` 事件对象的 `type` 属性值。
-         */
+        /** 定义 rightmouseup 事件对象的 type 属性值。*/
         static RIGHT_MOUSE_UP: string;
-        /**
-         * @en Defines the value of the `type` property of a `click` event object, triggered when a mouse click completes on a display object.
-         * @zh 定义 `click` 事件对象的 `type` 属性值，用于鼠标点击对象后触发。
-         */
+        /** 定义 click 事件对象的 type 属性值。*/
         static CLICK: string;
-        /**
-         * @en Defines the value of the `type` property of a `rightclick` event object.
-         * @zh 定义 `rightclick` 事件对象的 `type` 属性值。
-         */
+        /** 定义 rightclick 事件对象的 type 属性值。*/
         static RIGHT_CLICK: string;
-        /**
-         * @en Defines the value of the `type` property of a `mousemove` event object, triggered when mouse moves over a display object.
-         * @zh 定义 `mousemove` 事件对象的 `type` 属性值，用于鼠标在对象身上进行移动后触发。
-         */
+        /** 定义 mousemove 事件对象的 type 属性值。*/
         static MOUSE_MOVE: string;
-        /**
-         * @en Defines the value of the `type` property of a `mouseover` event object.
-         * @zh 定义 `mouseover` 事件对象的 `type` 属性值。
-         */
+        /** 定义 mouseover 事件对象的 type 属性值。*/
         static MOUSE_OVER: string;
-        /**
-         * @en Defines the value of the `type` property of a `mouseout` event object.
-         * @zh 定义 `mouseout` 事件对象的 `type` 属性值。
-         */
+        /** 定义 mouseout 事件对象的 type 属性值。*/
         static MOUSE_OUT: string;
-        /**
-         * @en Defines the value of the `type` property of a `mousewheel` event object.
-         * @zh 定义 `mousewheel` 事件对象的 `type` 属性值。
-         */
+        /** 定义 mousewheel 事件对象的 type 属性值。*/
         static MOUSE_WHEEL: string;
-        /**
-         * @en Defines the value of the `type` property of a `mouseover` event object.
-         * @zh 定义 `mouseover` 事件对象的 `type` 属性值。
-         */
+        /** 定义 mouseover 事件对象的 type 属性值。*/
         static ROLL_OVER: string;
-        /**
-         * @en Defines the value of the `type` property of a `mouseout` event object, triggered when mouse leaves a display object.
-         * @zh 定义 `mouseout` 事件对象的 `type` 属性值，用于鼠标离开对象后触发。
-         */
+        /** 定义 mouseout 事件对象的 type 属性值。*/
         static ROLL_OUT: string;
-        /**
-         * @en Defines the value of the `type` property of a `doubleclick` event object.
-         * @zh 定义 `doubleclick` 事件对象的 `type` 属性值。
-         */
+        /** 定义 doubleclick 事件对象的 type 属性值。*/
         static DOUBLE_CLICK: string;
-        /**
-         * @en Defines the value of the `type` property of a `mousedrag` event object.
-         * @zh 定义 `mousedrag` 事件对象的 `type` 属性值。
-         */
+        /** 定义 mousemove 事件对象的 type 属性值。*/
         static MOUSE_DRAG: string;
-        /**
-         * @en Defines the value of the `type` property of a `mousedragend` event object.
-         * @zh 定义 `mousedragend` 事件对象的 `type` 属性值。
-         */
+        /** 定义 mousemove 事件对象的 type 属性值。*/
         static MOUSE_DRAG_END: string;
-        /**
-         * @en Defines the value of the `type` property of a `dragstart` event object, triggered when drag start.
-         * @zh 定义 `dragstart` 事件对象的 `type` 属性值，用于开始拖动后触发。
-         */
+        /** 定义 dragstart 事件对象的 type 属性值。*/
         static DRAG_START: string;
-        /**
-         * @en Defines the value of the `type` property of a `dragmove` event object, triggered when dragging.
-         * @zh 定义 `dragmove` 事件对象的 `type` 属性值，用于拖动中触发。
-         */
+        /** 定义 dragmove 事件对象的 type 属性值。*/
         static DRAG_MOVE: string;
-        /**
-         * @en Defines the value of the `type` property of a `dragend` event object, triggered when drag end.
-         * @zh 定义 `dragend` 事件对象的 `type` 属性值，用于拖动结束后触发。
-         */
+        /** 定义 dragend 事件对象的 type 属性值。*/
         static DRAG_END: string;
-        /**
-         * @en Defines the value of the `type` property of a `keydown` event object.
-         * @zh 定义 `keydown` 事件对象的 `type` 属性值。
-         */
+        /** 定义 keydown 事件对象的 type 属性值。*/
         static KEY_DOWN: string;
-        /**
-         * @en Defines the value of the `type` property of a `keypress` event object.
-         * @zh 定义 `keypress` 事件对象的 `type` 属性值。
-         */
+        /** 定义 keypress 事件对象的 type 属性值。*/
         static KEY_PRESS: string;
-        /**
-         * @en Defines the value of the `type` property of a `keyup` event object.
-         * @zh 定义 `keyup` 事件对象的 `type` 属性值。
-         */
+        /** 定义 keyup 事件对象的 type 属性值。*/
         static KEY_UP: string;
-        /**
-         * @en Defines the value of the `type` property of a `change` event object.
-         * @zh 定义 `change` 事件对象的 `type` 属性值。
-         */
+        /** 定义 change 事件对象的 type 属性值。*/
         static CHANGE: string;
-        /**
-         * @en Defines the value of the `type` property of a `changed` event object.
-         * @zh 定义 `changed` 事件对象的 `type` 属性值。
-         */
+        /** 定义 changed 事件对象的 type 属性值。*/
         static CHANGED: string;
-        /**
-         * @en Defines the value of the `type` property of a `willResize` event object.
-         * @zh 定义 `willResize` 事件对象的 `type` 属性值。
-         */
+        /** 定义 willResize 事件对象的 type 属性值。*/
         static WILL_RESIZE: string;
-        /**
-         * @en Defines the value of the `type` property of a `resize` event object.
-         * @zh 定义 `resize` 事件对象的 `type` 属性值。
-         */
+        /** 定义 resize 事件对象的 type 属性值。*/
         static RESIZE: string;
-        /**
-         * @en Defines the value of the `type` property of an `added` event object.
-         * @zh 定义 `added` 事件对象的 `type` 属性值。
-         */
+        /** 定义 added 事件对象的 type 属性值。*/
         static ADDED: string;
-        /**
-         * @en Defines the value of the `type` property of a `removed` event object.
-         * @zh 定义 `removed` 事件对象的 `type` 属性值。
-         */
+        /** 定义 removed 事件对象的 type 属性值。*/
         static REMOVED: string;
-        /**
-         * @en Defines the value of the `type` property of a `display` event object.
-         * @zh 定义 `display` 事件对象的 `type` 属性值。
-         */
+        /** 定义 display 事件对象的 type 属性值。*/
         static DISPLAY: string;
-        /**
-         * @en Defines the value of the `type` property of an `undisplay` event object.
-         * @zh 定义 `undisplay` 事件对象的 `type` 属性值。
-         */
+        /** 定义 undisplay 事件对象的 type 属性值。*/
         static UNDISPLAY: string;
-        /**
-         * @en Defines the value of the `type` property of an `error` event object.
-         * @zh 定义 `error` 事件对象的 `type` 属性值。
-         */
+        /** 定义 error 事件对象的 type 属性值。*/
         static ERROR: string;
-        /**
-         * @en Defines the value of the `type` property of a `complete` event object.
-         * @zh 定义 `complete` 事件对象的 `type` 属性值。
-         */
+        /** 定义 complete 事件对象的 type 属性值。*/
         static COMPLETE: string;
-        /**
-         * @en Defines the value of the `type` property of a `loaded` event object.
-         * @zh 定义 `loaded` 事件对象的 `type` 属性值。
-         */
+        /** 定义 loaded 事件对象的 type 属性值。*/
         static LOADED: string;
-        /**
-         * @en Defines the value of the `type` property of a `ready` event object.
-         * @zh 定义 `ready` 事件对象的 `type` 属性值。
-         */
+        /** 定义 loaded 事件对象的 type 属性值。*/
         static READY: string;
-        /**
-         * @en Defines the value of the `type` property of a `progress` event object.
-         * @zh 定义 `progress` 事件对象的 `type` 属性值。
-         */
+        /** 定义 progress 事件对象的 type 属性值。*/
         static PROGRESS: string;
-        /**
-         * @en Defines the value of the `type` property of an `input` event object.
-         * @zh 定义 `input` 事件对象的 `type` 属性值。
-         */
+        /** 定义 input 事件对象的 type 属性值。*/
         static INPUT: string;
-        /**
-         * @en Defines the value of the `type` property of a `render` event object.
-         * @zh 定义 `render` 事件对象的 `type` 属性值。
-         */
+        /** 定义 render 事件对象的 type 属性值。*/
         static RENDER: string;
-        /**
-         * @en Defines the value of the `type` property of an `open` event object.
-         * @zh 定义 `open` 事件对象的 `type` 属性值。
-         */
+        /** 定义 open 事件对象的 type 属性值。*/
         static OPEN: string;
-        /**
-         * @en Defines the value of the `type` property of a `message` event object.
-         * @zh 定义 `message` 事件对象的 `type` 属性值。
-         */
+        /** 定义 message 事件对象的 type 属性值。*/
         static MESSAGE: string;
-        /**
-         * @en Defines the value of the `type` property of a `close` event object.
-         * @zh 定义 `close` 事件对象的 `type` 属性值。
-         */
+        /** 定义 close 事件对象的 type 属性值。*/
         static CLOSE: string;
-        /**
-         * @en Defines the value of the `type` property of a `enterframe` event object.
-         * @zh 定义 `enterframe` 事件对象的 `type` 属性值。
-         */
+        /** 定义 frame 事件对象的 type 属性值。*/
         static FRAME: string;
-        /**
-         * @en Defines the value of the `type` property of an `enter` event object.
-         * @zh 定义 `enter` 事件对象的 `type` 属性值。
-         */
+        /** 定义 enter 事件对象的 type 属性值。*/
         static ENTER: string;
-        /**
-         * @en Defines the value of the `type` property of a `select` event object.
-         * @zh 定义 `select` 事件对象的 `type` 属性值。
-         */
+        /** 定义 select 事件对象的 type 属性值。*/
         static SELECT: string;
-        /**
-         * @en Defines the value of the `type` property of a `blur` event object.
-         * @zh 定义 `blur` 事件对象的 `type` 属性值。
-         */
+        /** 定义 blur 事件对象的 type 属性值。*/
         static BLUR: string;
-        /**
-         * @en Defines the value of the `type` property of a `focus` event object.
-         * @zh 定义 `focus` 事件对象的 `type` 属性值。
-         */
+        /** 定义 focus 事件对象的 type 属性值。*/
         static FOCUS: string;
-        /**
-         * @en Defines the value of the `type` property of a `visibilitychange` event object.
-         * @zh 定义 `visibilitychange` 事件对象的 `type` 属性值。
-         */
+        /** 定义 visibilitychange 事件对象的 type 属性值。*/
         static VISIBILITY_CHANGE: string;
-        /**
-         * @en Defines the value of the `type` property of a `focuschange` event object.
-         * @zh 定义 `focuschange` 事件对象的 `type` 属性值。
-         */
+        /** 定义 focuschange 事件对象的 type 属性值。*/
         static FOCUS_CHANGE: string;
-        /**
-         * @en Defines the value of the `type` property of a `played` event object.
-         * @zh 定义 `played` 事件对象的 `type` 属性值。
-         */
+        /** 定义 played 事件对象的 type 属性值。*/
         static PLAYED: string;
-        /**
-         * @en Defines the value of the `type` property of a `paused` event object.
-         * @zh 定义 `paused` 事件对象的 `type` 属性值。
-         */
+        /** 定义 paused 事件对象的 type 属性值。*/
         static PAUSED: string;
-        /**
-         * @en Defines the value of the `type` property of a `stopped` event object.
-         * @zh 定义 `stopped` 事件对象的 `type` 属性值。
-         */
+        /** 定义 stopped 事件对象的 type 属性值。*/
         static STOPPED: string;
-        /**
-         * @en Defines the value of the `type` property of a `start` event object.
-         * @zh 定义 `start` 事件对象的 `type` 属性值。
-         */
+        /** 定义 start 事件对象的 type 属性值。*/
         static START: string;
-        /**
-         * @en Defines the value of the `type` property of an `end` event object.
-         * @zh 定义 `end` 事件对象的 `type` 属性值。
-         */
+        /** 定义 end 事件对象的 type 属性值。*/
         static END: string;
-        /**
-         * @en Defines the value of the `type` property of a `link` event object.
-         * @zh 定义 `link` 事件对象的 `type` 属性值。
-         */
+        /** 定义 link 事件对象的 type 属性值。*/
         static LINK: string;
-        /**
-         * @en Defines the value of the `type` property of a `label` event object.
-         * @zh 定义 `label` 事件对象的 `type` 属性值。
-         */
+        /** 定义 label 事件对象的 type 属性值。*/
         static LABEL: string;
-        /**
-         * @en Triggered when the full screen state changes in the browser.
-         * @zh 浏览器全屏更改时触发
-         */
+        /**浏览器全屏更改时触发*/
         static FULL_SCREEN_CHANGE: string;
-        /**
-         * @en Triggered when the GPU device is lost.
-         * @zh 显卡设备丢失时触发
-         */
+        /**显卡设备丢失时触发*/
         static DEVICE_LOST: string;
-        /**
-         * @en Triggered when the world matrix is updated.
-         * @zh 世界矩阵更新时触发。
-         */
+        /**世界矩阵更新时触发。*/
         static TRANSFORM_CHANGED: string;
-        /**
-         * @en Triggered when a 3D layer changes.
-         * @zh 3D layer改变时触发。
-         */
+        /**3D layer改变时触发。*/
         static LAYERCHANGE: string;
-        /**
-        * @en Triggered when 3D Static changes.
-        * @zh 3D Static改变时触发。
-        */
+        /**3D Static改变时触发 */
         static staticMask: string;
-        /**
-         * @en For 2D physics collision or 3D physics trigger start.
-         * @zh 2D物理碰撞或3D物理触发开始。
-         */
+        /**物理碰撞开始*/
         static TRIGGER_ENTER: string;
-        /**
-         * @en For 2D physics collision or 3D physics trigger continues.
-         * @zh 2D物理碰撞或3D物理触发持续。
-         */
+        /**物理碰撞持续*/
         static TRIGGER_STAY: string;
-        /**
-         * @en For 2D physics collision or 3D physics trigger end.
-         * @zh 2D物理碰撞或3D物理触发结束。
-         */
+        /**物理碰撞结束*/
         static TRIGGER_EXIT: string;
-        /**
-         * @en 3DPhysical collision start.
-         * @zh 3D物理碰撞开始。
-         */
+        /**物理碰撞开始*/
         static COLLISION_ENTER: string;
-        /**
-         * @en 3DPhysical collision continues.
-         * @zh 3D物理碰撞持续。
-         */
+        /**物理碰撞持续*/
         static COLLISION_STAY: string;
-        /**
-         * @en 3DPhysical collision end.
-         * @zh 3D物理碰撞结束。
-         */
+        /**物理碰撞结束*/
         static COLLISION_EXIT: string;
-        /**
-         * @en Joint destruction.
-         * @zh 关节破坏。
-         */
+        /**关节破坏 */
         static JOINT_BREAK: string;
         /**
-         * @en Checks whether the specified event type is a mouse event.
-         * @param type The type of the event.
-         * @returns True if the specified event type is a mouse event; otherwise, false.
-         * @zh 检测指定事件类型是否是鼠标事件。
-         * @param type 事件的类型。
-         * @returns 如果是鼠标事件，则值为 true;否则，值为 false。
+         * 检测指定事件类型是否是鼠标事件。
+         * @param	type 事件的类型。
+         * @return	如果是鼠标事件，则值为 true;否则，值为 false。
          */
         static isMouseEvent(type: string): boolean;
-        /**
-         * @en The event type.
-         * @zh 事件类型。
-         */
+        /** 事件类型。*/
         type: string;
-        /**
-         * @en The triggering object of the event.
-         * @zh 事件目标触发对象。
-         */
+        /** 事件目标触发对象。*/
         target: any;
-        /**
-         * @en The current propagation object of the event.
-         * @zh 事件当前冒泡对象。
-         */
+        /** 事件当前冒泡对象。*/
         currentTarget: any;
-        /**
-         * @en Unique identifier assigned to the touch point (as an int).
-         * @zh 分配给触摸点的唯一标识号（作为 int）。
-         */
+        /** 分配给触摸点的唯一标识号（作为 int）。*/
         touchId: number;
-        /**
-         * @en The clicked position.
-         * @zh 点击坐标。
-         */
+        /** 点击坐标 */
         readonly touchPos: Point;
-        /**
-         * @en Specifies whether this is a double-click.
-         * @zh 是否双击。
-         */
+        /** 是否双击 */
         isDblClick: boolean;
-        /**
-         * @en The scroll wheel increments.
-         * @zh 滚轮滑动增量。
-         */
+        /**滚轮滑动增量*/
         delta: number;
         /**
-         * @en The mouse button.
-         * - 0: Main button, usually the left button
-         * - 1: Auxiliary button, usually the middle button (wheel button)
-         * - 2: Secondary button, usually the right button
-         * - 3: Fourth button, typically the browser Back button
-         * - 4: Fifth button, typically the browser Forward button
-         * @zh 鼠标按键，
-         * - 0：主按键，通常指鼠标左键
-         * - 1：辅助按键，通常指鼠标滚轮中键
-         * - 2：次按键，通常指鼠标右键
-         * - 3：第四个按钮，通常指浏览器后退按钮
-         * - 4：第五个按钮，通常指浏览器的前进按钮
+         * 鼠标按键，
+         * 0：主按键，通常指鼠标左键
+         * 1：辅助按键，通常指鼠标滚轮中键
+         * 2：次按键，通常指鼠标右键
+         * 3：第四个按钮，通常指浏览器后退按钮
+         * 4：第五个按钮，通常指浏览器的前进按钮
          */
         button: number;
-        /**
-         * @en The original browser event.
-         * @zh 原生浏览器事件。
-         */
+        /** 原生浏览器事件。*/
         nativeEvent: MouseEvent | TouchEvent | WheelEvent | KeyboardEvent;
         constructor();
         /**
-         * @en Sets the event data.
-         * @param type The type of the event.
-         * @param currentTarget The triggering object of the event.
-         * @param target The current propagation object of the event.
-         * @returns The current Event object.
-         * @zh 设置事件数据。
-         * @param type 事件类型。
-         * @param currentTarget 事件目标触发对象。
-         * @param target 事件当前冒泡对象。
-         * @returns 返回当前 Event 对象。
+         * 设置事件数据。
+         * @param	type 事件类型。
+         * @param	currentTarget 事件目标触发对象。
+         * @param	target 事件当前冒泡对象。
+         * @return 返回当前 Event 对象。
          */
         setTo(type: string, currentTarget: any, target: any): Event;
         /**
-         * @en Prevents processing of all event listeners on the current node in the event flow after the current one.
-         * This method does not affect any event listeners on the current node (currentTarget).
-         * @zh 阻止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 (currentTarget) 中的任何事件侦听器。
+         * 阻止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 (currentTarget) 中的任何事件侦听器。
          */
         stopPropagation(): void;
         /**
-         * @en The list of touch points.
-         * @zh 触摸点列表。
+         * 触摸点列表。
          */
         get touches(): ReadonlyArray<Readonly<ITouchInfo>>;
         /**
-         * @en Indicates whether the Alt key is active (true) or inactive (false).
-         * @zh 表示 Alt 键是处于活动状态 (true) 还是非活动状态 (false)。
+         * 表示 Alt 键是处于活动状态 (true) 还是非活动状态 (false)。
          */
         get altKey(): boolean;
         /**
-         * @en Indicates whether the Ctrl key is active (true) or inactive (false).
-         * @zh 表示 Ctrl 键是处于活动状态 (true) 还是非活动状态 (false)。
+         * 表示 Ctrl 键是处于活动状态 (true) 还是非活动状态 (false)。
          */
         get ctrlKey(): boolean;
         /**
-         * @en Indicates whether the Shift key is active (true) or inactive (false).
-         * @zh 表示 Shift 键是处于活动状态 (true) 还是非活动状态 (false)。
+         * 表示 Shift 键是处于活动状态 (true) 还是非活动状态 (false)。
          */
         get shiftKey(): boolean;
         /**
-         * @en Indicates whether the Shift key is active (true) or inactive (false).
-         * @zh 表示 Shift 键是处于活动状态 (true) 还是非活动状态 (false)。
+         * 表示 Shift 键是处于活动状态 (true) 还是非活动状态 (false)。
          */
         get metaKey(): boolean;
-        /**
-         * @en The event name.
-         * @zh 事件名称。
-         */
         get key(): string;
-        /**
-         * @en The event name index.
-         * @zh 事件名称索引。
-         */
         get keyCode(): number;
         /**
-         * @en Contains the character code value of the key pressed or released. The character code value is for English keyboard.
-         * @zh 包含按下或释放的键的字符代码值。字符代码值为英文键盘值。
+         * 包含按下或释放的键的字符代码值。字符代码值为英文键盘值。
          */
         get charCode(): string;
         /**
-         * @en Indicates the location of the key on the keyboard. This is useful for differentiating keys that appear more than once on the keyboard.
-         * For example, you can use this property to distinguish between the left and right Shift keys: the value of KeyLocation.LEFT for the left Shift key and the value of KeyLocation.RIGHT for the right Shift key. Another example is distinguishing between a key pressed on the standard keyboard (KeyLocation.STANDARD) and the same key pressed on the numeric keypad (KeyLocation.NUM_PAD).
-         * @zh 表示键在键盘上的位置。这对于区分在键盘上多次出现的键非常有用。
+         * 表示键在键盘上的位置。这对于区分在键盘上多次出现的键非常有用。<br>
          * 例如，您可以根据此属性的值来区分左 Shift 键和右 Shift 键：左 Shift 键的值为 KeyLocation.LEFT，右 Shift 键的值为 KeyLocation.RIGHT。另一个示例是区分标准键盘 (KeyLocation.STANDARD) 与数字键盘 (KeyLocation.NUM_PAD) 上按下的数字键。
          */
         get keyLocation(): number;
-        /**
-         * @en The X axis coordinate of the mouse on the Stage.
-         * @zh 鼠标在 Stage 上的 X 轴坐标。
-         */
+        /**鼠标在 Stage 上的 X 轴坐标*/
         get stageX(): number;
-        /**
-         * @en The Y axis coordinate of the mouse on the Stage.
-         * @zh 鼠标在 Stage 上的 Y 轴坐标。
-         */
+        /**鼠标在 Stage 上的 Y 轴坐标*/
         get stageY(): number;
     }
     /**
-     * @en The `EventDispatcher` class is the base class for all classes that dispatch events.
-     * @zh `EventDispatcher` 类是可调度事件的所有类的基类。
+     * <code>EventDispatcher</code> 类是可调度事件的所有类的基类。
      */
     class EventDispatcher {
         /**@private */
         private _events;
+        protected onStartListeningToType(type: string): void;
         /**
-         * @en Check if the EventDispatcher object has any listeners registered for a specific type of event.
-         * @param type The type of event.
-         * @returns True if a listener of the specified type is registered, false otherwise.
-         * @zh 检查 EventDispatcher 对象是否为特定事件类型注册了任何侦听器。
-         * @param type 事件的类型。
-         * @returns 如果指定类型的侦听器已注册，则值为 true；否则，值为 false。
+         * 检查 EventDispatcher 对象是否为特定事件类型注册了任何侦听器。
+         * @param	type 事件的类型。
+         * @return 如果指定类型的侦听器已注册，则值为 true；否则，值为 false。
          */
         hasListener(type: string): boolean;
         /**
-         * @en Dispatch an event.
-         * @param type The type of event.
-         * @param data (Optional) Data to pass to the callback. If multiple parameters p1, p2, p3, ... need to be passed, use an array structure such as [p1, p2, p3, ...]. If a single parameter p needs to be passed and p is an array, use a structure such as [p]. For other single parameters p, you can directly pass parameter p.
-         * @returns True if there are listeners for this event type, false otherwise.
-         * @zh 派发事件。
-         * @param type 事件类型。
-         * @param data （可选）回调数据。<b>注意：</b>如果是需要传递多个参数 p1,p2,p3,...可以使用数组结构如：[p1,p2,p3,...] ；如果需要回调单个参数 p ，且 p 是一个数组，则需要使用结构如：[p]，其他的单个参数 p ，可以直接传入参数 p。
-         * @returns 此事件类型是否有侦听者，如果有侦听者则值为 true，否则值为 false。
+         * 派发事件。
+         * @param type	事件类型。
+         * @param data	（可选）回调数据。<b>注意：</b>如果是需要传递多个参数 p1,p2,p3,...可以使用数组结构如：[p1,p2,p3,...] ；如果需要回调单个参数 p ，且 p 是一个数组，则需要使用结构如：[p]，其他的单个参数 p ，可以直接传入参数 p。
+         * @return 此事件类型是否有侦听者，如果有侦听者则值为 true，否则值为 false。
          */
         event(type: string, data?: any): boolean;
         /**
-         * @en Register an event listener object with the EventDispatcher object so that the listener receives event notifications.
-         * @param type The type of event.
-         * @param caller The execution scope of the event listener function.
-         * @param listener The listener function.
-         * @param args (Optional) The callback parameters of the event listener function.
-         * @returns This EventDispatcher object.
-         * @zh 使用 EventDispatcher 对象注册指定类型的事件侦听器对象，以使侦听器能够接收事件通知。
-         * @param type 事件的类型。
-         * @param caller 事件侦听函数的执行域。
-         * @param listener 事件侦听函数。
-         * @param args （可选）事件侦听函数的回调参数。
-         * @returns 此 EventDispatcher 对象。
+         * 使用 EventDispatcher 对象注册指定类型的事件侦听器对象，以使侦听器能够接收事件通知。
+         * @param type		事件的类型。
+         * @param caller	事件侦听函数的执行域。
+         * @param listener	事件侦听函数。
+         * @param args		（可选）事件侦听函数的回调参数。
+         * @return 此 EventDispatcher 对象。
          */
         on(type: string, listener: Function): EventDispatcher;
         on(type: string, caller: any, listener: Function, args?: any[]): EventDispatcher;
         /**
-         * @en Register an event listener object with the EventDispatcher object so that the listener receives event notifications. This event listener responds once and is automatically removed after the first call.
-         * @param type The type of event.
-         * @param caller The execution scope of the event listener function.
-         * @param listener The listener function.
-         * @param args (Optional) The callback parameters of the event listener function.
-         * @returns This EventDispatcher object.
-         * @zh 使用 EventDispatcher 对象注册指定类型的事件侦听器对象，以使侦听器能够接收事件通知，此侦听事件响应一次后自动移除。
-         * @param type 事件的类型。
-         * @param caller 事件侦听函数的执行域。
-         * @param listener 事件侦听函数。
-         * @param args （可选）事件侦听函数的回调参数。
-         * @returns 此 EventDispatcher 对象。
+         * 使用 EventDispatcher 对象注册指定类型的事件侦听器对象，以使侦听器能够接收事件通知，此侦听事件响应一次后自动移除。
+         * @param type		事件的类型。
+         * @param caller	事件侦听函数的执行域。
+         * @param listener	事件侦听函数。
+         * @param args		（可选）事件侦听函数的回调参数。
+         * @return 此 EventDispatcher 对象。
          */
         once(type: string, listener: Function): EventDispatcher;
         once(type: string, caller: any, listener: Function, args?: any[]): EventDispatcher;
         /**
-         * @en Remove a listener from the EventDispatcher object.
-         * @param type The type of event.
-         * @param caller The execution scope of the event listener function.
-         * @param listener The listener function.
-         * @returns This EventDispatcher object.
-         * @zh 从 EventDispatcher 对象中删除侦听器。
-         * @param type 事件的类型。
-         * @param caller 事件侦听函数的执行域。
-         * @param listener 事件侦听函数。
-         * @returns 此 EventDispatcher 对象。
+         * 从 EventDispatcher 对象中删除侦听器。
+         * @param type		事件的类型。
+         * @param caller	事件侦听函数的执行域。
+         * @param listener	事件侦听函数。
+         * @return 此 EventDispatcher 对象。
          */
         off(type: string, listener: Function): EventDispatcher;
         off(type: string, caller: any, listener?: Function, args?: any[]): EventDispatcher;
         /**
-         * @en Remove all listeners of the specified event type from the EventDispatcher object.
-         * @param type (Optional) The type of event. If the value is null, all types of listeners on this object are removed.
-         * @returns This EventDispatcher object.
-         * @zh 从 EventDispatcher 对象中删除指定事件类型的所有侦听器。
-         * @param type （可选）事件类型，如果值为 null，则移除本对象所有类型的侦听器。
-         * @returns 此 EventDispatcher 对象。
+         * 从 EventDispatcher 对象中删除指定事件类型的所有侦听器。
+         * @param type	（可选）事件类型，如果值为 null，则移除本对象所有类型的侦听器。
+         * @return 此 EventDispatcher 对象。
          */
         offAll(type?: string): EventDispatcher;
         /**
-         * @en Remove all event listeners whose caller is the specified target.
-         * @param caller The target caller object.
-         * @returns This EventDispatcher object.
-         * @zh 移除caller为target的所有事件监听。
-         * @param caller caller对象
-         * @returns 此 EventDispatcher 对象。
+         * 移除caller为target的所有事件监听
+         * @param	caller caller对象
          */
         offAllCaller(caller: any): EventDispatcher;
     }
@@ -18833,8 +19303,12 @@ declare module Laya {
         static mouseY: number;
         /** 当前是否正在输入文字 */
         static isTextInputting: boolean;
-        /**当前是否是iOS的WKWebView平台 */
         static isiOSWKwebView: boolean;
+        protected _stage: Stage;
+        protected _mouseTouch: TouchInfo;
+        protected _touches: TouchInfo[];
+        protected _touchPool: TouchInfo[];
+        protected _touchTarget: Node;
         protected _eventType: number;
         protected _nativeEvent: MouseEvent | WheelEvent | TouchEvent;
         protected _pressKeys: Set<string | number>;
@@ -18842,19 +19316,10 @@ declare module Laya {
         private _touchInput;
         constructor();
         static get inst(): InputManager;
-        /**
-         * 获得触摸位置
-         * @param touchId 触摸点ID
-         * @returns
-         */
         static getTouchPos(touchId?: number): Readonly<Point>;
         static get touchTarget(): Node;
         static get touches(): ReadonlyArray<Readonly<ITouchInfo>>;
         static get touchCount(): number;
-        /**
-         * 取消点击
-         * @param touchId 取消的触摸事件ID
-         */
         static cancelClick(touchId?: number): void;
         /**
          * 返回指定键是否被按下。
@@ -18867,51 +19332,42 @@ declare module Laya {
          * 初始化。
          */
         static __init__(stage: Stage, canvas: HTMLCanvasElement): void;
-        /**
-         * 处理鼠标事件
-         * @param ev 鼠标事件
-         * @param type 事件类型
-         */
         handleMouse(ev: MouseEvent | WheelEvent, type: number): void;
-        /**
-         * 处理触屏事件
-         * @param ev 触屏事件
-         * @param type 事件类型
-         */
         handleTouch(ev: TouchEvent, type: number): void;
         private getTouch;
         private handleFocus;
-        /**
-         * 处理按键事件
-         * @param ev 案件事件
-         */
         handleKeys(ev: KeyboardEvent): void;
-        /**
-         * 获取位置点下的节点
-         * @param x x位置值
-         * @param y y位置值
-         * @returns
-         */
         getNodeUnderPoint(x: number, y: number): Node;
         /**
          * 获取指定坐标下的sprite。x/y值是sp的本地坐标
-         * @param sp 相对Sprite
-         * @param x 相对Sp的X值
-         * @param y 相对Sp的Y值
-         * @returns
+         * @param sp
+         * @param x
+         * @param y
          */
         getSpriteUnderPoint(sp: Sprite, x: number, y: number): Sprite;
         getSprite3DUnderPoint(x: number, y: number): Node;
-        /**
-         * 点击测试
-         * @param sp 相对Sprite
-         * @param x 相对Sprite的X位置
-         * @param y 相对Sprite的Y位置
-         * @param editing 是否是编辑状态
-         * @returns
-         */
         hitTest(sp: Sprite, x: number, y: number, editing?: boolean): boolean;
         private handleRollOver;
+    }
+    class TouchInfo implements ITouchInfo {
+        readonly event: Event;
+        readonly pos: Point;
+        touchId: number;
+        clickCount: number;
+        began: boolean;
+        target: Node;
+        lastRollOver: Node;
+        clickCancelled: boolean;
+        moved: boolean;
+        downButton: number;
+        readonly downTargets: Node[];
+        private downPos;
+        constructor(touches: Array<TouchInfo>);
+        begin(): void;
+        move(): void;
+        end(): void;
+        clickTest(): Node;
+        reset(): void;
     }
     /**
      * <code>Keyboard</code> 类的属性是一些常数，这些常数表示控制游戏时最常用的键。
@@ -19144,8 +19600,10 @@ declare module Laya {
      */
     class BlurFilter extends Filter {
         /**模糊滤镜的强度(值越大，越不清晰 */
-        private _strength;
-        private _shaderV1;
+        _strength: number;
+        strength_sig2_2sig2_gauss1: number[];
+        strength_sig2_native: Float32Array;
+        renderFunc: any;
         /**
          * 模糊滤镜
          * @param	strength	模糊滤镜的强度值
@@ -19153,19 +19611,34 @@ declare module Laya {
         constructor(strength?: number);
         get strength(): number;
         set strength(v: number);
-        render(srctexture: RenderTexture2D, width: number, height: number): void;
+        /**
+         * @private
+         * 当前滤镜的类型
+         * @override
+         */
+        get type(): number;
+        getStrenth_sig2_2sig2_native(): Float32Array;
+    }
+    /**
+     * @private
+     */
+    class BlurFilterGLRender {
+        private static blurinfo;
+        render(rt: RenderTexture2D, ctx: Context, width: number, height: number, filter: BlurFilter): void;
+        setShaderInfo(shader: Value2D, filter: BlurFilter, w: number, h: number): void;
     }
     /**
      * <p><code>ColorFilter</code> 是颜色滤镜。使用 ColorFilter 类可以将 4 x 5 矩阵转换应用于输入图像上的每个像素的 RGBA 颜色和 Alpha 值，以生成具有一组新的 RGBA 颜色和 Alpha 值的结果。该类允许饱和度更改、色相旋转、亮度转 Alpha 以及各种其他效果。您可以将滤镜应用于任何显示对象（即，从 Sprite 类继承的对象）。</p>
      * <p>注意：对于 RGBA 值，最高有效字节代表红色通道值，其后的有效字节分别代表绿色、蓝色和 Alpha 通道值。</p>
      */
     class ColorFilter extends Filter implements IFilter {
+        /**当前使用的矩阵*/
+        _matrix: any[];
         /**
          * 创建一个 <code>ColorFilter</code> 实例。
          * @param mat	（可选）由 20 个项目（排列成 4 x 5 矩阵）组成的数组，用于颜色转换。
          */
         constructor(mat?: any[]);
-        render(texture: RenderTexture2D, width: number, height: number): void;
         /**
          * 设置为灰色滤镜
          */
@@ -19190,7 +19663,6 @@ declare module Laya {
          */
         setByMatrix(matrix: any[]): ColorFilter;
         /**
-         * 滤镜类型
          * @private
          * @override
         */
@@ -19253,53 +19725,36 @@ declare module Laya {
          * 复制矩阵
          */
         private _copyMatrix;
-        /**
-         * 反序列化后调用
-         */
         onAfterDeserialize(): void;
     }
     /**
-     * <code>Filter</code> 是滤镜基类。滤镜是针对节点的后处理过程，所以必然操作一个rendertexture
+     * <code>Filter</code> 是滤镜基类。
      */
-    abstract class Filter implements IFilter {
+    class Filter extends EventDispatcher implements IFilter {
+        /**@private 模糊滤镜。*/
+        static BLUR: number;
         /**@private 颜色滤镜。*/
         static COLOR: number;
-        protected left: number;
-        protected top: number;
-        protected width: number;
-        protected height: number;
-        protected texture: RenderTexture2D;
-        protected _render2D: Render2D;
-        protected _rectMesh: MeshQuadTexture;
-        protected _rectMeshVB: Float32Array;
-        private _rectMeshNormY;
-        private _rectMeshVBNormY;
-        private _rectMeshInvY;
-        private _rectMeshVBInvY;
-        constructor();
-        useFlipY(b: boolean): void;
-        set render2D(r: Render2D);
+        /**@private 发光滤镜。*/
+        static GLOW: number;
+        static EVENT_CHANGE: string;
         /**
-         * 不需要位置
-         * @param texture
-         * @param width
-         * @param height
-         */
-        abstract render(texture: RenderTexture2D, width: number, height: number): void;
+         * 创建一个 <code>Filter</code> 实例。
+         * */
+        constructor();
         /**@private 滤镜类型。*/
         get type(): number;
+        protected onChange(): void;
+        static _filter: (this: RenderSprite, sprite: Sprite, context: Context, x: number, y: number) => void;
     }
     /**
      *  发光滤镜(也可以当成阴影滤使用）
      */
     class GlowFilter extends Filter {
+        /**数据的存储，顺序R,G,B,A,blurWidth,offX,offY;*/
+        private _elements;
         /**滤镜的颜色*/
         private _color;
-        private shaderDataBlur;
-        private shaderDataCopy;
-        private textureExtend;
-        private shaderDataCopy1;
-        private _flipY;
         /**
          * 创建发光滤镜
          * @param	color	滤镜的颜色
@@ -19308,39 +19763,64 @@ declare module Laya {
          * @param	offY	Y轴方向的偏移
          */
         constructor(color: string, blur?: number, offX?: number, offY?: number);
-        private _fillQuad;
-        useFlipY(b: boolean): void;
         /**
-         * 渲染
-         * @param srctexture 源渲染目标
-         * @param width 宽
-         * @param height 高
+         * @private
+         * 滤镜类型
+         * @override
          */
-        render(srctexture: RenderTexture2D, width: number, height: number): void;
-        /**@private Y偏移值*/
+        get type(): number;
+        /**@private */
         get offY(): number;
         /**@private */
         set offY(value: number);
-        /**@private X偏移值*/
+        /**@private */
         get offX(): number;
         /**@private */
         set offX(value: number);
-        /**@private 颜色值*/
+        /**@private */
         get color(): string;
         /**@private */
         set color(value: string);
         /**@private */
         getColor(): any[];
-        /**@private 模糊值*/
+        /**@private */
         get blur(): number;
         /**@private */
         set blur(value: number);
+        getColorNative(): Float32Array;
+        getBlurInfo1Native(): Float32Array;
+        getBlurInfo2Native(): Float32Array;
+    }
+    /**
+     * @private
+     */
+    class GlowFilterGLRender {
+        private setShaderInfo;
+        render(rt: RenderTexture2D, ctx: Context, width: number, height: number, filter: GlowFilter): void;
     }
     /**
      * 滤镜接口。
      */
     interface IFilter {
         type: number;
+    }
+    /**
+     * <code>Filter</code> 是滤镜基类。
+     */
+    class NativeFilter implements IFilter {
+        /**@private 模糊滤镜。*/
+        static BLUR: number;
+        /**@private 颜色滤镜。*/
+        static COLOR: number;
+        /**@private 发光滤镜。*/
+        static GLOW: number;
+        /**
+         * 创建一个 <code>Filter</code> 实例。
+         * */
+        constructor();
+        /**@private 滤镜类型。*/
+        get type(): number;
+        static _filter: (this: RenderSprite, sprite: Sprite, context: any, x: number, y: number) => void;
     }
     enum HtmlElementType {
         Text = 0,
@@ -19537,10 +20017,9 @@ declare module Laya {
     class LayaGL {
         static textureContext: ITextureContext;
         static renderEngine: IRenderEngine;
+        static render2DContext: IRender2DContext;
+        static renderDrawContext: IRenderDrawContext;
         static renderOBJCreate: IRenderEngineFactory;
-        static render2DRenderPassFactory: I2DRenderPassFactory;
-        static renderDeviceFactory: IRenderDeviceFactory;
-        static unitRenderModuleDataFactory: IUnitRenderModuleDataFactory;
     }
     /**
      * ...
@@ -20477,11 +20956,6 @@ declare module Laya {
          * @param	a  颜色的alpha分量。
          */
         constructor(r?: number, g?: number, b?: number, a?: number);
-        /**
-         * 判断颜色相等相等
-         * @param c 对比颜色
-         * @returns
-         */
         equal(c: Color): boolean;
         /**
          * Gamma空间转换到线性空间。
@@ -20498,19 +20972,7 @@ declare module Laya {
          * @param	destObject 克隆源。
          */
         cloneTo(destObject: any): void;
-        /**
-         * 缩放颜色
-         * @param value 缩放值
-         * @returns
-         */
         scale(value: number): Color;
-        /**
-         * 设置颜色数值0-1
-         * @param r 颜色r通道
-         * @param g 颜色g通道
-         * @param b 颜色b通道
-         * @param a 颜色a通道
-         */
         setValue(r: number, g: number, b: number, a: number): void;
         /**
          * 从Array数组拷贝值。
@@ -20858,9 +21320,7 @@ declare module Laya {
      * <code>Matrix3x3</code> 类用于创建3x3矩阵。
      */
     class Matrix3x3 implements IClone {
-        /**默认值 */
         static readonly DEFAULT: Readonly<Matrix3x3>;
-        /**临时变量 */
         static Temp: Matrix3x3;
         /**
          * 通过四元数创建旋转矩阵。
@@ -20907,7 +21367,7 @@ declare module Laya {
         constructor(createElement?: boolean);
         /**
          * 克隆
-         * @param destObject 克隆目标
+         * @param destObject
          */
         cloneByArray(destObject: Float32Array): void;
         /**
@@ -20964,11 +21424,12 @@ declare module Laya {
          */
         static lookAt(eye: Vector3, target: Vector3, up: Vector3, out: Matrix3x3): void;
         /**
-         * forward看向target，forward在这里规定为z轴
-         * @param eye 起始点
-         * @param target 目标点
-         * @param up 向上轴
-         * @param out 输出矩阵
+         * forward看向target
+         * forward在这里规定为z轴
+         * @param eye
+         * @param target 目标
+         * @param up
+         * @param out
          */
         static forwardLookAt(eye: Vector3, target: Vector3, up: Vector3, out: Matrix3x3): void;
     }
@@ -20978,7 +21439,6 @@ declare module Laya {
     class Matrix4x4 implements IClone {
         /**默认矩阵,禁止修改*/
         static readonly DEFAULT: Readonly<Matrix4x4>;
-        /**默认值的逆矩阵，禁止修改 */
         static readonly DEFAULTINVERT: Readonly<Matrix4x4>;
         /**默认矩阵,禁止修改*/
         static readonly ZERO: Readonly<Matrix4x4>;
@@ -21003,10 +21463,10 @@ declare module Laya {
         static createRotationZ(rad: number, out: Matrix4x4): void;
         /**
          * 通过yaw pitch roll旋转创建旋转矩阵。
-         * @param	yaw 这个角度表示物体围绕其垂直轴的旋转，即Y轴
-         * @param	pitch 这个角度表示物体围绕其横向轴的旋转，即X轴
-         * @param	roll 这个角度表示沿物体的前进方向轴的旋转，即Z轴
-         * @param	result 输出结果矩阵
+         * @param	yaw
+         * @param	pitch
+         * @param	roll
+         * @param	result
          */
         static createRotationYawPitchRoll(yaw: number, pitch: number, roll: number, result: Matrix4x4): void;
         /**
@@ -21102,13 +21562,13 @@ declare module Laya {
          */
         constructor(m11?: number, m12?: number, m13?: number, m14?: number, m21?: number, m22?: number, m23?: number, m24?: number, m31?: number, m32?: number, m33?: number, m34?: number, m41?: number, m42?: number, m43?: number, m44?: number, elements?: Float32Array);
         /**
-         * 四元数生成矩阵
-         * @param rotation 旋转四元数值
-         */
+      * 四元数生成矩阵
+      * @param rotation
+      */
         setRotation(rotation: Quaternion): void;
         /**
          * 位置
-         * @param position 坐标位置
+         * @param position
          */
         setPosition(position: Vector3): void;
         /**
@@ -21175,7 +21635,7 @@ declare module Laya {
         cloneTo(destObject: any): void;
         /**
          * 克隆
-         * @param destObject 克隆目标
+         * @param destObject
          */
         cloneByArray(destObject: Float32Array): void;
         /**
@@ -21183,11 +21643,6 @@ declare module Laya {
          * @return	 克隆副本。
          */
         clone(): any;
-        /**
-         * 转换一个坐标位矩阵
-         * @param v3 坐标点
-         * @param out 输出矩阵
-         */
         static translation(v3: Vector3, out: Matrix4x4): void;
         /**
          * 获取平移向量。
@@ -21367,7 +21822,6 @@ declare module Laya {
          * @param	x X值。
          * @param	y Y值。
          * @param	z Z值。
-         * @param   w W值
          */
         setValue(x: number, y: number, z: number, w: number): void;
         /**
@@ -21375,7 +21829,6 @@ declare module Laya {
          * @param	x X值。
          * @param	y Y值。
          * @param	z Z值。
-         * @param   w W值
          * @return 返回四元数
          */
         set(x: number, y: number, z: number, w: number): this;
@@ -21445,11 +21898,6 @@ declare module Laya {
          * @return	 克隆副本。
          */
         clone(): any;
-        /**
-         * 判断四元数是否相同
-         * @param b 对比四元数
-         * @returns
-         */
         equals(b: Quaternion): boolean;
         /**
          * 计算旋转观察四元数
@@ -21491,12 +21939,13 @@ declare module Laya {
          * @param	out        四元数
          */
         static rotationMatrix(matrix3x3: Matrix3x3, out: Quaternion): void;
+        forNativeElement(nativeElements?: Float32Array): void;
     }
     /**
      * <p><code>Rectangle</code> 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。</p>
      * <p>Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。</p>
      */
-    class Rectangle implements IClone {
+    class Rectangle {
         /**@private 全局空的矩形区域x=0,y=0,width=0,height=0，不允许修改此对象内容*/
         static EMPTY: Rectangle;
         /**全局临时的矩形区域，此对象用于全局复用，以减少对象创建*/
@@ -21581,6 +22030,12 @@ declare module Laya {
          */
         union(source: Rectangle, out?: Rectangle | null): Rectangle;
         /**
+         * 返回一个 Rectangle 对象，其 x、y、width 和 height 属性的值与当前 Rectangle 对象的对应值相同。
+         * @param out	（可选）用于存储结果的矩形对象。如果为空，则创建一个新的。建议：尽量复用对象，减少对象创建消耗。。Rectangle.TEMP对象用于对象复用。
+         * @return Rectangle 对象，其 x、y、width 和 height 属性的值与当前 Rectangle 对象的对应值相同。
+         */
+        clone(out?: Rectangle | null): Rectangle;
+        /**
          * 当前 Rectangle 对象的水平位置 x 和垂直位置 y 以及高度 width 和宽度 height 以逗号连接成的字符串。
          */
         toString(): string;
@@ -21603,13 +22058,6 @@ declare module Laya {
          * @return 如果 Rectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
          */
         isEmpty(): boolean;
-        /**
-         * 返回一个 Rectangle 对象，其 x、y、width 和 height 属性的值与当前 Rectangle 对象的对应值相同。
-         * @param out	（可选）用于存储结果的矩形对象。如果为空，则创建一个新的。建议：尽量复用对象，减少对象创建消耗。。Rectangle.TEMP对象用于对象复用。
-         * @return Rectangle 对象，其 x、y、width 和 height 属性的值与当前 Rectangle 对象的对应值相同。
-         */
-        clone(out?: Rectangle | null): Rectangle;
-        cloneTo(destObject: any): void;
     }
     interface IV2 {
         x: number;
@@ -21623,7 +22071,6 @@ declare module Laya {
         static readonly ZERO: Readonly<Vector2>;
         /**一向量,禁止修改*/
         static readonly ONE: Readonly<Vector2>;
-        /**临时Vector2 */
         static TempVector2: Vector2;
         /**X轴坐标*/
         x: number;
@@ -21701,28 +22148,22 @@ declare module Laya {
          * @return	 克隆副本。
          */
         clone(): any;
+        forNativeElement(nativeElements?: Float32Array | null): void;
+        static rewriteNumProperty(proto: any, name: string, index: number): void;
     }
     /**
      * <code>Vector3</code> 类用于创建三维向量。
      */
     class Vector3 implements IClone {
-        /**零值 */
+        static _tempVector3: Vector3;
         static readonly ZERO: Readonly<Vector3>;
-        /**壹值 */
         static readonly ONE: Readonly<Vector3>;
-        /**负X轴 */
         static readonly NegativeUnitX: Readonly<Vector3>;
-        /**正X轴 */
         static readonly UnitX: Readonly<Vector3>;
-        /**正Y轴 */
         static readonly UnitY: Readonly<Vector3>;
-        /**正Z轴 */
         static readonly UnitZ: Readonly<Vector3>;
-        /**负Z值 */
         static readonly ForwardRH: Readonly<Vector3>;
-        /**正Z值 */
         static readonly ForwardLH: Readonly<Vector3>;
-        /**正Y值 */
         static readonly Up: Readonly<Vector3>;
         /**
          * 两个三维向量距离的平方。
@@ -21884,8 +22325,8 @@ declare module Laya {
          */
         constructor(x?: number, y?: number, z?: number);
         /**
-         * 判断四维向量是否相等
-         * @param value 对比值
+         * 求四维向量是否相等
+         * @param value
          * @returns
          */
         equal(value: Vector3): boolean;
@@ -21934,21 +22375,21 @@ declare module Laya {
         /**
          * 向量相减
          * @param b 被减向量
-         * @param out 输出向量
+         * @param out
          * @returns
          */
         vsub(b: Vector3, out: Vector3): Vector3;
         /**
          * 向量相加
          * @param b 加向量
-         * @param out 输出向量
+         * @param out
          * @returns
          */
         vadd(b: Vector3, out: Vector3): Vector3;
         /**
          * 缩放向量
          * @param s 缩放值
-         * @param out 输出向量
+         * @param out
          * @returns 返回缩放向量
          */
         scale(s: number, out: Vector3): Vector3;
@@ -21959,14 +22400,14 @@ declare module Laya {
         normalize(): this;
         /**
          * 向量点乘
-         * @param b 点乘向量
+         * @param b
          * @returns
          */
         dot(b: Vector3): number;
         /**
          * 向量叉乘
-         * @param b 叉乘向量
-         * @param o 输出向量
+         * @param b
+         * @param o
          * @returns
          */
         cross(b: Vector3, o: Vector3): Vector3;
@@ -22070,8 +22511,8 @@ declare module Laya {
          */
         static equals(a: Vector4, b: Vector4): boolean;
         /**
-         * 判断四维向量是否相等
-         * @param value 对比值
+         * 求四维向量是否相等
+         * @param value
          * @returns
          */
         equal(value: Vector4): boolean;
@@ -22162,67 +22603,7 @@ declare module Laya {
          * @param	out 结果三维向量。
          */
         static max(a: Vector4, b: Vector4, out: Vector4): void;
-    }
-    /**
-     * <code>Viewport</code> 类用于创建视口。
-     */
-    class Viewport {
-        /**X轴坐标*/
-        x: number;
-        /**Y轴坐标*/
-        y: number;
-        /**宽度*/
-        width: number;
-        /**高度*/
-        height: number;
-        /**最小深度*/
-        minDepth: number;
-        /**最大深度*/
-        maxDepth: number;
-        /**
-         * 创建一个 <code>Viewport</code> 实例。
-         * @param	x x坐标。
-         * @param	y y坐标。
-         * @param	width 宽度。
-         * @param	height 高度。
-         */
-        constructor(x?: number, y?: number, width?: number, height?: number);
-        /**
-         * 投影一个三维向量到视口空间。
-         * @param	source 三维向量。
-         * @param	matrix 变换矩阵。
-         * @param	out x、y、z为视口空间坐标,透视投影下w为相对于变换矩阵的z轴坐标。
-         */
-        project(source: Vector3, matrix: Matrix4x4, out: Vector4): void;
-        /**
-         * 反变换一个三维向量。
-         * @param	source 源三维向量。
-         * @param	matrix 变换矩阵。
-         * @param	out 输出三维向量。
-         */
-        unprojectFromMat(source: Vector3, matrix: Matrix4x4, out: Vector3): void;
-        /**
-         * 反变换一个三维向量。
-         * @param	source 源三维向量。
-         * @param	projection  透视投影矩阵。
-         * @param	view 视图矩阵。
-         * @param	world 世界矩阵,可设置为null。
-         * @param   out 输出向量。
-         */
-        unprojectFromWVP(source: Vector3, projection: Matrix4x4, view: Matrix4x4, world: Matrix4x4, out: Vector3): void;
-        /**
-         * 设置视口值
-         * @param x X轴坐标
-         * @param y Y轴坐标
-         * @param width 宽度
-         * @param height 高度
-         */
-        set(x: number, y: number, width: number, height: number): void;
-        /**
-         * 克隆
-         * @param	out
-         */
-        cloneTo(out: Viewport): void;
+        forNativeElement(nativeElements?: Float32Array): void;
     }
     /**
      * @private
@@ -22515,9 +22896,6 @@ declare module Laya {
          */
         static set musicMuted(value: boolean);
         static get musicMuted(): boolean;
-        /**
-         * 背景音乐是否使用Audio标签播放。
-         */
         static get useAudioMusic(): boolean;
         static set useAudioMusic(value: boolean);
         /**
@@ -22593,9 +22971,6 @@ declare module Laya {
         private _autoPlay;
         private _loop;
         constructor();
-        /**
-         * 音频源
-         */
         get source(): string;
         set source(value: string);
         /**
@@ -22634,6 +23009,7 @@ declare module Laya {
         /**
          * 设置触发播放的事件
          * @param events
+         *
          */
         set playEvent(events: string);
         /**
@@ -22673,6 +23049,8 @@ declare module Laya {
          */
         get source(): string;
         set source(value: string);
+        private _checkCachAs;
+        private _repaintCachAs;
         /**
          * 设置播放源。
          * @param url	播放源路径。
@@ -22804,10 +23182,12 @@ declare module Laya {
         destroy(detroyChildren?: boolean): void;
     }
     /**
-     * <code>VideoTexture</code> 多媒体纹理
+     * @en VideoTexture Multimedia texture
+     * @zh VideoTexture 多媒体纹理
      */
     class VideoTexture extends BaseTexture {
         readonly element: HTMLVideoElement;
+        static videoEvent_update: string;
         private _source;
         private _listeningEvents;
         private immediatelyPlay;
@@ -22821,144 +23201,213 @@ declare module Laya {
         /** @inernal 是否使用了requestVideoFrameCallback 接口 */
         _requestVideoFrame: boolean;
         /**
-         * 创建VideoTexture对象，
+         * @en videoTexture update frame
+         * @zh 视频纹理更新帧率
+         */
+        set updateFrame(value: number);
+        get updateFrame(): number;
+        set useFrame(value: boolean);
+        get useFrame(): boolean;
+        /**
+         * @en Constructor method of VideoTexture
+         * @zh VideoTexture对象的构造方法
          */
         constructor();
         private isNeedUpdate;
+        /**
+         * @en Handle the loadedmetadata event of the video element.
+         * Processes the initialization work after the video resource is loaded, ensuring that necessary texture and playback settings are made so that the video can be properly handled during rendering.
+         * @zh 视频元素的 loadedmetadata 事件的回调方法。
+         * 处理视频资源加载完毕后的初始化工作，用于在视频正确加载后，做必要的纹理和播放设置，确保视频能在渲染时被正确处理。
+         */
         loadedmetadata(): void;
-        get source(): string;
+        /**
+         * @en The gamma correction value
+         * @zh gamma 校正值
+         */
         get gammaCorrection(): number;
         /**
-        * 设置播放源路径
-        * @param url 播放源路径
-        */
+         * @en The source URL for the video
+         * @zh 视频的源 URL
+         */
+        get source(): string;
         set source(url: string);
         private appendSource;
         /**
-         * 是否每一帧都渲染
+         * @en Whether to render every frame
+         * @zh 是否每一帧都渲染
          */
-        set frameRender(value: boolean);
         get frameRender(): boolean;
+        set frameRender(value: boolean);
         /**
-         * 开始播放视频
+         * @en Start playing the video
+         * @zh 开始播放视频
          */
         play(): void;
         _getSource(): any;
+        /**
+         * @en The default texture
+         * @zh 默认纹理
+         */
         get defaultTexture(): Texture2D;
         /**
-         * 暂停播放视频
+         * @en Pause the video playback
+         * @zh 暂停播放视频
          */
         pause(): void;
         /**
-         * 重新加载视频。
+         * @en Reload the video
+         * @zh 重新加载视频
          */
         load(): void;
         /**
-         * 检测是否支持播放指定格式视频。
-         * @param type	"mp4","ogg","webm","m3u8"等。
+         * @en Check if the specified video format is supported for playback
+         * @param type Video format type, such as "mp4", "ogg", "webm", "m3u8", etc.
+         * @returns  The level of support. Possible values:
+         * - "probably": The browser most likely supports this audio/video type
+         * - "maybe": The browser might support this audio/video type
+         * - "": (empty string) The browser does not support this audio/video type
+         * @zh 检测是否支持播放指定格式视频
+         * @param type	视频格式类型 "mp4","ogg","webm","m3u8"等。
          * @return 表示支持的级别。可能的值：
-         * <ul>
-         * <li>"probably" - 浏览器最可能支持该音频/视频类型</li>
-         * <li>"maybe" - 浏览器也许支持该音频/视频类型</li>
-         * <li>"" - （空字符串）浏览器不支持该音频/视频类型</li>
-         * </ul>
+         * - "probably": 浏览器最可能支持该音频/视频类型
+         * - "maybe": 浏览器也许支持该音频/视频类型
+         * - "": （空字符串）浏览器不支持该音频/视频类型
          */
         canPlayType(type: string): CanPlayTypeResult;
         /**
-         * buffered 属性返回 TimeRanges(JS)对象。TimeRanges 对象表示用户的音视频缓冲范围。缓冲范围指的是已缓冲音视频的时间范围。如果用户在音视频中跳跃播放，会得到多个缓冲范围。
-         * <p>buffered.length返回缓冲范围个数。如获取第一个缓冲范围则是buffered.start(0)和buffered.end(0)。以秒计。</p>
-         * @return TimeRanges(JS)对象
+         * @en Get the TimeRanges object representing the buffered parts of the audio/video
+         * The TimeRanges object represents the buffered time ranges of the audio/video. If the user skips around in the audio/video, multiple buffered ranges may be created.
+         * buffered.length returns the number of buffered ranges.
+         * To get the first buffered range, use buffered.start(0) and buffered.end(0). Values are in seconds.
+         * @returns The TimeRanges object
+         * @zh 获取表示音视频已缓冲部分的 TimeRanges 对象
+         * TimeRanges 对象表示用户的音视频缓冲范围。缓冲范围指的是已缓冲音视频的时间范围。如果用户在音视频中跳跃播放，会得到多个缓冲范围。
+         * buffered.length 返回缓冲范围个数。如获取第一个缓冲范围则是 buffered.start(0) 和 buffered.end(0)。以秒计。
+         * @returns TimeRanges(JS)对象
          */
         get buffered(): any;
         /**
-         * 获取当前播放源路径。
+         * @en The current source URL of the video
+         * @zh 当前播放源路径
          */
         get currentSrc(): string;
         /**
-         * 设置和获取当前播放头位置。
+         * @en The current playback position in seconds
+         * @zh 当前播放头位置（以秒为单位）
          */
         get currentTime(): number;
         set currentTime(value: number);
         /**
-         * 设置和获取当前音量。
+         * @en The current volume level
+         * @zh 当前音量
          */
-        set volume(value: number);
         get volume(): number;
+        set volume(value: number);
         /**
-         * 表示视频元素的就绪状态：
-         * <ul>
-         * <li>0 = HAVE_NOTHING - 没有关于音频/视频是否就绪的信息</li>
-         * <li>1 = HAVE_METADATA - 关于音频/视频就绪的元数据</li>
-         * <li>2 = HAVE_CURRENT_DATA - 关于当前播放位置的数据是可用的，但没有足够的数据来播放下一帧/毫秒</li>
-         * <li>3 = HAVE_FUTURE_DATA - 当前及至少下一帧的数据是可用的</li>
-         * <li>4 = HAVE_ENOUGH_DATA - 可用数据足以开始播放</li>
-         * </ul>
+         * @en The readiness state of the video element:
+         * - 0 = HAVE_NOTHING - No information is available about the audio/video
+         * - 1 = HAVE_METADATA - Metadata for the audio/video is ready
+         * - 2 = HAVE_CURRENT_DATA - Data for the current playback position is available, but not enough to play the next frame/millisecond
+         * - 3 = HAVE_FUTURE_DATA - Data for the current and at least the next frame is available
+         * - 4 = HAVE_ENOUGH_DATA - Enough data is available to start playing
+         * @zh 视频元素的就绪状态：
+         * - 0 = HAVE_NOTHING - 没有关于音频/视频是否就绪的信息
+         * - 1 = HAVE_METADATA - 关于音频/视频就绪的元数据
+         * - 2 = HAVE_CURRENT_DATA - 关于当前播放位置的数据是可用的，但没有足够的数据来播放下一帧/毫秒
+         * - 3 = HAVE_FUTURE_DATA - 当前及至少下一帧的数据是可用的
+         * - 4 = HAVE_ENOUGH_DATA - 可用数据足以开始播放
          */
         get readyState(): any;
         /**
-         * 获取视频源尺寸。ready事件触发后可用。
+         * @en The width of the video source. Available after the ready event is triggered.
+         * @zh 视频源宽度。ready 事件触发后可用。
          */
         get videoWidth(): number;
+        /**
+         * @en The height of the video source. Available after the ready event is triggered.
+         * @zh 视频源高度。ready 事件触发后可用。
+         */
         get videoHeight(): number;
         /**
-         * 获取视频长度（秒）。ready事件触发后可用。
+         * @en The duration of the video in seconds. Available after the ready event is triggered.
+         * @zh 视频长度（秒）。ready 事件触发后可用。
          */
         get duration(): number;
         /**
-         * 返回音频/视频的播放是否已结束
+         * @en If the playback of the audio/video has ended
+         * @zh 音频/视频的播放是否已结束
          */
         get ended(): boolean;
         /**
-         * 返回表示音频/视频错误状态的 MediaError（JS）对象。
+         * @en Return the MediaError object representing the error state of the audio/video
+         * @zh 返回表示音频/视频错误状态的 MediaError 对象
          */
         get error(): MediaError;
         /**
-         * 设置或返回音频/视频是否应在结束时重新播放。
+         * @en Whether the audio/video should loop when it reaches the end
+         * @zh 音频/视频是否应在结束时重新播放
          */
         get loop(): boolean;
         set loop(value: boolean);
         /**
-         * playbackRate 属性设置或返回音频/视频的当前播放速度。如：
-         * <ul>
-         * <li>1.0 正常速度</li>
-         * <li>0.5 半速（更慢）</li>
-         * <li>2.0 倍速（更快）</li>
-         * <li>-1.0 向后，正常速度</li>
-         * <li>-0.5 向后，半速</li>
-         * </ul>
-         * <p>只有 Google Chrome 和 Safari 支持 playbackRate 属性。</p>
+         * @en The current playback speed of the audio/video. For example:
+         * - 1.0: Normal speed
+         * - 0.5: Half speed (slower)
+         * - 2.0: Double speed (faster)
+         * - -1.0: Backwards, normal speed
+         * - -0.5: Backwards, half speed
+         * Note: Only Google Chrome and Safari support the playbackRate property.
+         * @zh 音频/视频的当前播放速度。如：
+         * - 1.0：正常速度
+         * - 0.5：半速（更慢）
+         * - 2.0：倍速（更快）
+         * - -1.0：向后，正常速度
+         * - -0.5：向后，半速
+         * 注意：只有 Google Chrome 和 Safari 支持 playbackRate 属性。
          */
         get playbackRate(): number;
         set playbackRate(value: number);
         /**
-         * 获取和设置静音状态。
+         * @en The muted state of the video
+         * @zh 视频的静音状态
          */
         get muted(): boolean;
         set muted(value: boolean);
         /**
-         * 返回视频是否暂停
+         * @en If the video is paused
+         * @zh 视频是否暂停
          */
         get paused(): boolean;
         /**
-         * preload 属性设置或返回是否在页面加载后立即加载视频。可赋值如下：
-         * <ul>
-         * <li>auto	指示一旦页面加载，则开始加载视频。</li>
-         * <li>metadata	指示当页面加载后仅加载音频/视频的元数据。</li>
-         * <li>none	指示页面加载后不应加载音频/视频。</li>
-         * </ul>
+         * @en The preload attribute of the video. Possible values:
+         * - "auto": Indicates that the video should be loaded as soon as the page loads
+         * - "metadata": Indicates that only metadata should be loaded when the page loads
+         * - "none": Indicates that the video should not be loaded when the page loads
+         * @zh 视频的预加载属性。可赋值如下：
+         * - "auto"：指示一旦页面加载，则开始加载视频
+         * - "metadata"：指示当页面加载后仅加载音频/视频的元数据
+         * - "none"：指示页面加载后不应加载音频/视频
          */
         get preload(): string;
         set preload(value: string);
         /**
-         * 参见 <i>http://www.w3school.com.cn/tags/av_prop_seekable.asp</i>。
+         * @en see: http://www.w3school.com.cn/tags/av_prop_seekable.asp象
+         * @zh 参见：http://www.w3school.com.cn/tags/av_prop_seekable.asp
          */
         get seekable(): any;
         /**
-         * seeking 属性返回用户目前是否在音频/视频中寻址。
-         * 寻址中（Seeking）指的是用户在音频/视频中移动/跳跃到新的位置。
+         * @en Returns whether the user is currently seeking in the audio/video.
+         * Seeking refers to the user moving/jumping to a new position in the audio/video.
+         * @zh 返回用户目前是否在音频/视频中寻址。
+         * 寻址（Seeking）指的是用户在音频/视频中移动/跳跃到新的位置。
          */
         get seeking(): boolean;
         protected onStartListeningToType(type: string): void;
+        /**
+         * @en Destroys the current instance and releases resources.
+         * @zh 销毁当前实例并释放资源。
+         */
         destroy(): void;
     }
     /**
@@ -23106,671 +23555,6 @@ declare module Laya {
          * @override
          */
         get volume(): number;
-    }
-    class AreaMask {
-        /**
-         * excludeflag
-         */
-        get excludeflag(): number;
-        /**
-        * flag
-        */
-        get flag(): number;
-        set flag(value: number);
-        constructor();
-    }
-    enum ObstacleAvoidanceType {
-        NoObstacle = 0,
-        LowQuality = 1,
-        MedQuality = 2,
-        GoodQuality = 3,
-        HighQuality = 4
-    }
-    /**
-     * 类用来实例化一个寻路代理
-     */
-    class NavAgent extends Component {
-        _navAgentLinkAnim: NavAgentLinkAnim;
-        /**
-         * 半径
-         */
-        set radius(value: number);
-        get radius(): number;
-        /**
-         * 高度
-         */
-        set height(value: number);
-        get height(): number;
-        /**
-         * 移动速度
-         */
-        set speed(value: number);
-        get speed(): number;
-        /**
-        * 加速度
-        */
-        set maxAcceleration(value: number);
-        get maxAcceleration(): number;
-        /**
-         * 转身速度
-         */
-        set angularSpeed(value: number);
-        get angularSpeed(): number;
-        /**
-        * 轴心点的偏移
-        */
-        set baseOffset(value: number);
-        get baseOffset(): number;
-        /**
-         * 	规避品质级别
-         */
-        set quality(value: ObstacleAvoidanceType);
-        get quality(): ObstacleAvoidanceType;
-        /**
-         * 规避优先级别
-         */
-        set priority(value: number);
-        get priority(): number;
-        /**
-         * 否绑定到导航网格
-         */
-        get isOnNavMesh(): boolean;
-        /**
-         * 当前是否位于 OffMeshLink 上
-         */
-        get isOnOffMeshLink(): boolean;
-        /**
-         * 目的地
-         */
-        set destination(value: Vector3);
-        get destination(): Vector3;
-        /**
-         * 设置网格类型
-         */
-        set agentType(value: string);
-        get agentType(): string;
-        /**
-         * @description:
-         * @param {*}
-         * @return {*}
-         */
-        set areaMask(value: number);
-        get areaMask(): number;
-        /**
-         * 创建一个 <code>NavAgent</code> 实例。
-         */
-        constructor();
-        /**
-        * @private
-        */
-        _getUpdateFlags(): number;
-        /**
-         * @private
-         */
-        _onDestroy(): void;
-        onUpdate(): void;
-        /**
-         * 是否停止
-         */
-        isStop(): boolean;
-        /**
-         * 当前路径
-         */
-        getCurrentPath(): Array<NavigationPathData>;
-        /**
-         * 设置位置
-         * @param pos 世界坐标
-         */
-        setPosition(pos: Vector3): void;
-        /**
-         * 到墙面的距离
-         * @returns {dist:距离，pos:碰撞点， normal:法向量}
-         */
-        findDistanceToWall(): {
-            dist: number;
-            pos: Array<number>;
-            normal: Array<number>;
-        };
-    }
-    /**
-     * <code>NavMeshLink</code> 网格外链接。
-     */
-    class NavMeshLink extends Component {
-        /**
-        * 起始位置
-        */
-        set start(value: Vector3);
-        get start(): Vector3;
-        /**
-         * 结束位置
-         */
-        set end(value: Vector3);
-        get end(): Vector3;
-        /**
-         * 宽度
-         */
-        set width(value: number);
-        get width(): number;
-        /**
-         * 地形标记
-         */
-        set areaFlag(value: string);
-        get areaFlag(): string;
-        /**
-         * 区域类型
-         */
-        set agentType(value: string);
-        get agentType(): string;
-        /**
-         * 是否双向
-         */
-        set bidirectional(value: boolean);
-        get bidirectional(): boolean;
-        /**
-         * 创建一个 <code>NavNavMeshLink</code> 实例。
-         */
-        constructor();
-    }
-    class NavMeshModifierVolume extends Component {
-        /**
-        * center
-        */
-        get center(): Vector3;
-        set center(value: Vector3);
-        /**
-         * size
-         */
-        get size(): Vector3;
-        set size(value: Vector3);
-        /**
-        * agentType
-        */
-        set agentType(value: string);
-        get agentType(): string;
-        /**
-         * area 类型
-         */
-        set areaFlag(value: string);
-        get areaFlag(): string;
-        /**
-         * <code>NavModifleBase<Code>
-         */
-        constructor();
-    }
-    class NavMeshModifileSurface extends NavModifleBase {
-        /**
-         * <code>NavMeshModifileSurface<Code>
-         */
-        constructor();
-        /**
-         * bake datas
-         */
-        set datas(value: TextResource);
-        get datas(): TextResource;
-    }
-    enum NavObstaclesMeshType {
-        BOX = 0,
-        CAPSULE = 1,
-        Num = 2
-    }
-    /**
-     * <code>NavMeshObstacles</code> 常用形状。
-     */
-    class NavMeshObstacles extends NavModifleBase {
-        set meshType(value: NavObstaclesMeshType);
-        get meshType(): NavObstaclesMeshType;
-        /**
-         * 中心偏移
-         */
-        set center(value: Vector3);
-        get center(): Vector3;
-        /**
-         * box size
-         */
-        set size(value: Vector3);
-        get size(): Vector3;
-        /**
-         * 圆柱高
-         */
-        set height(value: number);
-        get height(): number;
-        /**
-         * 圆柱半径
-         */
-        set radius(value: number);
-        get radius(): number;
-        constructor();
-    }
-    /**
-    * 数据分块算法
-    */
-    enum PartitionType {
-        PARTITION_WATERSHED = 0,
-        PARTITION_MONOTONE = 1,
-        PARTITION_LAYERS = 2
-    }
-    class NavMeshSurface extends Component {
-        /**
-         * find all
-         * @param surfaces
-         * @param sprite
-         */
-        static findNavMeshSurface(surfaces: Array<NavMeshSurface>, sprite: Sprite3D, agentFlags: string[]): void;
-        /**@intenral */
-        private _navMesh;
-        /**
-         * agent 类型
-         */
-        set agentType(value: string);
-        get agentType(): string;
-        /**
-         * area 类型
-         */
-        set areaFlag(value: string);
-        get areaFlag(): string;
-        /**
-         * 是否需要异步处理
-         */
-        set asyn(value: boolean);
-        get asyn(): boolean;
-        /**
-        * 设置产生navMesh的方法
-        */
-        set partitionType(value: PartitionType);
-        get partitionType(): PartitionType;
-        get bounds(): Bounds;
-        set datas(value: TextResource);
-        get datas(): TextResource;
-        get navMesh(): NavMesh;
-        /**
-         * <code>实例化一个寻路功能<code>
-         */
-        constructor();
-        _cloneTo(dest: Component): void;
-        /**
-         * add one modifile navMesh
-         * @param navModifile
-         */
-        _addModifileNavMesh(navModifile: NavModifleBase): void;
-        /**
-         * start build one Mesh
-         */
-        _buildOneTileMesh(): void;
-        /**
-         * start build all Mesh
-         */
-        _buildAllTileMesh(): void;
-        cleanAllTile(): void;
-        rebuildTile(pos: Vector3): void;
-    }
-    /**
-     * <code>NavModifleBase</code> 动态节点的基类。
-     */
-    class NavModifleBase extends Component {
-        set bounds(value: Bounds);
-        /**
-        * agentType
-        */
-        set agentType(value: string);
-        get agentType(): string;
-        /**
-         * area 类型
-         */
-        set areaFlag(value: string);
-        get areaFlag(): string;
-        /**
-         * <code>NavModifleBase<Code>
-         */
-        constructor();
-    }
-    class NavAreaFlag {
-        index: number;
-        cost: number;
-        name: string;
-        get flag(): number;
-    }
-    class NavigationManager implements IElementComponentManager {
-        /**
-         * <code>实例化一个Navigation管理器<code>
-         */
-        constructor();
-        /**
-         * 注册导航网格的 agent 类型
-         */
-        regNavConfig(config: RecastConfig): void;
-        /**
-         * 或者导航网格的agent 配置
-         * @param type
-         * @returns
-         */
-        getNavConfig(type: string): RecastConfig;
-        /**
-         * 注册地形类型
-         * @param type
-         * @param cost
-         */
-        regArea(area: NavAreaFlag): void;
-        /**
-         * 获取地形配置
-         * @param type
-         * @returns
-         */
-        getArea(type: string): NavAreaFlag;
-        /**
-        * get areaFlag Map
-        * @param type
-        * @returns
-        */
-        getAreaFlagMap(): Map<string, NavAreaFlag>;
-        /**
-         * 注册不同navMesh的NavMeshLink
-         * @param start NavMeshSurface
-         * @param end NavMeshSurface
-         * @param link NavMeshLink
-         */
-        regNavMeshLink(start: NavMeshSurface, end: NavMeshSurface, link: NavMeshLink): void;
-        /**
-         * 通过空间位置获得对应的NavMeshSurface
-         * @param pos  世界坐标位置
-         * @param agentType  类型
-         * @returns NavMeshSurface
-         */
-        getNavMeshSurface(pos: Vector3, agentType: string): NavMeshSurface;
-        /**
-         * 通过空间坐标获得所有的NavMeshSurface
-         * @param pos  世界坐标位置
-         *  @returns NavMeshSurface[]
-         */
-        getNavMeshSurfaces(pos: Vector3): NavMeshSurface[];
-    }
-    class NavigationPathData {
-        /**
-         * 位置
-         */
-        get pos(): Vector3;
-        /**
-         * 位置的标记
-         */
-        get flag(): number;
-        constructor();
-    }
-    class NavigationUtils {
-        /**
-         * create navMesh tile to Laya Mesh
-         * @param navMesh
-         * @param mesh
-         */
-        static creageDebugMesh(navMesh: NavMesh, mesh: Mesh): Mesh;
-        /**
-         * create NavMesh
-         * @return any
-         */
-        static createNavMesh(): any;
-        /**
-         * create NavMeshQuery
-         * @return any
-         */
-        static createNavMeshQuery(): any;
-        /**
-         * create RefPointData
-         * @return any
-         */
-        static createRefPointData(): any;
-        /**
-        * create MeshOffLink
-        * @return any
-        */
-        static createMeshOffLink(): any;
-        /**
-        * create ConvexVolum
-        * @return any
-        */
-        static createConvexVolume(): any;
-        /**
-         * create QueryFilter
-         * @return any
-         */
-        static createQueryFilter(): any;
-        /**
-         * create Crowd
-         * @return any
-         */
-        static createCrowd(): any;
-        /**
-        * get CrowdAgentParams
-        * @return any
-        */
-        static getCrowdAgentParams(): any;
-        /**
-         * free NavMeshQuery
-         */
-        static freeNavMeshQuery(data: any): void;
-        /**
-         * free NavMesh
-         */
-        static freeNavMesh(data: any): void;
-        /**
-         * free Crowd
-         */
-        static freeCrowd(data: any): void;
-        /**
-         * free any other
-         */
-        static free(data: any): void;
-        /**
-        * free any layaData
-        */
-        static freeLayaData(data: any): void;
-        /**
-         * check Status is Succeed
-         */
-        static statusSucceed(data: any): boolean;
-    }
-    class NavMesh {
-        /**寻路代理 */
-        private _crowd;
-        /**过滤信息 */
-        private _defatfilter;
-        /**TODO */
-        private _extents;
-        /**navigation manager */
-        private _manager;
-        private _fiterMap;
-        /**
-         * <code>实例化一个NavMesh组件<code>
-         */
-        constructor(config: RecastConfig, bound: Bounds, manager: NavigationManager);
-        /**
-         * create agent
-         * @param agent
-         */
-        private _createAgents;
-        /**
-         * add Agent
-         * @param agent
-         */
-        addAgent(agent: NavAgent): void;
-        /**
-         * remove agent
-         * @param agent
-         */
-        removeAgent(agent: NavAgent): void;
-        /**
-         * rayCast navMesh
-         * @param ray
-         * @param outPos
-         * @returns
-         */
-        raycastNavMesh(ray: Ray, outPos: Vector3): boolean;
-        /**
-         * 获得当前点的Flag
-         * @param pos 世界坐标
-         * @param fiter
-         * @return area
-         */
-        getPolyFlags(pos: Vector3, fiter?: any): number;
-        /**
-         * 获得当前点的AreaFlag
-         * @param pos 世界坐标
-         * @param fiter
-         * @return area
-         */
-        getPolyArea(pos: Vector3, fiter?: any): number;
-        /**
-         * 查找最近点
-         * @param pos 世界坐标
-         * @param fiter
-         */
-        findNearestPoly(pos: Vector3, fiter?: any): any;
-        /**
-         * @param agent
-         * @param fllowPaths
-         * @returns
-         */
-        findFllowPath(agent: NavAgent, fllowPaths: NavigationPathData[]): boolean;
-        /**
-         * @param agent
-         * @param fllowPaths
-         * @returns {dist:number,pos:Array<number>(3),normal:Array<number>(3)}
-         */
-        findDistanceToWall(agent: NavAgent): {
-            dist: number;
-            pos: Array<number>;
-            normal: Array<number>;
-        };
-        /**
-         * @param agent
-         * @returns
-         */
-        requestMoveTarget(agent: NavAgent, destination: Vector3): boolean;
-        /**
-        * get Mesh
-        *
-        */
-        buildDebugMesh(): Mesh;
-    }
-    class NavMeshGrid {
-        get tileWidth(): number;
-        /**
-         * <code>实例化一个NavMeshGrid组件<code>
-         */
-        constructor(config: RecastConfig, bound: Bounds);
-        /**
-         * update bound
-         */
-        private _updateBound;
-        /**
-         * refeachConfig
-         */
-        refeachConfig(tile: NavTileData): void;
-        /**
-         * get tile index by Bound
-         */
-        getBoundTileIndex(bound: Bounds, isbord?: boolean): number[];
-        /**
-        * get  bounds of mesh
-        */
-        get bounds(): Bounds;
-        /**
-        * get  bounds of mesh
-        */
-        get config(): RecastConfig;
-        /**
-        * get tile index of map by position
-        * @param x  世界坐标x
-        * @param z  世界坐标z
-        */
-        getTileIndexByPos(x: number, z: number): number;
-        /**
-         * get tile index of map
-         */
-        getTileIndex(xIndex: number, zIndex: number): number;
-        /**
-         * get max tiles number
-         */
-        getMaxtiles(): number;
-        /**
-         * get max x tiles number
-         */
-        get maxXTileCount(): number;
-        /**
-         * get max z tiles number
-         */
-        get maxZTileCount(): number;
-        /**
-        * get max x cell number
-        */
-        get maxXCellCount(): number;
-        /**
-         * get max z cell number
-         */
-        get maxZCellCount(): number;
-    }
-    class NavTileCache {
-        /** tile offset */
-        x: number;
-        y: number;
-        constructor();
-        /**三角形顶点 */
-        set triVertex(data: Float32Array);
-        get triVertex(): Float32Array;
-        /**三角形索引 */
-        set triIndex(data: Uint32Array);
-        get triIndex(): Uint32Array;
-        /**三角形标记 */
-        set triFlag(data: Uint8Array);
-        get triFlag(): Uint8Array;
-        /**
-         * 包围盒大小
-         */
-        get bound(): Bounds;
-        /**
-         * 绑定数据
-         * @returns any
-         */
-        get bindData(): any;
-        destroy(): void;
-    }
-    class NavTileData {
-        constructor(res: TextResource);
-        get dirtyFlag(): number;
-        getNavData(index: number): NavTileCache;
-        get length(): number;
-    }
-    /**
-     * create Recast navMesh Config
-     */
-    class RecastConfig implements IClone {
-        /**name */
-        agentName: string;
-        /**像素格子高度 单位/m */
-        cellHeight: number;
-        /**路径最大坡度 单位/角度 */
-        agentMaxSlope: number;
-        /**路径最大高度跨度 单位/m */
-        agentHeight: number;
-        /**路径最大高度 单位/m */
-        agentMaxClimb: number;
-        /**代理半径 单位/m */
-        agentRadius: number;
-        /**每个tile的格子数量 单位/个 */
-        tileSize: number;
-        /**
-         * 像素格子尺寸 单位/m
-         */
-        set cellSize(value: number);
-        get cellSize(): number;
-        constructor();
-        /**
-        * clone
-        * @returns
-        */
-        clone(): RecastConfig;
-        /**
-        * 克隆。
-        * @param	destObject 克隆源。
-        */
-        cloneTo(destObject: any): void;
     }
     /**
      * 自动图集管理类
@@ -23947,7 +23731,6 @@ declare module Laya {
     type TypeMapEntry = {
         typeId: number;
         loaderType: new () => IResourceLoader;
-        hotReloadable?: boolean;
     };
     interface URLInfo {
         ext: string;
@@ -24010,16 +23793,14 @@ declare module Laya {
         static readonly typeMap: {
             [type: string]: TypeMapEntry;
         };
-        static readonly hotReloadableFlags: Record<number, boolean>;
         static downloader: Downloader;
         /**
          * 注册一种资源装载器。
          * @param exts 扩展名
          * @param cls
          * @param type 类型标识。如果这种资源需要支持识别没有扩展名的情况，或者一个扩展名对应了多种资源类型的情况，那么指定type参数是个最优实践。
-         * @param hotReloadable 是否支持热重载
          */
-        static registerLoader(exts: string[], cls: new () => IResourceLoader, type?: string, hotReloadable?: boolean): void;
+        static registerLoader(exts: string[], cls: new () => IResourceLoader, type?: string): void;
         /**资源分组对应表。*/
         static groupMap: {
             [name: string]: Set<string>;
@@ -24466,167 +24247,51 @@ declare module Laya {
         static load(url: string, options: any): Promise<any>;
         private static workerMessage;
     }
-    enum BaseRender2DType {
-        baseRenderNode = 0,
-        spine = 1,
-        particle = 2,
-        spineSimple = 3
-    }
-    enum Render2DOrderMode {
-        elementIndex = 0,
-        ysort = 1
-    }
-    class BaseRenderNode2D extends Component {
-        /**
-         * 材质集
-         */
-        _materials: Material[];
-        /**
-         * 渲染类型
-         */
-        _renderType: BaseRender2DType;
-        /**
-         * 帧循环标记
-         */
-        _renderUpdateMask: number;
-        /**
-         * sprite ShaderData,可以为null
-         */
-        _spriteShaderData: ShaderData;
-        /**
-         * 唯一ID
-         */
-        private _renderid;
-        /**
-         * 节点内的渲染排序模式
-         */
-        private _ordingMode;
-        protected _transformChange(): void;
-        /**
-       * 返回第一个材质。
-       */
-        get sharedMaterial(): Material;
-        set sharedMaterial(value: Material);
-        private _setRenderElement2DMaterial;
-        constructor();
-        /**
-         * cmd run时调用，可以用来计算matrix等获得即时context属性
-         * @param context
-         * @param px
-         * @param py
-         */
-        addCMDCall?(context: Context, px: number, py: number): void;
-        /**
-         * 帧更新，可以放一些顶点更新，数据计算等
-         * @protected
-         * @param context
-         */
-        renderUpdate?(context: IRenderContext2D): void;
-        /**
-         * 渲染前更新，准备所需的渲染数据
-         * @param context
-         */
-        preRenderUpdate?(context: IRenderContext2D): void;
-        clear(): void;
-    }
-    interface IBatch2DRender {
-        /**合批范围，合批的RenderElement2D直接add进list中 */
-        batchRenderElement(list: FastSinglelist<IRenderElement2D>, start: number, length: number): void;
-        recover(): void;
-    }
-    class Batch2DInfo {
-        batchFun: IBatch2DRender;
-        batch: boolean;
-        indexStart: number;
-        elementLenth: number;
-        constructor();
-        static _pool: Batch2DInfo[];
-        static create(): Batch2DInfo;
-        static recover(info: Batch2DInfo): void;
-    }
-    class RenderManager2D {
-        /**
-         * 根据不同的RenderNode注册合批方式，来优化性能
-         */
-        private static _batchMapManager;
-        /**
-         * 注册渲染节点之间的合批
-         * @param firstRenderElementType
-         * @param lastRenderElementType
-         * @param batch
-         */
-        static regisBatch(renderElementType: number, batch: IBatch2DRender): void;
-        private _lastRenderNodeType;
-        private _lastbatch2DInfo;
-        _batchInfoList: FastSinglelist<Batch2DInfo>;
-        /**
-         * 渲染结束标签
-         */
-        _renderEnd: boolean;
-        /**
-        * RenderList
-        */
-        get list(): FastSinglelist<BaseRenderNode2D>;
-        set list(value: FastSinglelist<BaseRenderNode2D>);
-        constructor();
-        /**
-        * add Render Node
-        * @param object
-        */
-        addRenderObject(object: BaseRenderNode2D): void;
-        /**
-         * remove Render Node
-         * @param object
-         */
-        removeRenderObject(object: BaseRenderNode2D): void;
-        /**
-         * clear list
-         */
-        clearList(): void;
-        /**
-         * 帧更新
-         */
-        renderUpdate(): void;
-        /**
-         * 渲染
-         * @param context
-         */
-        render(context: IRenderContext2D): void;
-        private _cull;
-        /**
-         * 合批总循环
-         */
-        private _batch;
-        /**
-         * 开启一个Batch
-         */
-        private _batchStart;
-        endRender(): void;
-    }
     /**
      * 2D矩形碰撞体
      */
     class BoxCollider extends ColliderBase {
+        /**矩形宽度*/
+        private _width;
+        /**矩形高度*/
+        private _height;
+        /**
+        * 创建一个新的 <code>BoxCollider</code> 实例。
+        */
+        constructor();
+        /**@override */
+        protected _setShapeData(shape: any): void;
         /**矩形宽度*/
         get width(): number;
         set width(value: number);
         /**矩形高度*/
         get height(): number;
         set height(value: number);
-        /**
-        * 创建一个新的 <code>BoxCollider</code> 实例。
-        */
-        constructor();
     }
     /**
      * 2D线形碰撞体
      */
     class ChainCollider extends ColliderBase {
         /**
-        * @deprecated
-        * 用逗号隔开的点的集合，格式：x,y,x,y ...
+         * @deprecated
+         * 用逗号隔开的点的集合，格式：x,y,x,y ...
+         */
+        private _points;
+        /**顶点数据*/
+        private _datas;
+        /**是否是闭环，注意不要有自相交的链接形状，它可能不能正常工作*/
+        private _loop;
+        constructor();
+        /**
+        * @override
         */
+        protected _setShapeData(shape: any): void;
+        /**
+         * @deprecated
+         * 用逗号隔开的点的集合，格式：x,y,x,y ...
+         */
         get points(): string;
+        onAdded(): void;
         set points(value: string);
         /**顶点数据 x,y,x,y ...*/
         get datas(): number[];
@@ -24634,37 +24299,66 @@ declare module Laya {
         /**是否是闭环，注意不要有自相交的链接形状，它可能不能正常工作*/
         get loop(): boolean;
         set loop(value: boolean);
-        constructor();
-        /**
-         * 被添加到节点后调用，和Awake不同的是即使节点未激活onAdded也会调用。
-         */
-        onAdded(): void;
     }
     /**
      * 2D圆形碰撞体
      */
     class CircleCollider extends ColliderBase {
         /**圆形半径，必须为正数*/
+        private _radius;
+        constructor();
+        /**
+        * @override
+        */
+        protected _setShapeData(shape: any): void;
+        /**圆形半径，必须为正数*/
         get radius(): number;
         set radius(value: number);
-        constructor();
     }
     /**
      * 碰撞体基类
      */
     class ColliderBase extends Component {
-        /**@private box2D fixture Def */
-        protected _fixtureDef: any;
+        /**FixtureBox2DDef 数据 */
+        private static TempDef;
+        /**是否是传感器，传感器能够触发碰撞事件，但不会产生碰撞反应*/
+        private _isSensor;
+        /**密度值，值可以为零或者是正数，建议使用相似的密度，这样做可以改善堆叠稳定性，默认值为10*/
+        private _density;
+        /**摩擦力，取值范围0-1，值越大，摩擦越大，默认值为0.2*/
+        private _friction;
+        /**弹性系数，取值范围0-1，值越大，弹性越大，默认值为0*/
+        private _restitution;
         /**标签*/
         label: string;
+        /**@private box2D fixture Def */
+        protected _fixtureDef: any;
+        /**@readonly[只读]b2Fixture对象 */
+        fixture: any;
         /**刚体引用*/
         rigidBody: RigidBody;
+        /**相对节点的x轴偏移*/
+        private _x;
+        /**相对节点的y轴偏移*/
+        private _y;
         /**相对节点的x轴偏移*/
         get x(): number;
         set x(value: number);
         /**相对节点的y轴偏移*/
         get y(): number;
         set y(value: number);
+        /**
+         * 创建一个新的 <code>ColliderBase</code> 实例。
+         */
+        constructor();
+        /**@private 创建Shape*/
+        protected createfixture(): any;
+        /**@private 设置shape属性*/
+        protected resetFixtureData(): void;
+        protected _onEnable(): void;
+        protected _onAwake(): void;
+        /**通知rigidBody 更新shape 属性值 */
+        protected _needupdataShapeAttribute(): void;
         /**是否是传感器，传感器能够触发碰撞事件，但不会产生碰撞反应*/
         get isSensor(): boolean;
         set isSensor(value: boolean);
@@ -24678,13 +24372,11 @@ declare module Laya {
         get restitution(): number;
         set restitution(value: number);
         /**
-         * 创建一个新的 <code>ColliderBase</code> 实例。
+         * @private
+         * 碰撞体参数发生变化后，刷新物理世界碰撞信息
          */
-        constructor();
-        /**@protected 创建Shape*/
-        protected _createfixture(): any;
-        /**@protected 设置shape属性*/
-        protected resetFixtureData(): void;
+        refresh(): void;
+        protected _onDisable(): void;
     }
     enum PhysicsShape {
         BoxShape = 0,
@@ -24707,13 +24399,24 @@ declare module Laya {
     class EdgeCollider extends ColliderBase {
         /**
          * @deprecated
+         * 用逗号隔开的点的集合，注意只有两个点，格式：x,y,x,y
+         */
+        private _points;
+        /**顶点数据*/
+        private _datas;
+        constructor();
+        /**
+         * @override
+         */
+        protected _setShapeData(shape: any): void;
+        /**
+         * @deprecated
          * 用逗号隔开的点的集合，注意只有两个点，格式：x,y,x,y*/
         get points(): string;
         set points(value: string);
         /**顶点数据 x,y,x,y ...*/
         get datas(): number[];
         set datas(value: number[]);
-        constructor();
     }
     /**
      * 2D多边形碰撞体，暂时不支持凹多边形，如果是凹多边形，先手动拆分为多个凸多边形
@@ -24721,19 +24424,27 @@ declare module Laya {
      */
     class PolygonCollider extends ColliderBase {
         /**
-        * @deprecated
-        * 用逗号隔开的点的集合，格式：x,y,x,y ...
+         * @deprecated
+         * 用逗号隔开的点的集合，格式：x,y,x,y ...
+         */
+        private _points;
+        /**顶点数据*/
+        private _datas;
+        constructor();
+        onAdded(): void;
+        /**
+        * @override
         */
+        protected _setShapeData(shape: any): void;
+        /**
+         * @deprecated
+         * 用逗号隔开的点的集合，格式：x,y,x,y ...
+         */
         get points(): string;
         set points(value: string);
         /**顶点数据 x,y,x,y ...*/
         get datas(): number[];
         set datas(value: number[]);
-        constructor();
-        /**
-        * @override
-        */
-        protected _setShapeData(shape: any): void;
     }
     /**
      * 实现Box2D c++  2.4.1 版本
@@ -25196,6 +24907,8 @@ declare module Laya {
      * 距离关节：两个物体上面各自有一点，两点之间的距离固定不变
      */
     class DistanceJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的连接刚体，可不设置，默认为左上角空刚体*/
@@ -25206,6 +24919,21 @@ declare module Laya {
         otherAnchor: any[];
         /**[首次设置有效]两个刚体是否可以发生碰撞，默认为false*/
         collideConnected: boolean;
+        /**约束的目标静止长度*/
+        private _length;
+        /**约束的最小长度，-1表示使用默认值*/
+        private _maxLength;
+        /**约束的最大长度，-1表示使用默认值*/
+        private _minLength;
+        /**弹簧系统的震动频率，可以视为弹簧的弹性系数，通常频率应该小于时间步长频率的一半*/
+        private _frequency;
+        /**刚体在回归到节点过程中受到的阻尼比，建议取值0~1*/
+        private _dampingRatio;
+        /**
+         * @override
+         */
+        protected _createJoint(): void;
+        onDestroy(): void;
         /**约束的目标静止长度*/
         get length(): number;
         set length(value: number);
@@ -25223,18 +24951,26 @@ declare module Laya {
         set damping(value: number);
         /**刚体当前长度*/
         get jointLength(): number;
-        onDestroy(): void;
     }
     /**
      * 齿轮关节：用来模拟两个齿轮间的约束关系，齿轮旋转时，产生的动量有两种输出方式，一种是齿轮本身的角速度，另一种是齿轮表面的线速度
      */
     class GearJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]要绑定的第1个关节，类型可以是RevoluteJoint或者PrismaticJoint*/
         joint1: RevoluteJoint | PrismaticJoint;
         /**[首次设置有效]要绑定的第2个关节，类型可以是RevoluteJoint或者PrismaticJoint*/
         joint2: RevoluteJoint | PrismaticJoint;
         /**[首次设置有效]两个刚体是否可以发生碰撞，默认为false*/
         collideConnected: boolean;
+        /**两个齿轮角速度比例，默认1*/
+        private _ratio;
+        /**
+         * @override
+         *
+         */
+        protected _createJoint(): void;
         /**两个齿轮角速度比例，默认1*/
         get ratio(): number;
         set ratio(value: number);
@@ -25243,9 +24979,17 @@ declare module Laya {
      * 关节基类
      */
     class JointBase extends Component {
-        /**@readonly [只读]原生关节对象*/
-        get joint(): any;
+        /**原生关节对象*/
+        protected _joint: any;
+        protected _factory: IPhysiscs2DFactory;
         constructor();
+        protected getBodyAnchor(body: RigidBody, anchorx: number, anchory: number): Point;
+        /**[只读]原生关节对象*/
+        get joint(): any;
+        protected _onEnable(): void;
+        protected _onAwake(): void;
+        protected _createJoint(): void;
+        protected _onDisable(): void;
     }
     /**
      * Box2D distance Joint def Struct
@@ -25351,12 +25095,29 @@ declare module Laya {
      * 马达关节：用来限制两个刚体，使其相对位置和角度保持不变
      */
     class MotorJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的连接刚体*/
         otherBody: RigidBody;
         /**[首次设置有效]两个刚体是否可以发生碰撞，默认为false*/
         collideConnected: boolean;
+        /**基于otherBody坐标位置的偏移量，也是selfBody的目标位置*/
+        private _linearOffset;
+        /**基于otherBody的角度偏移量，也是selfBody的目标角度*/
+        private _angularOffset;
+        /**当selfBody偏离目标位置时，为使其恢复到目标位置，马达关节所施加的最大作用力*/
+        private _maxForce;
+        /**当selfBody角度与目标角度不同时，为使其达到目标角度，马达关节施加的最大扭力*/
+        private _maxTorque;
+        /**selfBody向目标位置移动时的缓动因子，取值0~1，值越大速度越快*/
+        private _correctionFactor;
+        /**
+         * @override
+         *
+         */
+        protected _createJoint(): void;
         /**基于otherBody坐标位置的偏移量，也是selfBody的目标位置*/
         get linearOffset(): any[];
         set linearOffset(value: any[]);
@@ -25377,10 +25138,29 @@ declare module Laya {
      * 鼠标关节：鼠标关节用于通过鼠标来操控物体。它试图将物体拖向当前鼠标光标的位置。而在旋转方面就没有限制。
      */
     class MouseJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的链接点，是相对于自身刚体的左上角位置偏移，如果不设置，则根据鼠标点击点作为连接点*/
         anchor: any[];
+        /**鼠标关节在拖曳刚体bodyB时施加的最大作用力*/
+        private _maxForce;
+        /**弹簧系统的震动频率，可以视为弹簧的弹性系数，通常频率应该小于时间步长频率的一半*/
+        private _frequency;
+        /**刚体在回归到节点过程中受到的阻尼比，建议取值0~1*/
+        private _dampingRatio;
+        protected _onEnable(): void;
+        protected _onAwake(): void;
+        private onMouseDown;
+        /**
+         * @override
+         *
+         */
+        protected _createJoint(): void;
+        private onStageMouseUp;
+        private onMouseMove;
+        protected _onDisable(): void;
         /**鼠标关节在拖曳刚体bodyB时施加的最大作用力*/
         get maxForce(): number;
         set maxForce(value: number);
@@ -25395,16 +25175,39 @@ declare module Laya {
      * 平移关节：移动关节允许两个物体沿指定轴相对移动，它会阻止相对旋转
      */
     class PrismaticJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的连接刚体，可不设置，默认为左上角空刚体*/
         otherBody: RigidBody;
         /**[首次设置有效]关节的控制点，是相对于自身刚体的左上角位置偏移*/
         anchor: any[];
+        /**
+         * @deprecated
+         * [首次设置有效]一个向量值，描述运动方向，比如1,0是沿X轴向右*/
+        _axis: any[];
         /**[首次设置有效]一个角度，描述运动方向，比如0是沿X轴向右*/
         angle: number;
         /**[首次设置有效]两个刚体是否可以发生碰撞，默认为false*/
         collideConnected: boolean;
+        /**是否开启马达，开启马达可使目标刚体运动*/
+        private _enableMotor;
+        /**启用马达后，在axis坐标轴上移动可以达到的最大速度*/
+        private _motorSpeed;
+        /**启用马达后，可以施加的最大作用力*/
+        private _maxMotorForce;
+        /**是否对刚体的移动范围加以约束*/
+        private _enableLimit;
+        /**启用约束后，刚体移动范围的下限，是距离anchor的偏移量*/
+        private _lowerTranslation;
+        /**启用约束后，刚体移动范围的上限，是距离anchor的偏移量*/
+        private _upperTranslation;
+        /**
+         * @override
+         *
+         */
+        protected _createJoint(): void;
         /**是否开启马达，开启马达可使目标刚体运动*/
         get enableMotor(): boolean;
         set enableMotor(value: boolean);
@@ -25433,6 +25236,8 @@ declare module Laya {
      * 滑轮关节：它将两个物体接地(ground)并彼此连接，当一个物体上升，另一个物体就会下降
      */
     class PulleyJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的连接刚体*/
@@ -25449,11 +25254,17 @@ declare module Laya {
         ratio: number;
         /**[首次设置有效]两个刚体是否可以发生碰撞，默认为false*/
         collideConnected: boolean;
+        /**
+         * @override
+         */
+        protected _createJoint(): void;
     }
     /**
      * 旋转关节强制两个物体共享一个锚点，两个物体相对旋转
      */
     class RevoluteJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的连接刚体，可不设置*/
@@ -25462,6 +25273,22 @@ declare module Laya {
         anchor: any[];
         /**[首次设置有效]两个刚体是否可以发生碰撞，默认为false*/
         collideConnected: boolean;
+        /**是否开启马达，开启马达可使目标刚体运动*/
+        private _enableMotor;
+        /**启用马达后，可以达到的最大旋转速度*/
+        private _motorSpeed;
+        /**启用马达后，可以施加的最大扭距，如果最大扭矩太小，会导致不旋转*/
+        private _maxMotorTorque;
+        /**是否对刚体的旋转范围加以约束*/
+        private _enableLimit;
+        /**启用约束后，刚体旋转范围的下限角度*/
+        private _lowerAngle;
+        /**启用约束后，刚体旋转范围的上限角度*/
+        private _upperAngle;
+        /**
+         * @override
+         */
+        protected _createJoint(): void;
         /**是否开启马达，开启马达可使目标刚体运动*/
         get enableMotor(): boolean;
         set enableMotor(value: boolean);
@@ -25485,6 +25312,8 @@ declare module Laya {
      * 焊接关节：焊接关节的用途是使两个物体不能相对运动，受到关节的限制，两个刚体的相对位置和角度都保持不变，看上去像一个整体
      */
     class WeldJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的连接刚体*/
@@ -25493,6 +25322,14 @@ declare module Laya {
         anchor: any[];
         /**[首次设置有效]两个刚体是否可以发生碰撞，默认为false*/
         collideConnected: boolean;
+        /**弹簧系统的震动频率，可以视为弹簧的弹性系数，通常频率应该小于时间步长频率的一半*/
+        private _frequency;
+        /**刚体在回归到节点过程中受到的阻尼比，建议取值0~1*/
+        private _dampingRatio;
+        /**
+         * @override
+         */
+        protected _createJoint(): void;
         /**弹簧系统的震动频率，可以视为弹簧的弹性系数，通常频率应该小于时间步长频率的一半*/
         get frequency(): number;
         set frequency(value: number);
@@ -25504,6 +25341,8 @@ declare module Laya {
      * 轮子关节：围绕节点旋转，包含弹性属性，使得刚体在节点位置发生弹性偏移
      */
     class WheelJoint extends JointBase {
+        /**@private */
+        private static _temp;
         /**[首次设置有效]关节的自身刚体*/
         selfBody: RigidBody;
         /**[首次设置有效]关节的连接刚体*/
@@ -25518,6 +25357,26 @@ declare module Laya {
         _axis: any[];
         /**[首次设置有效]一个角度值，用于定义弹性运动方向，即轮子在哪个方向可以如弹簧一样压缩和伸展，比如0是沿X轴向右, 90是沿Y轴向下*/
         angle: number;
+        /**弹簧系统的震动频率，可以视为弹簧的弹性系数，通常频率应该小于时间步长频率的一半*/
+        private _frequency;
+        /**刚体在回归到节点过程中受到的阻尼比，建议取值0~1*/
+        private _dampingRatio;
+        /**是否开启马达，开启马达可使目标刚体运动*/
+        private _enableMotor;
+        /**启用马达后，可以达到的最大旋转速度*/
+        private _motorSpeed;
+        /**启用马达后，可以施加的最大扭距，如果最大扭矩太小，会导致不旋转*/
+        private _maxMotorTorque;
+        /**是否对刚体的移动范围加以约束*/
+        private _enableLimit;
+        /**启用约束后，刚体移动范围的下限，是距离anchor的偏移量*/
+        private _lowerTranslation;
+        /**启用约束后，刚体移动范围的上限，是距离anchor的偏移量*/
+        private _upperTranslation;
+        /**
+         * @override
+         */
+        protected _createJoint(): void;
         /**弹簧系统的震动频率，可以视为弹簧的弹性系数，通常频率应该小于时间步长频率的一半*/
         get frequency(): number;
         set frequency(value: number);
@@ -25552,9 +25411,23 @@ declare module Laya {
      * 2D物理引擎
      */
     class Physics2D extends EventDispatcher {
+        /**@private */
+        private static _I;
+        /**@private 是否已经激活*/
+        private _enabled;
+        /**@private 根容器*/
+        private _worldRoot;
+        /**@private 空的body节点，给一些不需要节点的关节使用*/
+        _emptyBody: any;
+        /**@private */
+        _eventList: any[];
+        _factory: IPhysiscs2DFactory;
+        /**@private 需要同步实时跟新数据列表*/
+        _rigiBodyList: SingletonList<RigidBody>;
+        /**@private 需要同步物理数据的列表；使用后会及时释放*/
+        _updataattributeLists: SingletonList<RigidBody>;
         /**全局物理单例*/
         static get I(): Physics2D;
-        _factory: IPhysiscs2DFactory;
         /**
          * 设置物理绘制
          */
@@ -25579,6 +25452,23 @@ declare module Laya {
         * 是否绘制CenterOfMass
         */
         set drawCenterOfMass(enable: boolean);
+        enable(): Promise<void>;
+        /**
+        * 销毁当前物理世界
+        */
+        destroyWorld(): void;
+        /**
+         * 开启物理世界
+         */
+        start(): void;
+        /**@private*/
+        private _update;
+        /**@private*/
+        _updatePhysicsTransformToRender(): void;
+        /**
+         * 停止物理世界
+         */
+        stop(): void;
         /**
          * 设置是否允许休眠，休眠可以提高稳定性和性能，但通常会牺牲准确性
          */
@@ -25590,47 +25480,17 @@ declare module Laya {
         */
         get gravity(): any;
         set gravity(value: Vector2);
+        /**获得刚体总数量*/
+        getBodyCount(): number;
+        /**获得碰撞总数量*/
+        getContactCount(): number;
+        /**获得关节总数量*/
+        getJointCount(): number;
         /**物理世界根容器，将根据此容器作为物理世界坐标世界，进行坐标变换，默认值为stage
          * 设置特定容器后，就可整体位移物理对象，保持物理世界不变。
          * 注意，仅会在 set worldRoot 时平移一次，其他情况请配合 updatePhysicsByWorldRoot 函数使用*/
         get worldRoot(): Sprite;
         set worldRoot(value: Sprite);
-        get bodyCount(): number;
-        /**获得碰撞总数量*/
-        get contactCount(): number;
-        /**获得关节总数量*/
-        get jointCount(): number;
-        enable(): Promise<void>;
-        /**
-         * 开启物理世界
-         */
-        start(): void;
-        /**
-        * 销毁当前物理世界
-        */
-        destroyWorld(): void;
-        /**
-         * 停止物理世界
-         */
-        stop(): void;
-        /**
-         * @deprecated
-         * 获得刚体总数量
-         * use bodyCount instead
-         */
-        getBodyCount(): number;
-        /**
-         * @deprecated
-         * 获得碰撞总数量
-         * use contactCount instead
-         */
-        getContactCount(): number;
-        /**
-         *  @deprecated
-         *  获得关节总数量
-         *  use jointCount instead
-         */
-        getJointCount(): number;
         /**
          * 设定 worldRoot 后，手动触发物理世界更新
          */
@@ -25640,22 +25500,34 @@ declare module Laya {
      * 物理辅助线
      */
     class Physics2DDebugDraw extends Sprite {
-        /**@protected */
-        protected _lineWidth: number;
         DrawString_color: string;
         Red: string;
         Green: string;
+        /**@protected */
+        protected _camera: any;
+        /**@protected */
+        protected _mG: Graphics;
+        /**@private */
+        private _textSp;
+        /**@protected */
+        protected _textG: Graphics;
+        /**@protected */
+        protected _factory: IPhysiscs2DFactory;
+        /**@protected */
+        protected _lineWidth: number;
+        constructor(factory: IPhysiscs2DFactory);
+        /**@private
+         * @override
+        */
+        render(ctx: Context, x: number, y: number): void;
+        /**@private */
+        private _renderToGraphic;
+        PushTransform(tx: number, ty: number, angle: number): void;
+        PopTransform(): void;
         get mG(): Graphics;
         get textG(): Graphics;
         get lineWidth(): number;
         get camera(): any;
-        constructor(factory: IPhysiscs2DFactory);
-        /**
-         * @override
-        */
-        render(ctx: Context, x: number, y: number): void;
-        PushTransform(tx: number, ty: number, angle: number): void;
-        PopTransform(): void;
     }
     /**
      *  Physics2DOption 用于配置2D物理的默认参数
@@ -25694,6 +25566,31 @@ declare module Laya {
      * 可以通过IDE-"项目设置"-"2D物理"-"是否开启2D物理绘制" 开启物理辅助线显示，或者通过代码Physics2D.I.enableDebugDraw=true;
      */
     class RigidBody extends Component {
+        /** 用于判断节点属性更改时更新物理属性*/
+        private static changeFlag;
+        /**
+         * 刚体类型，支持三种类型static，dynamic和kinematic类型，默认为dynamic类型
+         * static为静态类型，静止不动，不受重力影响，质量无限大，可以通过节点移动，旋转，缩放进行控制
+         * dynamic为动态类型，受重力影响
+         * kinematic为运动类型，不受重力影响，可以通过施加速度或者力的方式使其运动
+         */
+        protected _type: string;
+        /**是否允许休眠，允许休眠能提高性能*/
+        protected _allowSleep: boolean;
+        /**角速度，设置会导致旋转*/
+        protected _angularVelocity: number;
+        /**旋转速度阻尼系数，范围可以在0到无穷大之间，0表示没有阻尼，无穷大表示满阻尼，通常阻尼的值应该在0到0.1之间*/
+        protected _angularDamping: number;
+        /**线性运动速度，比如{x:10,y:10}*/
+        protected _linearVelocity: any;
+        /**线性速度阻尼系数，范围可以在0到无穷大之间，0表示没有阻尼，无穷大表示满阻尼，通常阻尼的值应该在0到0.1之间*/
+        protected _linearDamping: number;
+        /**是否高速移动的物体，设置为true，可以防止高速穿透*/
+        protected _bullet: boolean;
+        /**是否允许旋转，如果不希望刚体旋转，这设置为false*/
+        protected _allowRotation: boolean;
+        /**重力缩放系数，设置为0为没有重力*/
+        protected _gravityScale: number;
         /**[只读] 指定了该主体所属的碰撞组，默认为0，碰撞规则如下：
          * 1.如果两个对象group相等
          * 		group值大于零，它们将始终发生碰撞
@@ -25710,42 +25607,32 @@ declare module Laya {
         mask: number;
         /**[只读]自定义标签*/
         label: string;
-        /** 获得原始body对象 */
-        get body(): any;
+        /**[只读]原始刚体*/
+        protected _body: any;
         /**
-         * 刚体类型，支持三种类型static，dynamic和kinematic类型
-         * static为静态类型，静止不动，不受重力影响，质量无限大，可以通过节点移动，旋转，缩放进行控制
-         * dynamic为动态类型，接受重力影响
-         * kinematic为运动类型，不受重力影响，可以通过施加速度或者力的方式使其运动
+         * @private
          */
-        get type(): string;
-        set type(value: string);
-        /**重力缩放系数，设置为0为没有重力*/
-        get gravityScale(): number;
-        set gravityScale(value: number);
-        /**是否允许旋转，如果不希望刚体旋转，这设置为false*/
-        get allowRotation(): boolean;
-        set allowRotation(value: boolean);
-        /**是否允许休眠，允许休眠能提高性能*/
-        get allowSleep(): boolean;
-        set allowSleep(value: boolean);
-        /**旋转速度阻尼系数，范围可以在0到无穷大之间，0表示没有阻尼，无穷大表示满阻尼，通常阻尼的值应该在0到0.1之间*/
-        get angularDamping(): number;
-        set angularDamping(value: number);
-        /**角速度，设置会导致旋转*/
-        get angularVelocity(): number;
-        set angularVelocity(value: number);
-        /**线性速度阻尼系数，范围可以在0到无穷大之间，0表示没有阻尼，无穷大表示满阻尼，通常阻尼的值应该在0到0.1之间*/
-        get linearDamping(): number;
-        set linearDamping(value: number);
-        /**线性运动速度，比如{x:5,y:5}*/
-        get linearVelocity(): IV2;
-        set linearVelocity(value: any);
-        /**是否高速移动的物体，设置为true，可以防止高速穿透*/
-        get bullet(): boolean;
-        set bullet(value: boolean);
+        private _createBody;
+        /**
+         * @private
+         * 同步Body 类型
+         */
+        private _updateBodyType;
+        /** @override */
+        protected _onAwake(): void;
+        /** @private */
+        private _globalChangeHandler;
+        /** @override */
+        protected _onEnable(): void;
+        /** @override */
+        protected _onDisable(): void;
+        /** @override */
+        protected _onDestroy(): void;
         /**获得原始body对象 */
         getBody(): any;
+        _getOriBody(): any;
+        /**[只读]获得原始body对象 */
+        get body(): any;
         /**
          * 对刚体施加力
          * @param	position 施加力的点，如{x:100,y:100}，全局坐标
@@ -25788,11 +25675,43 @@ declare module Laya {
         /**
          * 获得质心的相对节点0,0点的位置偏移
          */
-        getCenter(): IV2;
+        getCenter(): any;
         /**
          * 获得质心的世界坐标，相对于Physics2D.I.worldRoot节点
          */
-        getWorldCenter(): IV2;
+        getWorldCenter(): any;
+        /**
+         * 刚体类型，支持三种类型static，dynamic和kinematic类型
+         * static为静态类型，静止不动，不受重力影响，质量无限大，可以通过节点移动，旋转，缩放进行控制
+         * dynamic为动态类型，接受重力影响
+         * kinematic为运动类型，不受重力影响，可以通过施加速度或者力的方式使其运动
+         */
+        get type(): string;
+        set type(value: string);
+        /**重力缩放系数，设置为0为没有重力*/
+        get gravityScale(): number;
+        set gravityScale(value: number);
+        /**是否允许旋转，如果不希望刚体旋转，这设置为false*/
+        get allowRotation(): boolean;
+        set allowRotation(value: boolean);
+        /**是否允许休眠，允许休眠能提高性能*/
+        get allowSleep(): boolean;
+        set allowSleep(value: boolean);
+        /**旋转速度阻尼系数，范围可以在0到无穷大之间，0表示没有阻尼，无穷大表示满阻尼，通常阻尼的值应该在0到0.1之间*/
+        get angularDamping(): number;
+        set angularDamping(value: number);
+        /**角速度，设置会导致旋转*/
+        get angularVelocity(): number;
+        set angularVelocity(value: number);
+        /**线性速度阻尼系数，范围可以在0到无穷大之间，0表示没有阻尼，无穷大表示满阻尼，通常阻尼的值应该在0到0.1之间*/
+        get linearDamping(): number;
+        set linearDamping(value: number);
+        /**线性运动速度，比如{x:5,y:5}*/
+        get linearVelocity(): IV2;
+        set linearVelocity(value: any);
+        /**是否高速移动的物体，设置为true，可以防止高速穿透*/
+        get bullet(): boolean;
+        set bullet(value: boolean);
         /**
          * 获得相对body的世界坐标
          * @param x (单位： 像素)
@@ -25915,12 +25834,11 @@ declare module Laya {
         _characters: btCharacterCollider[];
         protected _physicsEngineCapableMap: Map<any, any>;
         constructor(physicsSettings: PhysicsSettings);
-        setActiveCollider(collider: ICollider, value: boolean): void;
+        setActiveCollider(collider: btCollider, value: boolean): void;
         sphereQuery?(pos: Vector3, radius: number, result: ICollider[], collisionmask: number): void;
         /**
          * 这个只是给对象发送事件，不会挨个组件调用碰撞函数
          * 组件要响应碰撞的话，要通过监听事件
-         * @perfTag PerformanceDefine.T_PhysicsEvent
          */
         dispatchCollideEvent(): void;
         /**
@@ -25939,13 +25857,11 @@ declare module Laya {
         removeCollider(collider: ICollider): void;
         addJoint(joint: btJoint): void;
         removeJoint(joint: btJoint): void;
-        /**
-         * @param elapsedTime
-         * @perfTag PerformanceDefine.T_Physics_Simulation
-         */
         update(elapsedTime: number): void;
         rayCast(ray: Ray, outHitResult: HitResult, distance?: number, collisonGroup?: number, collisionMask?: number): boolean;
         rayCastAll(ray: Ray, out: HitResult[], distance?: number, collisonGroup?: number, collisionMask?: number): boolean;
+        shapeCast(shape: btColliderShape, fromPosition: Vector3, toPosition: Vector3, out: HitResult, fromRotation?: Quaternion, toRotation?: Quaternion, collisonGroup?: number, collisionMask?: number, allowedCcdPenetration?: number): boolean;
+        shapeCastAll(shape: btColliderShape, fromPosition: Vector3, toPosition: Vector3, out: HitResult[], fromRotation?: Quaternion, toRotation?: Quaternion, collisonGroup?: number, collisionMask?: number, allowedCcdPenetration?: number): boolean;
         destroy(): void;
     }
     class btCharacterCollider extends btCollider implements ICharacterController {
@@ -25968,7 +25884,6 @@ declare module Laya {
         protected getColliderType(): btColliderType;
         protected _initCollider(): void;
         protected _onShapeChange(): void;
-        setWorldPosition(value: Vector3): void;
         move(disp: Vector3): void;
         jump(velocity: Vector3): void;
         setJumpSpeed(value: number): void;
@@ -25985,6 +25900,7 @@ declare module Laya {
          */
         getOverlappingObj(cb: (body: btCollider) => void): void;
         setColliderShape(shape: btColliderShape): void;
+        destroy(): void;
     }
     enum btColliderType {
         RigidbodyCollider = 0,
@@ -26730,17 +26646,35 @@ declare module Laya {
          */
         enableDebugDrawer?(value: boolean): void;
         /**
-         * Query
-         * @param pos
-         * @param radius
-         * @param result
-         * @param collisionmask
-         */
-        sphereQuery?(pos: Vector3, radius: number, result: ICollider[], collisionmask: number): void;
-        /**
          * destroy
          */
         destroy(): void;
+        /**
+         * ray cast by shape
+         * @param shape
+         * @param fromPosition
+         * @param toPosition
+         * @param out
+         * @param fromRotation
+         * @param toRotation
+         * @param collisonGroup
+         * @param collisionMask
+         * @param allowedCcdPenetration
+         */
+        shapeCast(shape: IColliderShape, fromPosition: Vector3, toPosition: Vector3, out: HitResult, fromRotation?: Quaternion, toRotation?: Quaternion, collisonGroup?: number, collisionMask?: number, allowedCcdPenetration?: number): boolean;
+        /**
+         * ray cast all by shape
+         * @param shape
+         * @param fromPosition
+         * @param toPosition
+         * @param out
+         * @param fromRotation
+         * @param toRotation
+         * @param collisonGroup
+         * @param collisionMask
+         * @param allowedCcdPenetration
+         */
+        shapeCastAll(shape: IColliderShape, fromPosition: Vector3, toPosition: Vector3, out: HitResult[], fromRotation?: Quaternion, toRotation?: Quaternion, collisonGroup?: number, collisionMask?: number, allowedCcdPenetration?: number): boolean;
     }
     interface IPhysicsMaterial {
         /**
@@ -27247,6 +27181,8 @@ declare module Laya {
     class pxCollider implements ICollider {
         /**temp tranform object */
         private static _tempTransform;
+        owner: Sprite3D;
+        component: PhysicsColliderComponent;
         /**actor */
         _pxActor: any;
         /**owner transform */
@@ -27545,6 +27481,24 @@ declare module Laya {
          * @param manager
          */
         constructor(manager: pxPhysicsManager);
+        isEnable(value: boolean): void;
+        isCollision(value: boolean): void;
+        isPreprocessiong(value: boolean): void;
+        setOwner(value: Sprite3D): void;
+        setCollider(owner: pxCollider): void;
+        setConnectedCollider(owner: pxCollider): void;
+        setLocalPos(value: Vector3): void;
+        setConnectLocalPos(value: Vector3): void;
+        setConnectedMassScale(value: number): void;
+        setConnectedInertiaScale(value: number): void;
+        setMassScale(value: number): void;
+        setInertiaScale(value: number): void;
+        setBreakForce(value: number): void;
+        setBreakTorque(value: number): void;
+        getlinearForce(): Vector3;
+        getAngularForce(): Vector3;
+        isValid(): boolean;
+        release(): void;
     }
     enum PxRevoluteJointFlag {
         eLIMIT_ENABLED = 1,
@@ -27556,6 +27510,19 @@ declare module Laya {
          * create Joint
          */
         protected _createJoint(): void;
+        setLowerLimit(lowerLimit: number): void;
+        setUpLimit(value: number): void;
+        setBounceness(value: number): void;
+        setBouncenMinVelocity(value: number): void;
+        setContactDistance(value: number): void;
+        enableLimit(value: boolean): void;
+        enableDrive(value: boolean): void;
+        enableFreeSpin(value: boolean): void;
+        setAxis(value: Vector3): void;
+        getAngle(): number;
+        getVelocity(): Readonly<Vector3>;
+        setDriveVelocity(velocity: number): void;
+        setDriveForceLimit(limit: number): void;
     }
     class pxSphereJoint extends pxJoint {
     }
@@ -27662,8 +27629,10 @@ declare module Laya {
         enableCCD: boolean;
         _pxcontrollerManager: any;
         private _gravity;
+        /**temp tranform object */
+        private static _tempTransform;
         constructor(physicsSettings: PhysicsSettings);
-        setActiveCollider(collider: ICollider, value: boolean): void;
+        setActiveCollider(collider: pxCollider, value: boolean): void;
         enableDebugDrawer?(value: boolean): void;
         setDataToMap(dataCallBack: any, eventType: string, isTrigger?: boolean): void;
         setGravity(gravity: Vector3): void;
@@ -27673,63 +27642,14 @@ declare module Laya {
         private removeDynamicElementByUUID;
         addCollider(collider: ICollider): void;
         removeCollider(collider: ICollider): void;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsCollider
-         */
-        private _collision_event;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsColliderEnter
-         */
-        private _collision_EnterEvent;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsColliderStay
-         */
-        private _collision_StayEvent;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsColliderExit
-         */
-        private _collision_ExitEvent;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsTrigger
-         */
-        private _trigger_Event;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsTriggerEnter
-         */
-        private _trigger_EnterEvent;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsTriggerStay
-         */
-        private _trigger_StayEvent;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsTriggerExit
-         */
-        private _trigger_ExitEvent;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_PhysicsEvent
-         */
         private _updatePhysicsEvents;
-        /**
-         * @private
-         * @perfTag PerformanceDefine.T_Physics_UpdateNode
-         */
         private _updatePhysicsTransformToRender;
-        /**
-         * @param elapsedTime
-         * @perfTag PerformanceDefine.T_Physics_Simulation
-         */
+        private functiontest;
         update(elapsedTime: number): void;
         rayCast(ray: Ray, outHitResult: HitResult, distance?: number, collisonGroup?: number, collisionMask?: number): boolean;
         rayCastAll?(ray: Ray, out: HitResult[], distance?: number, collisonGroup?: number, collisionMask?: number): boolean;
+        shapeCast(shape: pxColliderShape, fromPosition: Vector3, toPosition: Vector3, out: HitResult, fromRotation?: Quaternion, toRotation?: Quaternion, collisonGroup?: number, collisionMask?: number, allowedCcdPenetration?: number): boolean;
+        shapeCastAll(shape: pxColliderShape, fromPosition: Vector3, toPosition: Vector3, out: HitResult[], fromRotation?: Quaternion, toRotation?: Quaternion, collisonGroup?: number, collisionMask?: number, allowedCcdPenetration?: number): boolean;
         sphereQuery?(pos: Vector3, radius: number, result: ICollider[], collisionmask: number): void;
         destroy(): void;
     }
@@ -27900,482 +27820,63 @@ declare module Laya {
         setOffset(position: Vector3): void;
         destroy(): void;
     }
-    /**
-     * 前向渲染流程通用类
-     */
-    class ForwardAddClusterRP {
-        pipelineMode: PipelineMode;
-        depthPipelineMode: PipelineMode;
-        depthNormalPipelineMode: PipelineMode;
-        depthTarget: InternalRenderTarget;
-        destTarget: InternalRenderTarget;
-        camera: ICameraNodeData;
-        cameraCullInfo: CameraCullInfo;
-        depthTextureMode: DepthTextureMode;
-        depthNormalTarget: InternalRenderTarget;
-        beforeForwardCmds: CommandBuffer[];
-        beforeSkyboxCmds: CommandBuffer[];
-        beforeTransparentCmds: CommandBuffer[];
-        skyRenderNode: WebBaseRenderNode;
-        clearColor: Color;
-        clearFlag: number;
-        enableCMD: boolean;
-        enableOpaque: boolean;
-        enableTransparent: boolean;
-        protected _opaqueList: RenderListQueue;
-        protected _transparent: RenderListQueue;
-        protected _zBufferParams: Vector4;
-        protected _defaultNormalDepthColor: Color;
-        protected _viewPort: Viewport;
-        setViewPort(value: Viewport): void;
-        protected _scissor: Vector4;
-        setScissor(value: Vector4): void;
-        constructor();
-        /**
-         * 设置相机裁剪信息
-         * @param camera
-         */
-        setCameraCullInfo(camera: Camera): void;
-        /**
-         * 设置渲染命令（前向渲染之前）
-         * @param value
-         */
-        setBeforeForwardCmds(value: CommandBuffer[]): void;
-        /**
-         * 设置渲染命令（天空渲染之前）
-         * @param value
-         */
-        setBeforeSkyboxCmds(value: CommandBuffer[]): void;
-        /**
-         * 设置渲染命令（透明物体渲染之前）
-         * @param value
-         */
-        setBeforeTransparentCmds(value: CommandBuffer[]): void;
-        /**
-         * 渲染流程（TODO:其他两个pass合并MulTargetRT）
-         * @param context
-         * @param list
-         * @param count
-         */
-        render(context: IRenderContext3D, list: WebBaseRenderNode[], count: number): void;
-        /**
-         * 清除渲染队列
-         */
-        protected _clearRenderList(): void;
-        /**
-         * 缓存视口和裁剪
-         */
-        protected _cacheViewPortAndScissor(): void;
-        /**
-         * 渲染深度流程
-         * @param context
-         */
-        protected _renderDepthPass(context: IRenderContext3D): void;
-        /**
-         * 渲染法线深度流程
-         * @param context
-         */
-        protected _renderDepthNormalPass(context: IRenderContext3D): void;
-        /**
-         * 主渲染流程
-         * @param context
-         */
-        protected _mainPass(context: IRenderContext3D): void;
-        /**
-         * 渲染不透明贴图流程
-         */
-        protected _opaqueTexturePass(): void;
+    class BlendState {
+        static _blend_All_pool: any;
+        static _blend_seperate_pool: any;
+        static create(blendType: number, colorBlendhash: BlendComponent, alphaBlendComponent: BlendComponent): void;
+        /** Whether to enable blend. */
+        blendType: BlendType;
+        colorBlendComponent: BlendComponent;
+        alphaBlendComponent: BlendComponent;
+        constructor(blendType: number);
     }
-    /**
-     * 裁剪通用工具类
-     */
-    class RenderCullUtil {
-        /**
-         * 相机裁剪
-         * @param cameraCullInfo 相机裁剪信息
-         * @param list 渲染节点列表
-         * @param count 渲染节点数量（为什么不是list.length?）
-         * @param opaqueList 不透明队列
-         * @param transparent 透明队列
-         * @param context 渲染上下文
-         */
-        static cullByCameraCullInfo(cameraCullInfo: CameraCullInfo, list: WebBaseRenderNode[], count: number, opaqueList: RenderListQueue, transparent: RenderListQueue, context: IRenderContext3D): void;
-        /**
-         * 方向光源裁剪
-         * @param shadowCullInfo
-         * @param list
-         * @param count
-         * @param opaqueList
-         * @param context
-         */
-        static cullDirectLightShadow(shadowCullInfo: ShadowCullInfo, list: WebBaseRenderNode[], count: number, opaqueList: RenderListQueue, context: IRenderContext3D): void;
-        /**
-         * 聚光灯裁剪
-         * @param cameraCullInfo
-         * @param list
-         * @param count
-         * @param opaqueList
-         * @param context
-         */
-        static cullSpotShadow(cameraCullInfo: CameraCullInfo, list: WebBaseRenderNode[], count: number, opaqueList: RenderListQueue, context: IRenderContext3D): void;
+    class BlendComponent {
+        static _pool: any;
+        static getHash(blendOperationGLData: number, sourceBlendFactor: number, destinationFactor: number): number;
+        static getBlendComponent(blendOperationGLData: number, sourceBlendFactor: number, destinationFactor: number): any;
+        _blendOperation: BlendEquationSeparate;
+        _blendOperationGLData: number;
+        _sourceBlendFactor: BlendFactor;
+        _sourceBlendFactorGLData: number;
+        _destinationFactor: BlendFactor;
+        _destinationFactorGLData: number;
+        _hashIndex: number;
+        constructor(blendOperationGLData: BlendEquationSeparate, sourceBlendFactor: BlendFactor, destinationFactor: BlendFactor, hashindex: number);
     }
-    /**
-     * 渲染节点队列
-     */
-    class RenderListQueue {
-        private _elements;
-        get elements(): FastSinglelist<IRenderElement3D>;
-        private _quickSort;
-        private _isTransparent;
-        _batch: IInstanceRenderBatch;
-        constructor(isTransParent: boolean);
+    class Buffer {
+        _glBuffer: IRenderBuffer;
+        _buffer: Float32Array | Uint16Array | Uint8Array | Uint32Array;
+        _bufferType: number;
+        _bufferUsage: number;
+        _byteLength: number;
+        get bufferUsage(): number;
+        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
         /**
-         * 添加渲染元素
-         * @param renderelement
+         * @private
          */
-        addRenderElement(renderelement: IRenderElement3D): void;
+        bind(): boolean;
+        unbind(): void;
         /**
-         * 合并渲染队列
-         */
-        private _batchQueue;
-        /**
-         * 渲染队列
-         * @param context
-         */
-        renderQueue(context: IRenderContext3D): void;
-        /**
-         * 清空队列
-         */
-        clear(): void;
-        /**
-         * 销毁
+         * @private
          */
         destroy(): void;
-    }
-    /**
-     * 渲染流程通用工具类
-     */
-    class RenderPassUtil {
-        static contextViewPortCache: Viewport;
-        static contextScissorCache: Vector4;
-        /**
-         * 执行渲染命令
-         * @param cmds
-         * @param context
-         */
-        static renderCmd(cmds: CommandBuffer[], context: IRenderContext3D): void;
-        /**
-         * 恢复渲染上下文
-         * @param context
-         * @param renderTarget
-         */
-        static recoverRenderContext3D(context: IRenderContext3D, renderTarget: InternalRenderTarget): void;
-    }
-    /**
-     * 渲染节点快速排序
-     */
-    class RenderQuickSort {
-        private elementArray;
-        private isTransparent;
-        /**
-         * 快速排序
-         * @param elements
-         * @param isTransparent
-         * @param left
-         * @param right
-         */
-        sort(elements: FastSinglelist<IRenderElement3D>, isTransparent: boolean, left: number, right: number): void;
-    }
-    interface I2DRenderPassFactory {
-        createRenderElement2D(): IRenderElement2D;
-        createRenderContext2D(): IRenderContext2D;
-    }
-    interface IRenderContext2D {
-        invertY: boolean;
-        pipelineMode: string;
-        setRenderTarget(value: InternalRenderTarget, clear: boolean, clearColor: Color): void;
-        setOffscreenView(width: number, height: number): void;
-        drawRenderElementOne(node: IRenderElement2D): void;
-        drawRenderElementList(list: SingletonList<IRenderElement2D>): number;
-    }
-    interface IRenderElement2D {
-        geometry: IRenderGeometryElement;
-        materialShaderData: ShaderData;
-        value2DShaderData: ShaderData;
-        subShader: SubShader;
-        renderStateIsBySprite: boolean;
-        destroy(): void;
-    }
-    interface IRender3DProcess {
-        fowardRender(context: IRenderContext3D, camera: Camera): void;
-    }
-    type PipelineMode = "Forward" | "ShadowCaster" | "DepthNormal" | string;
-    interface IRenderContext3D {
-        globalShaderData: ShaderData;
-        sceneData: ShaderData;
-        sceneModuleData: ISceneNodeData;
-        cameraModuleData: ICameraNodeData;
-        cameraData: ShaderData;
-        sceneUpdataMask: number;
-        cameraUpdateMask: number;
-        pipelineMode: PipelineMode;
-        invertY: boolean;
-        setRenderTarget(value: InternalRenderTarget, clearFlag: RenderClearFlag): void;
-        setViewPort(value: Viewport): void;
-        setScissor(value: Vector4): void;
-        setClearData(clearFlag: number, clolor: Color, depth: number, stencil: number): number;
-        drawRenderElementList(list: FastSinglelist<IRenderElement3D>): number;
-        drawRenderElementOne(node: IRenderElement3D): number;
-        runOneCMD(cmd: IRenderCMD): void;
-        runCMDList(cmds: IRenderCMD[]): void;
-    }
-    interface IRenderElement3D {
-        geometry: IRenderGeometryElement;
-        materialShaderData: ShaderData;
-        materialRenderQueue: number;
-        renderShaderData: ShaderData;
-        transform: Transform3D;
-        canDynamicBatch: boolean;
-        isRender: boolean;
-        owner: IBaseRenderNode;
-        subShader: SubShader;
-        materialId: number;
-        destroy(): void;
-    }
-    interface IInstanceRenderBatch {
-        batch(elements: SingletonList<IRenderElement3D>): void;
-        clearRenderData(): void;
-        recoverData(): void;
-    }
-    interface IInstanceRenderElement3D extends IRenderElement3D {
-        instanceElementList: SingletonList<IRenderElement3D>;
-        setGeometry(geometry: IRenderGeometryElement): void;
-        clearRenderData(): void;
-        recover(): void;
-    }
-    interface ISkinRenderElement3D {
-        skinnedData: Float32Array[];
-    }
-    interface I3DRenderPassFactory {
-        createRender3DProcess(): IRender3DProcess;
-        createRenderContext3D(): IRenderContext3D;
-        createRenderElement3D(): IRenderElement3D;
-        createInstanceBatch(): IInstanceRenderBatch;
-        createInstanceRenderElement3D(): IInstanceRenderElement3D;
-        createSkinRenderElement(): ISkinRenderElement3D;
-        createSceneRenderManager(): ISceneRenderManager;
-        createDrawNodeCMDData(): DrawNodeCMDData;
-        createBlitQuadCMDData(): BlitQuadCMDData;
-        createDrawElementCMDData(): DrawElementCMDData;
-        createSetViewportCMD(): SetViewportCMD;
-        createSetRenderTargetCMD(): SetRenderTargetCMD;
-        createSetRenderDataCMD(): SetRenderDataCMD;
-        createSetShaderDefineCMD(): SetShaderDefineCMD;
-    }
-    enum RenderCMDType {
-        DrawNode = 0,
-        DrawElement = 1,
-        Blit = 2,
-        ChangeData = 3,
-        ChangeShaderDefine = 4,
-        ChangeViewPort = 5,
-        ChangeRenderTarget = 6
-    }
-    interface IRenderCMD {
-        type: RenderCMDType;
-        apply(context: IRenderContext3D): void;
-    }
-    class DrawNodeCMDData implements IRenderCMD {
-        type: RenderCMDType;
-        protected _node: IBaseRenderNode;
-        protected _destShaderData: ShaderData;
-        protected _destSubShader: SubShader;
-        protected _subMeshIndex: number;
-        get node(): IBaseRenderNode;
-        set node(value: IBaseRenderNode);
-        get destShaderData(): ShaderData;
-        set destShaderData(value: ShaderData);
-        get destSubShader(): SubShader;
-        set destSubShader(value: SubShader);
-        get subMeshIndex(): number;
-        set subMeshIndex(value: number);
-        apply(context: IRenderContext3D): void;
-    }
-    class BlitQuadCMDData implements IRenderCMD {
-        type: RenderCMDType;
-        protected _dest: InternalRenderTarget;
-        protected _viewport: Viewport;
-        protected _scissor: Vector4;
-        protected _source: InternalTexture;
-        protected _offsetScale: Vector4;
-        protected _element: IRenderElement3D;
-        get element(): IRenderElement3D;
-        set element(value: IRenderElement3D);
-        get dest(): InternalRenderTarget;
-        set dest(value: InternalRenderTarget);
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        get source(): InternalTexture;
-        set source(value: InternalTexture);
-        get offsetScale(): Vector4;
-        set offsetScale(value: Vector4);
-        apply(context: IRenderContext3D): void;
-    }
-    class DrawElementCMDData implements IRenderCMD {
-        type: RenderCMDType;
-        setRenderelements(value: IRenderElement3D[]): void;
-        apply(context: IRenderContext3D): void;
-    }
-    class SetViewportCMD implements IRenderCMD {
-        type: RenderCMDType;
-        protected _viewport: Viewport;
-        protected _scissor: Vector4;
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        apply(context: IRenderContext3D): void;
-    }
-    class SetRenderTargetCMD implements IRenderCMD {
-        type: RenderCMDType;
-        protected _rt: InternalRenderTarget;
-        protected _clearFlag: number;
-        protected _clearDepthValue: number;
-        protected _clearStencilValue: number;
-        protected _clearColorValue: Color;
-        get rt(): InternalRenderTarget;
-        set rt(value: InternalRenderTarget);
-        get clearFlag(): number;
-        set clearFlag(value: number);
-        get clearDepthValue(): number;
-        set clearDepthValue(value: number);
-        get clearStencilValue(): number;
-        set clearStencilValue(value: number);
-        get clearColorValue(): Color;
-        set clearColorValue(value: Color);
-        apply(context: IRenderContext3D): void;
-    }
-    class SetRenderDataCMD implements IRenderCMD {
-        type: RenderCMDType;
-        protected _value: ShaderDataItem;
-        protected _dataType: ShaderDataType;
-        protected _propertyID: number;
-        protected _dest: ShaderData;
-        get value(): ShaderDataItem;
-        set value(value: ShaderDataItem);
-        get dataType(): ShaderDataType;
-        set dataType(value: ShaderDataType);
-        get propertyID(): number;
-        set propertyID(value: number);
-        get dest(): ShaderData;
-        set dest(value: ShaderData);
-        apply(context: IRenderContext3D): void;
-    }
-    class SetShaderDefineCMD implements IRenderCMD {
-        type: RenderCMDType;
-        protected _define: ShaderDefine;
-        protected _dest: ShaderData;
-        protected _add: boolean;
-        get define(): ShaderDefine;
-        set define(value: ShaderDefine);
-        get dest(): ShaderData;
-        set dest(value: ShaderData);
-        get add(): boolean;
-        set add(value: boolean);
-        apply(context: IRenderContext3D): void;
-    }
-    /**
-     * @deprecated
-     */
-    interface IRenderEngine3DOBJFactory {
-        /**
-         * @deprecated
-         */
-        createVertexBuffer3D(byteLength: number, bufferUsage: BufferUsage, canRead: boolean): VertexBuffer3D;
-        /**
-         * @deprecated
-         */
-        createIndexBuffer3D(indexType: IndexFormat, indexCount: number, bufferUsage: BufferUsage, canRead: boolean): IndexBuffer3D;
-    }
-    /**
-     * 可替换的SceneManager
-     */
-    interface ISceneRenderManager {
-        list: FastSinglelist<BaseRender>;
-        baseRenderList: FastSinglelist<IBaseRenderNode>;
-        /**
-         * add one BaseRender
-         * @param object
-         */
-        addRenderObject(object: BaseRender): void;
-        /**
-         * remove RenderObject
-         * @param object
-         */
-        removeRenderObject(object: BaseRender): void;
-        /**
-         * 移除某个动态的渲染节点
-         * @param object
-         */
-        removeMotionObject(object: BaseRender): void;
-        /**
-         * 增加运动物体
-         * @param object
-         */
-        addMotionObject(object: BaseRender): void;
-        /**
-         * 更新运动物体
-         * @param object
-         */
-        updateMotionObjects(): void;
-        /**
-         * release Manager Node
-         */
-        destroy(): void;
-    }
-    /**
-     * @deprecated
-     */
-    class LengencyRenderEngine3DFactory implements IRenderEngine3DOBJFactory {
-        /**
-         * @deprecated use new VertexBuffer3D
-         * @param byteLength
-         * @param bufferUsage
-         * @param canRead
-         * @returns
-         */
-        createVertexBuffer3D(byteLength: number, bufferUsage: BufferUsage, canRead?: boolean): VertexBuffer3D;
-        /**
-         * @deprecated use new IndexBuffer3D
-         * @param indexType
-         * @param indexCount
-         * @param bufferUsage
-         * @param canRead
-         * @returns
-         */
-        createIndexBuffer3D(indexType: IndexFormat, indexCount: number, bufferUsage?: BufferUsage, canRead?: boolean): IndexBuffer3D;
     }
     type UniformProperty = {
         id: number;
         propertyName: string;
-        uniformtype: ShaderDataType;
+        uniformtype?: ShaderDataType;
+    };
+    type UniformData = {
+        block?: Object;
+        propertyName: string;
+        uniformtype?: ShaderDataType;
+        blockProperty?: UniformProperty[];
     };
     class CommandUniformMap {
+        _stateName: string;
         constructor(stateName: string);
-        /**
-         * 增加一个Uniform参数
-         * @param propertyID
-         * @param propertyKey
-         */
-        addShaderUniform(propertyID: number, propertyKey: string, uniformtype: ShaderDataType, block?: string): void;
-        /**
-         * 增加一个UniformArray参数
-         * @param propertyID
-         * @param propertyName
-         */
-        addShaderUniformArray(propertyID: number, propertyName: string, uniformtype: ShaderDataType, arrayLength: number, block?: string): void;
+        hasPtrID(propertyID: number): boolean;
+        getMap(): Record<number, UniformData>;
         /**
          * 增加一个Uniform
          * @param propertyID
@@ -28383,2023 +27884,81 @@ declare module Laya {
          */
         addShaderBlockUniform(propertyID: number, blockname: string, blockProperty: UniformProperty[]): void;
     }
-    interface IBufferState {
-        _bindedIndexBuffer: IIndexBuffer;
-        _vertexBuffers: IVertexBuffer[];
-        applyState(vertexBuffers: IVertexBuffer[], indexBuffer: IIndexBuffer | null): void;
-        destroy(): void;
-    }
-    interface IIndexBuffer {
-        destroy(): void;
-        _setIndexDataLength(data: number): void;
-        _setIndexData(data: Uint32Array | Uint16Array | Uint8Array, bufferOffset: number): void;
-        indexType: IndexFormat;
-        indexCount: number;
-    }
-    interface InternalRenderTarget {
-        _isCube: boolean;
-        _samples: number;
-        _generateMipmap: boolean;
-        _textures: InternalTexture[];
-        _texturesResolve?: InternalTexture[];
-        _depthTexture: InternalTexture;
-        colorFormat: RenderTargetFormat;
-        depthStencilFormat: RenderTargetFormat;
-        isSRGB: boolean;
-        gpuMemory: number;
-        dispose(): void;
-    }
     /**
-     * 内部纹理对象
+     * dds 未存储 color space 需要手动指定
      */
-    interface InternalTexture {
-        /**
-         * gpu texture object
-         */
-        resource: any;
+    class DDSTextureInfo {
         width: number;
         height: number;
-        depth: number;
-        isPotSize: boolean;
-        mipmap: boolean;
         mipmapCount: number;
-        filterMode: FilterMode;
-        wrapU: WrapMode;
-        wrapV: WrapMode;
-        wrapW: WrapMode;
-        anisoLevel: number;
-        baseMipmapLevel: number;
-        maxMipmapLevel: number;
-        compareMode: TextureCompareMode;
-        /**bytelength */
-        gpuMemory: number;
-        /**
-         * 是否使用 sRGB格式 加载图片数据
-         */
-        useSRGBLoad: boolean;
-        /**
-         * gamma 矫正值
-         */
-        gammaCorrection: number;
-        dispose(): void;
-    }
-    interface IRenderDeviceFactory {
-        createShaderInstance(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderCompileDefineBase): IShaderInstance;
-        createIndexBuffer(bufferUsage: BufferUsage): IIndexBuffer;
-        createVertexBuffer(bufferUsageType: BufferUsage): IVertexBuffer;
-        createBufferState(): IBufferState;
-        createRenderGeometryElement(mode: MeshTopology, drawType: DrawType): IRenderGeometryElement;
-        createEngine(config: Config, canvas: any): Promise<void>;
-        createGlobalUniformMap(blockName: string): CommandUniformMap;
-        createShaderData(ownerResource?: Resource): ShaderData;
-    }
-    interface IRenderEngine {
-        _context: any;
-        _enableStatistics: boolean;
-        _remapZ: boolean;
-        _screenInvertY: boolean;
-        _lodTextureSample: boolean;
-        _breakTextureSample: boolean;
-        initRenderEngine(canvas: any): void;
-        copySubFrameBuffertoTex(texture: InternalTexture, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
-        resizeOffScreen(width: number, height: number): void;
-        propertyNameToID(name: string): number;
-        propertyIDToName(id: number): string;
-        getDefineByName(name: string): ShaderDefine;
-        getNamesByDefineData(defineData: IDefineDatas, out: Array<string>): void;
-        addTexGammaDefine(key: number, value: ShaderDefine): void;
-        getParams(params: RenderParams): number;
-        getCapable(capatableType: RenderCapable): boolean;
-        getTextureContext(): ITextureContext;
-        getCreateRenderOBJContext(): IRenderEngineFactory;
-        getUBOPointer?(name: string): number;
-        createBuffer?(targetType: BufferTargetType, bufferUsageType: BufferUsage): GLBuffer;
-    }
-    interface IRenderEngineFactory {
-        createUniformBufferObject(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean): UniformBufferObject;
-        createEngine(config: Config, canvas: any): Promise<void>;
-    }
-    interface IRenderGeometryElement {
-    }
-    interface IRenderTarget {
-        _renderTarget: InternalRenderTarget;
-        _isCameraTarget: boolean;
         isCube: boolean;
-        samples: number;
-        generateMipmap: boolean;
-        depthStencilTexture: BaseTexture | null;
+        bpp: number;
+        blockBytes: number;
+        format: TextureFormat;
+        compressed: boolean;
+        dataOffset: number;
+        source: ArrayBuffer;
+        constructor(width: number, height: number, mipmapCount: number, isCube: boolean, bpp: number, blockBytes: number, dataOffset: number, format: TextureFormat, compressed: boolean, sourceData: ArrayBuffer);
+        static getDDSTextureInfo(source: ArrayBuffer): DDSTextureInfo;
     }
-    interface IShaderInstance {
-        _create(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderPass): void;
-        _disposeResource(): void;
+    class DepthState {
     }
-    interface ITextureContext {
-        needBitmap: boolean;
-        /**
-         * 为 Texture 创建 InternalTexture
-         * @param width
-         * @param height
-         * @param format
-         * @param generateMipmap
-         * @param sRGB
-         * @returns
-         */
-        createTextureInternal(dimension: TextureDimension, width: number, height: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
-        setTextureImageData(texture: InternalTexture, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureSubImageData(texture: InternalTexture, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, x: number, y: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexturePixelsData(texture: InternalTexture, source: ArrayBufferView, premultiplyAlpha: boolean, invertY: boolean): void;
-        initVideoTextureData(texture: InternalTexture): void;
-        setTextureSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureDDSData(texture: InternalTexture, ddsInfo: DDSTextureInfo): void;
-        setTextureKTXData(texture: InternalTexture, ktxInfo: KTXTextureInfo): void;
-        setTextureHDRData(texture: InternalTexture, hdrInfo: HDRTextureInfo): void;
-        setCubeImageData(texture: InternalTexture, sources: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubePixelsData(texture: InternalTexture, source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeSubPixelData(texture: InternalTexture, source: ArrayBufferView[], mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeDDSData(texture: InternalTexture, ddsInfo: DDSTextureInfo): void;
-        setCubeKTXData(texture: InternalTexture, ktxInfo: KTXTextureInfo): void;
-        setTextureCompareMode(texture: InternalTexture, compareMode: TextureCompareMode): TextureCompareMode;
-        createRenderTargetInternal(width: number, height: number, format: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
-        createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
-        createRenderTargetDepthTexture(renderTarget: InternalRenderTarget, dimension: TextureDimension, width: number, height: number): InternalTexture;
-        bindRenderTarget(renderTarget: InternalRenderTarget, faceIndex?: number): void;
-        bindoutScreenTarget(): void;
-        unbindRenderTarget(renderTarget: InternalRenderTarget): void;
-        /**
-         * @deprecated 请使用readRenderTargetPixelDataAsync函数代替
-         * @param renderTarget
-         * @param xOffset
-         * @param yOffset
-         * @param width
-         * @param height
-         * @param out
-         */
-        readRenderTargetPixelData(renderTarget: InternalRenderTarget, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): ArrayBufferView;
-        readRenderTargetPixelDataAsync(renderTarget: InternalRenderTarget, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): Promise<ArrayBufferView>;
-        updateVideoTexture(texture: InternalTexture, video: HTMLVideoElement, premultiplyAlpha: boolean, invertY: boolean): void;
-        getRenderTextureData(internalTex: InternalRenderTarget, x: number, y: number, width: number, height: number): ArrayBufferView;
-        createTexture3DInternal(dimension: TextureDimension, width: number, height: number, depth: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
-        setTexture3DImageData(texture: InternalTexture, source: HTMLImageElement[] | HTMLCanvasElement[] | ImageBitmap[], depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DPixelsData(texture: InternalTexture, source: ArrayBufferView, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, zOffset: number, width: number, height: number, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-    }
-    interface IVertexBuffer {
-        vertexDeclaration: VertexDeclaration;
-        instanceBuffer: boolean;
-        setData(buffer: ArrayBuffer, bufferOffset: number, dataStartIndex: number, dataCount: number): void;
-        setDataLength(byteLength: number): void;
-        destroy(): void;
-    }
-    type uboParams = {
-        ubo: UniformBufferObject;
-        uboBuffer: UnifromBufferData;
-    };
-    enum ShaderDataType {
-        None = 0,
-        Int = 1,
-        Bool = 2,
-        Float = 3,
-        Vector2 = 4,
-        Vector3 = 5,
-        Vector4 = 6,
-        Color = 7,
-        Matrix4x4 = 8,
-        Texture2D = 9,
-        Texture3D = 10,
-        TextureCube = 11,
-        Buffer = 12,
-        Matrix3x3 = 13,
-        Texture2DArray = 14
-    }
-    type ShaderDataItem = number | boolean | Vector2 | Vector3 | Vector4 | Color | Matrix4x4 | BaseTexture | Float32Array | Matrix3x3;
-    function ShaderDataDefaultValue(type: ShaderDataType): false | Readonly<Vector2> | 0 | Readonly<Matrix3x3> | Readonly<Vector3> | Readonly<Matrix4x4> | Readonly<Vector4> | Color;
     /**
-     * 着色器数据类。
+     * https://floyd.lbl.gov/radiance/framer.html
      */
-    class ShaderData implements IClone {
-        _releaseUBOData(): void;
-        getDefineData(): IDefineDatas;
-        /**
-         * 增加Shader宏定义。
-         * @param value 宏定义。
-         */
-        addDefine(define: ShaderDefine): void;
-        addDefines(define: IDefineDatas): void;
-        /**
-         * 移除Shader宏定义。
-         * @param value 宏定义。
-         */
-        removeDefine(define: ShaderDefine): void;
-        /**
-         * 是否包含Shader宏定义。
-         * @param value 宏定义。
-         */
-        hasDefine(define: ShaderDefine): boolean;
-        /**
-         * 清空宏定义。
-         */
-        clearDefine(): void;
-        /**
-         * 获取布尔。
-         * @param	index shader索引。
-         * @return  布尔。
-         */
-        getBool(index: number): boolean;
-        /**
-         * 设置布尔。
-         * @param	index shader索引。
-         * @param	value 布尔。
-         */
-        setBool(index: number, value: boolean): void;
-        /**
-         * 获取整形。
-         * @param	index shader索引。
-         * @return  整形。
-         */
-        getInt(index: number): number;
-        /**
-         * 设置整型。
-         * @param	index shader索引。
-         * @param	value 整形。
-         */
-        setInt(index: number, value: number): void;
-        /**
-         * 获取浮点。
-         * @param	index shader索引。
-         * @return	浮点。
-         */
-        getNumber(index: number): number;
-        /**
-         * 设置浮点。
-         * @param	index shader索引。
-         * @param	value 浮点。
-         */
-        setNumber(index: number, value: number): void;
-        /**
-         * 获取Vector2向量。
-         * @param	index shader索引。
-         * @return Vector2向量。
-         */
-        getVector2(index: number): Vector2;
-        /**
-         * 设置Vector2向量。
-         * @param	index shader索引。
-         * @param	value Vector2向量。
-         */
-        setVector2(index: number, value: Vector2): void;
-        /**
-         * 获取Vector3向量。
-         * @param	index shader索引。
-         * @return Vector3向量。
-         */
-        getVector3(index: number): Vector3;
-        /**
-         * 设置Vector3向量。
-         * @param	index shader索引。
-         * @param	value Vector3向量。
-         */
-        setVector3(index: number, value: Vector3): void;
-        /**
-         * 获取颜色。
-         * @param 	index shader索引。
-         * @return  向量。
-         */
-        getVector(index: number): Vector4;
-        /**
-         * 设置向量。
-         * @param	index shader索引。
-         * @param	value 向量。
-         */
-        setVector(index: number, value: Vector4): void;
-        /**
-         * 获取颜色
-         * @param index 索引
-         * @returns 颜色
-         */
-        getColor(index: number): Color;
-        /**
-         * 设置颜色
-         * @param index 索引
-         * @param value 颜色值
-         */
-        setColor(index: number, value: Color): void;
-        /**
-         * 获取矩阵。
-         * @param	index shader索引。
-         * @return  矩阵。
-         */
-        getMatrix4x4(index: number): Matrix4x4;
-        /**
-         * 设置矩阵。
-         * @param	index shader索引。
-         * @param	value  矩阵。
-         */
-        setMatrix4x4(index: number, value: Matrix4x4): void;
-        /**
-         * 获取矩阵
-         * @param index
-         * @returns
-         */
-        getMatrix3x3(index: number): Matrix3x3;
-        /**
-         * 设置矩阵。
-         * @param index
-         * @param value
-         */
-        setMatrix3x3(index: number, value: Matrix3x3): void;
-        /**
-         * 获取Buffer。
-         * @param	index shader索引。
-         * @return
-         */
-        getBuffer(index: number): Float32Array;
-        /**
-         * 设置Buffer。
-         * @param	index shader索引。
-         * @param	value  buffer数据。
-         */
-        setBuffer(index: number, value: Float32Array): void;
-        /**
-         * 设置纹理。
-         * @param	index shader索引。
-         * @param	value 纹理。
-         */
-        setTexture(index: number, value: BaseTexture): void;
-        /**
-         * 获取纹理。
-         * @param	index shader索引。
-         * @return  纹理。
-         */
-        getTexture(index: number): BaseTexture;
+    class HDRTextureInfo {
+        source: ArrayBuffer;
+        byteOffset: number;
+        decreaseX: boolean;
+        decreaseY: boolean;
+        width: number;
+        height: number;
+        format: TextureFormat;
+        static HDRTEXTURE: string;
+        static _parseHDRTexture(data: ArrayBuffer, propertyParams?: any, constructParams?: any[]): Texture2D;
         /**
          *
-         * @param index
-         * @param value
+         * @param source
          */
-        setUniformBuffer(index: number, value: UniformBufferObject): void;
-        getUniformBuffer(index: number): UniformBufferObject;
-        setShaderData(uniformIndex: number, type: ShaderDataType, value: ShaderDataItem | Quaternion): void;
-        getShaderData(uniformIndex: number, type: ShaderDataType): ShaderDataItem;
+        static getHDRInfo(source: ArrayBuffer): HDRTextureInfo;
+        private static getLineString;
+        constructor(source: ArrayBuffer, byteOffset: number, decreaseX: boolean, decreaseY: boolean, width: number, height: number, format: TextureFormat);
+        get_32_bit_rle_rgbe(): ArrayBufferView;
         /**
-         * @private
+         * https://www.radiance-online.org/archived/radsite/radiance/refer/Notes/picture_format.html
          */
-        _setInternalTexture(index: number, value: InternalTexture): void;
-        /**
-         * 克隆。
-         * @param	destObject 克隆源。
-         */
-        cloneTo(destObject: ShaderData): void;
-        /**
-         * 克隆。
-         * @return	 克隆副本。
-         */
-        clone(): any;
-        reset(): void;
-        destroy(): void;
+        readScanLine(): ArrayBufferView;
+        readcolors(scanlineArray: Uint8Array, getc: () => number, wrong: () => void): void;
+        olddreadcolors(scanlineArray: Uint8Array, getc: () => number, r: number, g: number, b: number, e: number): void;
+        color_color(col: Vector4, clr: Vector4): void;
     }
-    class GLESRender2DProcess implements I2DRenderPassFactory {
-        createRenderElement2D(): GLESREnderElement2D;
-        createRenderContext2D(): GLESREnderContext2D;
-    }
-    class GLESREnderContext2D implements IRenderContext2D {
-        get invertY(): boolean;
-        set invertY(value: boolean);
-        get pipelineMode(): string;
-        set pipelineMode(value: string);
-        _nativeObj: any;
-        constructor();
-        private _tempList;
-        drawRenderElementList(list: FastSinglelist<GLESREnderElement2D>): number;
-        setRenderTarget(value: GLESInternalRT, clear: boolean, clearColor: Color): void;
-        setOffscreenView(width: number, height: number): void;
-        drawRenderElementOne(node: GLESREnderElement2D): void;
-    }
-    class GLESREnderElement2D implements IRenderElement2D {
-        private _geometry;
-        private _materialShaderData;
-        private _value2DShaderData;
-        private _subShader;
-        set geometry(data: GLESRenderGeometryElement);
-        get geometry(): GLESRenderGeometryElement;
-        set materialShaderData(data: GLESShaderData);
-        get materialShaderData(): GLESShaderData;
-        set value2DShaderData(data: GLESShaderData);
-        get value2DShaderData(): GLESShaderData;
-        get subShader(): SubShader;
-        set subShader(value: SubShader);
-        protected init(): void;
-        constructor();
-        private _renderStateIsBySprite;
-        get renderStateIsBySprite(): boolean;
-        set renderStateIsBySprite(value: boolean);
-        destroy(): void;
-    }
-    class GLES3DRenderPassFactory implements I3DRenderPassFactory {
-        createInstanceBatch(): IInstanceRenderBatch;
-        createRender3DProcess(): IRender3DProcess;
-        createRenderContext3D(): IRenderContext3D;
-        createSetRenderDataCMD(): SetRenderDataCMD;
-        createSetShaderDefineCMD(): SetShaderDefineCMD;
-        createDrawNodeCMDData(): DrawNodeCMDData;
-        createBlitQuadCMDData(): BlitQuadCMDData;
-        createDrawElementCMDData(): DrawElementCMDData;
-        createSetViewportCMD(): SetViewportCMD;
-        createSetRenderTargetCMD(): SetRenderTargetCMD;
-        createSetRenderData(): GLESSetRenderData;
-        createSceneRenderManager(): ISceneRenderManager;
-        createSkinRenderElement(): GLESSkinRenderElement3D;
-        createInstanceRenderElement3D(): IInstanceRenderElement3D;
-        createDirectLightShadowRP(): GLESDirectLightShadowRP;
-        createSpotLightShadowRP(): GLESSpotLightShadowRP;
-        createForwardAddRP(): GLESForwardAddRP;
-        createForwardAddCluster(): GLESForwardAddClusterRP;
-        createRenderElement3D(): GLESRenderElement3D;
-    }
-    class GLESDirectLightShadowRP {
-        private _light;
-        get light(): RTDirectLight;
-        set light(value: RTDirectLight);
-        private _camera;
-        get camera(): RTCameraNodeData;
-        set camera(value: RTCameraNodeData);
-        private _destTarget;
-        get destTarget(): GLESInternalRT;
-        set destTarget(value: GLESInternalRT);
-        _nativeObj: any;
-        constructor();
-        private _shadowCasterCommanBuffer;
-        get shadowCasterCommanBuffer(): CommandBuffer[];
-        set shadowCasterCommanBuffer(value: CommandBuffer[]);
-        private _setCmd;
-    }
-    class GLESForwardAddClusterRP {
-        get enableOpaque(): boolean;
-        set enableOpaque(value: boolean);
-        get enableCMD(): boolean;
-        set enableCMD(value: boolean);
-        get enableTransparent(): boolean;
-        set enableTransparent(value: boolean);
-        get enableOpaqueTexture(): boolean;
-        set enableOpaqueTexture(value: boolean);
-        private _destTarget;
-        get destTarget(): GLESInternalRT;
-        set destTarget(value: GLESInternalRT);
-        get pipelineMode(): string;
-        set pipelineMode(value: string);
-        private _depthTarget;
-        get depthTarget(): GLESInternalRT;
-        set depthTarget(value: GLESInternalRT);
-        get depthPipelineMode(): string;
-        set depthPipelineMode(value: string);
-        private _depthNormalTarget;
-        get depthNormalTarget(): GLESInternalRT;
-        set depthNormalTarget(value: GLESInternalRT);
-        get depthNormalPipelineMode(): string;
-        set depthNormalPipelineMode(value: string);
-        private _skyRenderNode;
-        get skyRenderNode(): RTBaseRenderNode;
-        set skyRenderNode(value: RTBaseRenderNode);
-        get depthTextureMode(): DepthTextureMode;
-        set depthTextureMode(value: DepthTextureMode);
-        private _opaqueTexture;
-        get opaqueTexture(): GLESInternalRT;
-        set opaqueTexture(value: GLESInternalRT);
-        private _camera;
-        get camera(): RTCameraNodeData;
-        set camera(value: RTCameraNodeData);
-        private _clearColor;
-        get clearColor(): Color;
-        set clearColor(value: Color);
-        get clearFlag(): number;
-        set clearFlag(value: number);
-        setCameraCullInfo(value: Camera): void;
-        setViewPort(value: Viewport): void;
-        setScissor(value: Vector4): void;
-        private _getRenderCMDArray;
-        get opaquePassCommandBuffer(): CommandBuffer;
-        set opaquePassCommandBuffer(value: CommandBuffer);
-        setBeforeForwardCmds(value: CommandBuffer[]): void;
-        setBeforeSkyboxCmds(value: CommandBuffer[]): void;
-        setBeforeTransparentCmds(value: CommandBuffer[]): void;
-        _nativeObj: any;
-        constructor();
-    }
-    class GLESForwardAddRP {
-        get shadowCastPass(): boolean;
-        set shadowCastPass(value: boolean);
-        private _directLightShadowPass;
-        get directLightShadowPass(): GLESDirectLightShadowRP;
-        set directLightShadowPass(value: GLESDirectLightShadowRP);
-        get enableDirectLightShadow(): boolean;
-        set enableDirectLightShadow(value: boolean);
-        private _spotLightShadowPass;
-        get spotLightShadowPass(): GLESSpotLightShadowRP;
-        set spotLightShadowPass(value: GLESSpotLightShadowRP);
-        get enableSpotLightShadowPass(): boolean;
-        set enableSpotLightShadowPass(value: boolean);
-        private _renderpass;
-        get renderpass(): GLESForwardAddClusterRP;
-        set renderpass(value: GLESForwardAddClusterRP);
-        private _enablePostProcess;
-        get enablePostProcess(): boolean;
-        set enablePostProcess(value: boolean);
-        get postProcess(): CommandBuffer;
-        set postProcess(value: CommandBuffer);
-        get finalize(): CommandBuffer;
-        set finalize(value: CommandBuffer);
-        _nativeObj: any;
-        constructor();
-        private _getRenderCMDArray;
-        setAfterEventCmd(value: CommandBuffer[]): void;
-        setBeforeImageEffect(value: CommandBuffer[]): void;
-    }
-    class GLESRender3DProcess implements IRender3DProcess {
-        private _nativeObj;
-        private _tempList;
-        private renderpass;
-        constructor();
-        initRenderpass(camera: Camera, context: GLESRenderContext3D): void;
-        renderDepth(camera: Camera): void;
-        fowardRender(context: GLESRenderContext3D, camera: Camera): void;
-        renderFowarAddCameraPass(context: GLESRenderContext3D, renderpass: GLESForwardAddRP, list: RTBaseRenderNode[], count: number): void;
-    }
-    class GLESDrawNodeCMDData extends DrawNodeCMDData {
-        type: RenderCMDType;
-        protected _node: RTBaseRenderNode;
-        protected _destShaderData: GLESShaderData;
-        protected _destSubShader: SubShader;
-        protected _subMeshIndex: number;
-        get node(): RTBaseRenderNode;
-        set node(value: RTBaseRenderNode);
-        get destShaderData(): GLESShaderData;
-        set destShaderData(value: GLESShaderData);
-        get destSubShader(): SubShader;
-        set destSubShader(value: SubShader);
-        get subMeshIndex(): number;
-        set subMeshIndex(value: number);
-        constructor();
-    }
-    class GLESBlitQuadCMDData extends BlitQuadCMDData {
-        type: RenderCMDType;
-        protected _dest: GLESInternalRT;
-        protected _viewport: Viewport;
-        protected _source: GLESInternalTex;
-        protected _scissor: Vector4;
-        protected _offsetScale: Vector4;
-        protected _element: GLESRenderElement3D;
-        get dest(): GLESInternalRT;
-        set dest(value: GLESInternalRT);
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        get source(): GLESInternalTex;
-        set source(value: GLESInternalTex);
-        get offsetScale(): Vector4;
-        set offsetScale(value: Vector4);
-        get element(): GLESRenderElement3D;
-        set element(value: GLESRenderElement3D);
-        constructor();
-    }
-    class GLESDrawElementCMDData extends DrawElementCMDData {
-        type: RenderCMDType;
-        private _elemets;
-        constructor();
-        setRenderelements(value: GLESRenderElement3D[]): void;
-    }
-    class GLESSetViewportCMD extends SetViewportCMD {
-        type: RenderCMDType;
-        protected _viewport: Viewport;
-        protected _scissor: Vector4;
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        constructor();
-    }
-    class GLESSetRenderTargetCMD extends SetRenderTargetCMD {
-        type: RenderCMDType;
-        protected _rt: GLESInternalRT;
-        protected _clearFlag: number;
-        protected _clearColorValue: Color;
-        protected _clearDepthValue: number;
-        protected _clearStencilValue: number;
-        get rt(): GLESInternalRT;
-        set rt(value: GLESInternalRT);
-        get clearFlag(): number;
-        set clearFlag(value: number);
-        get clearColorValue(): Color;
-        set clearColorValue(value: Color);
-        get clearDepthValue(): number;
-        set clearDepthValue(value: number);
-        get clearStencilValue(): number;
-        set clearStencilValue(value: number);
-        constructor();
-    }
-    class GLESSetRenderData extends SetRenderDataCMD {
-        type: RenderCMDType;
-        protected _dataType: ShaderDataType;
-        protected _propertyID: number;
-        protected _dest: GLESShaderData;
-        protected _value: ShaderDataItem;
-        data_v4: Vector4;
-        data_v3: Vector3;
-        data_v2: Vector2;
-        data_mat: Matrix4x4;
-        data_number: number;
-        data_texture: BaseTexture;
-        data_Color: Color;
-        data_Buffer: Float32Array;
-        get dataType(): ShaderDataType;
-        set dataType(value: ShaderDataType);
-        get propertyID(): number;
-        set propertyID(value: number);
-        get dest(): GLESShaderData;
-        set dest(value: GLESShaderData);
-        get value(): ShaderDataItem;
-        set value(value: ShaderDataItem);
-        constructor();
-    }
-    class GLESSetShaderDefine extends SetShaderDefineCMD {
-        type: RenderCMDType;
-        protected _define: RTShaderDefine;
-        protected _dest: GLESShaderData;
-        protected _add: boolean;
-        get define(): RTShaderDefine;
-        set define(value: RTShaderDefine);
-        get dest(): GLESShaderData;
-        set dest(value: GLESShaderData);
-        get add(): boolean;
-        set add(value: boolean);
-        constructor();
-    }
-    class GLESRenderContext3D implements IRenderContext3D {
-        private _globalShaderData;
-        get globalShaderData(): GLESShaderData;
-        set globalShaderData(value: GLESShaderData);
-        private _sceneData;
-        get sceneData(): GLESShaderData;
-        set sceneData(value: GLESShaderData);
-        private _sceneModuleData;
-        get sceneModuleData(): RTSceneNodeData;
-        set sceneModuleData(value: RTSceneNodeData);
-        private _cameraModuleData;
-        get cameraModuleData(): RTCameraNodeData;
-        set cameraModuleData(value: RTCameraNodeData);
-        private _cameraData;
-        get cameraData(): GLESShaderData;
-        set cameraData(value: GLESShaderData);
-        get sceneUpdataMask(): number;
-        set sceneUpdataMask(value: number);
-        get cameraUpdateMask(): number;
-        set cameraUpdateMask(value: number);
-        get pipelineMode(): string;
-        set pipelineMode(value: string);
-        get invertY(): boolean;
-        set invertY(value: boolean);
-        _nativeObj: any;
-        constructor();
-        setRenderTarget(value: GLESInternalRT, clearFlag: RenderClearFlag): void;
-        setViewPort(value: Viewport): void;
-        setScissor(value: Vector4): void;
-        setClearData(clearFlag: number, color: Color, depth: number, stencil: number): number;
-        private _tempList;
-        drawRenderElementList(list: FastSinglelist<GLESRenderElement3D>): number;
-        drawRenderElementOne(node: IRenderElement3D): number;
-        runOneCMD(cmd: IRenderCMD): void;
-        runCMDList(cmds: IRenderCMD[]): void;
-    }
-    enum RenderElementType {
-        Base = 0,
-        Skin = 1,
-        Instance = 2
-    }
-    class GLESRenderElement3D implements IRenderElement3D {
-        static getCompileDefine(): RTDefineDatas;
-        private _geometry;
-        private _materialShaderData;
-        private _renderShaderData;
-        private _transform;
-        set geometry(data: GLESRenderGeometryElement);
-        get geometry(): GLESRenderGeometryElement;
-        set materialShaderData(data: GLESShaderData);
-        get materialShaderData(): GLESShaderData;
-        set renderShaderData(data: GLESShaderData);
-        get renderShaderData(): GLESShaderData;
-        set transform(data: NativeTransform3D);
-        get transform(): NativeTransform3D;
-        get isRender(): boolean;
-        set isRender(data: boolean);
-        get materialRenderQueue(): number;
-        set materialRenderQueue(value: number);
-        private _owner;
-        get owner(): RTBaseRenderNode;
-        set owner(value: RTBaseRenderNode);
-        private _subShader;
-        get subShader(): SubShader;
-        set subShader(value: SubShader);
-        get canDynamicBatch(): boolean;
-        set canDynamicBatch(value: boolean);
-        get materialId(): number;
-        set materialId(value: number);
-        _nativeObj: any;
-        constructor();
-        destroy(): void;
-        protected init(): void;
-    }
-    class GLESSkinRenderElement3D extends GLESRenderElement3D implements ISkinRenderElement3D {
-        _skinnedData: Float32Array[];
-        constructor();
-        get skinnedData(): Float32Array[];
-        set skinnedData(data: Float32Array[]);
-        init(): void;
-    }
-    class GLESSpotLightShadowRP {
-        private _light;
-        get light(): SpotLightCom;
-        set light(value: SpotLightCom);
-        private _destTarget;
-        get destTarget(): GLESInternalRT;
-        set destTarget(value: GLESInternalRT);
-        _nativeObj: any;
-        constructor();
-    }
-    class GLESBufferState implements IBufferState {
-        _bindedIndexBuffer: IIndexBuffer;
-        _vertexBuffers: IVertexBuffer[];
-        _nativeObj: any;
-        constructor();
-        applyState(vertexBuffers: IVertexBuffer[], indexBuffer: IIndexBuffer): void;
-        destroy(): void;
-    }
-    class GLESCommandUniformMap extends CommandUniformMap {
-        _nativeObj: any;
-        constructor(stateName: string);
-        /**
-         * 增加一个UniformArray参数
-         * @param propertyID
-         * @param propertyName
-         */
-        addShaderUniformArray(propertyID: number, propertyName: string, uniformtype: ShaderDataType, arrayLength: number, block?: string): void;
-        /**
-         * 增加一个Uniform
-         * @param propertyID
-         * @param propertyKey
-         */
-        addShaderBlockUniform(propertyID: number, blockname: string, blockProperty: UniformProperty[]): void;
-    }
-    /**
-     * WebGL mode.
-     */
-    enum GLESMode {
-        /** Auto, use WebGL2.0 if support, or will fallback to WebGL1.0. */
-        Auto = 0,
-        /** WebGL2.0. */
-        WebGL2 = 1,
-        /** WebGL1.0, */
-        WebGL1 = 2
-    }
-    /**
-     * @private 封装Webgl
-     */
-    class GLESEngine implements IRenderEngine {
-        _context: any;
-        _isShaderDebugMode: boolean;
-        _renderOBJCreateContext: IRenderEngineFactory;
-        _nativeObj: any;
-        private _GLTextureContext;
-        constructor(config: WebGLConfig, webglMode?: GLESMode);
-        _remapZ: boolean;
-        _screenInvertY: boolean;
-        _lodTextureSample: boolean;
-        _breakTextureSample: boolean;
-        getUBOPointer?(name: string): number;
-        createBuffer?(targetType: BufferTargetType, bufferUsageType: BufferUsage): GLBuffer;
-        get _enableStatistics(): boolean;
-        set _enableStatistics(value: boolean);
-        resizeOffScreen(width: number, height: number): void;
-        getDefineByName(name: string): RTShaderDefine;
-        getNamesByDefineData(defineData: IDefineDatas, out: Array<string>): void;
-        addTexGammaDefine(key: number, value: RTShaderDefine): void;
-        initRenderEngine(canvas: any): void;
-        copySubFrameBuffertoTex(texture: InternalTexture, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
-        propertyNameToID(name: string): number;
-        propertyIDToName(id: number): string;
-        getParams(params: RenderParams): number;
-        getCapable(capatableType: RenderCapable): boolean;
-        getTextureContext(): ITextureContext;
-        getCreateRenderOBJContext(): IRenderEngineFactory;
-        clearStatisticsInfo(): void;
-        getStatisticsInfo(info: GPUEngineStatisticsInfo): number;
-        viewport(x: number, y: number, width: number, height: number): void;
-        scissor(x: number, y: number, width: number, height: number): void;
-    }
-    class GLESIndexBuffer implements IIndexBuffer {
-        destroy(): void;
-        _setIndexDataLength(data: number): void;
+    class IndexBuffer extends Buffer {
+        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
+        _setIndexData(data: number): void;
         _setIndexData(data: Uint32Array | Uint16Array | Uint8Array, bufferOffset: number): void;
-        get indexType(): IndexFormat;
-        set indexType(value: IndexFormat);
-        get indexCount(): number;
-        set indexCount(value: number);
-        _nativeObj: any;
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
     }
-    class GLESInternalRT implements InternalRenderTarget {
-        _texturesRef: InternalTexture[];
-        _depthTextureRef: InternalTexture;
-        _nativeObj: any;
-        constructor(nativeObj: any);
-        get _isCube(): boolean;
-        set _isCube(value: boolean);
-        get _samples(): number;
-        set _samples(value: number);
-        get _generateMipmap(): boolean;
-        set _generateMipmap(value: boolean);
-        get colorFormat(): RenderTargetFormat;
-        set colorFormat(value: RenderTargetFormat);
-        get depthStencilFormat(): RenderTargetFormat;
-        set depthStencilFormat(value: RenderTargetFormat);
-        get isSRGB(): boolean;
-        set isSRGB(value: boolean);
-        get gpuMemory(): number;
-        set gpuMemory(value: number);
-        get _textures(): InternalTexture[];
-        get _depthTexture(): InternalTexture;
-        dispose(): void;
-    }
-    class GLESRenderDeviceFactory implements IRenderDeviceFactory {
-        createShaderData(ownerResource: Resource): ShaderData;
-        private globalBlockMap;
-        createGlobalUniformMap(blockName: string): GLESCommandUniformMap;
-        createShaderInstance(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderPass): IShaderInstance;
-        createIndexBuffer(bufferUsage: BufferUsage): IIndexBuffer;
-        createVertexBuffer(bufferUsageType: BufferUsage): IVertexBuffer;
-        createBufferState(): IBufferState;
-        createRenderGeometryElement(mode: MeshTopology, drawType: DrawType): IRenderGeometryElement;
-        createEngine(config: Config, canvas: any): Promise<void>;
-    }
-    class GLESRenderEngineFactory implements IRenderEngineFactory {
-        _nativeObj: any;
-        createUniformBufferObject(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean): UniformBufferObject;
-        createEngine(config: Config, canvas: any): Promise<void>;
-        afterInit(): void;
-        private static _setVertexDec;
-    }
-    class GLESRenderGeometryElement implements IRenderGeometryElement {
-        _nativeObj: any;
-        clearRenderParams(): void;
-        set bufferState(value: IBufferState);
-        get bufferState(): IBufferState;
-        set mode(value: MeshTopology);
-        get mode(): MeshTopology;
-        set drawType(value: DrawType);
-        get drawType(): DrawType;
-        set instanceCount(value: number);
-        get instanceCount(): number;
-        set indexFormat(value: IndexFormat);
-        get indexFormat(): IndexFormat;
-    }
-    class GLESShaderData extends ShaderData {
-        nativeObjID: number;
-        _nativeObj: any;
-        _defineDatas: RTDefineDatas;
-        _textureData: {
-            [key: number]: BaseTexture;
+    /**
+     * https://www.khronos.org/registry/KTX/specs/1.0/ktxspec_v1.html
+     * https://www.khronos.org/registry/KTX/specs/2.0/ktxspec_v2.html
+     */
+    class KTXTextureInfo {
+        source: ArrayBuffer;
+        compress: boolean;
+        sRGB: boolean;
+        dimension: TextureDimension;
+        width: number;
+        height: number;
+        format: TextureFormat;
+        mipmapCount: number;
+        bytesOfKeyValueData: number;
+        headerOffset: number;
+        static getLayaFormat(glFormat: number, glInternalFormat: number, glType: number, glTypeSize: number): {
+            format: TextureFormat;
+            sRGB: boolean;
         };
-        _bufferData: {
-            [key: number]: Float32Array;
-        };
-        /**
-        *
-        * @param index
-        * @param value
-        */
-        setUniformBuffer(index: number, value: UniformBufferObject): void;
-        getUniformBuffer(index: number): UniformBufferObject;
-        getDefineData(): RTDefineDatas;
-        /**
-         * 增加Shader宏定义。
-         * @param value 宏定义。
-         */
-        addDefine(define: RTShaderDefine): void;
-        addDefines(define: RTDefineDatas): void;
-        /**
-         * 移除Shader宏定义。
-         * @param value 宏定义。
-         */
-        removeDefine(define: RTShaderDefine): void;
-        /**
-         * 是否包含Shader宏定义。
-         * @param value 宏定义。
-         */
-        hasDefine(define: RTShaderDefine): boolean;
-        /**
-         * 清空宏定义。
-         */
-        clearDefine(): void;
-        /**
-         * 获取布尔。
-         * @param	index shader索引。
-         * @return  布尔。
-         */
-        getBool(index: number): boolean;
-        /**
-         * 设置布尔。
-         * @param	index shader索引。
-         * @param	value 布尔。
-         */
-        setBool(index: number, value: boolean): void;
-        /**
-         * 获取整形。
-         * @param	index shader索引。
-         * @return  整形。
-         */
-        getInt(index: number): number;
-        /**
-         * 设置整型。
-         * @param	index shader索引。
-         * @param	value 整形。
-         */
-        setInt(index: number, value: number): void;
-        /**
-         * 获取浮点。
-         * @param	index shader索引。
-         * @return	浮点。
-         */
-        getNumber(index: number): number;
-        /**
-         * 设置浮点。
-         * @param	index shader索引。
-         * @param	value 浮点。
-         */
-        setNumber(index: number, value: number): void;
-        /**
-         * 获取Vector2向量。
-         * @param	index shader索引。
-         * @return Vector2向量。
-         */
-        getVector2(index: number): Vector2;
-        /**
-         * 设置Vector2向量。
-         * @param	index shader索引。
-         * @param	value Vector2向量。
-         */
-        setVector2(index: number, value: Vector2): void;
-        /**
-         * 获取Vector3向量。
-         * @param	index shader索引。
-         * @return Vector3向量。
-         */
-        getVector3(index: number): Vector3;
-        /**
-         * 设置Vector3向量。
-         * @param	index shader索引。
-         * @param	value Vector3向量。
-         */
-        setVector3(index: number, value: Vector3): void;
-        /**
-         * 获取颜色。
-         * @param 	index shader索引。
-         * @return  向量。
-         */
-        getVector(index: number): Vector4;
-        /**
-         * 设置向量。
-         * @param	index shader索引。
-         * @param	value 向量。
-         */
-        setVector(index: number, value: Vector4): void;
-        /**
-         * 获取颜色
-         * @param index 索引
-         * @returns 颜色
-         */
-        getColor(index: number): Color;
-        /**
-         * 设置颜色
-         * @param index 索引
-         * @param value 颜色值
-         */
-        setColor(index: number, value: Color): void;
-        /**
-         * 获取矩阵。
-         * @param	index shader索引。
-         * @return  矩阵。
-         */
-        getMatrix4x4(index: number): Matrix4x4;
-        /**
-         * 设置矩阵。
-         * @param	index shader索引。
-         * @param	value  矩阵。
-         */
-        setMatrix4x4(index: number, value: Matrix4x4): void;
-        /**
-         * 获取矩阵
-         * @param index
-         * @returns
-         */
-        getMatrix3x3(index: number): Matrix3x3;
-        /**
-         * 设置矩阵。
-         * @param index
-         * @param value
-         */
-        setMatrix3x3(index: number, value: Matrix3x3): void;
-        /**
-         * 获取Buffer。
-         * @param	index shader索引。
-         * @return
-         */
-        getBuffer(index: number): Float32Array;
-        /**
-         * 设置Buffer。
-         * @param	index shader索引。
-         * @param	value  buffer数据。
-         */
-        setBuffer(index: number, value: Float32Array): void;
-        /**
-         * 设置纹理。
-         * @param	index shader索引。
-         * @param	value 纹理。
-         */
-        setTexture(index: number, value: BaseTexture): void;
-        /**
-         * 获取纹理。
-         * @param	index shader索引。
-         * @return  纹理。
-         */
-        getTexture(index: number): BaseTexture;
-        cloneTo(destObject: GLESShaderData): void;
-        /**
-         * 克隆。
-         * @return	 克隆副本。
-         */
-        clone(): any;
-        destroy(): void;
-    }
-    class GLESTextureContext implements ITextureContext {
-        needBitmap: boolean;
-        protected _native: any;
-        constructor(native: any);
-        createTextureInternal(dimension: TextureDimension, width: number, height: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): GLESInternalTex;
-        setTextureImageData(texture: GLESInternalTex, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexturePixelsData(texture: GLESInternalTex, source: ArrayBufferView, premultiplyAlpha: boolean, invertY: boolean): void;
-        initVideoTextureData(texture: GLESInternalTex): void;
-        setTextureSubPixelsData(texture: GLESInternalTex, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureSubImageData(texture: GLESInternalTex, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, x: number, y: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DImageData(texture: GLESInternalTex, source: HTMLImageElement[] | HTMLCanvasElement[] | ImageBitmap[], depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        createTexture3DInternal(dimension: TextureDimension, width: number, height: number, depth: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): GLESInternalTex;
-        setTexture3DPixelsData(texture: GLESInternalTex, source: ArrayBufferView, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DSubPixelsData(texture: GLESInternalTex, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, zOffset: number, width: number, height: number, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureHDRData(texture: GLESInternalTex, hdrInfo: HDRTextureInfo): void;
-        setTextureDDSData(texture: GLESInternalTex, ddsInfo: DDSTextureInfo): void;
-        setTextureKTXData(texture: GLESInternalTex, ktxInfo: KTXTextureInfo): void;
-        setCubeImageData(texture: GLESInternalTex, sources: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubePixelsData(texture: GLESInternalTex, source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeSubPixelData(texture: GLESInternalTex, source: ArrayBufferView[], mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeDDSData(texture: GLESInternalTex, ddsInfo: DDSTextureInfo): void;
-        setCubeKTXData(texture: GLESInternalTex, ktxInfo: KTXTextureInfo): void;
-        setTextureCompareMode(texture: GLESInternalTex, compareMode: TextureCompareMode): TextureCompareMode;
-        bindRenderTarget(renderTarget: GLESInternalRT, faceIndex?: number): void;
-        bindoutScreenTarget(): void;
-        unbindRenderTarget(renderTarget: GLESInternalRT): void;
-        createRenderTargetInternal(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): GLESInternalRT;
-        createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): GLESInternalRT;
-        createRenderTextureCubeInternal(dimension: TextureDimension, size: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): GLESInternalTex;
-        createRenderTargetDepthTexture(renderTarget: GLESInternalRT, dimension: TextureDimension, width: number, height: number): GLESInternalTex;
-        /**
-         * @deprecated 请使用readRenderTargetPixelDataAsync函数代替
-         * @param renderTarget
-         * @param xOffset
-         * @param yOffset
-         * @param width
-         * @param height
-         * @param out
-         * @returns
-         */
-        readRenderTargetPixelData(renderTarget: GLESInternalRT, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): ArrayBufferView;
-        readRenderTargetPixelDataAsync(renderTarget: GLESInternalRT, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): Promise<ArrayBufferView>;
-        updateVideoTexture(texture: GLESInternalTex, video: HTMLVideoElement, premultiplyAlpha: boolean, invertY: boolean): void;
-        getRenderTextureData(internalTex: GLESInternalRT, x: number, y: number, width: number, height: number): ArrayBufferView;
-    }
-    class GLESVertexBuffer implements IVertexBuffer {
-        _instanceBuffer: boolean;
-        _nativeObj: any;
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-        private _vertexDeclaration;
-        get vertexDeclaration(): VertexDeclaration;
-        set vertexDeclaration(value: VertexDeclaration);
-        get instanceBuffer(): boolean;
-        set instanceBuffer(value: boolean);
-        setData(buffer: ArrayBuffer, bufferOffset: number, dataStartIndex: number, dataCount: number): void;
-        setDataLength(byteLength: number): void;
-        destroy(): void;
-    }
-    enum BaseRenderType {
-        BaseRender = 0,
-        MeshRender = 1,
-        ParticleRender = 2,
-        TrailRender = 3,
-        LineRender = 4,
-        TerrainRender = 5,
-        SkyRender = 7,
-        SimpleSkinRender = 8,
-        SkinnedMeshRender = 9
-    }
-    interface IBaseRenderNode {
-        renderNodeType: number;
-        transform: Transform3D;
-        distanceForSort: number;
-        sortingFudge: number;
-        castShadow: boolean;
-        receiveShadow: boolean;
-        enable: boolean;
-        renderbitFlag: number;
-        layer: number;
-        bounds: Bounds;
-        baseGeometryBounds: Bounds;
-        boundsChange: boolean;
-        staticMask: number;
-        shaderData: ShaderData;
-        lightmapIndex: number;
-        lightmap: ILightMapData;
-        probeReflection: IReflectionProbeData;
-        probeReflectionUpdateMark: number;
-        reflectionMode: number;
-        volumetricGI: IVolumetricGIData;
-        lightProbUpdateMark: number;
-        irradientMode: IrradianceMode;
-        set_renderUpdatePreCall(call: any, fun: any): void;
-        set_caculateBoundingBox(call: any, fun: any): void;
-        _applyLightProb(): void;
-        _applyReflection(): void;
-    }
-    interface IMeshRenderNode extends IBaseRenderNode {
-    }
-    interface ISkinRenderNode extends IBaseRenderNode {
-        computeSkinnedData(): void;
-        setRootBoneTransfom(value: Sprite3D): void;
-        setOwnerTransform(value: Sprite3D): void;
-        setCacheMesh(cacheMesh: Mesh): void;
-        setBones(value: Sprite3D[]): void;
-        setSkinnedData(value: any[]): void;
-    }
-    interface ISimpleSkinRenderNode extends IBaseRenderNode {
-        setSimpleAnimatorParams(value: Vector4): void;
-    }
-    interface IDirectLightData {
-        transform: Transform3D;
-        shadowResolution: number;
-        shadowDistance: number;
-        shadowMode: ShadowMode;
-        shadowStrength: number;
-        shadowDepthBias: number;
-        shadowNormalBias: number;
-        shadowNearPlane: number;
-        shadowCascadesMode: ShadowCascadesMode;
-        shadowTwoCascadeSplits: number;
-        setShadowFourCascadeSplits(value: Vector3): void;
-        setDirection(value: Vector3): void;
-    }
-    interface ISpotLightData {
-        transform: Transform3D;
-        shadowResolution: number;
-        shadowDistance: number;
-        shadowMode: ShadowMode;
-        shadowStrength: number;
-        shadowDepthBias: number;
-        shadowNormalBias: number;
-        shadowNearPlane: number;
-        spotRange: number;
-        spotAngle: number;
-        setDirection(value: Vector3): void;
-    }
-    interface IPointLightData {
-        transform: Transform3D;
-        range: number;
-        shadowResolution: number;
-        shadowDistance: number;
-        shadowMode: ShadowMode;
-        shadowStrength: number;
-        shadowDepthBias: number;
-        shadowNormalBias: number;
-        shadowNearPlane: number;
-    }
-    interface ILightMapData {
-    }
-    interface IReflectionProbeData {
-    }
-    interface IVolumetricGIData {
-        _id: number;
-        irradiance: InternalTexture;
-        distance: InternalTexture;
-        bound: Bounds;
-        intensity: number;
-        updateMark: number;
-        setProbeCounts(value: Vector3): void;
-        setProbeStep(value: Vector3): void;
-        setParams(value: Vector4): void;
-    }
-    interface ICameraNodeData {
-        transform: Transform3D;
-        farplane: number;
-        nearplane: number;
-        fieldOfView: number;
-        aspectRatio: number;
-        setProjectionViewMatrix(value: Matrix4x4): void;
-    }
-    interface ISceneNodeData {
-        lightmapDirtyFlag: number;
-    }
-    interface I3DRenderModuleFactory {
-        createTransform(owner: Sprite3D): Transform3D;
-        createBounds(min: Vector3, max: Vector3): any;
-        createVolumetricGI(): IVolumetricGIData;
-        createReflectionProbe(): IReflectionProbeData;
-        createLightmapData(): ILightMapData;
-        createDirectLight(): IDirectLightData;
-        createSpotLight(): ISpotLightData;
-        createPointLight(): IPointLightData;
-        createCameraModuleData(): ICameraNodeData;
-        createSceneModuleData(): ISceneNodeData;
-        createBaseRenderNode(): IBaseRenderNode;
-        createMeshRenderNode(): IMeshRenderNode;
-        createSkinRenderNode(): ISkinRenderNode;
-        createSimpleSkinRenderNode(): ISimpleSkinRenderNode;
-    }
-    interface IDefineDatas {
-        add(define: ShaderDefine): void;
-        remove(define: ShaderDefine): void;
-        addDefineDatas(define: IDefineDatas): void;
-        removeDefineDatas(define: IDefineDatas): void;
-        has(define: ShaderDefine): boolean;
-        clear(): void;
-        cloneTo(destObject: IDefineDatas): void;
-        clone(): IDefineDatas;
-        destroy(): void;
-    }
-    interface IShaderPassData {
-        is2D: boolean;
-        pipelineMode: string;
-        statefirst: boolean;
-        validDefine: IDefineDatas;
-        renderState: RenderState;
-        setCacheShader(defines: IDefineDatas, shaderInstance: IShaderInstance): void;
-        getCacheShader(defines: IDefineDatas): IShaderInstance;
-        destroy(): void;
-    }
-    interface ISubshaderData {
-        addShaderPass(pass: IShaderPassData): void;
-        enableInstance: boolean;
-        destroy(): void;
-    }
-    interface IUnitRenderModuleDataFactory {
-        createRenderState(): RenderState;
-        createDefineDatas(): IDefineDatas;
-        createSubShader(): ISubshaderData;
-        createShaderPass(pass: ShaderPass): IShaderPassData;
-    }
-    /**
-     * <code>RenderState</code> 类用于控制渲染状态。
-     */
-    class RenderState {
-        /**剔除枚举_不剔除。*/
-        static CULL_NONE: number;
-        /**剔除枚举_剔除正面。*/
-        static CULL_FRONT: number;
-        /**剔除枚举_剔除背面。*/
-        static CULL_BACK: number;
-        /**混合枚举_禁用。*/
-        static BLEND_DISABLE: number;
-        /**混合枚举_启用_RGB和Alpha统一混合。*/
-        static BLEND_ENABLE_ALL: number;
-        /**混合枚举_启用_RGB和Alpha单独混合。*/
-        static BLEND_ENABLE_SEPERATE: number;
-        /**混合参数枚举_零,例：RGB(0,0,0),Alpha:(1)。*/
-        static BLENDPARAM_ZERO: number;
-        /**混合参数枚举_一,例：RGB(1,1,1),Alpha:(1)。*/
-        static BLENDPARAM_ONE: number;
-        /**混合参数枚举_源颜色,例：RGB(Rs, Gs, Bs)，Alpha(As)。*/
-        static BLENDPARAM_SRC_COLOR: number;
-        /**混合参数枚举_一减源颜色,例：RGB(1-Rs, 1-Gs, 1-Bs)，Alpha(1-As)。*/
-        static BLENDPARAM_ONE_MINUS_SRC_COLOR: number;
-        /**混合参数枚举_目标颜色,例：RGB(Rd, Gd, Bd),Alpha(Ad)。*/
-        static BLENDPARAM_DST_COLOR: number;
-        /**混合参数枚举_一减目标颜色,例：RGB(1-Rd, 1-Gd, 1-Bd)，Alpha(1-Ad)。*/
-        static BLENDPARAM_ONE_MINUS_DST_COLOR: number;
-        /**混合参数枚举_源透明,例:RGB(As, As, As),Alpha(1-As)。*/
-        static BLENDPARAM_SRC_ALPHA: number;
-        /**混合参数枚举_一减源阿尔法,例:RGB(1-As, 1-As, 1-As),Alpha(1-As)。*/
-        static BLENDPARAM_ONE_MINUS_SRC_ALPHA: number;
-        /**混合参数枚举_目标阿尔法，例：RGB(Ad, Ad, Ad),Alpha(Ad)。*/
-        static BLENDPARAM_DST_ALPHA: number;
-        /**混合参数枚举_一减目标阿尔法,例：RGB(1-Ad, 1-Ad, 1-Ad),Alpha(Ad)。*/
-        static BLENDPARAM_ONE_MINUS_DST_ALPHA: number;
-        /**混合参数枚举_阿尔法饱和，例：RGB(min(As, 1 - Ad), min(As, 1 - Ad), min(As, 1 - Ad)),Alpha(1)。*/
-        static BLENDPARAM_SRC_ALPHA_SATURATE: number;
-        /**混合参数枚举_混合设置颜色 */
-        static BLENDPARAM_BLENDCOLOR: number;
-        /**很合参数枚举_混合颜色取反 */
-        static BLENDPARAM_BLEND_ONEMINUS_COLOR: number;
-        /**混合方程枚举_加法,例：source + destination*/
-        static BLENDEQUATION_ADD: number;
-        /**混合方程枚举_减法，例：source - destination*/
-        static BLENDEQUATION_SUBTRACT: number;
-        /**混合方程枚举_反序减法，例：destination - source*/
-        static BLENDEQUATION_REVERSE_SUBTRACT: number;
-        /**混合方程枚举_取最小 TODO */
-        static BLENDEQUATION_MIN: number;
-        /**混合方程枚举_取最大 TODO*/
-        static BLENDEQUATION_MAX: number;
-        /**深度测试函数枚举_关闭深度测试。*/
-        static DEPTHTEST_OFF: number;
-        /**深度测试函数枚举_从不通过。*/
-        static DEPTHTEST_NEVER: number;
-        /**深度测试函数枚举_小于时通过。*/
-        static DEPTHTEST_LESS: number;
-        /**深度测试函数枚举_等于时通过。*/
-        static DEPTHTEST_EQUAL: number;
-        /**深度测试函数枚举_小于等于时通过。*/
-        static DEPTHTEST_LEQUAL: number;
-        /**深度测试函数枚举_大于时通过。*/
-        static DEPTHTEST_GREATER: number;
-        /**深度测试函数枚举_不等于时通过。*/
-        static DEPTHTEST_NOTEQUAL: number;
-        /**深度测试函数枚举_大于等于时通过。*/
-        static DEPTHTEST_GEQUAL: number;
-        /**深度测试函数枚举_总是通过。*/
-        static DEPTHTEST_ALWAYS: number;
-        static STENCILTEST_OFF: number;
-        /**深度测试函数枚举_从不通过。*/
-        static STENCILTEST_NEVER: number;
-        /**深度测试函数枚举_小于时通过。*/
-        static STENCILTEST_LESS: number;
-        /**深度测试函数枚举_等于时通过。*/
-        static STENCILTEST_EQUAL: number;
-        /**深度测试函数枚举_小于等于时通过。*/
-        static STENCILTEST_LEQUAL: number;
-        /**深度测试函数枚举_大于时通过。*/
-        static STENCILTEST_GREATER: number;
-        /**深度测试函数枚举_不等于时通过。*/
-        static STENCILTEST_NOTEQUAL: number;
-        /**深度测试函数枚举_大于等于时通过。*/
-        static STENCILTEST_GEQUAL: number;
-        /**深度测试函数枚举_总是通过。*/
-        static STENCILTEST_ALWAYS: number;
-        /**保持当前值*/
-        static STENCILOP_KEEP: number;
-        /**将模板缓冲区值设置为0*/
-        static STENCILOP_ZERO: number;
-        /**将模具缓冲区值设置为指定的参考值*/
-        static STENCILOP_REPLACE: number;
-        /**增加当前模具缓冲区值+1 */
-        static STENCILOP_INCR: number;
-        /**增加当前模具缓冲区值,超过最大值的时候循环*/
-        static STENCILOP_INCR_WRAP: number;
-        /**递减当前模板缓冲区的值*/
-        static STENCILOP_DECR: number;
-        /**递减当前模板缓冲去的值，小于0时会循环*/
-        static STENCILOP_DECR_WRAP: number;
-        /**按位反转当前的模板缓冲区的值*/
-        static STENCILOP_INVERT: number;
-        /**渲染剔除状态。*/
-        private _cull;
-        get cull(): number;
-        set cull(value: number);
-        /**透明混合。*/
-        private _blend;
-        get blend(): number;
-        set blend(value: number);
-        /**源混合参数,在blend为BLEND_ENABLE_ALL时生效。*/
-        private _srcBlend;
-        get srcBlend(): number;
-        set srcBlend(value: number);
-        /**目标混合参数,在blend为BLEND_ENABLE_ALL时生效。*/
-        private _dstBlend;
-        get dstBlend(): number;
-        set dstBlend(value: number);
-        /**RGB源混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
-        private _srcBlendRGB;
-        get srcBlendRGB(): number;
-        set srcBlendRGB(value: number);
-        /**RGB目标混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
-        private _dstBlendRGB;
-        get dstBlendRGB(): number;
-        set dstBlendRGB(value: number);
-        /**Alpha源混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
-        private _srcBlendAlpha;
-        get srcBlendAlpha(): number;
-        set srcBlendAlpha(value: number);
-        /**Alpha目标混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
-        private _dstBlendAlpha;
-        get dstBlendAlpha(): number;
-        set dstBlendAlpha(value: number);
-        /**混合方程。*/
-        private _blendEquation;
-        get blendEquation(): number;
-        set blendEquation(value: number);
-        /**RGB混合方程。*/
-        private _blendEquationRGB;
-        get blendEquationRGB(): number;
-        set blendEquationRGB(value: number);
-        /**Alpha混合方程。*/
-        private _blendEquationAlpha;
-        get blendEquationAlpha(): number;
-        set blendEquationAlpha(value: number);
-        /**深度测试函数。*/
-        private _depthTest;
-        get depthTest(): number;
-        set depthTest(value: number);
-        /**是否深度测试。*/
-        private _depthWrite;
-        get depthWrite(): boolean;
-        set depthWrite(value: boolean);
-        /**是否模板写入 */
-        private _stencilWrite;
-        get stencilWrite(): boolean;
-        set stencilWrite(value: boolean);
-        /**是否开启模板测试 */
-        private _stencilTest;
-        get stencilTest(): number;
-        set stencilTest(value: number);
-        /**模板值 一般会在0-255*/
-        private _stencilRef;
-        get stencilRef(): number;
-        set stencilRef(value: number);
-        /**模板设置值 */
-        private _stencilOp;
-        get stencilOp(): Vector3;
-        set stencilOp(value: Vector3);
-        protected createObj(): void;
-        /**
-         * 创建一个 <code>RenderState</code> 实例。
-         */
-        constructor();
-        /**
-         * 克隆
-         * @param dest
-         */
-        cloneTo(dest: RenderState): void;
-        /**
-         * 克隆。
-         * @return	 克隆副本。
-         */
-        clone(): RenderState;
-    }
-    /**
-     * <code>ShaderDefine</code> 类用于定义宏数据。
-     */
-    class ShaderDefine {
-        /**
-         * 创建一个宏定义的实例`
-         * @param index 宏索引
-         * @param value 宏值
-         */
-        constructor(index: number, value: number);
-    }
-    class NativeBounds implements IClone {
-        /**native Share Memory */
-        static MemoryBlock_size: number;
-        get min(): Vector3;
-        set min(value: Vector3);
-        get max(): Vector3;
-        set max(value: Vector3);
-        /**
-         * 设置包围盒的最小点。
-         * @param value	包围盒的最小点。
-         */
-        setMin(value: Vector3): void;
-        /**
-         * 获取包围盒的最小点。
-         * @return	包围盒的最小点。
-         */
-        getMin(): Vector3;
-        /**
-         * 设置包围盒的最大点。
-         * @param value	包围盒的最大点。
-         */
-        setMax(value: Vector3): void;
-        /**
-         * 获取包围盒的最大点。
-         * @return	包围盒的最大点。
-         */
-        getMax(): Vector3;
-        /**
-         * 设置包围盒的中心点。
-         * @param value	包围盒的中心点。
-         */
-        setCenter(value: Vector3): void;
-        /**
-         * 获取包围盒的中心点。
-         * @return	包围盒的中心点。
-         */
-        getCenter(): Vector3;
-        /**
-         * 设置包围盒的范围。
-         * @param value	包围盒的范围。
-         */
-        setExtent(value: Vector3): void;
-        /**
-         * 获取包围盒的范围。
-         * @return	包围盒的范围。
-         */
-        getExtent(): Vector3;
-        /**
-         * 创建一个 <code>Bounds</code> 实例。
-         * @param	min  min 最小坐标
-         * @param	max  max 最大坐标。
-         */
-        constructor(min?: Vector3, max?: Vector3);
-        _getBoundBox(): BoundBox;
-        /**
-         * @returns -1为不相交 不为0的时候返回值为相交体积
-         */
-        calculateBoundsintersection(bounds: Bounds): number;
-        /**
-         * 克隆。
-         * @param	destObject 克隆源。
-         */
-        cloneTo(destObject: any): void;
-        /**
-         * 克隆。
-         * @return	 克隆副本。
-         */
-        clone(): any;
-    }
-    /**
-     * <code>Transform3D</code> 类用于实现3D变换。
-     */
-    class NativeTransform3D extends Transform3D {
-        static MemoryBlock_size: number;
-        /**native Share Memory */
-        private nativeMemory;
-        private float32Array;
-        private float64Array;
-        private int32Array;
-        private eventDispatcher;
-        _nativeObj: any;
-        /**
-         * 所属精灵。
-         */
-        get owner(): Sprite3D;
-        /**
-         * 局部位置X轴分量。
-         */
-        get localPositionX(): number;
-        set localPositionX(x: number);
-        /**
-         * 局部位置Y轴分量。
-         */
-        get localPositionY(): number;
-        set localPositionY(y: number);
-        /**
-         * 局部位置Z轴分量。
-         */
-        get localPositionZ(): number;
-        set localPositionZ(z: number);
-        /**
-         * 局部位置。
-         */
-        get localPosition(): Vector3;
-        set localPosition(value: Vector3);
-        /**
-         * 局部旋转四元数X分量。
-         */
-        get localRotationX(): number;
-        set localRotationX(x: number);
-        /**
-         * 局部旋转四元数Y分量。
-         */
-        get localRotationY(): number;
-        set localRotationY(y: number);
-        /**
-         * 局部旋转四元数Z分量。
-         */
-        get localRotationZ(): number;
-        set localRotationZ(z: number);
-        /**
-         * 局部旋转四元数W分量。
-         */
-        get localRotationW(): number;
-        set localRotationW(w: number);
-        /**
-         * 局部旋转。
-         */
-        get localRotation(): Quaternion;
-        set localRotation(value: Quaternion);
-        /**
-         * 局部缩放X。
-         */
-        get localScaleX(): number;
-        set localScaleX(value: number);
-        /**
-         * 局部缩放Y。
-         */
-        get localScaleY(): number;
-        set localScaleY(value: number);
-        /**
-         * 局部缩放Z。
-         */
-        get localScaleZ(): number;
-        set localScaleZ(value: number);
-        /**
-         * 局部缩放。
-         */
-        get localScale(): Vector3;
-        set localScale(value: Vector3);
-        /**
-         * 局部空间的X轴欧拉角。
-         */
-        get localRotationEulerX(): number;
-        set localRotationEulerX(value: number);
-        /**
-         * 局部空间的Y轴欧拉角。
-         */
-        get localRotationEulerY(): number;
-        set localRotationEulerY(value: number);
-        /**
-         * 局部空间的Z轴欧拉角。
-         */
-        get localRotationEulerZ(): number;
-        set localRotationEulerZ(value: number);
-        /**
-         * 局部空间欧拉角。
-         */
-        get localRotationEuler(): Vector3;
-        set localRotationEuler(value: Vector3);
-        /**
-         * 局部矩阵。
-         */
-        get localMatrix(): Matrix4x4;
-        set localMatrix(value: Matrix4x4);
-        /**
-         * 世界位置。
-         */
-        get position(): Vector3;
-        set position(value: Vector3);
-        /**
-         * 世界旋转。
-         */
-        get rotation(): Quaternion;
-        set rotation(value: Quaternion);
-        /**
-         * 世界空间的旋转角度，顺序为x、y、z。
-         */
-        get rotationEuler(): Vector3;
-        set rotationEuler(value: Vector3);
-        /**
-         * 世界矩阵。
-         */
-        get worldMatrix(): Matrix4x4;
-        set worldMatrix(value: Matrix4x4);
-        /**
-         * 创建一个 <code>Transform3D</code> 实例。
-         * @param owner 所属精灵。
-         */
-        constructor(owner: Sprite3D);
-        /**
-         * 平移变换。
-         * @param 	translation 移动距离。
-         * @param 	isLocal 是否局部空间。
-         */
-        translate(translation: Vector3, isLocal?: boolean): void;
-        /**
-         * 旋转变换。
-         * @param 	rotations 旋转幅度。
-         * @param 	isLocal 是否局部空间。
-         * @param 	isRadian 是否弧度制。
-         */
-        rotate(rotation: Vector3, isLocal?: boolean, isRadian?: boolean): void;
-        /**
-         * 获取向前方向。
-         * @param forward 前方向。
-         */
-        getForward(forward: Vector3): void;
-        /**
-         * 获取向上方向。
-         * @param up 上方向。
-         */
-        getUp(up: Vector3): void;
-        /**
-         * 获取向右方向。
-         * @param 右方向。
-         */
-        getRight(right: Vector3): void;
-        /**
-         * 观察目标位置。
-         * @param	target 观察目标。
-         * @param	up 向上向量。
-         * @param	isLocal 是否局部空间。
-         */
-        lookAt(target: Vector3, up: Vector3, isLocal?: boolean, isCamera?: boolean): void;
-        /**
-         * 对象朝向目标
-         * @param target
-         * @param up
-         * @param isLocal
-         */
-        objLookat(target: Vector3, up: Vector3, isLocal?: boolean): void;
-        /**
-         * 世界缩放。
-         * 某种条件下获取该值可能不正确（例如：父节点有缩放，子节点有旋转），缩放会倾斜，无法使用Vector3正确表示,必须使用Matrix3x3矩阵才能正确表示。
-         * @return	世界缩放。
-         */
-        getWorldLossyScale(): Vector3;
-        /**
-         * 设置世界缩放。
-         * 某种条件下设置该值可能不正确（例如：父节点有缩放，子节点有旋转），缩放会倾斜，无法使用Vector3正确表示,必须使用Matrix3x3矩阵才能正确表示。
-         * @return	世界缩放。
-         */
-        setWorldLossyScale(value: Vector3): void;
-        hasListener(type: string): boolean;
-        event(type: string, data?: any): boolean;
-        on(type: string, listener: Function): EventDispatcher;
-        on(type: string, caller: any, listener: Function, args?: any[]): EventDispatcher;
-        once(type: string, listener: Function): EventDispatcher;
-        once(type: string, caller: any, listener: Function, args?: any[]): EventDispatcher;
-        off(type: string, listener: Function): EventDispatcher;
-        off(type: string, caller: any, listener?: Function, args?: any[]): EventDispatcher;
-        offAll(type?: string): EventDispatcher;
-        offAllCaller(caller: any): EventDispatcher;
-    }
-    class RTCameraNodeData implements ICameraNodeData {
-        private _transform;
-        get transform(): NativeTransform3D;
-        set transform(value: NativeTransform3D);
-        get farplane(): number;
-        set farplane(value: number);
-        get nearplane(): number;
-        set nearplane(value: number);
-        get fieldOfView(): number;
-        set fieldOfView(value: number);
-        get aspectRatio(): number;
-        set aspectRatio(value: number);
-        _nativeObj: any;
-        constructor();
-        setProjectionViewMatrix(value: Matrix4x4): void;
-    }
-    class RTSceneNodeData implements ISceneNodeData {
-        get lightmapDirtyFlag(): number;
-        set lightmapDirtyFlag(value: number);
-        _nativeObj: any;
-        constructor();
-    }
-    class RT3DRenderModuleFactory implements I3DRenderModuleFactory {
-        createTransform(owner: Sprite3D): NativeTransform3D;
-        createBounds(min: Vector3, max: Vector3): NativeBounds;
-        createVolumetricGI(): RTVolumetricGI;
-        createReflectionProbe(): RTReflectionProb;
-        createLightmapData(): RTLightmapData;
-        createDirectLight(): RTDirectLight;
-        createSpotLight(): RTSpotLight;
-        createPointLight(): IPointLightData;
-        createCameraModuleData(): RTCameraNodeData;
-        createSceneModuleData(): RTSceneNodeData;
-        createBaseRenderNode(): RTBaseRenderNode;
-        createMeshRenderNode(): RTMeshRenderNode;
-        createSkinRenderNode(): ISkinRenderNode;
-        createSimpleSkinRenderNode(): ISimpleSkinRenderNode;
-    }
-    class RTBaseRenderNode implements IBaseRenderNode {
-        renderelements: IRenderElement3D[];
-        private _transform;
-        get transform(): NativeTransform3D;
-        set transform(value: NativeTransform3D);
-        get distanceForSort(): number;
-        set distanceForSort(value: number);
-        get sortingFudge(): number;
-        set sortingFudge(value: number);
-        get castShadow(): boolean;
-        set castShadow(value: boolean);
-        get enable(): boolean;
-        set enable(value: boolean);
-        get renderbitFlag(): number;
-        set renderbitFlag(value: number);
-        get layer(): number;
-        set layer(value: number);
-        private _bounds;
-        get bounds(): Bounds;
-        set bounds(value: Bounds);
-        private _baseGeometryBounds;
-        get baseGeometryBounds(): Bounds;
-        set baseGeometryBounds(value: Bounds);
-        get boundsChange(): boolean;
-        set boundsChange(value: boolean);
-        get customCull(): boolean;
-        set customCull(value: boolean);
-        get customCullResoult(): boolean;
-        set customCullResoult(value: boolean);
-        get staticMask(): number;
-        set staticMask(value: number);
-        private _shaderData;
-        get shaderData(): ShaderData;
-        set shaderData(value: ShaderData);
-        get lightmapIndex(): number;
-        set lightmapIndex(value: number);
-        private _lightmap;
-        get lightmap(): RTLightmapData;
-        set lightmap(value: RTLightmapData);
-        private _probeReflection;
-        get probeReflection(): RTReflectionProb;
-        set probeReflection(value: RTReflectionProb);
-        get probeReflectionUpdateMark(): number;
-        set probeReflectionUpdateMark(value: number);
-        get reflectionMode(): number;
-        set reflectionMode(value: number);
-        private _volumetricGI;
-        get volumetricGI(): RTVolumetricGI;
-        set volumetricGI(value: RTVolumetricGI);
-        get lightProbUpdateMark(): number;
-        set lightProbUpdateMark(value: number);
-        private _irradientMode;
-        get irradientMode(): IrradianceMode;
-        set irradientMode(value: IrradianceMode);
-        private _caculateBoundingBoxbindFun;
-        private _renderUpdatePrebindFun;
-        /**
-         * 设置更新数据
-         * @param call
-         * @param fun
-         */
-        set_renderUpdatePreCall(call: any, fun: any): void;
-        /**
-         * 设置更新包围盒方法
-         * @param call
-         * @param fun
-         */
-        set_caculateBoundingBox(call: any, fun: any): void;
-        _nativeObj: any;
-        protected _getNativeObj(): void;
-        constructor();
-        get renderNodeType(): number;
-        set renderNodeType(value: number);
-        get receiveShadow(): boolean;
-        set receiveShadow(value: boolean);
-        _applyLightProb(): void;
-        _applyReflection(): void;
-        setRenderelements(value: IRenderElement3D[]): void;
-        setLightmapScaleOffset(value: Vector4): void;
-        setCommonUniformMap(value: string[]): void;
-        setOneMaterial(index: number, mat: Material): void;
-        destroy(): void;
-    }
-    class RTDirectLight implements IDirectLightData {
-        get shadowNearPlane(): number;
-        set shadowNearPlane(value: number);
-        get shadowCascadesMode(): ShadowCascadesMode;
-        set shadowCascadesMode(value: ShadowCascadesMode);
-        private _transform;
-        get transform(): NativeTransform3D;
-        set transform(value: NativeTransform3D);
-        get shadowResolution(): number;
-        set shadowResolution(value: number);
-        get shadowDistance(): number;
-        set shadowDistance(value: number);
-        get shadowMode(): ShadowMode;
-        set shadowMode(value: ShadowMode);
-        get shadowStrength(): number;
-        set shadowStrength(value: number);
-        get shadowDepthBias(): number;
-        set shadowDepthBias(value: number);
-        get shadowNormalBias(): number;
-        set shadowNormalBias(value: number);
-        get shadowTwoCascadeSplits(): number;
-        set shadowTwoCascadeSplits(value: number);
-        setShadowFourCascadeSplits(value: Vector3): void;
-        setDirection(value: Vector3): void;
-        _nativeObj: any;
-        constructor();
-    }
-    class RTLightmapData implements ILightMapData {
-        _nativeObj: any;
-        constructor();
-        get lightmapColor(): InternalTexture;
-        set lightmapColor(value: InternalTexture);
-        get lightmapDirection(): InternalTexture;
-        set lightmapDirection(value: InternalTexture);
-        destroy(): void;
-    }
-    class RTMeshRenderNode extends RTBaseRenderNode implements RTMeshRenderNode {
-    }
-    class RTPointLight implements IPointLightData {
-        _nativeObj: any;
-        private _transform;
-        get transform(): NativeTransform3D;
-        set transform(value: NativeTransform3D);
-        get range(): number;
-        set range(value: number);
-        get shadowResolution(): number;
-        set shadowResolution(value: number);
-        get shadowDistance(): number;
-        set shadowDistance(value: number);
-        get shadowMode(): ShadowMode;
-        set shadowMode(value: ShadowMode);
-        get shadowStrength(): number;
-        set shadowStrength(value: number);
-        get shadowDepthBias(): number;
-        set shadowDepthBias(value: number);
-        get shadowNormalBias(): number;
-        set shadowNormalBias(value: number);
-        get shadowNearPlane(): number;
-        set shadowNearPlane(value: number);
-        constructor();
-    }
-    class RTReflectionProb implements IReflectionProbeData {
-        private static _idCounter;
-        get boxProjection(): boolean;
-        set boxProjection(value: boolean);
-        private _bound;
-        get bound(): Bounds;
-        set bound(value: Bounds);
-        get ambientMode(): AmbientMode;
-        set ambientMode(value: AmbientMode);
-        get ambientIntensity(): number;
-        set ambientIntensity(value: number);
-        get reflectionIntensity(): number;
-        set reflectionIntensity(value: number);
-        private _reflectionTexture;
-        get reflectionTexture(): InternalTexture;
-        set reflectionTexture(value: InternalTexture);
-        private _iblTex;
-        get iblTex(): InternalTexture;
-        set iblTex(value: InternalTexture);
-        get updateMark(): number;
-        set updateMark(value: number);
-        get iblTexRGBD(): boolean;
-        set iblTexRGBD(value: boolean);
-        setProbePosition(value: Vector3): void;
-        setAmbientColor(value: Color): void;
-        setAmbientSH(value: Float32Array): void;
-        _nativeObj: any;
-        constructor();
-        destroy(): void;
-    }
-    class RTSimpleSkinRenderNode extends RTBaseRenderNode implements ISimpleSkinRenderNode {
-        setSimpleAnimatorParams(value: Vector4): void;
-        protected _getNativeObj(): void;
-        constructor();
-    }
-    /**
-     * 骨骼动画渲染节点，包含骨骼数据计算
-     */
-    class RTSkinRenderNode extends RTBaseRenderNode implements ISkinRenderNode {
-        private boneNums;
-        protected _getNativeObj(): void;
-        constructor();
-        computeSkinnedData(): void;
-        setRootBoneTransfom(value: Sprite3D): void;
-        setOwnerTransform(value: Sprite3D): void;
-        setCacheMesh(cacheMesh: Mesh): void;
-        setBones(value: Sprite3D[]): void;
-        setSkinnedData(value: Array<Float32Array[]>): void;
-    }
-    class RTSpotLight implements ISpotLightData {
-        private _transform;
-        get transform(): NativeTransform3D;
-        set transform(value: NativeTransform3D);
-        get shadowResolution(): number;
-        set shadowResolution(value: number);
-        get shadowDistance(): number;
-        set shadowDistance(value: number);
-        get shadowMode(): ShadowMode;
-        set shadowMode(value: ShadowMode);
-        get shadowStrength(): number;
-        set shadowStrength(value: number);
-        get shadowDepthBias(): number;
-        set shadowDepthBias(value: number);
-        get shadowNormalBias(): number;
-        set shadowNormalBias(value: number);
-        get shadowNearPlane(): number;
-        set shadowNearPlane(value: number);
-        get spotRange(): number;
-        set spotRange(value: number);
-        get spotAngle(): number;
-        set spotAngle(value: number);
-        _nativeObj: any;
-        constructor();
-        setDirection(value: Vector3): void;
-    }
-    class RTVolumetricGI implements IVolumetricGIData {
-        private static _idCounter;
-        _id: number;
-        private _irradiance;
-        get irradiance(): InternalTexture;
-        set irradiance(value: InternalTexture);
-        private _distance;
-        get distance(): InternalTexture;
-        set distance(value: InternalTexture);
-        private _bound;
-        get bound(): Bounds;
-        set bound(value: Bounds);
-        get intensity(): number;
-        set intensity(value: number);
-        get updateMark(): number;
-        set updateMark(value: number);
-        constructor();
-        setParams(value: Vector4): void;
-        setProbeCounts(value: Vector3): void;
-        setProbeStep(value: Vector3): void;
+        static getKTXTextureInfo(source: ArrayBuffer): KTXTextureInfo;
+        static createKTX1Info(source: ArrayBuffer): KTXTextureInfo;
+        constructor(source: ArrayBuffer, compress: boolean, sRGB: boolean, dimension: TextureDimension, width: number, height: number, format: TextureFormat, mipmapCount: number, bytesOfKeyValueData: number, headerOffset: number);
     }
     /**
      * 共享内存分配,并且绑定Native共享Buffer
@@ -30416,6 +27975,22 @@ declare module Laya {
          * @param buffer
          */
         static freeMemoryBlock(buffer: ArrayBuffer): void;
+    }
+    /**
+     * 接口规范Native更新数据的命令
+     */
+    interface INativeUploadNode {
+        /**Node Type */
+        _dataType: MemoryDataType;
+        /**NativeID */
+        nativeObjID: number;
+    }
+    enum MemoryDataType {
+        ShaderData = 0,
+        TextureData = 1,
+        VertexData = 2,
+        IndexData = 3,
+        BaseRenderData = 4
     }
     class NativeMemory {
         static NativeSourceID: number;
@@ -30476,24 +28051,139 @@ declare module Laya {
          */
         clear(): void;
     }
-    class RTDefineDatas implements IDefineDatas {
-        _nativeObj: any;
-        constructor();
-        get _length(): number;
-        set _length(value: number);
-        get _mask(): number[];
-        set _mask(value: number[]);
-        add(define: RTShaderDefine): void;
-        remove(define: RTShaderDefine): void;
-        addDefineDatas(define: RTDefineDatas): void;
-        removeDefineDatas(define: RTDefineDatas): void;
-        has(define: RTShaderDefine): boolean;
+    class UploadMemory extends NativeMemory {
+        constructor(size: number);
+        addBlockCell(node: INativeUploadNode, dataSizeInByte: number): void;
+        /**
+         * check ability of size data
+         * @param size
+         * @returns
+         */
+        check(size: number): boolean;
+        /**
+         * 清空更新数据
+         */
         clear(): void;
-        cloneTo(destObject: RTDefineDatas): void;
-        clone(): RTDefineDatas;
+    }
+    /**
+     * 用来组织所有的数据更新
+     * 基本思路如下：每个需要更新native数据的类都继承接口INativeUploadNode，当需要上传数据时，会添加到UploadMemoryMenager.dataNodeList队列中，统一更新数据到共享Buffer中
+     * 会有一个共享Buffer NativeMemory来记录总共用了几个UploadMemory，每个Upload中有几个UploadMemoryCell，在native中统一的将数据变化全部同步到Native的渲染底层
+     */
+    class UploadMemoryManager {
+        /**
+         * each upload block memory size
+         * defined 1MB
+         */
+        static UploadMemorySize: number;
+        /**@native C++ */
+        _conchUploadMemoryManager: any;
+        constructor();
+        static getInstance(): UploadMemoryManager;
+        private _addNodeCommand;
+        static syncRenderMemory(): void;
+        /**强制更新数据 */
+        uploadData(): void;
+        /**
+         * clear UpdateLoad list
+         */
+        clear(): void;
+    }
+    class NativeCommandUniformMap extends CommandUniformMap {
+        private _nativeObj;
+        constructor(_nativeObj: any, stateName: string);
+        hasPtrID(propertyID: number): boolean;
+        getMap(): Record<number, UniformData>;
+    }
+    /**
+     * 将继承修改为类似 WebGLRenderingContextBase, WebGLRenderingContextOverloads 多继承 ?
+     */
+    class NativeGL2TextureContext extends NativeGLTextureContext {
+        constructor(engine: NativeWebGLEngine, native: any);
+    }
+    /**
+     * WebglObject 基类
+     */
+    class NativeGLObject {
+        protected _engine: NativeWebGLEngine;
+        protected _gl: WebGLRenderingContext | WebGL2RenderingContext;
+        protected _id: number;
+        protected _destroyed: boolean;
+        constructor(engine: NativeWebGLEngine);
+        get destroyed(): boolean;
+        /**
+         * @override
+         */
+        setResourceManager(): void;
         destroy(): void;
     }
-    class RTRenderState extends RenderState {
+    class NativeGLRender2DContext extends NativeGLObject implements IRender2DContext {
+        constructor(engine: NativeWebGLEngine);
+        activeTexture(textureID: number): void;
+        bindTexture(target: number, texture: WebGLTexture): void;
+        bindUseProgram(webglProgram: any): boolean;
+    }
+    class NativeGLRenderDrawContext extends NativeGLObject implements IRenderDrawContext {
+        _nativeObj: any;
+        constructor(engine: NativeWebGLEngine);
+        drawElements2DTemp(mode: MeshTopology, count: number, type: IndexFormat, offset: number): void;
+    }
+    class NativeGLRenderEngineFactory implements IRenderEngineFactory {
+        createShaderData(): ShaderData;
+        createShaderInstance(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderCompileDefineBase): ShaderInstance;
+        createRenderStateComand(): NativeRenderStateCommand;
+        createRenderState(): RenderState;
+        createUniformBufferObject(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean): UniformBufferObject;
+        createGlobalUniformMap(blockName: string): NativeCommandUniformMap;
+        createEngine(config: any, canvas: any): Promise<void>;
+    }
+    class NativeGLTextureContext extends NativeGLObject implements ITextureContext {
+        needBitmap: boolean;
+        protected _native: any;
+        constructor(engine: NativeWebGLEngine, native: any);
+        createTextureInternal(dimension: TextureDimension, width: number, height: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean): InternalTexture;
+        setTextureImageData(texture: InternalTexture, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTexturePixelsData(texture: InternalTexture, source: ArrayBufferView, premultiplyAlpha: boolean, invertY: boolean): void;
+        initVideoTextureData(texture: InternalTexture): void;
+        setTextureSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTextureSubImageData(texture: InternalTexture, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, x: number, y: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTexture3DImageData(texture: InternalTexture, source: HTMLImageElement[] | HTMLCanvasElement[] | ImageBitmap[], depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTexture3DPixlesData(texture: InternalTexture, source: ArrayBufferView, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTexture3DSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, zOffset: number, width: number, height: number, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTextureHDRData(texture: InternalTexture, hdrInfo: HDRTextureInfo): void;
+        setTextureDDSData(texture: InternalTexture, ddsInfo: DDSTextureInfo): void;
+        setTextureKTXData(texture: InternalTexture, ktxInfo: KTXTextureInfo): void;
+        setCubeImageData(texture: InternalTexture, sources: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubePixelsData(texture: InternalTexture, source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubeSubPixelData(texture: InternalTexture, source: ArrayBufferView[], mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubeDDSData(texture: InternalTexture, ddsInfo: DDSTextureInfo): void;
+        setCubeKTXData(texture: InternalTexture, ktxInfo: KTXTextureInfo): void;
+        setTextureCompareMode(texture: InternalTexture, compareMode: TextureCompareMode): TextureCompareMode;
+        bindRenderTarget(renderTarget: InternalRenderTarget, faceIndex?: number): void;
+        bindoutScreenTarget(): void;
+        unbindRenderTarget(renderTarget: InternalRenderTarget): void;
+        createRenderTextureInternal(dimension: TextureDimension, width: number, height: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): InternalTexture;
+        createRenderTargetInternal(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
+        createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
+        createRenderTextureCubeInternal(dimension: TextureDimension, size: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): InternalTexture;
+        setupRendertargetTextureAttachment(renderTarget: InternalRenderTarget, texture: InternalTexture): void;
+        readRenderTargetPixelData(renderTarget: InternalRenderTarget, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): ArrayBufferView;
+        updateVideoTexture(texture: InternalTexture, video: HTMLVideoElement, premultiplyAlpha: boolean, invertY: boolean): void;
+        getRenderTextureData(internalTex: InternalRenderTarget, x: number, y: number, width: number, height: number): ArrayBufferView;
+    }
+    class NativeGLVertexState extends NativeGLObject implements IRenderVertexState {
+        _vertexDeclaration: VertexDeclaration[];
+        _bindedIndexBuffer: IndexBuffer;
+        _vertexBuffers: VertexBuffer[];
+        _nativeVertexBuffers: any[];
+        _nativeObj: any;
+        constructor(engine: NativeWebGLEngine);
+        bindVertexArray(): void;
+        unbindVertexArray(): void;
+        applyVertexBuffer(vertexBuffer: VertexBuffer[]): void;
+        applyIndexBuffer(indexBuffer: IndexBuffer | null): void;
+    }
+    class NativeRenderState {
         _nativeObj: any;
         set cull(value: number);
         get cull(): number;
@@ -30529,322 +28219,48 @@ declare module Laya {
         get stencilRef(): number;
         set stencilOp(value: Vector3);
         setNull(): void;
-        protected createObj(): void;
         constructor();
-        cloneTo(dest: RTRenderState): void;
-        clone(): RenderState;
-    }
-    class RTShaderDefine extends ShaderDefine {
-        constructor(index: number, value: number);
-    }
-    class RTShaderPass implements IShaderPassData {
-        private _validDefine;
-        private _createShaderInstanceFun;
-        _nativeObj: any;
-        static _globalCompileDefine: RTDefineDatas;
-        is2D: boolean;
-        private _pass;
-        constructor(pass: ShaderPass);
-        get statefirst(): boolean;
-        set statefirst(value: boolean);
-        private _renderState;
-        get renderState(): RenderState;
-        set renderState(value: RenderState);
-        get pipelineMode(): string;
-        set pipelineMode(value: string);
-        get validDefine(): RTDefineDatas;
-        set validDefine(value: RTDefineDatas);
-        nativeCreateShaderInstance(): any;
-        destroy(): void;
-        setCacheShader(defines: IDefineDatas, shaderInstance: IShaderInstance): void;
-        getCacheShader(defines: IDefineDatas): IShaderInstance;
-    }
-    class RTSubShader implements ISubshaderData {
-        _nativeObj: any;
-        constructor();
-        get enableInstance(): boolean;
-        set enableInstance(value: boolean);
-        destroy(): void;
-        addShaderPass(pass: RTShaderPass): void;
-    }
-    class RTUintRenderModuleDataFactory implements IUnitRenderModuleDataFactory {
-        createSubShader(): RTSubShader;
-        createShaderPass(pass: ShaderPass): RTShaderPass;
-        createRenderState(): RTRenderState;
-        createDefineDatas(): RTDefineDatas;
-    }
-    class Web3DRenderModuleFactory implements I3DRenderModuleFactory {
-        createSimpleSkinRenderNode(): ISimpleSkinRenderNode;
-        createTransform(owner: Sprite3D): Transform3D;
-        createBounds(min: Vector3, max: Vector3): BoundsImpl;
-        createVolumetricGI(): WebVolumetricGI;
-        createReflectionProbe(): WebReflectionProbe;
-        createLightmapData(): WebLightmap;
-        createDirectLight(): WebDirectLight;
-        createSpotLight(): WebSpotLight;
-        createPointLight(): IPointLightData;
-        createCameraModuleData(): WebCameraNodeData;
-        createSceneModuleData(): WebSceneNodeData;
-        createBaseRenderNode(): WebBaseRenderNode;
-        createMeshRenderNode(): WebMeshRenderNode;
-        createSkinRenderNode(): ISkinRenderNode;
-    }
-    class WebBaseRenderNode implements IBaseRenderNode {
-        renderNodeType: number;
-        boundsChange: boolean;
-        distanceForSort: number;
-        sortingFudge: number;
-        castShadow: boolean;
-        receiveShadow: boolean;
-        enable: boolean;
-        renderbitFlag: number;
-        layer: number;
-        customCull: boolean;
-        customCullResoult: boolean;
-        staticMask: number;
-        lightmapIndex: number;
-        lightmapDirtyFlag: number;
-        probeReflectionUpdateMark: number;
-        reflectionMode: number;
-        lightProbUpdateMark: number;
-        irradientMode: IrradianceMode;
-        renderelements: IRenderElement3D[];
-        lightmapScaleOffset: Vector4;
-        lightmap: WebLightmap;
-        probeReflection: WebReflectionProbe;
-        volumetricGI: WebVolumetricGI;
-        shaderData: ShaderData;
-        baseGeometryBounds: Bounds;
-        transform: Transform3D;
-        _worldParams: Vector4;
-        _commonUniformMap: string[];
-        private _bounds;
-        private _caculateBoundingBoxCall;
-        private _caculateBoundingBoxFun;
-        private _renderUpdatePreCall;
-        private _renderUpdatePreFun;
-        private _updateMark;
-        _calculateBoundingBox(): void;
-        /**
-         * get bounds
-         */
-        get bounds(): Bounds;
-        set bounds(value: Bounds);
-        constructor();
-        /**
-         * 设置更新数据
-         * @param call
-         * @param fun
-         */
-        set_renderUpdatePreCall(call: any, fun: any): void;
-        /**
-         * 设置更新包围盒方法
-         * @param call
-         * @param fun
-         */
-        set_caculateBoundingBox(call: any, fun: any): void;
-        /**
-         * 视锥检测包围盒
-         * @param boundFrustum
-         * @returns
-         */
-        _needRender(boundFrustum: BoundFrustum): boolean;
-        /**
-        * apply lightProb
-        * @returns
-        */
-        _applyLightProb(): void;
-        /**
-         * apply reflection
-         * @returns
-         */
-        _applyReflection(): void;
-        /**
-         * destroy
-         */
-        destroy(): void;
-    }
-    class WebDirectLight implements IDirectLightData {
-        shadowNearPlane: number;
-        shadowCascadesMode: ShadowCascadesMode;
-        transform: Transform3D;
-        shadowResolution: number;
-        shadowDistance: number;
-        shadowMode: ShadowMode;
-        shadowStrength: number;
-        shadowDepthBias: number;
-        shadowNormalBias: number;
-        shadowTwoCascadeSplits: number;
-        _shadowFourCascadeSplits: Vector3;
-        _direction: Vector3;
-        constructor();
-        setShadowFourCascadeSplits(value: Vector3): void;
-        setDirection(value: Vector3): void;
-    }
-    class WebLightmap implements ILightMapData {
-    }
-    class WebMeshRenderNode extends WebBaseRenderNode implements IMeshRenderNode {
-        constructor();
-    }
-    class WebCameraNodeData implements ICameraNodeData {
-        transform: Transform3D;
-        farplane: number;
-        nearplane: number;
-        fieldOfView: number;
-        aspectRatio: number;
-        _projectViewMatrix: Matrix4x4;
-        constructor();
-        setProjectionViewMatrix(value: Matrix4x4): void;
-    }
-    class WebSceneNodeData implements ISceneNodeData {
-        lightmapDirtyFlag: number;
-    }
-    class WebPointLight implements IPointLightData {
-        transform: Transform3D;
-        range: number;
-        shadowResolution: number;
-        shadowDistance: number;
-        shadowMode: ShadowMode;
-        shadowStrength: number;
-        shadowDepthBias: number;
-        shadowNormalBias: number;
-        shadowNearPlane: number;
-    }
-    class WebReflectionProbe implements IReflectionProbeData {
-        private static _idCounter;
-    }
-    class WebSimpleSkinRenderNode extends WebBaseRenderNode implements ISimpleSkinRenderNode {
-        _simpleAnimatorParams: Vector4;
-        constructor();
-        setSimpleAnimatorParams(value: Vector4): void;
-        _renderUpdate(context3D: IRenderContext3D): void;
-    }
-    class WebSkinRenderNode extends WebBaseRenderNode implements ISkinRenderNode {
-        constructor();
-        setRootBoneTransfom(value: Sprite3D): void;
-        setOwnerTransform(value: Sprite3D): void;
-        setCacheMesh(cacheMesh: Mesh): void;
-        setBones(value: Sprite3D[]): void;
-        setSkinnedData(value: any[]): void;
-        /**
-         * 计算动画数据
-         */
-        computeSkinnedData(): void;
-        _renderUpdate(context3D: IRenderContext3D): void;
-    }
-    class WebSpotLight implements ISpotLightData {
-        transform: Transform3D;
-        shadowResolution: number;
-        shadowDistance: number;
-        shadowMode: ShadowMode;
-        shadowStrength: number;
-        shadowDepthBias: number;
-        shadowNormalBias: number;
-        shadowNearPlane: number;
-        spotRange: number;
-        spotAngle: number;
-        _direction: Vector3;
-        setDirection(value: Vector3): void;
-        getWorldMatrix(out: Matrix4x4): Matrix4x4;
-    }
-    class WebVolumetricGI implements IVolumetricGIData {
-        private static _idCounter;
-        _id: number;
-        private _probeCounts;
-        private _probeStep;
-        irradiance: InternalTexture;
-        distance: InternalTexture;
-        bound: Bounds;
-        intensity: number;
-        updateMark: number;
-        constructor();
-        setParams(value: Vector4): void;
-        setProbeCounts(value: Vector3): void;
-        setProbeStep(value: Vector3): void;
-        applyRenderData(data: ShaderData): void;
     }
     /**
-     * <code>DefineDatas</code> 类用于创建宏定义数据集合。
+     * 渲染状态设置命令流
      */
-    class WebDefineDatas implements IDefineDatas {
-        /**
-         * 创建一个 <code>DefineDatas</code> 实例。
-         */
+    class NativeRenderStateCommand extends RenderStateCommand {
+        private _nativeObj;
         constructor();
-        /**
-         * 添加宏定义值。
-         * @param define 宏定义值。
-         */
-        add(define: ShaderDefine): void;
-        /**
-         * 移除宏定义。
-         * @param define 宏定义。
-         */
-        remove(define: ShaderDefine): void;
-        /**
-         * 添加宏定义集合。
-         * @param define 宏定义集合。
-         */
-        addDefineDatas(define: WebDefineDatas): void;
-        /**
-         * 移除宏定义集合。
-         * @param define 宏定义集合。
-         */
-        removeDefineDatas(define: WebDefineDatas): void;
-        /**
-         * 是否有宏定义。
-         * @param define 宏定义。
-         */
-        has(define: ShaderDefine): boolean;
-        /**
-         * 清空宏定义。
-         */
+        addCMD(renderstate: RenderStateType, value: any): void;
+        applyCMD(): void;
         clear(): void;
-        /**
-         * 克隆。
-         * @param	destObject 克隆源。
-         */
-        cloneTo(destObject: any): void;
-        /**
-         * 克隆。
-         * @return	 克隆副本。
-         */
-        clone(): any;
-        destroy(): void;
     }
-    /**
-     * 着色器数据类。
-     */
-    class WebGLShaderData extends ShaderData {
-        get uniformBuffersMap(): Map<number, UniformBufferObject>;
-        _releaseUBOData(): void;
+    enum NativeShaderDataType {
+        Number32 = 0,
+        Vector2 = 1,
+        Vector3 = 2,
+        Vector4 = 3,
+        Matrix4x4 = 4,
+        Number32Array = 5,
+        Texture = 6,
+        ShaderDefine = 7,
+        UBO = 8
+    }
+    class NativeShaderData extends ShaderData implements INativeUploadNode {
+        private inUploadList;
+        _dataType: MemoryDataType;
+        nativeObjID: number;
+        _nativeObj: any;
+        updateMap: Map<number, Function>;
+        updataSizeMap: Map<number, number>;
+        payload32bitNum: number;
+        clearUpload(): void;
         applyUBOData(): void;
-        /**
-         * 增加Shader宏定义。
-         * @param value 宏定义。
-         */
-        addDefine(define: ShaderDefine): void;
-        addDefines(define: WebDefineDatas): void;
-        /**
-         * 移除Shader宏定义。
-         * @param value 宏定义。
-         */
-        removeDefine(define: ShaderDefine): void;
-        /**
-         * 是否包含Shader宏定义。
-         * @param value 宏定义。
-         */
-        hasDefine(define: ShaderDefine): boolean;
-        /**
-         * 清空宏定义。
-         */
-        clearDefine(): void;
-        /**
-         * 获取布尔。
-         * @param	index shader索引。
-         * @return  布尔。
-         */
-        getBool(index: number): boolean;
+        compressNumber(index: number, memoryBlock: UploadMemory, stride: number): number;
+        compressVector2(index: number, memoryBlock: UploadMemory, stride: number): number;
+        compressVector3(index: number, memoryBlock: UploadMemory, stride: number): number;
+        compressVector4(index: number, memoryBlock: UploadMemory, stride: number): number;
+        compressMatrix4x4(index: number, memoryBlock: UploadMemory, stride: number): number;
+        compressNumberArray(index: number, memoryBlock: UploadMemory, stride: number): number;
+        compressTexture(index: number, memoryBlock: UploadMemory, stride: number): number;
+        compressUBO(index: number, memoryBlock: UploadMemory, stride: number): number;
+        private configMotionProperty;
         /**
          * 设置布尔。
          * @param	index shader索引。
@@ -30852,23 +28268,11 @@ declare module Laya {
          */
         setBool(index: number, value: boolean): void;
         /**
-         * 获取整形。
-         * @param	index shader索引。
-         * @return  整形。
-         */
-        getInt(index: number): number;
-        /**
          * 设置整型。
          * @param	index shader索引。
          * @param	value 整形。
          */
         setInt(index: number, value: number): void;
-        /**
-         * 获取浮点。
-         * @param	index shader索引。
-         * @return	浮点。
-         */
-        getNumber(index: number): number;
         /**
          * 设置浮点。
          * @param	index shader索引。
@@ -30876,23 +28280,11 @@ declare module Laya {
          */
         setNumber(index: number, value: number): void;
         /**
-         * 获取Vector2向量。
-         * @param	index shader索引。
-         * @return Vector2向量。
-         */
-        getVector2(index: number): Vector2;
-        /**
          * 设置Vector2向量。
          * @param	index shader索引。
          * @param	value Vector2向量。
          */
         setVector2(index: number, value: Vector2): void;
-        /**
-         * 获取Vector3向量。
-         * @param	index shader索引。
-         * @return Vector3向量。
-         */
-        getVector3(index: number): Vector3;
         /**
          * 设置Vector3向量。
          * @param	index shader索引。
@@ -30900,23 +28292,11 @@ declare module Laya {
          */
         setVector3(index: number, value: Vector3): void;
         /**
-         * 获取颜色。
-         * @param 	index shader索引。
-         * @return  向量。
-         */
-        getVector(index: number): Vector4;
-        /**
          * 设置向量。
          * @param	index shader索引。
          * @param	value 向量。
          */
         setVector(index: number, value: Vector4): void;
-        /**
-         * 获取颜色
-         * @param index 索引
-         * @returns 颜色
-         */
-        getColor(index: number): Color;
         /**
          * 设置颜色
          * @param index 索引
@@ -30924,35 +28304,11 @@ declare module Laya {
          */
         setColor(index: number, value: Color): void;
         /**
-         * 获取矩阵。
-         * @param	index shader索引。
-         * @return  矩阵。
-         */
-        getMatrix4x4(index: number): Matrix4x4;
-        /**
          * 设置矩阵。
          * @param	index shader索引。
          * @param	value  矩阵。
          */
         setMatrix4x4(index: number, value: Matrix4x4): void;
-        /**
-         * 获取矩阵
-         * @param index
-         * @returns
-         */
-        getMatrix3x3(index: number): Matrix3x3;
-        /**
-         * 设置矩阵。
-         * @param index
-         * @param value
-         */
-        setMatrix3x3(index: number, value: Matrix3x3): void;
-        /**
-         * 获取Buffer。
-         * @param	index shader索引。
-         * @return
-         */
-        getBuffer(index: number): Float32Array;
         /**
          * 设置Buffer。
          * @param	index shader索引。
@@ -30965,567 +28321,89 @@ declare module Laya {
          * @param	value 纹理。
          */
         setTexture(index: number, value: BaseTexture): void;
-        _setInternalTexture(index: number, value: InternalTexture): void;
-        /**
-         * 获取纹理。
-         * @param	index shader索引。
-         * @return  纹理。
-         */
-        getTexture(index: number): BaseTexture;
-        getSourceIndex(value: any): number;
         /**
          *
          * @param index
          * @param value
          */
-        setUniformBuffer(index: number, value: UniformBufferObject): void;
-        getUniformBuffer(index: number): UniformBufferObject;
+        setUniformBuffer(index: number, value: NativeUniformBufferObject): void;
         /**
-         * 克隆。
-         * @param	destObject 克隆源。
+         * set shader data
+         * @deprecated
+         * @param index uniformID
+         * @param value data
          */
-        cloneTo(destObject: WebGLShaderData): void;
-        getDefineData(): WebDefineDatas;
+        setValueData(index: number, value: any): void;
+        cloneTo(destObject: NativeShaderData): void;
         /**
          * 克隆。
          * @return	 克隆副本。
          */
         clone(): any;
-        reset(): void;
         destroy(): void;
     }
-    class WebShaderPass implements IShaderPassData {
-        is2D: boolean;
-        pipelineMode: string;
-        statefirst: boolean;
-        private _validDefine;
-        private _renderState;
-        get renderState(): RenderState;
-        set renderState(value: RenderState);
-        get validDefine(): WebDefineDatas;
-        set validDefine(value: WebDefineDatas);
-        constructor(pass: ShaderPass);
-        setCacheShader(compileDefine: WebDefineDatas, shader: IShaderInstance): void;
-        getCacheShader(compileDefine: WebDefineDatas): IShaderInstance;
-        destroy(): void;
-    }
-    class WebSubShader implements ISubshaderData {
-        enableInstance: boolean;
-        destroy(): void;
-        addShaderPass(pass: WebShaderPass): void;
-    }
-    class WebUnitRenderModuleDataFactory implements IUnitRenderModuleDataFactory {
-        createSubShader(): WebSubShader;
-        createShaderPass(pass: ShaderPass): IShaderPassData;
-        createRenderState(): RenderState;
-        createDefineDatas(): WebDefineDatas;
-    }
-    class WebGLRender2DProcess implements I2DRenderPassFactory {
-        createRenderElement2D(): IRenderElement2D;
-        createRenderContext2D(): IRenderContext2D;
-    }
-    class WebglRenderContext2D implements IRenderContext2D {
-        private _clearColor;
-        _destRT: WebGLInternalRT;
-        invertY: boolean;
-        pipelineMode: string;
-        sceneData: WebGLShaderData;
-        _globalConfigShaderData: WebDefineDatas;
-        private _offscreenWidth;
-        private _offscreenHeight;
-        constructor();
-        drawRenderElementList(list: FastSinglelist<WebGLRenderelement2D>): number;
-        setOffscreenView(width: number, height: number): void;
-        setRenderTarget(value: WebGLInternalRT, clear: boolean, clearColor: Color): void;
-        drawRenderElementOne(node: WebGLRenderelement2D): void;
-    }
-    class WebGLRenderelement2D implements IRenderElement2D {
-        renderStateIsBySprite: boolean;
-        protected _shaderInstances: FastSinglelist<WebGLShaderInstance>;
-        geometry: WebGLRenderGeometryElement;
-        materialShaderData: WebGLShaderData;
-        value2DShaderData: WebGLShaderData;
-        subShader: SubShader;
-        protected _compileShader(context: WebglRenderContext2D): void;
-        _prepare(context: WebglRenderContext2D): void;
-        _render(context: WebglRenderContext2D): void;
-        renderByShaderInstance(shader: WebGLShaderInstance, context: WebglRenderContext2D): void;
-        destroy(): void;
-    }
-    class InstanceRenderElementOBJ extends WebGLRenderElement3D {
-        private _updateData;
-        private _updateDataNum;
-        drawCount: number;
-        updateNums: number;
-        /**
-         * 增加UpdateBuffer
-         * @param vb
-         * @param length 每个instance属性的数据长度
-         */
-        addUpdateBuffer(vb: VertexBuffer3D, length: number): void;
-        /**
-         *
-         * @param index index of Buffer3D
-         * @param length length of array
-         */
-        getUpdateData(index: number, length: number): Float32Array;
-        constructor();
-        /**
-         * draw geometry
-         * @param shaderIns
-         */
-        drawGeometry(shaderIns: IShaderInstance): void;
-        clear(): void;
-    }
-    class WebGL3DRenderPassFactory implements I3DRenderPassFactory {
-        createInstanceBatch(): IInstanceRenderBatch;
-        createSetRenderDataCMD(): WebGLSetRenderData;
-        createSetShaderDefineCMD(): WebGLSetShaderDefine;
-        createDrawNodeCMDData(): WebGLDrawNodeCMDData;
-        createBlitQuadCMDData(): WebGLBlitQuadCMDData;
-        createDrawElementCMDData(): WebGLDrawElementCMDData;
-        createSetViewportCMD(): WebGLSetViewportCMD;
-        createSetRenderTargetCMD(): WebGLSetRenderTargetCMD;
-        createSceneRenderManager(): SceneRenderManagerOBJ;
-        createSkinRenderElement(): WebGLSkinRenderElement3D;
-        createRenderContext3D(): WebGLRenderContext3D;
-        createRenderElement3D(): WebGLRenderElement3D;
-        createInstanceRenderElement3D(): WebGLInstanceRenderElement3D;
-        createRender3DProcess(): WebGLRender3DProcess;
-    }
-    class WebGLDirectLightShadowRP {
-        camera: WebCameraNodeData;
-        destTarget: WebGLInternalRT;
-        private _shadowCasterCommanBuffer;
-        get shadowCasterCommanBuffer(): CommandBuffer[];
-        set shadowCasterCommanBuffer(value: CommandBuffer[]);
-        /**light */
-        private _light;
-        set light(value: WebDirectLight);
-        get light(): WebDirectLight;
-        constructor();
-        /**
-         * @param context
-         * @perfTag PerformanceDefine.T_Render_ShadowPassMode
-         */
-        update(context: WebGLRenderContext3D): void;
-        /**
-         * @param context
-         * @param list
-         * @param count
-         * @perfTag PerformanceDefine.T_Render_ShadowPassMode
-         */
-        render(context: WebGLRenderContext3D, list: WebBaseRenderNode[], count: number): void;
-        /**
-         * set shaderData after Render shadow
-         * @param scene
-         * @param camera
-         */
-        private _applyRenderData;
-        /**
-         * apply shadowCast cmd array
-         */
-        private _applyCasterPassCommandBuffer;
-        private getShadowBias;
-    }
-    class WebGLForwardAddClusterRP {
-        /**enable */
-        enableOpaque: boolean;
-        enableCMD: boolean;
-        enableTransparent: boolean;
-        opaqueTexture: InternalRenderTarget;
-        blitOpaqueBuffer: CommandBuffer;
-        private _enableOpaqueTexture;
-        get enableOpaqueTexture(): boolean;
-        set enableOpaqueTexture(value: boolean);
-        clearColor: Color;
-        clearFlag: number;
-        private _viewPort;
-        setViewPort(value: Viewport): void;
-        private _scissor;
-        setScissor(value: Vector4): void;
-        private opaqueList;
-        private transparent;
-        private _zBufferParams;
-        private _defaultNormalDepthColor;
-        constructor();
-        setCameraCullInfo(value: Camera): void;
-        setBeforeForwardCmds(value: CommandBuffer[]): void;
-        setBeforeSkyboxCmds(value: CommandBuffer[]): void;
-        setBeforeTransparentCmds(value: CommandBuffer[]): void;
-        /**
-         * 渲染主流程（TODO:其他两个pass合并MulTargetRT）
-         * @param context
-         * @param list
-         */
-        render(context: WebGLRenderContext3D, list: WebBaseRenderNode[], count: number): void;
-        /**
-         * 渲染深度Pass
-         * @param context
-         * @param list
-         * @perfTag PerformanceDefine.T_Render_CameraOtherDest
-         */
-        private _renderDepthPass;
-        /**
-         * @param context
-         * @private
-         * @perfTag PerformanceDefine.T_Render_TransparentRender
-         */
-        private _transparentListRender;
-        /**
-         * 渲染非透明物体Pass
-         * @param context
-         * @param list
-         * @perfTag PerformanceDefine.T_Render_OpaqueRender
-         */
-        private _opaqueListRender;
-        /**
-         * 渲染法线深度Pass
-         * @param context
-         * @param list
-         * @perfTag PerformanceDefine.T_Render_CameraOtherDest
-         */
-        private _renderDepthNormalPass;
-        /**
-         * @perfTag PerformanceDefine.T_Render_CameraOtherDest
-         */
-        private opaqueTexturePass;
-        private _mainPass;
-        /**
-         * @param cmds
-         * @param context
-         * @private
-         * @perfTag PerformanceDefine.T_Render_CameraEventCMD
-         */
-        private _rendercmd;
-        private _recoverRenderContext3D;
-    }
-    class WebGLForwardAddRP {
-        constructor();
-        setBeforeImageEffect(value: CommandBuffer[]): void;
-        setAfterEventCmd(value: CommandBuffer[]): void;
-        /**是否开启阴影 */
-        shadowCastPass: boolean;
-        /**directlight shadow */
-        directLightShadowPass: WebGLDirectLightShadowRP;
-        /**enable directlight */
-        enableDirectLightShadow: boolean;
-        /**spot shadow */
-        spotLightShadowPass: WebGLSpotLightShadowRP;
-        /**enable spot */
-        enableSpotLightShadowPass: boolean;
-        shadowParams: Vector4;
-        enablePostProcess: boolean;
-        /**main pass */
-        renderpass: WebGLForwardAddClusterRP;
-        finalize: CommandBuffer;
+    class NativeUniformBufferObject extends UniformBufferObject {
+        _conchUniformBufferObject: any;
+        constructor(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean);
     }
     /**
-     * 动态合批通用类（目前由WebGPU专用）
+     * @private 封装Webgl
      */
-    class WebGLInstanceRenderBatch {
-        static MaxInstanceCount: number;
-        private recoverList;
-        private _batchOpaqueMarks;
-        private _updateCountMark;
-        constructor();
-        getBatchMark(element: IRenderElement3D): any;
-        batch(elements: SingletonList<IRenderElement3D>): void;
-        clearRenderData(): void;
-        recoverData(): void;
-    }
-    interface WebGLInstanceStateInfo {
-        state: WebGLBufferState;
-        worldInstanceVB?: WebGLVertexBuffer;
-        lightmapScaleOffsetVB?: WebGLVertexBuffer;
-        simpleAnimatorVB?: WebGLVertexBuffer;
-    }
-    class WebGLInstanceRenderElement3D extends WebGLRenderElement3D implements IInstanceRenderElement3D {
+    class NativeWebGLEngine implements IRenderEngine {
+        _context: WebGLRenderingContext | WebGL2RenderingContext;
+        private _config;
+        private _GLTextureContext;
+        private _GLRenderDrawContext;
+        private _GL2DRenderContext;
+        _nativeObj: any;
+        constructor(config: WebGlConfig, webglMode?: WebGLMode);
+        createRenderStateComand(): RenderStateCommand;
+        getUBOPointer(name: string): number;
+        _addStatisticsInfo(info: RenderStatisticsInfo, value: number): void;
         /**
-         * get Instance BufferState
+         * GL Context
+         * @member {WebGLRenderingContext}
          */
-        private static _instanceBufferStateMap;
-        static getInstanceBufferState(geometry: WebGLRenderGeometryElement, renderType: number, spriteDefine: WebDefineDatas): WebGLInstanceStateInfo;
+        get gl(): WebGLRenderingContext | WebGL2RenderingContext;
+        get isWebGL2(): any;
+        get webglConfig(): WebGlConfig;
         /**
-         * max instance count
+         * create GL
+         * @param canvas
          */
-        static MaxInstanceCount: number;
-        static create(): WebGLInstanceRenderElement3D;
-        static _instanceBufferCreate(length: number): Float32Array;
-        instanceElementList: FastSinglelist<WebGLRenderElement3D>;
-        private _vertexBuffers;
-        private _updateData;
-        private _updateDataNum;
-        private _instanceStateInfo;
-        _invertFrontFace: boolean;
-        drawCount: number;
-        updateNums: number;
-        protected _getInvertFront(): boolean;
-        constructor();
-        addUpdateBuffer(vb: WebGLVertexBuffer, length: number): void;
-        getUpdateData(index: number, length: number): Float32Array;
-        protected _compileShader(context: WebGLRenderContext3D): void;
-        private _updateInstanceData;
-        /**
-         * get correct geometry
-         * @param geometry
-         */
-        setGeometry(geometry: WebGLRenderGeometryElement): void;
-        drawGeometry(shaderIns: WebGLShaderInstance): void;
-        /**
-         * 清理单次渲染生成的数据
-         */
-        clearRenderData(): void;
-        /**
-         * 回收
-         */
-        recover(): void;
-        destroy(): void;
-    }
-    class WebGLRender3DProcess implements IRender3DProcess {
-        private renderpass;
-        initRenderpass(camera: Camera, context: WebGLRenderContext3D): void;
-        renderDepth(camera: Camera): void;
-        fowardRender(context: WebGLRenderContext3D, camera: Camera): void;
-        renderFowarAddCameraPass(context: WebGLRenderContext3D, renderpass: WebGLForwardAddRP, list: WebBaseRenderNode[], count: number): void;
-        /**
-         * @param cmds
-         * @param context
-         * @private
-         * @perfTag PerformanceDefine.T_Render_CameraEventCMD
-         */
-        private _rendercmd;
-        /**
-         * @param postprocessCMD
-         * @param context
-         * @private
-         * @perfTag PerformanceDefine.T_Render_PostProcess
-         */
-        private _renderPostProcess;
-    }
-    class WebGLDrawNodeCMDData extends DrawNodeCMDData {
-        type: RenderCMDType;
-        protected _node: WebBaseRenderNode;
-        protected _destShaderData: WebGLShaderData;
-        protected _destSubShader: SubShader;
-        protected _subMeshIndex: number;
-        get node(): WebBaseRenderNode;
-        set node(value: WebBaseRenderNode);
-        get destShaderData(): WebGLShaderData;
-        set destShaderData(value: WebGLShaderData);
-        get destSubShader(): SubShader;
-        set destSubShader(value: SubShader);
-        get subMeshIndex(): number;
-        set subMeshIndex(value: number);
-        constructor();
-        apply(context: WebGLRenderContext3D): void;
-    }
-    class WebGLBlitQuadCMDData extends BlitQuadCMDData {
-        type: RenderCMDType;
-        private _sourceTexelSize;
-        protected _dest: WebGLInternalRT;
-        protected _viewport: Viewport;
-        protected _source: InternalTexture;
-        protected _scissor: Vector4;
-        protected _offsetScale: Vector4;
-        protected _element: WebGLRenderElement3D;
-        get dest(): WebGLInternalRT;
-        set dest(value: WebGLInternalRT);
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        get source(): InternalTexture;
-        set source(value: InternalTexture);
-        get offsetScale(): Vector4;
-        set offsetScale(value: Vector4);
-        get element(): WebGLRenderElement3D;
-        set element(value: WebGLRenderElement3D);
-        constructor();
-        apply(context: WebGLRenderContext3D): void;
-    }
-    class WebGLDrawElementCMDData extends DrawElementCMDData {
-        type: RenderCMDType;
-        private _elemets;
-        constructor();
-        setRenderelements(value: WebGLRenderElement3D[]): void;
-        apply(context: WebGLRenderContext3D): void;
-    }
-    class WebGLSetViewportCMD extends SetViewportCMD {
-        type: RenderCMDType;
-        protected _viewport: Viewport;
-        protected _scissor: Vector4;
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        constructor();
-        apply(context: WebGLRenderContext3D): void;
-    }
-    class WebGLSetRenderTargetCMD extends SetRenderTargetCMD {
-        type: RenderCMDType;
-        protected _rt: InternalRenderTarget;
-        protected _clearFlag: number;
-        protected _clearColorValue: Color;
-        protected _clearDepthValue: number;
-        protected _clearStencilValue: number;
-        get rt(): InternalRenderTarget;
-        set rt(value: InternalRenderTarget);
-        get clearFlag(): number;
-        set clearFlag(value: number);
-        get clearColorValue(): Color;
-        set clearColorValue(value: Color);
-        get clearDepthValue(): number;
-        set clearDepthValue(value: number);
-        get clearStencilValue(): number;
-        set clearStencilValue(value: number);
-        constructor();
-        apply(context: WebGLRenderContext3D): void;
-    }
-    class WebGLSetRenderData extends SetRenderDataCMD {
-        type: RenderCMDType;
-        protected _dataType: ShaderDataType;
-        protected _propertyID: number;
-        protected _dest: WebGLShaderData;
-        protected _value: ShaderDataItem;
-        data_v4: Vector4;
-        data_v3: Vector3;
-        data_v2: Vector2;
-        data_mat: Matrix4x4;
-        data_number: number;
-        data_texture: BaseTexture;
-        data_Color: Color;
-        data_Buffer: Float32Array;
-        get dataType(): ShaderDataType;
-        set dataType(value: ShaderDataType);
-        get propertyID(): number;
-        set propertyID(value: number);
-        get dest(): WebGLShaderData;
-        set dest(value: WebGLShaderData);
-        get value(): ShaderDataItem;
-        set value(value: ShaderDataItem);
-        constructor();
-        apply(context: WebGLRenderContext3D): void;
-    }
-    class WebGLSetShaderDefine extends SetShaderDefineCMD {
-        type: RenderCMDType;
-        protected _define: ShaderDefine;
-        protected _dest: WebGLShaderData;
-        protected _add: boolean;
-        get define(): ShaderDefine;
-        set define(value: ShaderDefine);
-        get dest(): WebGLShaderData;
-        set dest(value: WebGLShaderData);
-        get add(): boolean;
-        set add(value: boolean);
-        constructor();
-        apply(context: WebGLRenderContext3D): void;
-    }
-    class WebGLRenderContext3D implements IRenderContext3D {
-        _globalConfigShaderData: WebDefineDatas;
-        private _globalShaderData;
-        private _cameraModuleData;
-        get sceneData(): WebGLShaderData;
-        set sceneData(value: WebGLShaderData);
-        get cameraData(): WebGLShaderData;
-        set cameraData(value: WebGLShaderData);
-        get sceneModuleData(): WebSceneNodeData;
-        set sceneModuleData(value: WebSceneNodeData);
-        get cameraModuleData(): WebCameraNodeData;
-        set cameraModuleData(value: WebCameraNodeData);
-        get globalShaderData(): WebGLShaderData;
-        set globalShaderData(value: WebGLShaderData);
-        setRenderTarget(value: InternalRenderTarget, clearFlag: RenderClearFlag): void;
-        setViewPort(value: Viewport): void;
-        setScissor(value: Vector4): void;
-        get sceneUpdataMask(): number;
-        set sceneUpdataMask(value: number);
-        get cameraUpdateMask(): number;
-        set cameraUpdateMask(value: number);
-        get pipelineMode(): PipelineMode;
-        set pipelineMode(value: PipelineMode);
-        get invertY(): boolean;
-        set invertY(value: boolean);
-        /**
-         * <code>GLESRenderContext3D<code/>
-         */
-        constructor();
-        runOneCMD(cmd: IRenderCMD): void;
-        runCMDList(cmds: IRenderCMD[]): void;
-        setClearData(clearFlag: number, color: Color, depth: number, stencil: number): number;
-        drawRenderElementList(list: FastSinglelist<WebGLRenderElement3D>): number;
-        drawRenderElementOne(node: WebGLRenderElement3D): number;
-        private _bindRenderTarget;
-        private _start;
-    }
-    class WebGLRenderElement3D implements IRenderElement3D {
-        protected _shaderInstances: FastSinglelist<WebGLShaderInstance>;
-        geometry: WebGLRenderGeometryElement;
-        subShader: SubShader;
-        materialId: number;
-        canDynamicBatch: boolean;
-        materialShaderData: WebGLShaderData;
-        materialRenderQueue: number;
-        renderShaderData: WebGLShaderData;
-        transform: Transform3D;
-        isRender: boolean;
-        owner: WebBaseRenderNode;
-        protected _invertFront: boolean;
-        constructor();
-        _addShaderInstance(shader: WebGLShaderInstance): void;
-        _clearShaderInstance(): void;
-        _preUpdatePre(context: WebGLRenderContext3D): void;
-        protected _getInvertFront(): boolean;
-        /**
-         * render RenderElement
-         * context:GLESRenderContext3D
-         * @param renderqueue
-         */
-        _render(context: WebGLRenderContext3D): void;
-        protected _compileShader(context: WebGLRenderContext3D): void;
-        drawGeometry(shaderIns: WebGLShaderInstance): void;
-        destroy(): void;
-    }
-    class WebGLSkinRenderElement3D extends WebGLRenderElement3D implements ISkinRenderElement3D {
-        skinnedData: Float32Array[];
-        constructor();
-        /** 更新数据并且 */
-        drawGeometry(shaderIns: WebGLShaderInstance): void;
-    }
-    class WebGLSpotLightShadowRP {
-        destTarget: InternalRenderTarget;
-        private _renderQueue;
-        set light(value: WebSpotLight);
-        get light(): WebSpotLight;
-        constructor();
-        /**
-        * 更新阴影数据
-        * @perfTag PerformanceDefine.T_Render_ShadowPassMode
-        */
-        update(context: WebGLRenderContext3D): void;
-        /**
-         * render
-         * @param context
-         * @param list
-         * @perfTag PerformanceDefine.T_Render_ShadowPassMode
-         */
-        render(context: WebGLRenderContext3D, list: WebBaseRenderNode[], count: number): void;
-        /**
-         * get shadow bias
-         * @param shadowResolution
-         * @param out
-         */
-        private _getShadowBias;
-        private _setupShadowCasterShaderValues;
-        /**
-         * apply shadowCast cmd array
-         */
-        private _applyCasterPassCommandBuffer;
+        initRenderEngine(canvas: any): void;
+        bindTexture(texture: BaseTexture): void;
+        applyRenderStateCMD(cmd: RenderStateCommand): void;
+        getCapable(capatableType: RenderCapable): boolean;
+        viewport(x: number, y: number, width: number, height: number): void;
+        scissor(x: number, y: number, width: number, height: number): void;
+        scissorTest(value: boolean): void;
+        clearRenderTexture(clearFlag: RenderClearFlag, clearcolor?: Color, clearDepth?: number): void;
+        copySubFrameBuffertoTex(texture: BaseTexture, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
+        colorMask(r: boolean, g: boolean, b: boolean, a: boolean): void;
+        getParams(params: RenderParams): number;
+        createBuffer(targetType: BufferTargetType, bufferUsageType: BufferUsage): IRenderBuffer;
+        createShaderInstance(vs: string, ps: string, attributeMap: {
+            [name: string]: [
+                number,
+                ShaderDataType
+            ];
+        }): IRenderShaderInstance;
+        createVertexState(): IRenderVertexState;
+        getTextureContext(): ITextureContext;
+        getDrawContext(): IRenderDrawContext;
+        get2DRenderContext(): IRender2DContext;
+        getCreateRenderOBJContext(): IRenderEngineFactory;
+        propertyNameToID(name: string): number;
+        propertyIDToName(id: number): string;
+        uploadUniforms(shader: IRenderShaderInstance, commandEncoder: CommandEncoder, shaderData: any, uploadUnTexture: boolean): number;
+        uploadCustomUniforms(shader: IRenderShaderInstance, custom: any[], index: number, data: any): number;
+        unbindVertexState(): void;
     }
     /**
      * 将继承修改为类似 WebGLRenderingContextBase, WebGLRenderingContextOverloads 多继承 ?
      */
-    class GL2TextureContext extends GLTextureContext implements ITextureContext {
+    class GL2TextureContext extends GLTextureContext implements ITexture3DContext {
         protected _gl: WebGL2RenderingContext;
         constructor(engine: WebGLEngine);
         protected getTarget(dimension: TextureDimension): number;
@@ -31560,232 +28438,14 @@ declare module Laya {
         getCubeKTXRGBMData(texture: WebGLInternalTex, ktxInfo: KTXTextureInfo): void;
         setTextureCompareMode(texture: WebGLInternalTex, compareMode: TextureCompareMode): TextureCompareMode;
         createRenderbuffer(width: number, height: number, internalFormat: number, samples: number): WebGLRenderbuffer;
-        protected createRenderTextureInternal(dimension: TextureDimension, width: number, height: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): WebGLInternalTex;
+        createRenderTextureInternal(dimension: TextureDimension, width: number, height: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): WebGLInternalTex;
         createRenderTargetInternal(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): WebGLInternalRT;
         createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): WebGLInternalRT;
         createRenderTextureCubeInternal(dimension: TextureDimension, size: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): WebGLInternalTex;
         bindRenderTarget(renderTarget: WebGLInternalRT, faceIndex?: number): void;
         unbindRenderTarget(renderTarget: WebGLInternalRT): void;
     }
-    class GLTextureContext extends GLObject implements ITextureContext {
-        protected _sRGB: any;
-        protected _oesTextureHalfFloat: any;
-        protected _compressdTextureS3tc_srgb: any;
-        protected _compressedTextureEtc1: any;
-        protected _compressedTextureS3tc: any;
-        protected _compressedTextureETC: any;
-        protected _compressedTextureASTC: any;
-        protected _webgl_depth_texture: any;
-        needBitmap: boolean;
-        constructor(engine: WebGLEngine);
-        createTexture3DInternal(dimension: TextureDimension, width: number, height: number, depth: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
-        setTexture3DImageData(texture: InternalTexture, source: HTMLImageElement[] | HTMLCanvasElement[] | ImageBitmap[], depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DPixelsData(texture: InternalTexture, source: ArrayBufferView, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, zOffset: number, width: number, height: number, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        _glParam: {
-            internalFormat: number;
-            format: number;
-            type: number;
-        };
-        glTextureParam(format: TextureFormat, useSRGB: boolean): {
-            internalFormat: number;
-            format: number;
-            type: number;
-        };
-        glRenderTextureParam(format: RenderTargetFormat, useSRGB: boolean): {
-            internalFormat: number;
-            format: number;
-            type: number;
-        };
-        glRenderBufferParam(format: RenderTargetFormat, useSRGB: boolean): {
-            internalFormat: number;
-            attachment: number;
-        };
-        glRenderTargetAttachment(format: RenderTargetFormat): number;
-        protected getTarget(dimension: TextureDimension): number;
-        getFormatPixelsParams(format: TextureFormat): {
-            channels: number;
-            bytesPerPixel: number;
-            dataTypedCons: any;
-            typedSize: number;
-        };
-        /**
-         * caculate texture memory
-         * @param tex
-         * @returns
-         */
-        getGLtexMemory(tex: WebGLInternalTex, depth?: number): number;
-        getGLRTTexMemory(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, multiSamples: number, cube: boolean): number;
-        /**
-         * 根据 format 判断是否支持 SRGBload
-         * @param format
-         * @returns
-         */
-        supportSRGB(format: TextureFormat | RenderTargetFormat, mipmap: boolean): boolean;
-        supportGenerateMipmap(format: TextureFormat | RenderTargetFormat): boolean;
-        /**
-         * 判断 纹理格式 本身是否是 SRGB格式
-         * @param format
-         * @returns
-         */
-        isSRGBFormat(format: TextureFormat | RenderTargetFormat): boolean;
-        createTextureInternal(dimension: TextureDimension, width: number, height: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
-        setTextureImageData(texture: WebGLInternalTex, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureSubImageData(texture: WebGLInternalTex, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, x: number, y: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        initVideoTextureData(texture: WebGLInternalTex): void;
-        setTexturePixelsData(texture: WebGLInternalTex, source: ArrayBufferView, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureSubPixelsData(texture: WebGLInternalTex, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureDDSData(texture: WebGLInternalTex, ddsInfo: DDSTextureInfo): void;
-        setTextureKTXData(texture: WebGLInternalTex, ktxInfo: KTXTextureInfo): void;
-        setTextureHDRData(texture: WebGLInternalTex, hdrInfo: HDRTextureInfo): void;
-        setCubeImageData(texture: WebGLInternalTex, sources: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubePixelsData(texture: WebGLInternalTex, source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeSubPixelData(texture: WebGLInternalTex, source: ArrayBufferView[], mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeDDSData(texture: WebGLInternalTex, ddsInfo: DDSTextureInfo): void;
-        setCubeKTXData(texture: WebGLInternalTex, ktxInfo: KTXTextureInfo): void;
-        setTextureCompareMode(texture: WebGLInternalTex, compareMode: TextureCompareMode): TextureCompareMode;
-        currentActiveRT: WebGLInternalRT;
-        bindRenderTarget(renderTarget: WebGLInternalRT, faceIndex?: number): void;
-        bindoutScreenTarget(): void;
-        unbindRenderTarget(renderTarget: WebGLInternalRT): void;
-        createRenderTextureCubeInternal(dimension: TextureDimension, size: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): WebGLInternalTex;
-        createRenderTargetInternal(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): WebGLInternalRT;
-        createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): WebGLInternalRT;
-        createRenderbuffer(width: number, height: number, internalFormat: number, samples: number): WebGLRenderbuffer;
-        protected createRenderTextureInternal(dimension: TextureDimension, width: number, height: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): WebGLInternalTex;
-        createRenderTargetDepthTexture(renderTarget: WebGLInternalRT, dimension: TextureDimension, width: number, height: number): WebGLInternalTex;
-        /**
-         * @deprecated 请使用readRenderTargetPixelDataAsync函数代替
-         * @param renderTarget
-         * @param xOffset
-         * @param yOffset
-         * @param width
-         * @param height
-         * @param out
-         * @returns
-         */
-        readRenderTargetPixelData(renderTarget: WebGLInternalRT, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): ArrayBufferView;
-        readRenderTargetPixelDataAsync(renderTarget: WebGLInternalRT, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): Promise<ArrayBufferView>;
-        updateVideoTexture(texture: WebGLInternalTex, video: HTMLVideoElement, premultiplyAlpha: boolean, invertY: boolean): void;
-        getRenderTextureData(internalTex: WebGLInternalRT, x: number, y: number, width: number, height: number): ArrayBufferView;
-    }
-    class WebGLBufferState implements IBufferState {
-        static _curBindedBufferState: WebGLBufferState;
-        _glVertexState: GLVertexState;
-        _bindedIndexBuffer: WebGLIndexBuffer;
-        _vertexBuffers: WebGLVertexBuffer[];
-        constructor();
-        private applyVertexBuffers;
-        protected applyIndexBuffers(): void;
-        applyState(vertexBuffers: WebGLVertexBuffer[], indexBuffer: WebGLIndexBuffer): void;
-        /**
-         * @private
-         */
-        bind(): void;
-        /**
-         * @private
-         */
-        unBind(): void;
-        isBind(): boolean;
-        destroy(): void;
-    }
-    class WebGLCommandUniformMap extends CommandUniformMap {
-        _stateName: string;
-        constructor(stateName: string);
-        hasPtrID(propertyID: number): boolean;
-        /**
-         * 增加一个Uniform
-         * @param propertyID
-         * @param propertyKey
-         */
-        addShaderBlockUniform(propertyID: number, blockname: string, blockProperty: UniformProperty[]): void;
-    }
-    /**
-     * 封装Webgl
-     */
-    class WebGLEngine implements IRenderEngine {
-        _context: WebGLRenderingContext | WebGL2RenderingContext;
-        private _lost;
-        get lost(): boolean;
-        private _config;
-        private _isWebGL2;
-        private _webglMode;
-        _enableStatistics: boolean;
-        private _GLBufferBindMap;
-        private _curUBOPointer;
-        private _GLUBOPointerMap;
-        private _GLBindPointerUBOMap;
-        private _lastViewport;
-        private _lastScissor;
-        private _scissorState;
-        private _lastClearColor;
-        private _lastClearDepth;
-        private _GLParams;
-        private _GLTextureContext;
-        private _GLRenderDrawContext;
-        _remapZ: boolean;
-        _screenInvertY: boolean;
-        _lodTextureSample: boolean;
-        _breakTextureSample: boolean;
-        _GLRenderState: GLRenderState;
-        private _GLStatisticsInfo;
-        static instance: WebGLEngine;
-        constructor(config: WebGLConfig, webglMode?: WebGLMode);
-        resizeOffScreen(width: number, height: number): void;
-        addTexGammaDefine(key: number, value: ShaderDefine): void;
-        /**
-         * GL Context
-         * @member {WebGLRenderingContext}
-         */
-        get gl(): WebGLRenderingContext | WebGL2RenderingContext;
-        get isWebGL2(): boolean;
-        get webglConfig(): WebGLConfig;
-        private _initStatisticsInfo;
-        /**
-         * create GL
-         * @param canvas
-         */
-        initRenderEngine(canvas: any): void;
-        webglContextLost(e: any): void;
-        private _initBindBufferMap;
-        _getbindBuffer(target: BufferTargetType): GLBuffer;
-        _setbindBuffer(target: BufferTargetType, buffer: GLBuffer | null): void;
-        getCapable(capatableType: RenderCapable): boolean;
-        viewport(x: number, y: number, width: number, height: number): void;
-        scissor(x: number, y: number, width: number, height: number): void;
-        scissorTest(value: boolean): void;
-        clearRenderTexture(clearFlag: RenderClearFlag, clearcolor?: Color, clearDepth?: number, clearStencilValue?: number): void;
-        copySubFrameBuffertoTex(texture: WebGLInternalTex, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
-        colorMask(r: boolean, g: boolean, b: boolean, a: boolean): void;
-        getParams(params: RenderParams): number;
-        createBuffer(targetType: BufferTargetType, bufferUsageType: BufferUsage): GLBuffer;
-        createShaderInstance(vs: string, ps: string, attributeMap: {
-            [name: string]: [
-                number,
-                ShaderDataType
-            ];
-        }): GLShaderInstance;
-        createVertexState(): GLVertexState;
-        getUBOPointer(name: string): number;
-        getTextureContext(): ITextureContext;
-        getDrawContext(): GLRenderDrawContext;
-        getCreateRenderOBJContext(): IRenderEngineFactory;
-        /**
-       * 通过Shader属性名称获得唯一ID。
-       * @param name Shader属性名称。
-       * @return 唯一ID。
-       */
-        propertyNameToID(name: string): number;
-        propertyIDToName(id: number): string;
-        getNamesByDefineData(defineData: IDefineDatas, out: Array<string>): void;
-        /**
-        * 注册宏定义。
-        * @param name
-        */
-        getDefineByName(name: string): ShaderDefine;
-        unbindVertexState(): void;
-    }
-    class GLBuffer extends GLObject {
+    class GLBuffer extends GLObject implements IRenderBuffer {
         _glBuffer: WebGLBuffer;
         _glTarget: number;
         _glUsage: number;
@@ -31875,7 +28535,15 @@ declare module Laya {
         private _initParams;
         getParams(params: RenderParams): number;
     }
-    class GLRenderDrawContext extends GLObject {
+    class GLRender2DContext extends GLObject implements IRender2DContext {
+        private shaderInstance;
+        private cacheShaderProgram;
+        constructor(engine: WebGLEngine);
+        activeTexture(textureID: number): void;
+        bindTexture(target: number, texture: WebGLTexture): void;
+        bindUseProgram(webglProgram: any): boolean;
+    }
+    class GLRenderDrawContext extends GLObject implements IRenderDrawContext {
         constructor(engine: WebGLEngine);
     }
     class GLRenderState {
@@ -31923,8 +28591,13 @@ declare module Laya {
          * @param value
          */
         setStencilMask(value: boolean): void;
+        /**
+         * apply RenderState list
+         * @param cmd
+         */
+        applyRenderStateCommand(cmd: RenderStateCommand): void;
     }
-    class GLShaderInstance extends GLObject {
+    class GLShaderInstance extends GLObject implements IRenderShaderInstance {
         _engine: WebGLEngine;
         _gl: WebGLRenderingContext | WebGL2RenderingContext;
         constructor(engine: WebGLEngine, vs: string, ps: string, attributeMap: {
@@ -31940,19 +28613,103 @@ declare module Laya {
         _uniform_sampler3D(one: any, texture: BaseTexture): number;
         destroy(): void;
     }
-    class GLVertexState extends GLObject {
+    class GLTextureContext extends GLObject implements ITextureContext {
+        protected _sRGB: any;
+        protected _oesTextureHalfFloat: any;
+        protected _compressdTextureS3tc_srgb: any;
+        protected _compressedTextureEtc1: any;
+        protected _compressedTextureS3tc: any;
+        protected _compressedTextureETC: any;
+        protected _compressedTextureASTC: any;
+        protected _webgl_depth_texture: any;
+        needBitmap: boolean;
+        constructor(engine: WebGLEngine);
+        _glParam: {
+            internalFormat: number;
+            format: number;
+            type: number;
+        };
+        glTextureParam(format: TextureFormat, useSRGB: boolean): {
+            internalFormat: number;
+            format: number;
+            type: number;
+        };
+        glRenderTextureParam(format: RenderTargetFormat, useSRGB: boolean): {
+            internalFormat: number;
+            format: number;
+            type: number;
+        };
+        glRenderBufferParam(format: RenderTargetFormat, useSRGB: boolean): {
+            internalFormat: number;
+            attachment: number;
+        };
+        glRenderTargetAttachment(format: RenderTargetFormat): number;
+        protected getTarget(dimension: TextureDimension): number;
+        getFormatPixelsParams(format: TextureFormat): {
+            channels: number;
+            bytesPerPixel: number;
+            dataTypedCons: any;
+            typedSize: number;
+        };
+        /**
+         * caculate texture memory
+         * @param tex
+         * @returns
+         */
+        getGLtexMemory(tex: WebGLInternalTex, depth?: number): number;
+        getGLRTTexMemory(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, multiSamples: number, cube: boolean): number;
+        /**
+         * 根据 format 判断是否支持 SRGBload
+         * @param format
+         * @returns
+         */
+        supportSRGB(format: TextureFormat | RenderTargetFormat, mipmap: boolean): boolean;
+        supportGenerateMipmap(format: TextureFormat | RenderTargetFormat): boolean;
+        /**
+         * 判断 纹理格式 本身是否是 SRGB格式
+         * @param format
+         * @returns
+         */
+        isSRGBFormat(format: TextureFormat | RenderTargetFormat): boolean;
+        createTextureInternal(dimension: TextureDimension, width: number, height: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
+        setTextureImageData(texture: WebGLInternalTex, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTextureSubImageData(texture: WebGLInternalTex, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, x: number, y: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        initVideoTextureData(texture: WebGLInternalTex): void;
+        setTexturePixelsData(texture: WebGLInternalTex, source: ArrayBufferView, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTextureSubPixelsData(texture: WebGLInternalTex, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTextureDDSData(texture: WebGLInternalTex, ddsInfo: DDSTextureInfo): void;
+        setTextureKTXData(texture: WebGLInternalTex, ktxInfo: KTXTextureInfo): void;
+        setTextureHDRData(texture: WebGLInternalTex, hdrInfo: HDRTextureInfo): void;
+        setCubeImageData(texture: WebGLInternalTex, sources: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubePixelsData(texture: WebGLInternalTex, source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubeSubPixelData(texture: WebGLInternalTex, source: ArrayBufferView[], mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubeDDSData(texture: WebGLInternalTex, ddsInfo: DDSTextureInfo): void;
+        setCubeKTXData(texture: WebGLInternalTex, ktxInfo: KTXTextureInfo): void;
+        setTextureCompareMode(texture: WebGLInternalTex, compareMode: TextureCompareMode): TextureCompareMode;
+        bindRenderTarget(renderTarget: WebGLInternalRT, faceIndex?: number): void;
+        bindoutScreenTarget(): void;
+        unbindRenderTarget(renderTarget: WebGLInternalRT): void;
+        createRenderTextureInternal(dimension: TextureDimension, width: number, height: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): WebGLInternalTex;
+        createRenderTextureCubeInternal(dimension: TextureDimension, size: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): WebGLInternalTex;
+        createRenderTargetInternal(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): WebGLInternalRT;
+        createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): WebGLInternalRT;
+        createRenderbuffer(width: number, height: number, internalFormat: number, samples: number): WebGLRenderbuffer;
+        setupRendertargetTextureAttachment(renderTarget: WebGLInternalRT, texture: WebGLInternalTex): void;
+        readRenderTargetPixelData(renderTarget: WebGLInternalRT, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): ArrayBufferView;
+        updateVideoTexture(texture: WebGLInternalTex, video: HTMLVideoElement, premultiplyAlpha: boolean, invertY: boolean): void;
+        getRenderTextureData(internalTex: WebGLInternalRT, x: number, y: number, width: number, height: number): ArrayBufferView;
+    }
+    class GLVertexState extends GLObject implements IRenderVertexState {
         private _angleInstancedArrays;
         private _vaoExt;
         private _vao;
-        _vertexDeclaration: {
-            [key: number]: VertexStateContext;
-        }[];
-        _bindedIndexBuffer: WebGLIndexBuffer;
-        _vertexBuffers: WebGLVertexBuffer[];
+        _vertexDeclaration: VertexDeclaration[];
+        _bindedIndexBuffer: IndexBuffer;
+        _vertexBuffers: VertexBuffer[];
         constructor(engine: WebGLEngine);
-        applyVertexBuffer(vertexBuffer: WebGLVertexBuffer[]): void;
+        applyVertexBuffer(vertexBuffer: VertexBuffer[]): void;
         clearVAO(): void;
-        applyIndexBuffer(indexBuffer: WebGLIndexBuffer | null): void;
+        applyIndexBuffer(indexBuffer: IndexBuffer | null): void;
     }
     class VertexArrayObject {
         constructor();
@@ -31960,7 +28717,7 @@ declare module Laya {
     /**
      * init Webgl option
      */
-    class WebGLConfig {
+    class WebGlConfig {
         stencil: boolean;
         alpha: boolean;
         depth: boolean;
@@ -31970,15 +28727,77 @@ declare module Laya {
         preserveDrawingBuffer: boolean;
         powerPreference: WebGLPowerPreference;
     }
-    class WebGLIndexBuffer implements IIndexBuffer {
-        _glBuffer: GLBuffer;
-        indexType: IndexFormat;
-        indexCount: number;
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-        private _changeMemory;
-        _setIndexDataLength(data: number): void;
-        _setIndexData(data: Uint32Array | Uint16Array | Uint8Array, bufferOffset: number): void;
-        destroy(): void;
+    /**
+     * 封装Webgl
+     */
+    class WebGLEngine implements IRenderEngine {
+        _context: WebGLRenderingContext | WebGL2RenderingContext;
+        private _config;
+        private _isWebGL2;
+        private _webglMode;
+        private _GLBufferBindMap;
+        private _curUBOPointer;
+        private _GLUBOPointerMap;
+        private _GLBindPointerUBOMap;
+        private _lastViewport;
+        private _lastScissor;
+        private _lastClearColor;
+        private _lastClearDepth;
+        private _GLParams;
+        private _GLTextureContext;
+        private _GLRenderDrawContext;
+        private _GL2DRenderContext;
+        _GLRenderState: GLRenderState;
+        private _GLStatisticsInfo;
+        constructor(config: WebGlConfig, webglMode?: WebGLMode);
+        /**
+         * GL Context
+         * @member {WebGLRenderingContext}
+         */
+        get gl(): WebGLRenderingContext | WebGL2RenderingContext;
+        get isWebGL2(): boolean;
+        get webglConfig(): WebGlConfig;
+        private _initStatisticsInfo;
+        /**
+         * create GL
+         * @param canvas
+         */
+        initRenderEngine(canvas: any): void;
+        private _initBindBufferMap;
+        _getbindBuffer(target: BufferTargetType): GLBuffer;
+        _setbindBuffer(target: BufferTargetType, buffer: GLBuffer | null): void;
+        bindTexture(texture: BaseTexture): void;
+        applyRenderStateCMD(cmd: RenderStateCommand): void;
+        getCapable(capatableType: RenderCapable): boolean;
+        viewport(x: number, y: number, width: number, height: number): void;
+        scissor(x: number, y: number, width: number, height: number): void;
+        scissorTest(value: boolean): void;
+        clearRenderTexture(clearFlag: RenderClearFlag, clearcolor?: Color, clearDepth?: number): void;
+        copySubFrameBuffertoTex(texture: BaseTexture, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
+        colorMask(r: boolean, g: boolean, b: boolean, a: boolean): void;
+        getParams(params: RenderParams): number;
+        createBuffer(targetType: BufferTargetType, bufferUsageType: BufferUsage): IRenderBuffer;
+        createShaderInstance(vs: string, ps: string, attributeMap: {
+            [name: string]: [
+                number,
+                ShaderDataType
+            ];
+        }): IRenderShaderInstance;
+        createVertexState(): IRenderVertexState;
+        getUBOPointer(name: string): number;
+        getTextureContext(): ITextureContext;
+        getDrawContext(): IRenderDrawContext;
+        get2DRenderContext(): IRender2DContext;
+        getCreateRenderOBJContext(): IRenderEngineFactory;
+        /**
+       * 通过Shader属性名称获得唯一ID。
+       * @param name Shader属性名称。
+       * @return 唯一ID。
+       */
+        propertyNameToID(name: string): number;
+        propertyIDToName(id: number): string;
+        createRenderStateComand(): RenderStateCommand;
+        unbindVertexState(): void;
     }
     class WebGLInternalRT extends GLObject implements InternalRenderTarget {
         _gl: WebGLRenderingContext | WebGL2RenderingContext;
@@ -31998,3499 +28817,77 @@ declare module Laya {
         _gpuMemory: number;
         get gpuMemory(): number;
         set gpuMemory(value: number);
-        private _changeTexMemory;
         constructor(engine: WebGLEngine, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, isCube: boolean, generateMipmap: boolean, samples: number);
         dispose(): void;
     }
-    class WebGLRenderDeviceFactory implements IRenderDeviceFactory {
-        createShaderData(ownerResource?: Resource): ShaderData;
-        createShaderInstance(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderPass): IShaderInstance;
-        createIndexBuffer(bufferUsageType: BufferUsage): IIndexBuffer;
-        createVertexBuffer(bufferUsageType: BufferUsage): IVertexBuffer;
-        createBufferState(): IBufferState;
-        createRenderGeometryElement(mode: MeshTopology, drawType: DrawType): IRenderGeometryElement;
-        private globalBlockMap;
-        createGlobalUniformMap(blockName: string): WebGLCommandUniformMap;
-        createEngine(config: Config, canvas: any): Promise<void>;
-        /**@private test function*/
-        private _replaceWebglcall;
-    }
-    class WebGLRenderEngineFactory implements IRenderEngineFactory {
-        createUniformBufferObject(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean): UniformBufferObject;
-        createEngine(config: any, canvas: any): Promise<void>;
-        /**@private test function*/
-        private _replaceWebglcall;
-    }
-    class WebGLRenderGeometryElement implements IRenderGeometryElement {
-        private static _idCounter;
-        /**
-         * index format
-         */
-        get indexFormat(): IndexFormat;
-        set indexFormat(value: IndexFormat);
-        /**
-         * Mesh Topology mode
-         */
-        get mode(): MeshTopology;
-        set mode(value: MeshTopology);
-        cloneTo(obj: WebGLRenderGeometryElement): void;
-    }
-    /**
-     * <code>ShaderInstance</code> 类用于实现ShaderInstance。
-     */
-    class WebGLShaderInstance implements IShaderInstance {
-        private _renderShaderInstance;
-        /**
-         * 创建一个 <code>ShaderInstance</code> 实例。
-         */
-        constructor();
-        /**
-         * get complete
-         */
-        get complete(): boolean;
-        _create(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderPass): void;
-        private hasSpritePtrID;
-        /**
-         * @inheritDoc
-         * @override
-         */
-        _disposeResource(): void;
-        /**
-         * apply shader programe
-         * @returns
-         */
-        bind(): boolean;
-        /**
-         * upload uniform data
-         * @param shaderUniform
-         * @param shaderDatas
-         * @param uploadUnTexture
-         */
-        uploadUniforms(shaderUniform: CommandEncoder, shaderDatas: WebGLShaderData, uploadUnTexture: boolean): void;
-        /**
-         * set blend depth stencil RenderState
-         * @param shaderDatas
-         */
-        uploadRenderStateBlendDepth(shaderDatas: WebGLShaderData): void;
-        /**
-         * set blend depth stencil RenderState frome Shader
-         * @param shaderDatas
-         */
-        uploadRenderStateBlendDepthByShader(shaderDatas: WebGLShaderData): void;
-        /**
-         * set blend depth stencil RenderState frome Material
-         * @param shaderDatas
-         */
-        uploadRenderStateBlendDepthByMaterial(shaderDatas: ShaderData): void;
-    }
-    class WebGLVertexBuffer implements IVertexBuffer {
-        _glBuffer: GLBuffer;
-        private _vertexDeclaration;
-        get vertexDeclaration(): VertexDeclaration;
-        set vertexDeclaration(value: VertexDeclaration);
-        instanceBuffer: boolean;
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-        private _changeMemory;
-        setDataLength(byteLength: number): void;
-        setData(buffer: ArrayBuffer, bufferOffset: number, dataStartIndex: number, dataCount: number): void;
-        /**
-         * @private
-         */
-        bind(): boolean;
-        unbind(): void;
-        /**
-         * 剥离内存块存储。
-         */
-        orphanStorage(): void;
-        destroy(): void;
-    }
-    class WebGPURender2DProcess implements I2DRenderPassFactory {
-        createRenderElement2D(): IRenderElement2D;
-        createRenderContext2D(): IRenderContext2D;
-    }
-    /**
-     * WebGPU渲染上下文（2D）
-     */
-    class WebGPURenderContext2D implements IRenderContext2D {
-        device: GPUDevice;
-        destRT: WebGPUInternalRT;
-        invertY: boolean;
-        pipelineMode: string;
-        sceneData: WebGPUShaderData;
-        cameraData: WebGPUShaderData;
-        _globalConfigShaderData: WebDefineDatas;
-        renderCommand: WebGPURenderCommandEncoder;
-        private _offscreenWidth;
-        private _offscreenHeight;
-        private _needClearColor;
-        private _needStart;
-        private _viewport;
-        private _clearColor;
-        constructor();
-        drawRenderElementList(list: FastSinglelist<WebGPURenderElement2D>): number;
-        setOffscreenView(width: number, height: number): void;
-        setRenderTarget(value: WebGPUInternalRT, clear: boolean, clearColor: Color): void;
-        drawRenderElementOne(node: WebGPURenderElement2D): void;
-        /**
-         * 提交渲染命令
-         */
-        private _submit;
-        /**
-         * 设置屏幕渲染目标
-         */
-        private _setScreenRT;
-        /**
-         * 准备录制渲染命令
-         */
-        private _start;
-    }
-    class WebGPURenderElement2D implements IRenderElement2D, IRenderPipelineInfo {
-        static _value2DShaderData: WebGPUShaderData;
-        static _materialShaderData: WebGPUShaderData;
-        static _compileDefine: WebDefineDatas;
-        static _defineStrings: Array<string>;
-        protected _sceneData: WebGPUShaderData;
-        protected _cameraData: WebGPUShaderData;
-        materialShaderData: WebGPUShaderData;
-        value2DShaderData: WebGPUShaderData;
-        subShader: SubShader;
-        geometry: WebGPURenderGeometry;
-        blendState: WebGPUBlendStateCache;
-        depthStencilState: WebGPUDepthStencilStateCache;
-        cullMode: CullMode;
-        frontFace: FrontFace;
-        protected _stateKey: string[];
-        protected _shaderInstances: WebGPUShaderInstance[];
-        protected _pipelineCache: GPURenderPipeline[];
-        protected _passNum: number;
-        protected _passName: string;
-        protected _passIndex: number[];
-        protected _shaderPass: ShaderPass[];
-        protected _shaderInstance: WebGPUShaderInstance[];
-        protected _shaderDataState: {
-            [key: string]: number[];
-        };
-        protected _shaderDataObject: {
-            [key: string]: number[];
-        };
-        bundleId: number;
-        needClearBundle: boolean;
-        static bundleIdCounter: number;
-        isStatic: boolean;
-        staticChange: boolean;
-        globalId: number;
-        objectName: string;
-        constructor();
-        renderStateIsBySprite: boolean;
-        /**
-         * 获取渲染通道的uniform
-         * @param shaderpass
-         * @param defineData
-         */
-        private _getShaderPassUniform;
-        /**
-         * 收集uniform
-         * @param compileDefine
-         */
-        protected _collectUniform(compileDefine: WebDefineDatas): {
-            uniformMap: WebGPUUniformMapType;
-            arrayMap: NameNumberMap;
-        };
-        /**
-         * 编译着色器
-         * @param context
-         */
-        protected _compileShader(context: WebGPURenderContext2D): void;
-        /**
-         * 计算状态值
-         * @param shaderInstance
-         * @param dest
-         * @param context
-         */
-        protected _calcStateKey(shaderInstance: WebGPUShaderInstance, dest: WebGPUInternalRT, context: WebGPURenderContext2D): string;
-        /**
-         * 获取渲染管线
-         * @param shaderInstance
-         * @param dest
-         * @param context
-         * @param entries
-         */
-        protected _getWebGPURenderPipeline(shaderInstance: WebGPUShaderInstance, dest: WebGPUInternalRT, context: WebGPURenderContext2D, entries: any): any;
-        /**
-         * 获取混合状态
-         * @param shaderInstance
-         */
-        private _getBlendState;
-        private _getRenderStateBlendByShader;
-        private _getRenderStateBlendByMaterial;
-        /**
-         * 获取深度缓存状态
-         * @param shaderInstance
-         * @param dest
-         */
-        private _getDepthStencilState;
-        private _getRenderStateDepthByShader;
-        private _getRenderStateDepthByMaterial;
-        private _getCullFrontMode;
-        /**
-         * 着色器数据是否改变
-         * @param context
-         */
-        protected _isShaderDataChange(context: WebGPURenderContext2D): boolean;
-        /**
-         * 创建绑定组布局
-         * @param shaderInstance
-         */
-        protected _createBindGroupLayout(shaderInstance: WebGPUShaderInstance): any[];
-        /**
-         * 绑定资源组
-         * @param shaderInstance
-         * @param command
-         * @param bundle
-         */
-        protected _bindGroup(shaderInstance: WebGPUShaderInstance, command: WebGPURenderCommandEncoder): void;
-        /**
-         * 上传uniform数据
-         */
-        protected _uploadUniform(): void;
-        /**
-         * 上传几何数据
-         * @param command
-         * @param bundle
-         */
-        protected _uploadGeometry(command: WebGPURenderCommandEncoder): number;
-        /**
-         * 用于创建渲染管线的函数
-         * @param sn
-         * @param context
-         * @param shaderInstance
-         * @param command
-         * @param bundle
-         * @param stateKey
-         */
-        protected _createPipeline(sn: number, context: WebGPURenderContext2D, shaderInstance: WebGPUShaderInstance, command: WebGPURenderCommandEncoder, stateKey?: string): boolean;
-        /**
-         * 准备渲染
-         * @param context
-         * @returns
-         */
-        prepare(context: WebGPURenderContext2D): boolean;
-        /**
-         * 渲染
-         * @param context
-         * @param command
-         */
-        render(context: WebGPURenderContext2D, command: WebGPURenderCommandEncoder): number;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    class WebGPU3DRenderPass implements IRender3DProcess {
-        private _renderPass;
-        globalId: number;
-        objectName: string;
-        constructor();
-        /**
-         * 初始化渲染流程
-         * @param camera
-         * @param context
-         */
-        private _initRenderPass;
-        /**
-         * 渲染深度图设置
-         * @param camera
-         */
-        private _renderDepth;
-        /**
-         * 前向渲染流程
-         * @param context
-         * @param renderPass
-         * @param list
-         * @param count
-         */
-        private _renderForwardAddCameraPass;
-        /**
-         * 渲染命令
-         * @param cmds
-         * @param context
-         */
-        private _renderCmd;
-        /**
-         * 渲染后处理效果
-         * @param postprocessCMD
-         * @param context
-         */
-        private _renderPostProcess;
-        /**
-         * 前向渲染
-         * @param context
-         * @param camera
-         */
-        fowardRender(context: WebGPURenderContext3D, camera: Camera): void;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    /**
-     * WebGPU渲染工厂类
-     */
-    class WebGPU3DRenderPassFactory implements I3DRenderPassFactory {
-        createInstanceBatch(): IInstanceRenderBatch;
-        createRender3DProcess(): IRender3DProcess;
-        createRenderContext3D(): IRenderContext3D;
-        createRenderElement3D(): IRenderElement3D;
-        createInstanceRenderElement3D(): WebGPUInstanceRenderElement3D;
-        createSkinRenderElement(): ISkinRenderElement3D;
-        createSceneRenderManager(): ISceneRenderManager;
-        createDrawNodeCMDData(): DrawNodeCMDData;
-        createBlitQuadCMDData(): BlitQuadCMDData;
-        createDrawElementCMDData(): DrawElementCMDData;
-        createSetViewportCMD(): SetViewportCMD;
-        createSetRenderTargetCMD(): SetRenderTargetCMD;
-        createSetRenderDataCMD(): SetRenderDataCMD;
-        createSetShaderDefineCMD(): SetShaderDefineCMD;
-    }
-    /**
-     * WebGPU全局上下文
-     */
-    class WebGPUContext {
-        static lastBundle: WebGPURenderBundle;
-        static lastCommand: WebGPURenderCommandEncoder;
-        static lastBundlePipeline: GPURenderPipeline;
-        static lastCommandPipeline: GPURenderPipeline;
-        static lastBundleGeometry: WebGPURenderGeometry;
-        static lastCommandGeometry: WebGPURenderGeometry;
-        /**
-         * 开始渲染（清空历史数据）
-         */
-        static startRender(): void;
-        /**
-         * 清空上次打包数据
-         */
-        static clearLastBundle(): void;
-        /**
-         * 清空上次命令数据
-         */
-        static clearLastCommand(): void;
-        /**
-         * 设置打包管线
-         * @param bundle
-         * @param pipeline
-         */
-        static setBundlePipeline(bundle: WebGPURenderBundle, pipeline: GPURenderPipeline): void;
-        /**
-         * 设置命令管线
-         * @param command
-         * @param pipeline
-         */
-        static setCommandPipeline(command: WebGPURenderCommandEncoder, pipeline: GPURenderPipeline): void;
-        /**
-         * 设置打包几何数据
-         * @param bundle
-         * @param geometry
-         */
-        static applyBundleGeometry(bundle: WebGPURenderBundle, geometry: WebGPURenderGeometry): number;
-        /**
-         * 设置打包几何数据（部分）
-         * @param bundle
-         * @param geometry
-         * @param part
-         */
-        static applyBundleGeometryPart(bundle: WebGPURenderBundle, geometry: WebGPURenderGeometry, part: number): number;
-        /**
-         * 设置命令几何数据
-         * @param command
-         * @param geometry
-         */
-        static applyCommandGeometry(command: WebGPURenderCommandEncoder, geometry: WebGPURenderGeometry): number;
-        /**
-         * 设置命令几何数据（部分）
-         * @param command
-         * @param geometry
-         * @param part
-         */
-        static applyCommandGeometryPart(command: WebGPURenderCommandEncoder, geometry: WebGPURenderGeometry, part: number): number;
-    }
-    /**
-     * 线性光源阴影渲染流程
-     */
-    class WebGPUDirectLightShadowRP {
-        camera: WebCameraNodeData;
-        destTarget: InternalRenderTarget;
-        private _shadowCasterCommanBuffer;
-        get shadowCasterCommanBuffer(): CommandBuffer[];
-        set shadowCasterCommanBuffer(value: CommandBuffer[]);
-        set light(value: WebDirectLight);
-        get light(): WebDirectLight;
-        constructor();
-        /**
-         * 更新
-         * @param context
-         */
-        update(context: WebGPURenderContext3D): void;
-        /**
-         * 渲染
-         * @param context
-         * @param list
-         * @param count
-         */
-        render(context: WebGPURenderContext3D, list: WebBaseRenderNode[], count: number): void;
-        /**
-         * 设置渲染数据
-         * @param sceneData
-         * @param cameraData
-         */
-        private _applyRenderData;
-        /**
-         * 应用阴影渲染命令
-         * @param context
-         */
-        private _applyCasterPassCommandBuffer;
-        /**
-         * 获取阴影偏移
-         * @param shadowProjectionMatrix
-         * @param shadowResolution
-         * @param out
-         */
-        private _getShadowBias;
-        /**
-         * 设置阴影级联数据模式
-         * @param shaderData
-         * @param shadowSliceData
-         * @param lightParam
-         * @param shadowBias
-         */
-        private _setupShadowCasterShaderValues;
-    }
-    /**
-     * WebGPU前向渲染流程
-     */
-    class WebGPUForwardAddClusterRP extends ForwardAddClusterRP {
-        /**
-         * 主渲染流程
-         * @param context
-         */
-        protected _mainPass(context: IRenderContext3D): void;
-    }
-    class WebGPUForwardAddRP {
-        /**是否开启阴影 */
-        shadowCastPass: boolean;
-        enablePostProcess: boolean;
-        /**main pass */
-        renderPass: WebGPUForwardAddClusterRP;
-        /**directlight shadow */
-        directLightShadowPass: WebGPUDirectLightShadowRP;
-        /**enable directlight */
-        enableDirectLightShadow: boolean;
-        /**spot shadow */
-        spotLightShadowPass: WebGPUSpotLightShadowRP;
-        /**enable spot */
-        enableSpotLightShadowPass: boolean;
-        shadowParams: Vector4;
-        finalize: CommandBuffer;
-        constructor();
-        /**
-         * 设置后处理之前绘制的渲染命令
-         * @param value
-         */
-        setBeforeImageEffect(value: CommandBuffer[]): void;
-        /**
-         * 设置所有渲染都结束后绘制的渲染命令
-         * @param value
-         */
-        setAfterEventCmd(value: CommandBuffer[]): void;
-    }
-    /**
-     * 动态合批通用类（目前由WebGPU专用）
-     */
-    class WebGPUInstanceRenderBatch implements IInstanceRenderBatch {
-        static MaxInstanceCount: number;
-        private recoverList;
-        private _batchOpaqueMarks;
-        private _updateCountMark;
-        private _gpuRecover;
-        constructor();
-        getBatchMark(element: IRenderElement3D): any;
-        batch(elements: SingletonList<IRenderElement3D>): void;
-        clearRenderData(): void;
-        recoverData(): void;
-    }
-    interface WebGPUInstanceStateInfo {
-        inUse: boolean;
-        state: WebGPUBufferState;
-        worldInstanceVB?: WebGPUVertexBuffer;
-        lightmapScaleOffsetVB?: WebGPUVertexBuffer;
-        simpleAnimatorVB?: WebGPUVertexBuffer;
-    }
-    class WebGPUInstanceRenderElement3D extends WebGPURenderElement3D implements IInstanceRenderElement3D {
-        static getInstanceBufferState(geometry: WebGPURenderGeometry, renderType: number, spriteDefine: WebDefineDatas): {
-            inUse: boolean;
-            state: WebGPUBufferState;
-        };
-        static MaxInstanceCount: number;
-        private static _pool;
-        static create(): WebGPUInstanceRenderElement3D;
-        private static _bufferPool;
-        static _instanceBufferCreate(length: number): Float32Array;
-        instanceElementList: SingletonList<IRenderElement3D>;
-        private _vertexBuffers;
-        private _updateData;
-        private _updateDataNum;
-        private _instanceStateInfo;
-        drawCount: number;
-        updateNums: number;
-        constructor();
-        addUpdateBuffer(vb: WebGPUVertexBuffer, length: number): void;
-        getUpdateData(index: number, length: number): Float32Array;
-        /**
-         * 计算状态值
-         * @param shaderInstance
-         * @param dest
-         * @param context
-         */
-        protected _calcStateKey(shaderInstance: WebGPUShaderInstance, dest: WebGPUInternalRT, context: WebGPURenderContext3D): string;
-        /**
-         * 着色器数据是否改变
-         * @param context
-         */
-        protected _isShaderDataChange(context: WebGPURenderContext3D): boolean;
-        protected _compileShader(context: WebGPURenderContext3D): void;
-        private _updateInstanceData;
-        /**
-         * 设置几何对象
-         * @param geometry
-         */
-        setGeometry(geometry: WebGPURenderGeometry): void;
-        /**
-         * 上传几何数据
-         * @param command
-         * @param bundle
-         */
-        protected _uploadGeometry(command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle): number;
-        /**
-         * 清理单次渲染生成的数据
-         */
-        clearRenderData(): void;
-        /**
-         * 清理单次渲染生成的数据（延迟回收内存）
-         */
-        clearRenderDataAndRecover(resRecover: WebGPUResourceRecover): void;
-        /**
-         * 回收
-         */
-        recover(): void;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    class WebGPUBlitQuadCMDData extends BlitQuadCMDData {
-        type: RenderCMDType;
-        private _sourceTexelSize;
-        protected _dest: WebGPUInternalRT;
-        protected _viewport: Viewport;
-        protected _source: InternalTexture;
-        protected _scissor: Vector4;
-        protected _offsetScale: Vector4;
-        protected _element: WebGPURenderElement3D;
-        get dest(): WebGPUInternalRT;
-        set dest(value: WebGPUInternalRT);
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        get source(): InternalTexture;
-        set source(value: InternalTexture);
-        get offsetScale(): Vector4;
-        set offsetScale(value: Vector4);
-        get element(): WebGPURenderElement3D;
-        set element(value: WebGPURenderElement3D);
-        constructor();
-        apply(context: WebGPURenderContext3D): void;
-    }
-    class WebGPUDrawElementCMDData extends DrawElementCMDData {
-        type: RenderCMDType;
-        private _elemets;
-        constructor();
-        setRenderelements(value: WebGPURenderElement3D[]): void;
-        apply(context: WebGPURenderContext3D): void;
-    }
-    class WebGPUDrawNodeCMDData extends DrawNodeCMDData {
-        type: RenderCMDType;
-        protected _node: WebBaseRenderNode;
-        protected _destShaderData: WebGPUShaderData;
-        protected _destSubShader: SubShader;
-        protected _subMeshIndex: number;
-        get node(): WebBaseRenderNode;
-        set node(value: WebBaseRenderNode);
-        get destShaderData(): WebGPUShaderData;
-        set destShaderData(value: WebGPUShaderData);
-        get destSubShader(): SubShader;
-        set destSubShader(value: SubShader);
-        get subMeshIndex(): number;
-        set subMeshIndex(value: number);
-        constructor();
-        apply(context: WebGPURenderContext3D): void;
-    }
-    class WebGPUSetRenderData extends SetRenderDataCMD {
-        type: RenderCMDType;
-        protected _dataType: ShaderDataType;
-        protected _propertyID: number;
-        protected _dest: WebGPUShaderData;
-        protected _value: ShaderDataItem;
-        data_v2: Vector2;
-        data_v3: Vector3;
-        data_v4: Vector4;
-        data_mat3: Matrix3x3;
-        data_mat4: Matrix4x4;
-        data_color: Color;
-        data_number: number;
-        data_texture: BaseTexture;
-        data_buffer: Float32Array;
-        get dataType(): ShaderDataType;
-        set dataType(value: ShaderDataType);
-        get propertyID(): number;
-        set propertyID(value: number);
-        get dest(): WebGPUShaderData;
-        set dest(value: WebGPUShaderData);
-        get value(): ShaderDataItem;
-        set value(value: ShaderDataItem);
-        constructor();
-        apply(context: WebGPURenderContext3D): void;
-    }
-    class WebGPUSetRenderTargetCMD extends SetRenderTargetCMD {
-        type: RenderCMDType;
-        protected _rt: WebGPUInternalRT;
-        protected _clearFlag: number;
-        protected _clearColorValue: Color;
-        protected _clearDepthValue: number;
-        protected _clearStencilValue: number;
-        get rt(): WebGPUInternalRT;
-        set rt(value: WebGPUInternalRT);
-        get clearFlag(): number;
-        set clearFlag(value: number);
-        get clearColorValue(): Color;
-        set clearColorValue(value: Color);
-        get clearDepthValue(): number;
-        set clearDepthValue(value: number);
-        get clearStencilValue(): number;
-        set clearStencilValue(value: number);
-        constructor();
-        apply(context: WebGPURenderContext3D): void;
-    }
-    class WebGPUSetShaderDefine extends SetShaderDefineCMD {
-        type: RenderCMDType;
-        protected _define: ShaderDefine;
-        protected _dest: WebGPUShaderData;
-        protected _add: boolean;
-        get define(): ShaderDefine;
-        set define(value: ShaderDefine);
-        get dest(): WebGPUShaderData;
-        set dest(value: WebGPUShaderData);
-        get add(): boolean;
-        set add(value: boolean);
-        constructor();
-        apply(context: WebGPURenderContext3D): void;
-    }
-    class WebGPUSetViewportCMD extends SetViewportCMD {
-        type: RenderCMDType;
-        protected _viewport: Viewport;
-        protected _scissor: Vector4;
-        get viewport(): Viewport;
-        set viewport(value: Viewport);
-        get scissor(): Vector4;
-        set scissor(value: Vector4);
-        constructor();
-        apply(context: WebGPURenderContext3D): void;
-    }
-    /**
-     * WebGPU渲染上下文
-     */
-    class WebGPURenderContext3D implements IRenderContext3D {
-        globalConfigShaderData: WebDefineDatas;
-        device: GPUDevice;
-        bundleHit: number;
-        needRemoveBundle: number[];
-        bundleManagerSets: Map<string, WebGPURenderBundleManagerSet>;
-        destRT: WebGPUInternalRT;
-        blitFrameCount: number;
-        blitScreen: boolean;
-        renderCommand: WebGPURenderCommandEncoder;
-        private _viewScissorSaved;
-        private _viewPortSave;
-        private _scissorSave;
-        globalId: number;
-        objectName: string;
-        constructor();
-        get sceneData(): WebGPUShaderData;
-        set sceneData(value: WebGPUShaderData);
-        get cameraData(): WebGPUShaderData;
-        set cameraData(value: WebGPUShaderData);
-        get sceneModuleData(): WebSceneNodeData;
-        set sceneModuleData(value: WebSceneNodeData);
-        get cameraModuleData(): WebCameraNodeData;
-        set cameraModuleData(value: WebCameraNodeData);
-        get globalShaderData(): WebGPUShaderData;
-        set globalShaderData(value: WebGPUShaderData);
-        get sceneUpdataMask(): number;
-        set sceneUpdataMask(value: number);
-        get cameraUpdateMask(): number;
-        set cameraUpdateMask(value: number);
-        get pipelineMode(): PipelineMode;
-        set pipelineMode(value: PipelineMode);
-        get invertY(): boolean;
-        set invertY(value: boolean);
-        /**
-         * 设置渲染目标
-         * @param rt
-         * @param clearFlag
-         */
-        setRenderTarget(rt: WebGPUInternalRT, clearFlag: RenderClearFlag): void;
-        /**
-         * 设置视口
-         * @param value
-         */
-        setViewPort(value: Viewport): void;
-        /**
-         * 设置裁剪
-         * @param value
-         */
-        setScissor(value: Vector4): void;
-        /**
-         * 保存视口
-         */
-        saveViewPortAndScissor(): void;
-        /**
-         * 恢复视口
-         */
-        restoreViewPortAndScissor(): void;
-        /**
-         * 设置清除参数
-         * @param flag
-         * @param color
-         * @param depth
-         * @param stencil
-         */
-        setClearData(flag: number, color: Color, depth: number, stencil: number): number;
-        /**
-         * 得到GPUBuffer改变的通知
-         */
-        notifyGPUBufferChange(): void;
-        /**
-         * 获取指令缓存组的key
-         */
-        getBundleManagerKey(): string;
-        /**
-         * 渲染一组节点
-         * @param list
-         */
-        drawRenderElementList(list: FastSinglelist<WebGPURenderElement3D>): number;
-        /**
-         * 渲染一个节点
-         * @param node
-         */
-        drawRenderElementOne(node: WebGPURenderElement3D): number;
-        /**
-         * 执行命令列表
-         * @param cmds
-         */
-        runCMDList(cmds: IRenderCMD[]): void;
-        /**
-         * 执行单个命令
-         * @param cmd
-         */
-        runOneCMD(cmd: IRenderCMD): void;
-        /**
-         * 清除渲染目标（空白绘制，用于清除颜色或深度缓存）
-         */
-        clearRenderTarget(): void;
-        /**
-         * 设置屏幕渲染目标
-         */
-        private _setScreenRT;
-        /**
-         * 准备录制渲染命令
-         * @param viewPortAndScissor
-         */
-        private _start;
-        /**
-         * 提交渲染命令
-         */
-        private _submit;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    /**
-     * 基本渲染单元
-     */
-    class WebGPURenderElement3D implements IRenderElement3D, IRenderPipelineInfo {
-        static _renderShaderData: WebGPUShaderData;
-        static _compileDefine: WebDefineDatas;
-        static _defineStrings: Array<string>;
-        protected _sceneData: WebGPUShaderData;
-        protected _cameraData: WebGPUShaderData;
-        renderShaderData: WebGPUShaderData;
-        materialShaderData: WebGPUShaderData;
-        materialRenderQueue: number;
-        materialId: number;
-        transform: Transform3D;
-        canDynamicBatch: boolean;
-        isRender: boolean;
-        owner: WebBaseRenderNode;
-        subShader: SubShader;
-        geometry: WebGPURenderGeometry;
-        blendState: WebGPUBlendStateCache;
-        depthStencilState: WebGPUDepthStencilStateCache;
-        cullMode: CullMode;
-        frontFace: FrontFace;
-        protected _invertFrontFace: boolean;
-        protected _stencilParam: {
-            [key: string]: any;
-        };
-        protected _stateKey: string;
-        protected _pipeline: GPURenderPipeline;
-        protected _shaderInstances: WebGPUShaderInstance[];
-        protected static _pipelineCacheMap: Map<string, GPURenderPipeline>;
-        protected _passNum: number;
-        protected _passName: string;
-        protected _passIndex: number[];
-        protected _shaderPass: ShaderPass[];
-        protected _shaderInstance: WebGPUShaderInstance[];
-        protected _shaderDataState: {
-            [key: string]: number[];
-        };
-        bundleId: number;
-        needClearBundle: boolean;
-        static bundleIdCounter: number;
-        isStatic: boolean;
-        staticChange: boolean;
-        globalId: number;
-        objectName: string;
-        constructor();
-        /**
-         * 是否反转面片
-         */
-        protected _getInvertFront(): boolean;
-        /**
-         * 获取渲染通道的uniform
-         * @param shaderpass
-         * @param defineData
-         */
-        private _getShaderPassUniform;
-        /**
-         * 收集uniform
-         * @param compileDefine
-         */
-        protected _collectUniform(compileDefine: WebDefineDatas): {
-            uniformMap: WebGPUUniformMapType;
-            arrayMap: NameNumberMap;
-        };
-        /**
-         * 渲染前更新
-         * @param context
-         */
-        _preUpdatePre(context: WebGPURenderContext3D): boolean;
-        /**
-         * 编译着色器
-         * @param context
-         */
-        protected _compileShader(context: WebGPURenderContext3D): void;
-        /**
-         * 计算状态值
-         * @param shaderInstance
-         * @param dest
-         * @param context
-         */
-        protected _calcStateKey(shaderInstance: WebGPUShaderInstance, dest: WebGPUInternalRT, context: WebGPURenderContext3D): string;
-        /**
-         * 获取渲染管线
-         * @param shaderInstance
-         * @param dest
-         * @param context
-         * @param entries
-         */
-        protected _getWebGPURenderPipeline(shaderInstance: WebGPUShaderInstance, dest: WebGPUInternalRT, context: WebGPURenderContext3D, entries: any): any;
-        /**
-         * 获取混合状态
-         * @param shaderInstance
-         */
-        private _getBlendState;
-        private _getRenderStateBlendByShader;
-        private _getRenderStateBlendByMaterial;
-        /**
-         * 获取深度缓存状态
-         * @param shaderInstance
-         * @param dest
-         */
-        private _getDepthStencilState;
-        private _getRenderStateDepthByShader;
-        private _getRenderStateDepthByMaterial;
-        private _getCullFrontMode;
-        /**
-         * 着色器数据是否改变
-         * @param context
-         */
-        protected _isShaderDataChange(context: WebGPURenderContext3D): boolean;
-        /**
-         * 创建绑定组布局
-         * @param shaderInstance
-         */
-        protected _createBindGroupLayout(shaderInstance: WebGPUShaderInstance): any[];
-        /**
-         * 绑定资源组
-         * @param shaderInstance
-         * @param command
-         * @param bundle
-         */
-        protected _bindGroup(shaderInstance: WebGPUShaderInstance, command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle): void;
-        /**
-         * 上传uniform数据
-         */
-        protected _uploadUniform(): void;
-        /**
-         * 上传模板参考值
-         * @param command
-         */
-        protected _uploadStencilReference(command: WebGPURenderCommandEncoder): void;
-        /**
-         * 上传几何数据
-         * @param command
-         * @param bundle
-         */
-        protected _uploadGeometry(command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle): number;
-        /**
-         * 用于创建渲染管线的函数
-         * @param sn
-         * @param context
-         * @param shaderInstance
-         * @param command
-         * @param bundle
-         * @param stateKey
-         */
-        protected _createPipeline(sn: number, context: WebGPURenderContext3D, shaderInstance: WebGPUShaderInstance, command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle, stateKey?: string): boolean;
-        /**
-         * 转换数据格式
-         */
-        protected _changeDataFormat(): void;
-        /**
-         * 渲染
-         * @param context
-         * @param command
-         * @param bundle
-         */
-        _render(context: WebGPURenderContext3D, command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle): number;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    /**
-     * 带骨骼的基本渲染单元
-     */
-    class WebGPUSkinRenderElement3D extends WebGPURenderElement3D implements ISkinRenderElement3D {
-        skinnedData: Float32Array[];
-        renderShaderDatas: WebGPUShaderData[];
-        globalId: number;
-        objectName: string;
-        constructor();
-        /**
-         * 编译着色器
-         * @param context
-         */
-        protected _compileShader(context: WebGPURenderContext3D): void;
-        /**
-         * 销毁renderShaderDatas数据
-         */
-        private _destroyRenderShaderDatas;
-        /**
-         * 绑定资源组
-         * @param shaderInstance
-         * @param command
-         * @param bundle
-         * @param sn
-         */
-        protected _bindGroupEx(shaderInstance: WebGPUShaderInstance, command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle, sn: number): void;
-        /**
-         * 上传uniform数据
-         * @param sn
-         */
-        protected _uploadUniformEx(sn: number): void;
-        /**
-         * 上传几何数据
-         * @param command
-         * @param bundle
-         * @param sn
-         */
-        protected _uploadGeometryEx(command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle, sn: number): number;
-        /**
-         * 渲染
-         * @param context
-         * @param command
-         * @param bundle
-         */
-        _render(context: WebGPURenderContext3D, command: WebGPURenderCommandEncoder, bundle: WebGPURenderBundle): number;
-    }
-    /**
-     * 聚光灯阴影渲染流程
-     */
-    class WebGPUSpotLightShadowRP {
-        protected static _invertYScaleMatrix: Matrix4x4;
-        destTarget: InternalRenderTarget;
-        set light(value: WebSpotLight);
-        get light(): WebSpotLight;
-        constructor();
-        /**
-         * 更新阴影数据
-         * @param context
-         */
-        update(context: WebGPURenderContext3D): void;
-        /**
-         * 渲染
-         * @param context
-         * @param list
-         * @param count
-         */
-        render(context: WebGPURenderContext3D, list: WebBaseRenderNode[], count: number): void;
-        /**
-         * get shadow bias
-         * @param shadowResolution
-         * @param out
-         */
-        private _getShadowBias;
-        /**
-         * 设置阴影级联数据模式
-         * @param shaderData
-         * @param shadowSliceData
-         * @param shadowParams
-         * @param shadowBias
-         */
-        private _setupShadowCasterShaderValues;
-        /**
-         * 应用阴影渲染命令
-         * @param context
-         */
-        private _applyCasterPassCommandBuffer;
-        /**
-         * 设置聚光接受阴影的模式
-         * @param shaderData 渲染数据
-         * @param cameraData 相机数据
-         */
-        private _applyRenderData;
-    }
-    class WebGPU_GLSLCommon {
-        /**
-         * 替换字符串的一部分
-         * @param str 输入字符串
-         * @param replace 替换项
-         * @param start 替换开始位置（包含）
-         * @param end 替换结束位置（不包含）
-         */
-        static replaceStringPart(str: string, replace: string, start: number, end: number): string;
-        /**
-         * 在第一对括号内查找参数，查找以逗号分割的参数，括号可以嵌套，不在第一对括号内的逗号不会被分割
-         * @param input 输入字符串（带括号）
-         * @param start 从哪个位置开始查找
-         * @param bracket 指定括号（默认为小括号）
-         */
-        static findParamInBracket(input: string, start: number, bracket?: string): {
-            full: string;
-            elements: string[];
-            index: number;
-        } | null;
-        /**
-         * 根据函数类型替换指定实参
-         * @param code 要替换的代码
-         * @param variableName 要查找的变量名
-         * @param functionNames 包含特定函数名称的数组
-         * @param replacementInCategory 替换字符串，如果函数名称在提供的数组中
-         * @param replacementOutOfCategory 替换字符串，如果函数名称不在提供的数组中
-         * @return 返回替换后的代码
-         */
-        static replaceArgumentByFunctionCategory(code: string, variableName: string, functionNames: string[], replacementInCategory: string, replacementOutOfCategory: string): string;
-        /**
-         * 移除括号内的空格
-         * @param str 输入字符串
-         * @param bracket 指定括号（默认为小括号）
-         */
-        static removeSpacesInBracket(str: string, bracket?: string): string;
-    }
-    /**
-     * 函数参数
-     */
-    interface Parameter {
-        name: string;
-        type: string;
-        inout?: string;
-        precision?: string;
-        isArray: boolean;
-        arrayLength?: number;
-        isStruct: boolean;
-    }
-    /**
-     * 函数调用
-     */
-    interface FunctionCall {
-        name: string;
-        params: string[];
-    }
-    /**
-     * GLSL函数定义
-     */
-    class WebGPU_GLSLFunction {
-        name: string;
-        return: string;
-        precision: string;
-        all: string;
-        head: string;
-        body: string;
-        params: Parameter[];
-        calls: FunctionCall[];
-        samplerProcessed: boolean;
-        samplerParams: Parameter[];
-        samplerBody: string;
-        samplerOutput: string;
-        static variableType: string[];
-        constructor(all: string);
-        /**
-         * 获取函数头和函数体
-         */
-        private _getHeadAndBody;
-        /**
-         * 解析函数定义
-         */
-        private _parse;
-        /**
-         * 查找函数调用
-         * @param glslCode
-         */
-        private _findFunctionCalls;
-        /**
-         * 对函数进行处理，将sampler转换为texture和sampler
-         * @param textureNames
-         */
-        processSampler(textureNames: string[]): void;
-    }
-    /**
-     * GLSL宏定义
-     */
-    class WebGPU_GLSLMacro {
-        all: string;
-        name: string;
-        params?: string[];
-        replace?: string;
-        constructor(all: string);
-        /**
-         * 解析
-         */
-        private _parse;
-        /**
-         * 替换GLSL代码中的宏
-         * @param glslCode 原始GLSL代码
-         * @returns 替换后的GLSL代码
-         */
-        replaceMacros(glslCode: string): string;
-    }
-    /**
-     * GLSL代码处理
-     */
-    class WebGPU_GLSLProcess {
-        globals: string[];
-        macros: WebGPU_GLSLMacro[];
-        structs: WebGPU_GLSLStruct[];
-        uniforms: WebGPU_GLSLUniform[];
-        functions: WebGPU_GLSLFunction[];
-        textureNames: string[];
-        glslCode: string;
-        /**
-         * 处理GLSL代码
-         * @param glslCode GLSL代码
-         * @param textureNames 所有的贴图名称
-         */
-        process(glslCode: string, textureNames: string[]): void;
-        /**
-         * 添加uniform
-         * @param uniform
-         */
-        addUniform(uniform: string): void;
-        /**
-         * 移除注释
-         * @param glslCode
-         */
-        private _removeComments;
-        /**
-         * 移除不必要的空格
-         * @param glslCode
-         */
-        private _removeSpaces;
-        /**
-         * 提取宏定义
-         * @param glslCode
-         */
-        private _extractMacros;
-        /**
-         * 执行宏替换
-         * @param glslCode
-         */
-        private _replaceMacros;
-        /**
-         * 提取全局变量
-         * @param glslCode
-         */
-        private _extractGlobals;
-        /**
-         * 提取结构体定义
-         * @param glslCode
-         */
-        private _extractStructs;
-        /**
-         * 提取函数定义
-         * @param glslCode
-         */
-        private _extractFunctions;
-        /**
-         * 查找被使用的函数
-         */
-        private _findUsedFunctions;
-        /**
-         * 输出处理后的GLSL代码
-         */
-        private _outputGLSL;
-        /**
-         * 获取一个变量
-         * @param name
-         * @param isArray
-         */
-        private _getVariable;
-        /**
-         * 打印调试信息
-         */
-        debugInfo(): void;
-    }
-    /**
-     * 结构体字段
-     */
-    interface StructField {
-        type: string;
-        name: string;
-        precision?: string;
-        isArray?: boolean;
-        arrayLength?: number;
-    }
-    /**
-     * GLSL结构体定义
-     */
-    class WebGPU_GLSLStruct {
-        all: string;
-        name: string;
-        fields: StructField[];
-        constructor(all: string);
-        /**
-         * 解析结构体定义
-         * @param all
-         */
-        private _parse;
-        /**
-         * 获取字段
-         * @param name 字段名称
-         * @param isArray 是否是数组
-         * @returns 字段
-         */
-        getArrayField(name: string, isArray?: boolean): StructField;
-    }
-    /**
-     * uniform字段
-     */
-    interface UniformField {
-        type: string;
-        name: string;
-        precision?: string;
-        isArray: boolean;
-        arrayLength?: number;
-    }
-    /**
-     * GLSLUniform块定义
-     */
-    class WebGPU_GLSLUniform {
-        all: string;
-        name: string;
-        set: number;
-        binding: number;
-        fields: UniformField[];
-        constructor(all: string);
-        /**
-         * 解析uniform定义
-         * @param all
-         */
-        private _parse;
-        /**
-         * 获取字段
-         * @param name 字段名称
-         * @param isArray 是否是数组
-         * @returns 字段
-         */
-        getArrayField(name: string, isArray?: boolean): UniformField;
-    }
-    class NagaWASM {
-        /**
-         * 初始化wasm库
-         */
-        init(): Promise<void>;
-        /**
-         * 将GLSL4.5转译成WGSL
-         */
-        compileGLSL2WGSL(code: string, type: string): any;
-    }
-    /**
-     * Converts a `GPUExtent3D` into an array of numbers
-     *
-     * `GPUExtent3D` has two forms `[width, height?, depth?]` or
-     * `{width: number, height?: number, depthOrArrayLayers?: number}`
-     *
-     * You pass one of those in here and it returns an array of 3 numbers
-     * so that your code doesn't have to deal with multiple forms.
-     *
-     * @param size
-     * @returns an array of 3 numbers, [width, height, depthOrArrayLayers]
-     */
-    function normalizeGPUExtent3D(size: GPUExtent3D): number[];
-    /**
-     * Given a GPUExtent3D returns the number of mip levels needed
-     *
-     * @param size
-     * @returns number of mip levels needed for the given size
-     */
-    function numMipLevels(size: GPUExtent3D, dimension?: GPUTextureDimension): number;
-    /**
-     * Generates mip levels from level 0 to the last mip for an existing texture
-     *
-     * The texture must have been created with TEXTURE_BINDING and RENDER_ATTACHMENT
-     * and been created with mip levels
-     *
-     * @param device A GPUDevice
-     * @param texture The texture to create mips for
-     * @param textureBindingViewDimension This is only needed in compatibility mode
-     *   and it is only needed when the texture is going to be used as a cube map.
-     */
-    function genMipmap(device: GPUDevice, texture: GPUTexture, textureBindingViewDimension?: GPUTextureViewDimension): void;
-    /**
-     * 对贴图中的像素做预乘处理
-     *
-     * @param device A GPUDevice
-     * @param tex The texture to premultiply Alpha
-     * @param xOffset horizon offset
-     * @param yOffset vertical offset
-     * @param width
-     * @param height
-     */
-    function doPremultiplyAlpha(device: GPUDevice, tex: WebGPUInternalTex, xOffset: number, yOffset: number, width: number, height: number): void;
-    enum WebGPUBufferUsage {
-        MAP_READ,
-        MAP_WRITE,
-        COPY_SRC,
-        COPY_DST,
-        INDEX,
-        VERTEX,
-        UNIFORM,
-        STORAGE,
-        INDIRECT,
-        QUERY_RESOLVE
-    }
-    enum GPUMapModeFlag {
-        READ,
-        Write
-    }
-    class WebGPUBuffer {
-        _source: GPUBuffer;
-        _usage: GPUBufferUsageFlags;
-        _size: number;
-        private _isCreate;
-        private _mappedAtCreation;
-        globalId: number;
-        objectName: string;
-        constructor(usage: GPUBufferUsageFlags, byteSize?: number, mappedAtCreation?: boolean);
-        /**
-         * @param length
-         */
-        setDataLength(length: number): void;
-        private _create;
-        setData(srcData: ArrayBuffer | ArrayBufferView, srcOffset: number): void;
-        setDataEx(srcData: ArrayBuffer | ArrayBufferView, srcOffset: number, byteLength: number, dstOffset?: number): void;
-        readDataFromBuffer(): Promise<Uint8Array>;
-        readFromBuffer(buffer: GPUBuffer, size: number): Promise<Float32Array>;
-        release(): void;
-    }
-    enum WebGPUVertexStepMode {
-        vertex = "vertex",
-        instance = "instance"
-    }
-    class WebGPUBufferState implements IBufferState {
-        static idCounter: number;
-        id: number;
-        updateBufferLayoutFlag: number;
-        vertexState: GPUVertexBufferLayout[];
-        _bindedIndexBuffer: WebGPUIndexBuffer;
-        _vertexBuffers: WebGPUVertexBuffer[];
-        globalId: number;
-        objectName: string;
-        applyState(vertexBuffers: WebGPUVertexBuffer[], indexBuffer: WebGPUIndexBuffer): void;
-        constructor();
-        private _getVertexBufferLayoutArray;
-        private _getvertexAttributeFormat;
-        destroy(): void;
-    }
-    /**
-     * 渲染指令缓存
-     * 用于缓存渲染指令，提高渲染效率
-     * 一个渲染指令缓存对象缓存了若干个渲染节点的渲染指令
-     * 如果下一帧渲染流程中，缓存的渲染节点命中率高于一定的程度，则可以直接使用缓存的渲染指令
-     * 对于动态节点，要求命中率为100%，对于静态节点，要求命中率可低于100%（比如70%）
-     */
-    class WebGPURenderBundle {
-        private _engine;
-        private _encoder;
-        private _elements;
-        private _shotNum;
-        private _shotCount;
-        private _shotRateSet;
-        private _shotEstimate;
-        renderBundle: GPURenderBundle;
-        renderTimeStamp: number;
-        renderTriangles: number;
-        id: number;
-        static idCounter: number;
-        constructor(device: GPUDevice, dest: WebGPUInternalRT, shotRateSet: number);
-        /**
-         * 添加渲染节点，将节点的渲染指令添加到命令缓存中
-         * @param context
-         * @param element
-         */
-        render(context: WebGPURenderContext3D, element: WebGPURenderElement3D): void;
-        /**
-         * 结束渲染指令的编码，生成渲染命令缓存对象
-         */
-        finish(): void;
-        /**
-         * 判断是否包含某个渲染节点
-         * @param elementId
-         */
-        hasElement(elementId: number): boolean;
-        /**
-         * 增加命中的渲染节点数量
-         */
-        addShot(): void;
-        /**
-         * 把本缓存对象的所有渲染节点从总体渲染节点集合中移除
-         * @param elements 总体渲染节点集合
-         */
-        removeMyIds(elements: Map<number, WebGPURenderBundle>): void;
-        /**
-         * 清除命中的渲染节点数量
-         */
-        clearShotNum(): void;
-        /**
-         * 判断是否是低命中率
-         */
-        isLowShotRate(): boolean;
-        /**
-         * 设置渲染管线
-         * @param pipeline
-         */
-        setPipeline(pipeline: GPURenderPipeline): void;
-        /**
-         * 设置索引缓冲区
-         * @param buffer
-         * @param indexFormat
-         * @param byteSize
-         * @param offset
-         */
-        setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, byteSize: number, offset?: number): void;
-        /**
-         * 设置顶点缓冲区
-         * @param slot
-         * @param buffer
-         * @param offset
-         * @param size
-         */
-        setVertexBuffer(slot: number, buffer: GPUBuffer, offset?: number, size?: number): void;
-        /**
-         * 设置绑定组
-         * @param index
-         * @param bindGroup
-         * @param dynamicOffsets
-         */
-        setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup, dynamicOffsets?: Iterable<GPUBufferDynamicOffset>): void;
-        /**
-         * 上传几何数据
-         * @param geometry
-         * @param setBuffer
-         */
-        applyGeometry(geometry: WebGPURenderGeometry, setBuffer?: boolean): number;
-        /**
-         * 上传几何数据
-         * @param geometry
-         * @param part
-         * @param setBuffer
-         */
-        applyGeometryPart(geometry: WebGPURenderGeometry, part: number, setBuffer?: boolean): number;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    /**
-     * 渲染指令缓存管理器
-     */
-    class WebGPURenderBundleManager {
-        elementsMaxPerBundleStatic: number;
-        elementsMaxPerBundleDynamic: number;
-        bundles: WebGPURenderBundle[];
-        renderTimeStamp: number;
-        private _triangles;
-        private _elementsMap;
-        private _renderBundles;
-        private _needUpdateRenderBundles;
-        /**
-         * 提交缓存渲染命令
-         * @param passEncoder
-         */
-        renderBundles(passEncoder: GPURenderPassEncoder): void;
-        /**
-         * 渲染元素是否在缓存中
-         * @param elementId
-         */
-        has(elementId: number): boolean;
-        /**
-         * 根据渲染元素id查找渲染缓存对象
-         * @param elementId
-         */
-        getBundle(elementId: number): WebGPURenderBundle;
-        /**
-         * 通过渲染元素组创建渲染缓存对象
-         * @param context
-         * @param elements
-         * @param shotRateSet
-         */
-        createBundle(context: WebGPURenderContext3D, elements: WebGPURenderElement3D[], shotRateSet: number): void;
-        /**
-         * 移除渲染缓存对象
-         * @param bundle
-         */
-        removeBundle(bundle: WebGPURenderBundle): void;
-        /**
-         * 通过指定元素id移除渲染缓存对象
-         * @param elementId
-         */
-        removeBundleByElement(elementId: number): void;
-        /**
-         * 清除所有渲染缓存对象
-         */
-        clearBundle(): void;
-        /**
-         * 清除所有渲染缓存对象的命中计数
-         */
-        clearShot(): void;
-        /**
-         * 移除命中率低的渲染缓存对象
-         */
-        removeLowShotBundle(): boolean;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    class WebGPURenderBundleManagerSet {
-        key: string;
-        bundleManager: WebGPURenderBundleManager;
-        elementsToBundleStatic: WebGPURenderElement3D[];
-        elementsToBundleDynamic: WebGPURenderElement3D[];
-        /**
-         * 清除渲染指令缓存
-         */
-        clearBundle(): void;
-    }
-    class WebGPUCapable {
-        constructor(descriptor: GPUDeviceDescriptor);
-        initCapable(descriptor: GPUDeviceDescriptor): void;
-        getCapable(type: RenderCapable): boolean;
-    }
-    type WebGPUAttributeMapType = {
-        [key: string]: [
-            number,
-            ShaderDataType
-        ];
-    };
-    /**
-     * uniform列表
-     */
-    type WebGPUUniformMapType = {
-        [key: string]: {
-            name: string;
-            type: ShaderDataType;
-        };
-    };
-    /**
-     * 绑定类型（uniformBlock，texture或sampler）
-     */
-    enum WebGPUBindingInfoType {
-        buffer = 0,
-        texture = 1,
-        sampler = 2
-    }
-    /**
-     * uniform详细内容（可能是uniformBlock，texture或sampler）
-     */
-    interface WebGPUUniformPropertyBindingInfo {
-        id: number;
-        set: number;
-        binding: number;
-        name: string;
-        propertyId: number;
-        visibility: GPUShaderStageFlags;
-        type: WebGPUBindingInfoType;
-        uniform?: WebGPUUniformBlockInfo;
-        buffer?: GPUBufferBindingLayout;
-        texture?: GPUTextureBindingLayout;
-        sampler?: GPUSamplerBindingLayout;
-    }
-    /**
-     * WGSL代码转译
-     */
-    class WebGPUCodeGenerator {
-        static naga: NagaWASM;
-        static inited: boolean;
-        static forNaga: boolean;
-        /**
-         * 初始化nageWASM库
-         * @param next
-         */
-        static init(next?: Function): Promise<void>;
-        /**
-         * 生成attribute字符串
-         * @param attributeMap
-         */
-        private static _attributeString;
-        /**
-         * 生成varying字符串
-         * @param varyingMap
-         * @param io 'in' or 'out'
-         */
-        private static _varyingString;
-        /**
-         * 生成uniform字符串
-         * @param uniformMap
-         * @param arrayMap 数组uniform映射表（表示哪些uniform是数组，长度是多少）
-         */
-        private static _uniformString2D;
-        /**
-         * 生成uniform字符串
-         * @param uniformMap
-         * @param arrayMap 数组uniform映射表（表示哪些uniform是数组，长度是多少）
-         */
-        private static _uniformString3D;
-        /**
-         * 生成sampler和texuture字符串
-         * @param textureUniforms
-         * @param uniformInfo
-         * @param visibility
-         */
-        private static _textureString;
-        /**
-         * 去除naga转译报错的代码
-         * @param code
-         */
-        private static _changeUnfitCode;
-        /**
-         * 生成a_WorldMat拼合代码
-         */
-        private static _genAWorldMat;
-        /**
-         * 生成inverse函数（因为WGSL缺乏内置的inverse函数）
-         */
-        private static _genInverseFunc;
-        /**
-         * 生成Uniform数据块信息
-         * @param name
-         * @param binding
-         * @param uniforms
-         * @param arrayMap
-         */
-        private static _genUniformBlockInfo;
-        /**
-         * 转译Attribute类型（Type到String）
-         * @param type
-         */
-        private static _getAttributeT2S;
-        /**
-         * 转译Attribute类型（String到Type）
-         * @param name
-         */
-        private static _getAttributeS2T;
-        /**
-         * 转译Attribute类型（String到Number），用于分组
-         * @param name
-         */
-        private static _getAttributeS2N;
-        /**
-         * 执行WGSL转译
-         * @param defineString
-         * @param attributeMap
-         * @param uniformMap
-         * @param VS
-         * @param FS
-         * @param is2D
-         */
-        static shaderLanguageProcess(defineString: string[], attributeMap: WebGPUAttributeMapType, uniformMap: WebGPUUniformMapType, arrayMap: NameNumberMap, VS: ShaderNode, FS: ShaderNode, is2D: boolean): {
-            glsl_vs: string;
-            glsl_fs: string;
-            vs: any;
-            fs: any;
-            uniformInfo: WebGPUUniformPropertyBindingInfo[];
-        };
-        /**
-         * 收集Uniform信息
-         * @param defineString
-         * @param uniformMap
-         * @param VS
-         * @param FS
-         */
-        static collectUniform(defineString: string[], uniformMap: UniformMapType, VS: ShaderNode, FS: ShaderNode): {
-            uniform: WebGPUUniformMapType;
-            arr: NameNumberMap;
-        };
-    }
-    class WebGPUCommandUniformMap extends CommandUniformMap {
-        _stateName: string;
-        constructor(stateName: string);
-        hasPtrID(propertyID: number): boolean;
-        /**
-         * 增加一个UniformArray参数
-         * @param propertyID
-         * @param propertyName
-         */
-        addShaderUniformArray(propertyID: number, propertyName: string, uniformtype: ShaderDataType, arrayLength: number, block?: string): void;
-        /**
-         * 增加一个Uniform
-         * @param propertyID
-         * @param propertyKey
-         */
-        addShaderBlockUniform(propertyID: number, blockname: string, blockProperty: UniformProperty[]): void;
-    }
-    type OffsetAndSize = {
-        offset: number;
-        size: number;
-    };
-    type NameAndType = {
-        name: string;
-        type: string;
-        set: number;
-    };
-    type NameStringMap = Record<string, string>;
-    type NameNumberMap = Record<string, number>;
-    type NameBooleanMap = Record<string, boolean>;
-    type TypedArray = Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array;
-    type TypedArrayConstructor = Int8ArrayConstructor | Uint8ArrayConstructor | Int16ArrayConstructor | Uint16ArrayConstructor | Int32ArrayConstructor | Uint32ArrayConstructor | Float32ArrayConstructor | Float64ArrayConstructor;
-    /**
-     * 向上圆整到align的整数倍
-     * @param n
-     * @param align
-     */
-    function roundUp(n: number, align: number): number;
-    /**
-     * 向下圆整到align的整数倍
-     * @param n
-     * @param align
-     */
-    function roundDown(n: number, align: number): number;
-    /**
-     * 是否是TypedArray
-     * @param arr
-     */
-    const isTypedArray: (arr: any) => boolean;
-    class WebGPUIndexBuffer implements IIndexBuffer {
-        source: WebGPUBuffer;
-        indexType: IndexFormat;
-        indexCount: number;
-        globalId: number;
-        objectName: string;
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-        _setIndexDataLength(length: number): void;
-        _setIndexData(data: Uint8Array | Uint16Array | Uint32Array, bufferOffset: number): void;
-        destroy(): void;
-    }
-    class WebGPUInternalRT implements InternalRenderTarget {
-        _isCube: boolean;
-        _samples: number;
-        _generateMipmap: boolean;
-        _textures: WebGPUInternalTex[];
-        _texturesResolve: WebGPUInternalTex[];
-        _depthTexture: WebGPUInternalTex;
-        colorFormat: RenderTargetFormat;
-        depthStencilFormat: RenderTargetFormat;
-        isSRGB: boolean;
-        gpuMemory: number;
-        formatId: number;
-        _colorStates: GPUColorTargetState[];
-        _depthState: GPUColorTargetState;
-        _renderPassDescriptor: GPURenderPassDescriptor;
-        _renderBundleDescriptor: GPURenderBundleEncoderDescriptor;
-        globalId: number;
-        objectName: string;
-        constructor(colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, isCube: boolean, generateMipmap: boolean, samples: number);
-        dispose(): void;
-    }
-    class WebGPUInternalTex implements InternalTexture {
-        resource: GPUTexture;
-        dimension: TextureDimension;
-        width: number;
-        height: number;
-        depth: number;
-        isPotSize: boolean;
-        mipmap: boolean;
-        mipmapCount: number;
-        baseMipmapLevel: number;
-        maxMipmapLevel: number;
-        useSRGBLoad: boolean;
-        gammaCorrection: number;
-        multiSamplers: number;
-        _webGPUFormat: WebGPUTextureFormat;
-        private _engine;
-        private _statistics_M_TextureX;
-        private _statistics_M_TextureA;
-        private _statistics_RC_TextureX;
-        private _statistics_RC_TextureA;
-        globalId: number;
-        objectName: string;
+    class WebGLInternalTex extends GLObject implements InternalTexture {
+        _gl: WebGLRenderingContext | WebGL2RenderingContext;
+        readonly resource: WebGLTexture;
+        _resourceTarget: number;
+        readonly width: number;
+        readonly height: number;
+        readonly depth: number;
+        readonly isPotSize: boolean;
+        private _mipmap;
+        /**
+         * 是否存在 mipmap 数据
+         */
+        get mipmap(): boolean;
+        private _mipmapCount;
+        get mipmapCount(): number;
+        readonly useSRGBLoad: boolean;
+        readonly gammaCorrection: number;
+        readonly target: number;
+        internalFormat: number;
+        format: number;
+        type: number;
+        /**bytelength */
+        _gpuMemory: number;
+        get gpuMemory(): number;
+        set gpuMemory(value: number);
+        constructor(engine: WebGLEngine, target: number, width: number, height: number, depth: number, dimension: TextureDimension, mipmap: boolean, useSRGBLoader: boolean, gammaCorrection: number);
         private _filterMode;
         get filterMode(): FilterMode;
         set filterMode(value: FilterMode);
-        private _wrapU;
+        private _warpU;
         get wrapU(): WrapMode;
         set wrapU(value: WrapMode);
-        private _wrapV;
+        private _warpV;
         get wrapV(): WrapMode;
         set wrapV(value: WrapMode);
-        private _wrapW;
+        private _warpW;
         get wrapW(): WrapMode;
         set wrapW(value: WrapMode);
         private _anisoLevel;
         get anisoLevel(): number;
         set anisoLevel(value: number);
+        private _baseMipmapLevel;
+        set baseMipmapLevel(value: number);
+        get baseMipmapLevel(): number;
+        private _maxMipmapLevel;
+        set maxMipmapLevel(value: number);
+        get maxMipmapLevel(): number;
         private _compareMode;
         get compareMode(): TextureCompareMode;
         set compareMode(value: TextureCompareMode);
-        private _webGPUSamplerParams;
-        private _webgpuSampler;
-        get sampler(): WebGPUSampler;
-        private _gpuMemory;
-        get gpuMemory(): number;
-        set gpuMemory(value: number);
-        constructor(width: number, height: number, depth: number, dimension: TextureDimension, mipmap: boolean, multiSamples: number, useSRGBLoader: boolean, gammaCorrection: number);
-        statisAsRenderTexture(): void;
-        getTextureView(): GPUTextureView;
-        private _changeTexMemory;
+        _setTexParameteri(pname: number, param: number): void;
+        _setTexParametexf(pname: number, param: number): void;
+        protected getFilteMinrParam(filterMode: FilterMode, mipmap: boolean): number;
+        protected getFilterMagParam(filterMode: FilterMode): number;
+        protected getWrapParam(wrapMode: WrapMode): number;
+        protected _setWrapMode(pname: number, param: number): void;
         dispose(): void;
     }
-    class WebGPURenderCommandEncoder {
-        _commandEncoder: GPUCommandEncoder;
-        _encoder: GPURenderPassEncoder;
-        _engine: WebGPURenderEngine;
-        _device: GPUDevice;
-        globalId: number;
-        objectName: string;
-        constructor();
-        startRender(renderPassDesc: GPURenderPassDescriptor): void;
-        setPipeline(pipeline: GPURenderPipeline): void;
-        setIndexBuffer(buffer: GPUBuffer, indexFormat: GPUIndexFormat, byteSize: number, offset?: number): void;
-        setVertexBuffer(slot: number, buffer: GPUBuffer, offset?: number, size?: number): void;
-        drawIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64): void;
-        drawIndexedIndirect(indirectBuffer: GPUBuffer, indirectOffset: GPUSize64): void;
-        setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup, dynamicOffsets?: Iterable<GPUBufferDynamicOffset>): void;
-        setBindGroupByDataOffaset(index: GPUIndex32, bindGroup: GPUBindGroup, dynamicOffsetsData: Uint32Array, dynamicOffsetsDataStart: GPUSize64, dynamicOffsetsDataLength: GPUSize32): void;
-        setViewport(x: number, y: number, width: number, height: number, minDepth: number, maxDepth: number): void;
-        setScissorRect(x: GPUIntegerCoordinate, y: GPUIntegerCoordinate, width: GPUIntegerCoordinate, height: GPUIntegerCoordinate): void;
-        setStencilReference(ref: number): void;
-        end(): void;
-        finish(): GPUCommandBuffer;
-        playBundle(bundles: GPURenderBundle[]): void;
-        /**
-         * 上传几何数据
-         * @param geometry
-         * @param setBuffer
-         */
-        applyGeometry(geometry: WebGPURenderGeometry, setBuffer?: boolean): number;
-        /**
-         * 上传几何数据
-         * @param geometry
-         * @param part
-         * @param setBuffer
-         */
-        applyGeometryPart(geometry: WebGPURenderGeometry, part: number, setBuffer?: boolean): number;
-        destroy(): void;
-    }
-    class WebGPURenderDeviceFactory implements IRenderDeviceFactory {
-        createShaderInstance(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderCompileDefineBase): IShaderInstance;
-        createIndexBuffer(bufferUsage: BufferUsage): IIndexBuffer;
-        createVertexBuffer(bufferUsageType: BufferUsage): IVertexBuffer;
-        createBufferState(): IBufferState;
-        createRenderGeometryElement(mode: MeshTopology, drawType: DrawType): IRenderGeometryElement;
-        createEngine(config: Config, canvas: any): Promise<void>;
-        static globalBlockMap: {
-            [key: string]: WebGPUCommandUniformMap;
-        };
-        createGlobalUniformMap(blockName: string): WebGPUCommandUniformMap;
-        createShaderData(ownerResource?: Resource): ShaderData;
-    }
-    class WebGPUConfig {
-        /**
-         * Defines the category of adapter to use.
-         */
-        powerPreference: GPUPowerPreference;
-        /**
-         * Defines the device descriptor used to create a device.
-         */
-        deviceDescriptor?: GPUDeviceDescriptor;
-        /**
-         * context params
-         */
-        swapChainFormat?: WebGPUTextureFormat;
-        /**
-         * canvans alpha mode
-         */
-        alphaMode: GPUCanvasAlphaMode;
-        /**
-         * attach canvans usage
-         */
-        usage?: GPUTextureUsageFlags;
-        /**
-         * color space
-         */
-        colorSpace?: string;
-        /**
-         * depth and stencil
-         */
-        depthStencilFormat: WebGPUTextureFormat;
-        /**
-         * multi sample（msaa = 4x）
-         */
-        msaa: boolean;
-    }
-    /**
-     * WebGPU渲染引擎
-     */
-    class WebGPURenderEngine implements IRenderEngine {
-        static _offscreenFormat: GPUTextureFormat;
-        static _instance: WebGPURenderEngine;
-        _isShaderDebugMode: boolean;
-        _renderOBJCreateContext: IRenderEngineFactory;
-        _canvas: HTMLCanvasElement;
-        _context: GPUCanvasContext;
-        _config: WebGPUConfig;
-        screenResized: boolean;
-        _screenRT: WebGPUInternalRT;
-        _remapZ: boolean;
-        _screenInvertY: boolean;
-        _lodTextureSample: boolean;
-        _breakTextureSample: boolean;
-        private _adapter;
-        private _device;
-        private _supportCapatable;
-        private _textureContext;
-        private _adapterSupportedExtensions;
-        private _deviceEnabledExtensions;
-        private _GPUStatisticsInfo;
-        gpuBufferMgr: WebGPUBufferManager;
-        globalId: number;
-        objectName: string;
-        /**
-         * 实例化一个webgpuEngine
-         */
-        constructor(config: WebGPUConfig, canvas: any);
-        _enableStatistics: boolean;
-        /**
-         * 获取适配器
-         */
-        private _getAdapter;
-        /**
-         * 初始化适配器
-         * @param adapter
-         */
-        private _initAdapter;
-        /**
-         * 获取WebGPU设备
-         * @param deviceDescriptor
-         */
-        private _getGPUdevice;
-        /**
-         * 显示错误信息
-         * @param event
-         */
-        private _unCapturedErrorCall;
-        /**
-         * 设备丢失
-         * @param info
-         */
-        private _deviceLostCall;
-        /**
-         * 初始化WebGPU设备
-         * @param device
-         */
-        private _initDevice;
-        /**
-         * 初始化WebGPU
-         */
-        _initAsync(): Promise<void>;
-        /**
-         * 画布尺寸改变
-         * @param width
-         * @param height
-         */
-        resizeOffScreen(width: number, height: number): void;
-        getDevice(): GPUDevice;
-        /**
-         * 上传数据
-         */
-        upload(): void;
-        /**
-         * 设置WebGPU画图上下文
-         */
-        private _initContext;
-        /**
-         * 初始化渲染引擎
-         */
-        initRenderEngine(): Promise<void>;
-        copySubFrameBuffertoTex(texture: InternalTexture, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
-        propertyNameToID(name: string): number;
-        propertyIDToName(id: number): string;
-        getDefineByName(name: string): ShaderDefine;
-        getNamesByDefineData(defineData: IDefineDatas, out: string[]): void;
-        _texGammaDefine: {
-            [key: number]: ShaderDefine;
-        };
-        addTexGammaDefine(key: number, value: ShaderDefine): void;
-        /**获得各个参数 */
-        getParams(params: RenderParams): number;
-        /**获得是否支持某种能力 */
-        getCapable(capatableType: RenderCapable): boolean;
-        getTextureContext(): ITextureContext;
-        getCreateRenderOBJContext(): WebGPURenderEngineFactory;
-        viewport(x: number, y: number, width: number, height: number): void;
-        scissor(x: number, y: number, width: number, height: number): void;
-        private _initStatisticsInfo;
-        /**
-         * 创建屏幕渲染目标
-         */
-        createScreenRT(): void;
-    }
-    class WebGPURenderEngineFactory implements IRenderEngineFactory {
+    class WebGLRenderEngineFactory implements IRenderEngineFactory {
+        createShaderData(): ShaderData;
+        createShaderInstance(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderCompileDefineBase): ShaderInstance;
+        createRenderStateComand(): RenderStateCommand;
+        createRenderState(): RenderState;
         createUniformBufferObject(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean): UniformBufferObject;
-        createEngine(config: Config, canvas: any): Promise<void>;
-    }
-    enum WebGPUPrimitiveTopology {
-        point_list = "point-list",
-        line_list = "line-list",
-        line_strip = "line-strip",
-        triangle_list = "triangle-list",
-        triangle_strip = "triangle-strip"
-    }
-    class WebGPURenderGeometry implements IRenderGeometryElement {
-        checkDataFormat: boolean;
-        _id: number;
-        static _idCounter: number;
-        get instanceCount(): number;
-        set instanceCount(value: number);
-        get mode(): MeshTopology;
-        set mode(value: MeshTopology);
-        get indexFormat(): IndexFormat;
-        set indexFormat(value: IndexFormat);
-        globalId: number;
-        objectName: string;
-        setDrawArrayParams(first: number, count: number): void;
-        setDrawElemenParams(count: number, offset: number): void;
-        setInstanceRenderOffset(offset: number, instanceCount: number): void;
-        clearRenderParams(): void;
-        cloneTo(obj: WebGPURenderGeometry): void;
-        destroy(): void;
-    }
-    class WebGPURenderPassHelper {
-        static getDescriptor(rt: WebGPUInternalRT, clearflag: RenderClearFlag, clearColor?: Color, clearDepthValue?: number, clearStencilValue?: number): GPURenderPassDescriptor;
-        static getBundleDescriptor(rt: WebGPUInternalRT): GPURenderBundleEncoderDescriptor;
-        static setColorAttachments(desc: GPURenderPassDescriptor, rt: WebGPUInternalRT, clear: boolean, clearColor?: Color): void;
-        static setDepthAttachments(desc: GPURenderPassDescriptor, rt: WebGPUInternalRT, clear: boolean, clearDepthValue?: number, clearStencilValue?: number): void;
-    }
-    interface WebGPUBlendStateCache {
-        state: GPUBlendState;
-        key: number;
-        id: number;
-    }
-    class WebGPUBlendState {
-        private static _idCounter;
-        private static _pointer_BlendType;
-        private static _pointer_OperationRGB_BlendEquationSeparate;
-        private static _pointer_OperationAlpha_BlendEquationSeparate;
-        private static _pointer_srcBlendRGB_BlendFactor;
-        private static _pointer_dstBlendRGB_BlendFactor;
-        private static _pointer_srcBlendAlpha_BlendFactor;
-        private static _pointer_dstBlendAlpha_BlendFactor;
-        private static _cache;
-        static getBlendState(blend: BlendType, operationRGB: BlendEquationSeparate, srcBlendRGB: BlendFactor, dstBlendRGB: BlendFactor, operationAlpha: BlendEquationSeparate, srcBlendAlpha: BlendFactor, dstBlendAlpha: BlendFactor): WebGPUBlendStateCache;
-        private static _getBlendStateCacheID;
-        private static _createBlendState;
-        private static _getFactor;
-        private static _getComponent;
-    }
-    interface WebGPUDepthStencilStateCache {
-        state: GPUDepthStencilState;
-        key: number;
-        id: number;
-    }
-    class WebGPUDepthStencilState {
-        private static _idCounter;
-        private static _pointer_DepthWriteEnable;
-        private static _pointer_DepthCompare;
-        private static _pointer_DepthFormat;
-        private static _pointer_StencilTest;
-        private static _pointer_StencilOp1;
-        private static _pointer_StencilOp2;
-        private static _pointer_StencilOp3;
-        private static _cache;
-        static getDepthStencilState(format: RenderTargetFormat, depthWriteEnabled: boolean, depthCompare: CompareFunction, stencilParam?: any, depthBiasParam?: any): WebGPUDepthStencilStateCache;
-        private static _getDepthStencilCacheID;
-        private static _createDepthStencilState;
-    }
-    interface WebGPUPrimitiveStateCache {
-        state: GPUPrimitiveState;
-        key: number;
-        id: number;
-    }
-    class WebGPUPrimitiveState {
-        private static _idCounter;
-        private static _pointer_Topology;
-        private static _pointer_FrontFace;
-        private static _pointer_CullMode;
-        private static _cache;
-        static getGPUPrimitiveState(topology: MeshTopology, frontFace: FrontFace, cullMode: CullMode): WebGPUPrimitiveStateCache;
-        private static _getGPUPrimitiveStateID;
-        private static _createPrimitiveState;
-    }
-    interface IRenderPipelineInfo {
-        geometry: WebGPURenderGeometry;
-        blendState: WebGPUBlendStateCache;
-        depthStencilState: WebGPUDepthStencilStateCache;
-        cullMode: CullMode;
-        frontFace: FrontFace;
-    }
-    class WebGPURenderPipeline {
-        static idCounter: number;
-        /**
-         * 获取渲染管线，如果缓存中存在，直接取出，否则创建一个，放入缓存
-         * @param info
-         * @param shaderInstance
-         * @param renderTarget
-         * @param entries
-         */
-        static getRenderPipeline(info: IRenderPipelineInfo, shaderInstance: WebGPUShaderInstance, renderTarget: WebGPUInternalRT, entries: any): any;
-        /**
-         * 创建渲染管线
-         * @param blendState
-         * @param depthState
-         * @param primitiveState
-         * @param vertexBuffers
-         * @param shaderInstance
-         * @param renderTarget
-         * @param entries
-         * @param strId
-         */
-        private static _createRenderPipeline;
-    }
-    /**
-     * WebGPU内存回收（需要延迟一帧回收的内存）
-     */
-    class WebGPUResourceRecover {
-        recoverList: WebGPUBuffer[];
-        readyToRecover: WebGPUBuffer[];
-        needRecover(res: WebGPUBuffer): void;
-        recover(): void;
-    }
-    interface WebGPUSamplerParams {
-        comparedMode: TextureCompareMode;
-        wrapU: WrapMode;
-        warpV: WrapMode;
-        warpW: WrapMode;
-        mipmapFilter: FilterMode;
-        filterMode: FilterMode;
-        anisoLevel: number;
-    }
-    class WebGPUSampler {
-        static pointer_wrapU: number;
-        static pointer_warpV: number;
-        static pointer_warpW: number;
-        static pointer_filterMode: number;
-        static pointer_mipmapFilter: number;
-        static pointer_comparedMode: number;
-        static pointer_anisoLevel: number;
-        private static _cacheMap;
-        static getWebGPUSampler(params: WebGPUSamplerParams): WebGPUSampler;
-        private static _getCatchSamplerKey;
-        private _descriptor;
-        source: GPUSampler;
-        globalId: number;
-        objectName: string;
-        constructor(obj: WebGPUSamplerParams);
-        private _createGPUSampler;
-        private _getSamplerDescriptor;
-        private _getSamplerAddressMode;
-        private _getFilterMode;
-        private _getGPUCompareFunction;
-    }
-    /**
-     * 着色器数据
-     */
-    class WebGPUShaderData extends ShaderData {
-        private static _bindGroupCounter;
-        private static _dummyTexture2D;
-        private static _dummyTextureCube;
-        stateKey: string;
-        static _stateKeyMap: Set<number>;
-        private _infoId;
-        private _uniformBuffer;
-        private _bindGroupMap;
-        private _bindGroup;
-        private _bindGroupLayoutEntries;
-        private _bindGroupKey;
-        coShaderData: WebGPUShaderData[];
-        private _isShare;
-        get isShare(): boolean;
-        set isShare(value: boolean);
-        private _isStatic;
-        get isStatic(): boolean;
-        set isStatic(value: boolean);
-        changeMark: number;
-        globalId: number;
-        objectName: string;
-        static objectCount: number;
-        static __init__(): void;
-        constructor(ownerResource?: Resource);
-        /**
-         * 创建UniformBuffer
-         * @param info
-         * @param single
-         */
-        createUniformBuffer(info: WebGPUUniformPropertyBindingInfo, single?: boolean): void;
-        /**
-         * 将数据更新到UniformBuffer中
-         */
-        private _updateUniformData;
-        /**
-         * 清理缓存的BindGroup
-         */
-        clearBindGroup(): void;
-        /**
-         * 创建绑定组项
-         * @param info
-         */
-        createBindGroupLayoutEntry(info: WebGPUUniformPropertyBindingInfo[]): ({
-            binding: number;
-            visibility: number;
-            buffer: GPUBufferBindingLayout;
-            texture?: undefined;
-            sampler?: undefined;
-        } | {
-            binding: number;
-            visibility: number;
-            texture: GPUTextureBindingLayout;
-            buffer?: undefined;
-            sampler?: undefined;
-        } | {
-            binding: number;
-            visibility: number;
-            sampler: GPUSamplerBindingLayout;
-            buffer?: undefined;
-            texture?: undefined;
-        })[];
-        /**
-         * 绑定资源组
-         * @param groupId
-         * @param name
-         * @param info
-         * @param command
-         * @param bundle
-         */
-        bindGroup(groupId: number, name: string, info: WebGPUUniformPropertyBindingInfo[], command: WebGPURenderCommandEncoder, bundle?: WebGPURenderBundle): GPUBindGroupLayoutEntry[];
-        /**
-         * 上传数据
-         */
-        uploadUniform(): void;
-        /**
-         * 获取数据对象
-         */
-        getData(): any;
-        /**
-         * 获取宏定义数据
-         */
-        getDefineData(): WebDefineDatas;
-        /**
-         * 增加Shader宏定义
-         * @param value 宏定义
-         */
-        addDefine(define: ShaderDefine): void;
-        addDefines(define: WebDefineDatas): void;
-        /**
-         * 移除Shader宏定义
-         * @param value 宏定义
-         */
-        removeDefine(define: ShaderDefine): void;
-        /**
-         * 是否包含Shader宏定义
-         * @param value 宏定义
-         */
-        hasDefine(define: ShaderDefine): boolean;
-        /**
-         * 清空宏定义
-         */
-        clearDefine(): void;
-        /**
-         * 获取布尔
-         * @param index shader索引
-         * @return 布尔
-         */
-        getBool(index: number): boolean;
-        /**
-         * 设置布尔
-         * @param index shader索引
-         * @param value 布尔
-         */
-        setBool(index: number, value: boolean): void;
-        /**
-         * 获取整型
-         * @param index shader索引
-         * @return 整型
-         */
-        getInt(index: number): number;
-        /**
-         * 设置整型
-         * @param index shader索引
-         * @param value 整型
-         */
-        setInt(index: number, value: number): void;
-        /**
-         * 获取浮点
-         * @param index shader索引
-         * @return 浮点
-         */
-        getNumber(index: number): number;
-        /**
-         * 设置浮点
-         * @param index shader索引
-         * @param value 浮点
-         */
-        setNumber(index: number, value: number): void;
-        /**
-         * 获取Vector2向量
-         * @param index shader索引
-         * @return Vector2向量
-         */
-        getVector2(index: number): Vector2;
-        /**
-         * 设置Vector2向量
-         * @param index shader索引
-         * @param value Vector2向量
-         */
-        setVector2(index: number, value: Vector2): void;
-        /**
-         * 获取Vector3向量
-         * @param index shader索引
-         * @return Vector3向量
-         */
-        getVector3(index: number): Vector3;
-        /**
-         * 设置Vector3向量
-         * @param index shader索引
-         * @param value Vector3向量
-         */
-        setVector3(index: number, value: Vector3): void;
-        /**
-         * 获取向量
-         * @param index shader索引
-         * @return 向量
-         */
-        getVector(index: number): Vector4;
-        /**
-         * 设置向量
-         * @param index shader索引
-         * @param value 向量
-         */
-        setVector(index: number, value: Vector4): void;
-        /**
-         * 获取颜色
-         * @param index 索引
-         * @returns 颜色
-         */
-        getColor(index: number): Color;
-        /**
-         * 设置颜色
-         * @param index 索引
-         * @param value 颜色值
-         */
-        setColor(index: number, value: Color): void;
-        /**
-         * 获取矩阵
-         * @param index
-         * @returns
-         */
-        getMatrix3x3(index: number): Matrix3x3;
-        /**
-         * 设置矩阵
-         * @param index
-         * @param value
-         */
-        setMatrix3x3(index: number, value: Matrix3x3): void;
-        /**
-         * 获取矩阵
-         * @param index shader索引
-         * @return 矩阵
-         */
-        getMatrix4x4(index: number): Matrix4x4;
-        /**
-         * 设置矩阵
-         * @param index shader索引
-         * @param value 矩阵
-         */
-        setMatrix4x4(index: number, value: Matrix4x4): void;
-        /**
-         * 获取Buffer
-         * @param index shader索引
-         * @return
-         */
-        getBuffer(index: number): Float32Array;
-        /**
-         * 设置Buffer
-         * @param index shader索引
-         * @param value buffer数据
-         */
-        setBuffer(index: number, value: Float32Array): void;
-        /**
-         * 设置纹理
-         * @param index shader索引
-         * @param value 纹理
-         */
-        setTexture(index: number, value: BaseTexture): void;
-        /**
-         * 设置内部纹理
-         * @param index shader索引
-         * @param value 纹理
-         */
-        _setInternalTexture(index: number, value: InternalTexture): void;
-        /**
-         * 获取纹理
-         * @param index shader索引
-         * @return 纹理
-         */
-        getTexture(index: number): BaseTexture;
-        getSourceIndex(value: any): number;
-        /**
-         * 克隆
-         * @param dest
-         */
-        cloneTo(dest: WebGPUShaderData): void;
-        /**
-         * 克隆
-         */
-        clone(): WebGPUShaderData;
-        _releaseUBOData(): void;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    /**
-     * WebGPU着色器实例
-     */
-    class WebGPUShaderInstance implements IShaderInstance {
-        static idCounter: number;
-        _id: number;
-        _shaderPass: ShaderPass;
-        private _vsShader;
-        private _fsShader;
-        destroyed: boolean;
-        name: string;
-        complete: boolean;
-        renderPipelineMap: Map<string, any>;
-        uniformInfo: WebGPUUniformPropertyBindingInfo[];
-        uniformSetMap: {
-            [set: number]: WebGPUUniformPropertyBindingInfo[];
-        };
-        globalId: number;
-        objectName: string;
-        constructor(name: string);
-        /**
-         * 获取渲染管线描述
-         */
-        getRenderPipelineDescriptor(): GPURenderPipelineDescriptor;
-        /**
-         * 创建ShaderInstance
-         * @param shaderProcessInfo
-         * @param shaderPass
-         */
-        _create(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderPass): void;
-        /**
-         * 基于WebGPUUniformPropertyBindingInfo创建PipelineLayout
-         * @param device
-         * @param name
-         * @param entries
-         */
-        createPipelineLayout(device: GPUDevice, name: string, entries?: any): GPUPipelineLayout;
-        /**
-         * 销毁
-         */
-        _disposeResource(): void;
-    }
-    class WebGPUGlobal {
-        static debug: boolean;
-        static useCache: boolean;
-        static useBundle: boolean;
-        static useBigBuffer: boolean;
-        static useGlobalContext: boolean;
-        private static _idCounter;
-        private static _uniformInfoIdCounter;
-        static getUniformInfoId(): number;
-        static getId(object?: any): number;
-        static releaseId(object: any): void;
-        static action(object: any, action: string, memory?: number): void;
-        static reset(): void;
-        static get idCounter(): number;
-    }
-    class WebGPUStatis {
-        private static _start;
-        private static _totalStatis;
-        private static _frameStatis;
-        private static _dataTiming;
-        private static _dataCreate;
-        private static _dataRelease;
-        private static _textureStatis;
-        static startFrame(): void;
-        static addUploadNum(n?: number): void;
-        static addUploadBytes(n?: number): void;
-        static addRenderElement(n?: number): void;
-        static addSubmit(n?: number): void;
-        static addTexture(texture: any): void;
-        static trackObjectCreation(name: string, id: number, object?: any, memory?: number): void;
-        static trackObjectRelease(name: string, id: number, object?: any, memory?: number): void;
-        static trackObjectAction(name: string, id: number, action: string, object?: any, memory?: number): void;
-        static printStatisticsAsTable(): void;
-        static printTotalStatis(): void;
-        static printFrameStatis(): void;
-        static printTextureStatis(): void;
-    }
-    enum WebGPUTextureDimension {
-        D1D = "1d",
-        D2D = "2d",
-        D3D = "3d"
-    }
-    enum WebGPUTextureFormat {
-        r8unorm = "r8unorm",
-        r8snorm = "r8snorm",
-        r8uint = "r8uint",
-        r8sint = "r8sint",
-        r16uint = "r16uint",
-        r16sint = "r16sint",
-        r16float = "r16float",
-        rg8unorm = "rg8unorm",
-        rg8snorm = "rg8snorm",
-        rg8uint = "rg8uint",
-        rg8sint = "rg8sint",
-        r32uint = "r32uint",
-        r32sint = "r32sint",
-        r32float = "r32float",
-        rg16uint = "rg16uint",
-        rg16sint = "rg16sint",
-        rg16float = "rg16float",
-        rgba8unorm = "rgba8unorm",
-        rgba8unorm_srgb = "rgba8unorm-srgb",
-        rgba8snorm = "rgba8snorm",
-        rgba8uint = "rgba8uint",
-        rgba8sint = "rgba8sint",
-        bgra8unorm = "bgra8unorm",
-        bgra8unorm_srgb = "bgra8unorm-srgb",
-        rgb9e5ufloat = "rgb9e5ufloat",
-        rgb10a2unorm = "rgb10a2unorm",
-        rg11b10ufloat = "rg11b10ufloat",
-        rg32uint = "rg32uint",
-        rg32sint = "rg32sint",
-        rg32float = "rg32float",
-        rgba16uint = "rgba16uint",
-        rgba16sint = "rgba16sint",
-        rgba16float = "rgba16float",
-        rgba32uint = "rgba32uint",
-        rgba32sint = "rgba32sint",
-        rgba32float = "rgba32float",
-        stencil8 = "stencil8",
-        depth16unorm = "depth16unorm",
-        depth24plus = "depth24plus",
-        depth24plus_stencil8 = "depth24plus-stencil8",
-        depth32float = "depth32float",
-        depth32float_stencil8 = "depth32float-stencil8",
-        bc1_rgba_unorm = "bc1-rgba-unorm",
-        bc1_rgba_unorm_srgb = "bc1-rgba-unorm-srgb",
-        bc2_rgba_unorm = "bc2-rgba-unorm",
-        bc2_rgba_unorm_srgb = "bc2-rgba-unorm-srgb",
-        bc3_rgba_unorm = "bc3-rgba-unorm",
-        bc3_rgba_unorm_srgb = "bc3-rgba-unorm-srgb",
-        bc4_r_unorm = "bc4-r-unorm",
-        bc4_r_snorm = "bc4-r-snorm",
-        bc5_rg_unorm = "bc5-rg-unorm",
-        bc5_rg_snorm = "bc5-rg-snorm",
-        bc6h_rgb_ufloat = "bc6h-rgb-ufloat",
-        bc6h_rgb_float = "bc6h-rgb-float",
-        bc7_rgba_unorm = "bc7-rgba-unorm",
-        bc7_rgba_unorm_srgb = "bc7-rgba-unorm-srgb",
-        etc2_rgb8unorm = "etc2-rgb8unorm",
-        etc2_rgb8unorm_srgb = "etc2-rgb8unorm-srgb",
-        etc2_rgb8a1unorm = "etc2-rgb8a1unorm",
-        etc2_rgb8a1unorm_srgb = "etc2-rgb8a1unorm-srgb",
-        etc2_rgba8unorm = "etc2-rgba8unorm",
-        etc2_rgba8unorm_srgb = "etc2-rgba8unorm-srgb",
-        astc_4x4_unorm = "astc-4x4-unorm",
-        astc_4x4_unorm_srgb = "astc-4x4-unorm-srgb",
-        astc_5x4_unorm = "astc-5x4-unorm",
-        astc_5x4_unorm_srgb = "astc-5x4-unorm-srgb",
-        astc_5x5_unorm = "astc-5x5-unorm",
-        astc_5x5_unorm_srgb = "astc-5x5-unorm-srgb",
-        astc_6x5_unorm = "astc-6x5-unorm",
-        astc_6x5_unorm_srgb = "astc-6x5-unorm-srgb",
-        astc_6x6_unorm = "astc-6x6-unorm",
-        astc_6x6_unorm_srgb = "astc-6x6-unorm-srgb",
-        astc_8x5_unorm = "astc-8x5-unorm",
-        astc_8x5_unorm_srgb = "astc-8x5-unorm-srgb",
-        astc_8x6_unorm = "astc-8x6-unorm",
-        astc_8x6_unorm_srgb = "astc-8x6-unorm-srgb",
-        astc_8x8_unorm = "astc-8x8-unorm",
-        astc_8x8_unorm_srgb = "astc-8x8-unorm-srgb",
-        astc_10x5_unorm = "astc-10x5-unorm",
-        astc_10x5_unorm_srgb = "astc-10x5-unorm-srgb",
-        astc_10x6_unorm = "astc-10x6-unorm",
-        astc_10x6_unorm_srgb = "astc-10x6-unorm-srgb",
-        astc_10x8_unorm = "astc-10x8-unorm",
-        astc_10x8_unorm_srgb = "astc-10x8-unorm-srgb",
-        astc_10x10_unorm = "astc-10x10-unorm",
-        astc_10x10_unorm_srgb = "astc-10x10-unorm-srgb",
-        astc_12x10_unorm = "astc-12x10-unorm",
-        astc_12x10_unorm_srgb = "astc-12x10-unorm-srgb",
-        astc_12x12_unorm = "astc-12x12-unorm",
-        astc_12x12_unorm_srgb = "astc-12x12-unorm-srgb"
-    }
-    class WebGPUTextureContext implements ITextureContext {
-        private _engine;
-        constructor(engine: WebGPURenderEngine);
-        needBitmap: boolean;
-        createTexture3DInternal(dimension: TextureDimension, width: number, height: number, depth: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
-        setTexture3DImageData(texture: InternalTexture, source: HTMLImageElement[] | HTMLCanvasElement[] | ImageBitmap[], depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DPixelsData(texture: InternalTexture, source: ArrayBufferView, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexture3DSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, zOffset: number, width: number, height: number, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        private _getGPUTexturePixelByteSize;
-        private _getGPURenderTexturePixelByteSize;
-        private _getGPUTextureFormat;
-        private _getGPURenderTargetFormat;
-        private isCompressTexture;
-        getFormatPixelsParams(format: TextureFormat): {
-            channels: number;
-            bytesPerPixel: number;
-            dataTypedCons: any;
-            typedSize: number;
-        };
-        private _getGPUTextureDescriptor;
-        createTextureInternal(dimension: TextureDimension, width: number, height: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
-        setTextureImageData(texture: InternalTexture, source: HTMLCanvasElement | HTMLImageElement | ImageBitmap, premultiplyAlpha: boolean, invertY: boolean): Promise<void>;
-        setTextureSubImageData(texture: InternalTexture, source: HTMLCanvasElement | HTMLImageElement | ImageBitmap, x: number, y: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTexturePixelsData(texture: WebGPUInternalTex, source: ArrayBufferView, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureSubPixelsData(texture: WebGPUInternalTex, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setTextureDDSData(texture: WebGPUInternalTex, ddsInfo: DDSTextureInfo): void;
-        setTextureKTXData(texture: WebGPUInternalTex, ktxInfo: KTXTextureInfo): void;
-        setTextureHDRData(texture: WebGPUInternalTex, hdrInfo: HDRTextureInfo): void;
-        setCubeImageData(texture: InternalTexture, source: (HTMLCanvasElement | HTMLImageElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubePixelsData(texture: WebGPUInternalTex, source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeSubPixelData(texture: WebGPUInternalTex, source: ArrayBufferView[], mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
-        setCubeKTXData(texture: WebGPUInternalTex, ktxInfo: KTXTextureInfo): void;
-        setCubeDDSData(texture: WebGPUInternalTex, ddsInfo: DDSTextureInfo): void;
-        setTextureCompareMode(texture: InternalTexture, compareMode: TextureCompareMode): TextureCompareMode;
-        createRenderTextureInternal(dimension: TextureDimension, width: number, height: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): InternalTexture;
-        /**
-         * 判断 纹理格式 本身是否是 SRGB格式
-         * @param format
-         * @returns
-         */
-        isSRGBFormat(format: TextureFormat | RenderTargetFormat): boolean;
-        supportSRGB(format: TextureFormat | RenderTargetFormat, mipmap: boolean): boolean;
-        supportGenerateMipmap(format: TextureFormat | RenderTargetFormat): boolean;
-        createRenderTargetInternal(width: number, height: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
-        createRenderTargetDepthTexture(renderTarget: WebGPUInternalRT, dimension: TextureDimension, width: number, height: number): WebGPUInternalTex;
-        createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
-        bindRenderTarget(renderTarget: InternalRenderTarget, faceIndex?: number): void;
-        bindoutScreenTarget(): void;
-        unbindRenderTarget(renderTarget: InternalRenderTarget): void;
-        /**
-         * @deprecated 请使用readRenderTargetPixelDataAsync函数代替
-         * @param renderTarget
-         * @param xOffset
-         * @param yOffset
-         * @param width
-         * @param height
-         * @param out
-         */
-        readRenderTargetPixelData(renderTarget: InternalRenderTarget, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): ArrayBufferView;
-        readRenderTargetPixelDataAsync(renderTarget: InternalRenderTarget, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): Promise<ArrayBufferView>;
-        initVideoTextureData(texture: WebGPUInternalTex): void;
-        updateVideoTexture(texture: InternalTexture, video: HTMLVideoElement, premultiplyAlpha: boolean, invertY: boolean): Promise<void>;
-        getRenderTextureData(internalTex: InternalRenderTarget, x: number, y: number, width: number, height: number): ArrayBufferView;
-    }
-    /**
-     * 单独的GPUBuffer
-     */
-    class WebGPUBufferAlone {
-        queue: GPUQueue;
-        buffer: GPUBuffer;
-        data: ArrayBuffer;
-        size: number;
-        constructor(buffer: GPUBuffer, size: number);
-        upload(): void;
-        destroy(): void;
-    }
-    /**
-     * GPU内存块（小内存块）
-     */
-    class WebGPUBufferBlock {
-        sn: number;
-        buffer: WebGPUBufferCluster;
-        offset: number;
-        size: number;
-        alignedSize: number;
-        user: WebGPUUniformBuffer;
-        destroyed: boolean;
-        globalId: number;
-        objectName: string;
-        constructor(sn: number, buffer: WebGPUBufferCluster, offset: number, size: number, alignedSize: number, user: WebGPUUniformBuffer);
-        needUpload(): void;
-        destroy(): void;
-    }
-    /**
-     * GPU内存块（大内存块）
-     */
-    class WebGPUBufferCluster {
-        device: GPUDevice;
-        name: string;
-        sliceSize: number;
-        sliceNum: number;
-        totalSize: number;
-        totalLeft: number;
-        buffer: GPUBuffer;
-        free: OffsetAndSize[];
-        used: WebGPUBufferBlock[];
-        expand: number;
-        renderContext: any;
-        needUpload: boolean[];
-        data: ArrayBuffer;
-        globalId: number;
-        objectName: string;
-        constructor(device: GPUDevice, name: string, sliceSize: number, sliceNum: number);
-        /**
-         * 设置渲染上下文
-         * @param rc
-         */
-        setRenderContext(rc: any): void;
-        /**
-         * 获取内存块
-         * @param size 需求尺寸
-         * @param user 使用者
-         * @returns 偏移地址（256字节对齐）
-         */
-        getBlock(size: number, user: WebGPUUniformBuffer): WebGPUBufferBlock;
-        /**
-         * 释放内存块
-         */
-        freeBlock(bb: WebGPUBufferBlock): boolean;
-        /**
-         * 将数据上传到GPU内存，合并相邻块，尽可能减少上传次数
-         */
-        upload(): void;
-        /**
-         * 清理，释放所有内存块，回到内存未占用状态
-         * @param sliceNum 保留多少分割数量
-         */
-        clear(sliceNum?: number): void;
-        /**
-         * 查找或创建一个足够大的空闲块，若有必要则扩展大内存块
-         */
-        private _findOrCreateFreeBlock;
-        /**
-         * 扩展GPU缓冲区
-         */
-        private _expandBuffer;
-        /**
-         * 合并内存块
-         */
-        private _mergeFree;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    /**
-     * GPU内存块管理
-     */
-    class WebGPUBufferManager {
-        device: GPUDevice;
-        renderContext: any;
-        namedBuffers: Map<string, WebGPUBufferCluster>;
-        static snCounter: number;
-        constructor(device: GPUDevice);
-        /**
-         * 设置渲染上下文
-         * @param rc
-         */
-        setRenderContext(rc: any): void;
-        /**
-         * 获取单独的GPUBuffer
-         * @param size
-         * @param name
-         */
-        getBufferAlone(size: number, name?: string): GPUBuffer;
-        /**
-         * 添加内存
-         * @param name
-         * @param sliceSize
-         * @param sliceNum
-         */
-        addBuffer(name: string, sliceSize: number, sliceNum: number): boolean;
-        /**
-         * 删除内存
-         * @param name
-         */
-        removeBuffer(name: string): void;
-        /**
-         * 获取内存块
-         * @param name
-         */
-        getBuffer(name: string): GPUBuffer;
-        /**
-         * 获取内存块
-         * @param name
-         * @param size
-         * @param user
-         */
-        getBlock(name: string, size: number, user: WebGPUUniformBuffer): WebGPUBufferBlock;
-        /**
-         * 释放内存块
-         * @param name
-         * @param bb
-         */
-        freeBlock(name: string, bb: WebGPUBufferBlock): boolean;
-        /**
-         * 清理内存
-         * @param name
-         */
-        clearBuffer(name: string): void;
-        /**
-         * 上传数据
-         */
-        upload(): void;
-        /**
-         * 清理所有内存
-         */
-        clear(): void;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    type ItemType = {
-        propertyId: number;
-        name: string;
-        type: string;
-        size: number;
-        align: number;
-        offset: number;
-        element: number;
-        count: number;
-    };
-    /**
-     * UniformBlock信息
-     */
-    class WebGPUUniformBlockInfo {
-        name: string;
-        size: number;
-        items: ItemType[];
-        globalId: number;
-        objectName: string;
-        constructor(name: string, size: number);
-        /**
-         * 添加uniform字段
-         * @param name
-         * @param type
-         * @param offset
-         * @param align
-         * @param size
-         * @param element
-         * @param count
-         */
-        addUniform(name: string, type: string, offset: number, align: number, size: number, element: number, count: number): void;
-        /**
-         * 是否具有指定的uniform
-         * @param propertyId
-         */
-        hasUniform(propertyId: number): boolean;
-        /**
-         * 输出调试信息
-         */
-        debugInfo(): void;
-        /**
-         * 销毁
-         */
-        destroy(): void;
-    }
-    type ItemType = {
-        name: string;
-        view: TypedArray;
-        type: string;
-        align: number;
-        size: number;
-        elements: number;
-        count: number;
-    };
-    class WebGPUUniformBuffer {
-        name: string;
-        strId: string;
-        items: Map<number, ItemType>;
-        itemNum: number;
-        needUpload: boolean;
-        set: number;
-        binding: number;
-        bufferBlock: WebGPUBufferBlock;
-        bufferAlone: WebGPUBufferAlone;
-        gpuBuffer: WebGPUBufferManager;
-        user: WebGPUShaderData;
-        private _gpuBuffer;
-        private _gpuBindGroupEntry;
-        globalId: number;
-        objectName: string;
-        constructor(name: string, set: number, binding: number, size: number, gpuBuffer: WebGPUBufferManager, user: WebGPUShaderData);
-        /**
-         * 通知GPUBuffer改变
-         */
-        notifyGPUBufferChange(): void;
-        /**
-         * 添加uniform字段
-         * @param id
-         * @param name
-         * @param type
-         * @param offset
-         * @param align
-         * @param size
-         * @param elements
-         * @param count
-         */
-        addUniform(id: number, name: string, type: string, offset: number, align: number, size: number, elements: number, count: number): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setUniformData(id: number, data: any): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setBool(id: number, data: boolean): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setBoolArray(id: number, data: boolean[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setInt(id: number, data: number): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setIntArray(id: number, data: number[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setFloat(id: number, data: number): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setFloatArray(id: number, data: number[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setVector2(id: number, data: Vector2): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setVector2Array(id: number, data: Vector2[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setVector3(id: number, data: Vector3): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setVector3Array(id: number, data: Vector3[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setVector4(id: number, data: Vector4): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setVector4Array(id: number, data: Vector4[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setMatrix3x3(id: number, data: Matrix3x3): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setMatrix3x3Array(id: number, data: Matrix3x3[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setMatrix4x4(id: number, data: Matrix4x4): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setMatrix4x4Array(id: number, data: Matrix4x4[]): void;
-        /**
-         * 设置uniform数据
-         * @param id
-         * @param data
-         */
-        setBuffer(id: number, data: Float32Array): void;
-        /**
-         * 获取uniformItem
-         * @param id
-         */
-        getUniform(id: number): ItemType;
-        /**
-         * 是否存在指定的uniform
-         * @param id
-         */
-        hasUniform(id: number): boolean;
-        /**
-         * 根据strId判断是否命中
-         * @param strId
-         */
-        isMe(strId: string): boolean;
-        /**
-         * 上传数据
-         */
-        upload(): void;
-        /**
-         * 清除所有uniform
-         */
-        clear(): void;
-        destroy(): void;
-        /**
-         * 获取WebGPU绑定资源入口
-         */
-        getGPUBindEntry(): GPUBindGroupEntry;
-        /**
-         * 获取一个unifromItem
-         * @param name
-         * @param tac
-         * @param type
-         * @param offset
-         * @param align
-         * @param size
-         * @param elements
-         * @param count
-         */
-        private _getUniformItem;
-        /**
-         * 根据数据类型判断elements数量
-         * @param type
-         */
-        private _typeElements;
-        /**
-         * 根据type获取TypeArray类型
-         * @param type
-         */
-        private static _typeArray;
-        /**
-         * 输出调试信息
-         */
-        debugInfo(): void;
-    }
-    class WebGPUVertexBuffer implements IVertexBuffer {
-        source: WebGPUBuffer;
-        vertexDeclaration: VertexDeclaration;
-        instanceBuffer: boolean;
-        buffer: ArrayBuffer;
-        globalId: number;
-        objectName: string;
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-        setData(buffer: ArrayBuffer, bufferOffset?: number, dataStartIndex?: number, dataCount?: number): void;
-        setDataLength(byteLength: number): void;
-        destroy(): void;
-    }
-    enum enumInOut {
-        in = 0,
-        out = 1,
-        inout = 2
-    }
-    enum enumDescribe {
-        uniform = 0,
-        varying = 1,
-        const = 2,
-        mediump = 3,
-        highp = 4,
-        lowp = 5,
-        attribute = 6
-    }
-    enum enumOperator {
-        "!=" = 0,
-        "==" = 1,
-        "<=" = 2,
-        ">=" = 3,
-        "||" = 4,
-        "&&" = 5,
-        ">>" = 6,
-        "<<" = 7,
-        "++" = 8,
-        "^^" = 9,
-        "--" = 10,
-        "!" = 11,
-        "+" = 12,
-        "-" = 13,
-        "*" = 14,
-        "/" = 15,
-        "=" = 16,
-        "<" = 17,
-        ">" = 18,
-        "&" = 19,
-        "|" = 20,
-        "^" = 21,
-        "%" = 22
-    }
-    const boolCheck: string[];
-    const _clearCR: RegExp;
-    type TypeOut = {
-        type: string;
-        struct?: WebGPUShaderToken;
-        length?: number[];
-        blockName?: string;
-    };
-    type TypeOutData = {
-        uniform?: Record<string, TypeOut>;
-        varying?: Record<string, TypeOut>;
-        attribute?: Record<string, TypeOut>;
-        variable?: Set<String>;
-    };
-    class WebGPUShaderCompileCode {
-        /**如果parameterNode有值，则代表当前正在解析参数，可能是函数也可能是函数调用 */
-        private static _parameterNode;
-        /**当前的父节点，一般都是往父节点里面添加节点 */
-        private static _parentNode;
-        /**是否当前正在检测Type */
-        private static _isCheckType;
-        /**当前正在处理中的Node节点，一般是parameterNode的child的最后一个或者——parentNode的child最后一个节点 */
-        private static __currNode;
-        /**当前刚刚设置过名字的Node，如果后面发现是个函数的话，直接给該node这是parameter属性 */
-        private static _currNameNode;
-        /**当前的函数参数，或者函数调用的参数 */
-        private static _currParame;
-        /**用户当前checkBodyName的函数体，如果未写大括号会临时放到这里面 */
-        private static _currTmpBody;
-        private static _isCheckBody3;
-        private static _uniform;
-        private static _attribute;
-        private static _varying;
-        private static _variable;
-        private static _struct;
-        private static _varUniform;
-        /**宏替换参数 */
-        private static _define;
-        static compile(code: string): WebGPUShaderToken;
-        private static get _currNode();
-        private static set _currNode(value);
-        private static get isCheckType();
-        private static set isCheckType(value);
-        private static get currNode();
-        /**
-         * 当退出一个函数参数，需要更新currNode为当前_parentNode的最后一个或者_parameterNode的最后一个节点
-         */
-        private static updateCurrNode;
-        /**
-         * @param parameterType 0为(),1为[]
-         */
-        private static newParameterNode;
-        static isEmptyNode(node: WebGPUShaderToken, isCheckParent?: boolean): boolean;
-        /**
-         *
-         * @param isForceCreate 设置force以后，自动会给当前的_parameterNode节点或者_parentNode节点下面增加一个新的节点并且返回
-         * @returns
-         */
-        private static nextCurrNode;
-        private static _compileToTree;
-        private static _checkStructDef;
-        private static _checkTypeByString;
-        private static get _isFor();
-        private static _parseParameter;
-        private static _addParam;
-        private static _checkParameter;
-        private static _body3Fin;
-        /** 这里是对类似if，for，while没有加{}做判断的逻辑 */
-        private static _checkBody3;
-        private static _checkBody;
-        private static _splitTextCheck;
-        private static _childFin;
-        private static _checkType;
-        /**对于等号的检测 */
-        private static _checkEqual;
-        /**这是给当前节点设置nodeName，一般是在checktype里面调用,也可以确定value里面不会存在表达式的时候直接调用*/
-        private static _setNodeName;
-        /**分解运算符等等,设置函数名，变量名或者常量理论上这里不应该出现函数嵌套,设置node的Name也应该用setNodeName */
-        private static _checkBody2;
-        private static _checkOperator;
-        private static _parseNode;
-        /**
-         * 移除代码中的所有注释
-         * @param text
-         * @returns
-         */
-        private static removeAnnotation;
-    }
-    class WebGPUShaderCompileDef {
-        /**当前的父节点，一般都是往父节点里面添加节点 */
-        private static _parentNode;
-        /**当前正在处理中的Node节点，一般是parameterNode的child的最后一个或者——parentNode的child最后一个节点 */
-        private static _currNode;
-        private static _defs;
-        static compile(code: string, defs?: Set<string>): WebGPUShaderToken;
-        static isEmptyNode(node: WebGPUShaderToken): boolean;
-        /**
-         *
-         * @param isForceCreate 设置force以后，自动会给当前的_parameterNode节点或者_parentNode节点下面增加一个新的节点并且返回
-         * @returns
-         */
-        private static nextCurrNode;
-        private static get currNode();
-        private static _compileToTree;
-        private static _parseNode;
-    }
-    class WebGPUShaderCompileUtil {
-        static checkDef(node: WebGPUShaderToken, _defs: Set<string>): void;
-        /**
-         * 提取宏定义
-         * @param code
-         */
-        static extractMacros(code: string): WebGPU_GLSLMacro[];
-        static macrosToVariable(macros: WebGPU_GLSLMacro[]): Set<string>;
-        static toScript(root: WebGPUShaderToken, def?: Record<string, boolean>, outData?: TypeOutData): string;
-        static removeUniform(code: string): string;
-        static removeVarying(code: string): string;
-        static checkCondition(st: WebGPUShaderToken, def: Record<string, boolean>): boolean;
-        private static _parseChilds;
-    }
-    class WebGPUShaderDefine {
-        /**
-         * 查找代码中的数字宏定义
-         * @param code
-         * @param map
-         */
-        static findNumberDefine(code: string, map?: Map<string, string>): Map<string, string>;
-    }
-    class WebGPUShaderToken {
-        uniform: Record<string, TypeOut>;
-        variable: Set<string>;
-        structs: Record<string, WebGPUShaderToken>;
-        varying: Record<string, TypeOut>;
-        attribute: Record<string, TypeOut>;
-        /**是否是赋值状态 */
-        assign: boolean;
-        /**类似于+=、-=、/=、*=、>>=、<<=这种逻辑 */
-        assignLeft: enumOperator;
-        includefiles: any[];
-        describe: enumDescribe;
-        childs: WebGPUShaderToken[];
-        parent: WebGPUShaderToken;
-        inOrOut: enumInOut;
-        /**如果是函数，这里就是函数名，否则是变量名,或者是精度定义 */
-        name: string;
-        /**原始未解析的代码 */
-        code: string;
-        /**用原始code分析出来的语法树 */
-        root: WebGPUShaderToken;
-        /**节点的类型，例如vec4，float...如果是函数，则是函数的返回值,还有可能是参数的分隔符,或者?或者: */
-        type: string;
-        /**操作符，例如=、+、-、*、/ */
-        operator: enumOperator;
-        /**操作符是在name的左侧还是右侧，通常是用于++和--，但是有时也会用于= */
-        operatorRight: boolean;
-        /**函数类型的话会有这些参数数据 */
-        parameter: WebGPUShaderToken;
-        /**这里是数组参数a[][]这种，支持多维数组 */
-        parameterArr: WebGPUShaderToken[];
-        /**参数数据的数据源 */
-        owner: WebGPUShaderToken;
-        /**ifdef的参数 */
-        defParam: string[] | WebGPUShaderToken;
-        /**这里是uniform或者struct后面默认追加变量定义的地方 */
-        varNames: string[];
-        z: number;
-        constructor(includefiles?: any[]);
-        condition(def: Record<string, boolean>): boolean;
-        addParameterArr(param: WebGPUShaderToken, parent?: WebGPUShaderToken): void;
-        setParameter(param: WebGPUShaderToken, parent?: WebGPUShaderToken): void;
-        addBody(body: WebGPUShaderToken): void;
-        setParent(parent: WebGPUShaderToken): void;
-        private _parseShaderNode;
-        private _getParameter;
-        private _getParameterArr;
-        toscript(def?: Record<string, boolean>, out?: string[]): string[];
-    }
-    class BlendState {
-        static _blend_All_pool: any;
-        static _blend_seperate_pool: any;
-        static create(blendType: number, colorBlendhash: BlendComponent, alphaBlendComponent: BlendComponent): void;
-        /** Whether to enable blend. */
-        blendType: BlendType;
-        colorBlendComponent: BlendComponent;
-        alphaBlendComponent: BlendComponent;
-        constructor(blendType: number);
-    }
-    class BlendComponent {
-        static _pool: any;
-        static getHash(blendOperationGLData: number, sourceBlendFactor: number, destinationFactor: number): number;
-        static getBlendComponent(blendOperationGLData: number, sourceBlendFactor: number, destinationFactor: number): any;
-        _blendOperation: BlendEquationSeparate;
-        _blendOperationGLData: number;
-        _sourceBlendFactor: BlendFactor;
-        _sourceBlendFactorGLData: number;
-        _destinationFactor: BlendFactor;
-        _destinationFactorGLData: number;
-        _hashIndex: number;
-        constructor(blendOperationGLData: BlendEquationSeparate, sourceBlendFactor: BlendFactor, destinationFactor: BlendFactor, hashindex: number);
-    }
-    class Buffer {
-        _buffer: Float32Array | Uint16Array | Uint8Array | Uint32Array;
-        _bufferType: number;
-        _bufferUsage: number;
-        _byteLength: number;
-        get bufferUsage(): number;
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-        /**
-         * @private
-         */
-        destroy(): void;
-    }
-    /**
-     * dds 未存储 color space 需要手动指定
-     */
-    class DDSTextureInfo {
-        width: number;
-        height: number;
-        mipmapCount: number;
-        isCube: boolean;
-        bpp: number;
-        blockBytes: number;
-        format: TextureFormat;
-        compressed: boolean;
-        dataOffset: number;
-        source: ArrayBuffer;
-        constructor(width: number, height: number, mipmapCount: number, isCube: boolean, bpp: number, blockBytes: number, dataOffset: number, format: TextureFormat, compressed: boolean, sourceData: ArrayBuffer);
-        static getDDSTextureInfo(source: ArrayBuffer): DDSTextureInfo;
-    }
-    class DepthState {
-    }
-    /**
-     * https://floyd.lbl.gov/radiance/framer.html
-     */
-    class HDRTextureInfo {
-        source: ArrayBuffer;
-        byteOffset: number;
-        decreaseX: boolean;
-        decreaseY: boolean;
-        width: number;
-        height: number;
-        format: TextureFormat;
-        static HDRTEXTURE: string;
-        static _parseHDRTexture(data: ArrayBuffer, propertyParams?: any, constructParams?: any[]): Texture2D;
-        /**
-         *
-         * @param source
-         */
-        static getHDRInfo(source: ArrayBuffer): HDRTextureInfo;
-        private static getLineString;
-        constructor(source: ArrayBuffer, byteOffset: number, decreaseX: boolean, decreaseY: boolean, width: number, height: number, format: TextureFormat);
-        get_32_bit_rle_rgbe(): ArrayBufferView;
-        /**
-         * https://www.radiance-online.org/archived/radsite/radiance/refer/Notes/picture_format.html
-         */
-        readScanLine(): ArrayBufferView;
-        readcolors(scanlineArray: Uint8Array, getc: () => number, wrong: () => void): void;
-        olddreadcolors(scanlineArray: Uint8Array, getc: () => number, r: number, g: number, b: number, e: number): void;
-        color_color(col: Vector4, clr: Vector4): void;
-    }
-    class IndexBuffer extends Buffer {
-        constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-    }
-    /**
-     * https://www.khronos.org/registry/KTX/specs/1.0/ktxspec_v1.html
-     * https://www.khronos.org/registry/KTX/specs/2.0/ktxspec_v2.html
-     */
-    class KTXTextureInfo {
-        source: ArrayBuffer;
-        compress: boolean;
-        sRGB: boolean;
-        dimension: TextureDimension;
-        width: number;
-        height: number;
-        format: TextureFormat;
-        mipmapCount: number;
-        bytesOfKeyValueData: number;
-        headerOffset: number;
-        static getLayaFormat(glFormat: number, glInternalFormat: number, glType: number, glTypeSize: number): {
-            format: TextureFormat;
-            sRGB: boolean;
-        };
-        static getKTXTextureInfo(source: ArrayBuffer): KTXTextureInfo;
-        static createKTX1Info(source: ArrayBuffer): KTXTextureInfo;
-        constructor(source: ArrayBuffer, compress: boolean, sRGB: boolean, dimension: TextureDimension, width: number, height: number, format: TextureFormat, mipmapCount: number, bytesOfKeyValueData: number, headerOffset: number);
+        createGlobalUniformMap(blockName: string): CommandUniformMap;
+        createEngine(config: any, canvas: any): Promise<void>;
+        /**@private test function*/
+        private _replaceWebglcall;
     }
     enum BlendEquationSeparate {
         ADD = 0,
@@ -35541,7 +28938,9 @@ declare module Laya {
         UNIFORM_BUFFER = 2,
         COPY_READ_BUFFER = 3,
         COPY_WRITE_BUFFER = 4,
-        TRANSFORM_FEEDBACK_BUFFER = 5
+        TRANSFORM_FEEDBACK_BUFFER = 5,
+        PIXEL_PACK_BUFFER = 6,
+        PIXEL_UNPACK_BUFFER = 7
     }
     /**
      * Buffer usage.
@@ -35581,12 +28980,6 @@ declare module Laya {
         Front = 1,
         /** cut the back-face of the polygons. */
         Back = 2
-    }
-    enum FrontFace {
-        /** Clockwise front faces. */
-        CW = 0,
-        /** Counter-clockwise front faces. */
-        CCW = 1
     }
     enum DrawType {
         DrawArray = 0,
@@ -35709,38 +29102,15 @@ declare module Laya {
     /**
      * 渲染统计数据
      */
-    enum GPUEngineStatisticsInfo {
-        C_UniformBufferUploadCount = 0,
-        C_GeometryBufferUploadCount = 1,
-        C_TriangleCount = 2,
-        C_SetRenderPassCount = 3,
-        C_DrawCallCount = 4,
-        C_Instancing_DrawCallCount = 5,
-        C_ShaderCompile = 6,
-        T_ShaderCompile = 7,
-        FrameClearCount = 8,
-        M_GPUMemory = 9,
-        M_GPUBuffer = 10,
-        M_VertexBuffer = 11,
-        M_IndexBuffer = 12,
-        M_UniformBlockBuffer = 13,
-        RC_GPUBuffer = 14,
-        RC_VertexBuffer = 15,
-        RC_IndexBuffer = 16,
-        RC_UniformBlockBuffer = 17,
-        M_ALLTexture = 18,
-        M_Texture2D = 19,
-        M_TextureCube = 20,
-        M_Texture3D = 21,
-        M_Texture2DArray = 22,
-        RC_ALLTexture = 23,
-        RC_Texture2D = 24,
-        RC_TextureCube = 25,
-        RC_Texture3D = 26,
-        RC_Texture2DArray = 27,
-        M_ALLRenderTexture = 28,
-        RC_ALLRenderTexture = 29,
-        Count = 30
+    enum RenderStatisticsInfo {
+        DrawCall = 0,
+        InstanceDrawCall = 1,
+        Triangle = 2,
+        UniformUpload = 3,
+        GPUMemory = 4,
+        TextureMemeory = 5,
+        RenderTextureMemory = 6,
+        BufferMemory = 7
     }
     enum RenderTargetFormat {
         None = -1,
@@ -35831,6 +29201,10 @@ declare module Laya {
         ETC2SRGB_Alpha8 = 8,
         /** 纹理格式_ETC2SRGB*/
         ETC2SRGB = 28,
+        /** 纹理格式 RGB8_PUNCHTHROUGH_ALPHA1_ETC2 */
+        ETC2RGB_Alpha1 = 32,
+        /** 纹理格式 SRGB8_PUNCHTHROUGH_ALPHA1_ETC2 */
+        ETC2SRGB_Alpha1 = 33,
         /** 纹理格式_PVRTCRGB_2BPPV*/
         PVRTCRGB_2BPPV = 9,
         /**纹理格式_PVRTCRGBA_2BPPV。*/
@@ -35883,6 +29257,515 @@ declare module Laya {
         /** 镜像采样 */
         Mirrored = 2
     }
+    interface InternalRenderTarget {
+        _isCube: boolean;
+        _samples: number;
+        _generateMipmap: boolean;
+        _textures: InternalTexture[];
+        _depthTexture: InternalTexture;
+        colorFormat: RenderTargetFormat;
+        depthStencilFormat: RenderTargetFormat;
+        isSRGB: boolean;
+        gpuMemory: number;
+        dispose(): void;
+    }
+    /**
+     * 内部纹理对象
+     */
+    interface InternalTexture {
+        /**
+         * gpu texture object
+         */
+        resource: any;
+        target: number;
+        width: number;
+        height: number;
+        depth: number;
+        isPotSize: boolean;
+        mipmap: boolean;
+        mipmapCount: number;
+        filterMode: FilterMode;
+        wrapU: WrapMode;
+        wrapV: WrapMode;
+        wrapW: WrapMode;
+        anisoLevel: number;
+        baseMipmapLevel: number;
+        maxMipmapLevel: number;
+        compareMode: TextureCompareMode;
+        /**bytelength */
+        gpuMemory: number;
+        /**
+         * 是否使用 sRGB格式 加载图片数据
+         */
+        useSRGBLoad: boolean;
+        /**
+         * gamma 矫正值
+         */
+        gammaCorrection: number;
+        dispose(): void;
+    }
+    interface IRender2DContext {
+        activeTexture(textureID: number): void;
+        bindTexture(target: number, texture: any): void;
+        bindUseProgram(webglProgram: any): boolean;
+    }
+    interface IRenderBuffer {
+        bindBuffer(): boolean;
+        unbindBuffer(): void;
+        setDataLength(srcData: number): void;
+        setData(srcData: ArrayBuffer | ArrayBufferView, offset: number): void;
+        setDataEx(srcData: ArrayBuffer | ArrayBufferView, offset: number, length: number): void;
+        bindBufferBase(glPointer: number): void;
+        bindBufferRange(glPointer: number, offset: number, byteCount: number): void;
+        destroy(): void;
+    }
+    interface IRenderDrawContext {
+    }
+    interface IRenderEngine {
+        _context: any;
+        initRenderEngine(canvas: any): void;
+        applyRenderStateCMD(cmd: RenderStateCommand): void;
+        viewport(x: number, y: number, width: number, height: number): void;
+        scissor(x: number, y: number, width: number, height: number): void;
+        colorMask(r: boolean, g: boolean, b: boolean, a: boolean): void;
+        copySubFrameBuffertoTex(texture: BaseTexture, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
+        bindTexture(texture: BaseTexture): void;
+        clearRenderTexture(clearFlag: RenderClearFlag | number, clearcolor: Color, clearDepth: number): void;
+        scissorTest(value: boolean): void;
+        propertyNameToID(name: string): number;
+        propertyIDToName(id: number): string;
+        getParams(params: RenderParams): number;
+        getCapable(capatableType: RenderCapable): boolean;
+        getTextureContext(): ITextureContext;
+        getDrawContext(): IRenderDrawContext;
+        get2DRenderContext(): IRender2DContext;
+        getCreateRenderOBJContext(): IRenderEngineFactory;
+        createRenderStateComand(): RenderStateCommand;
+        createShaderInstance(vs: string, ps: string, attributeMap: {
+            [name: string]: [
+                number,
+                ShaderDataType
+            ];
+        }): IRenderShaderInstance;
+        createBuffer(targetType: BufferTargetType, bufferUsageType: BufferUsage): IRenderBuffer;
+        createVertexState(): IRenderVertexState;
+        getUBOPointer(name: string): number;
+        unbindVertexState(): void;
+    }
+    interface IRenderEngineFactory {
+        createShaderInstance(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderCompileDefineBase): any;
+        createShaderData(ownerResource: Resource): ShaderData;
+        createRenderStateComand(): RenderStateCommand;
+        createRenderState(): RenderState;
+        createUniformBufferObject(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean): UniformBufferObject;
+        createGlobalUniformMap(blockName: string): CommandUniformMap;
+        createEngine(config: Config, canvas: any): Promise<void>;
+    }
+    interface IRenderShaderInstance {
+        getUniformMap(): ShaderVariable[];
+        destroy(): void;
+    }
+    interface IRenderTarget {
+        _renderTarget: InternalRenderTarget;
+        _isCameraTarget: boolean;
+        isCube: boolean;
+        samples: number;
+        generateMipmap: boolean;
+        depthStencilTexture: BaseTexture | null;
+    }
+    /**
+     * 接口用来描述绑定渲染顶点布局
+     */
+    interface IRenderVertexState {
+        _vertexDeclaration: VertexDeclaration[];
+        _bindedIndexBuffer: IndexBuffer;
+        _vertexBuffers: VertexBuffer[];
+        applyVertexBuffer(vertexBuffer: VertexBuffer[]): void;
+        applyIndexBuffer(indexBuffer: IndexBuffer | null): void;
+    }
+    interface ITextureContext {
+        needBitmap: boolean;
+        /**
+         * 为 Texture 创建 InternalTexture
+         * @param width
+         * @param height
+         * @param format
+         * @param generateMipmap
+         * @param sRGB
+         * @returns
+         */
+        createTextureInternal(dimension: TextureDimension, width: number, height: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
+        setTextureImageData(texture: InternalTexture, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTextureSubImageData(texture: InternalTexture, source: HTMLImageElement | HTMLCanvasElement | ImageBitmap, x: number, y: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTexturePixelsData(texture: InternalTexture, source: ArrayBufferView, premultiplyAlpha: boolean, invertY: boolean): void;
+        initVideoTextureData(texture: InternalTexture): void;
+        setTextureSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTextureDDSData(texture: InternalTexture, ddsInfo: DDSTextureInfo): void;
+        setTextureKTXData(texture: InternalTexture, ktxInfo: KTXTextureInfo): void;
+        setTextureHDRData(texture: InternalTexture, hdrInfo: HDRTextureInfo): void;
+        setCubeImageData(texture: InternalTexture, sources: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubePixelsData(texture: InternalTexture, source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubeSubPixelData(texture: InternalTexture, source: ArrayBufferView[], mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, width: number, height: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setCubeDDSData(texture: InternalTexture, ddsInfo: DDSTextureInfo): void;
+        setCubeKTXData(texture: InternalTexture, ktxInfo: KTXTextureInfo): void;
+        setTextureCompareMode(texture: InternalTexture, compareMode: TextureCompareMode): TextureCompareMode;
+        createRenderTextureInternal(dimension: TextureDimension, width: number, height: number, format: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean): InternalTexture;
+        createRenderTargetInternal(width: number, height: number, format: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
+        createRenderTargetCubeInternal(size: number, colorFormat: RenderTargetFormat, depthStencilFormat: RenderTargetFormat, generateMipmap: boolean, sRGB: boolean, multiSamples: number): InternalRenderTarget;
+        setupRendertargetTextureAttachment(renderTarget: InternalRenderTarget, texture: InternalTexture): void;
+        bindRenderTarget(renderTarget: InternalRenderTarget, faceIndex?: number): void;
+        bindoutScreenTarget(): void;
+        unbindRenderTarget(renderTarget: InternalRenderTarget): void;
+        readRenderTargetPixelData(renderTarget: InternalRenderTarget, xOffset: number, yOffset: number, width: number, height: number, out: ArrayBufferView): ArrayBufferView;
+        updateVideoTexture(texture: InternalTexture, video: HTMLVideoElement, premultiplyAlpha: boolean, invertY: boolean): void;
+        getRenderTextureData(internalTex: InternalRenderTarget, x: number, y: number, width: number, height: number): ArrayBufferView;
+    }
+    interface ITexture3DContext extends ITextureContext {
+        createTexture3DInternal(dimension: TextureDimension, width: number, height: number, depth: number, format: TextureFormat, generateMipmap: boolean, sRGB: boolean, premultipliedAlpha: boolean): InternalTexture;
+        setTexture3DImageData(texture: InternalTexture, source: HTMLImageElement[] | HTMLCanvasElement[] | ImageBitmap[], depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTexture3DPixelsData(texture: InternalTexture, source: ArrayBufferView, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
+        setTexture3DSubPixelsData(texture: InternalTexture, source: ArrayBufferView, mipmapLevel: number, generateMipmap: boolean, xOffset: number, yOffset: number, zOffset: number, width: number, height: number, depth: number, premultiplyAlpha: boolean, invertY: boolean): void;
+    }
+    /**
+     * 基本渲染单元
+     */
+    interface IBaseRenderNode {
+    }
+    interface ICameraCullInfo {
+        /**位置 */
+        position: Vector3;
+        /**是否遮挡剔除 */
+        useOcclusionCulling: Boolean;
+        /**锥体包围盒 */
+        boundFrustum: BoundFrustum;
+        /**遮挡标记 */
+        cullingMask: number;
+        /**静态标记 */
+        staticMask: number;
+    }
+    /**
+     * 裁剪接口
+     */
+    interface ICullPass {
+        cullList: SingletonList<BaseRender>;
+        cullByCameraCullInfo(cameraCullInfo: ICameraCullInfo, renderManager: ISceneRenderManager): void;
+        cullByShadowCullInfo(cullInfo: IShadowCullInfo, renderManager: ISceneRenderManager): void;
+        cullingSpotShadow(cameraCullInfo: ICameraCullInfo, renderManager: ISceneRenderManager): void;
+    }
+    type PipelineMode = "Forward" | "ShadowCaster" | "DepthNormal" | string;
+    interface IRenderContext3D {
+        destTarget: IRenderTarget;
+        viewPort: Viewport;
+        scissor: Vector4;
+        invertY: boolean;
+        pipelineMode: PipelineMode;
+        configShaderData: ShaderData;
+        cameraShaderData: ShaderData;
+        sceneID: number;
+        sceneShaderData: ShaderData;
+        cameraUpdateMark: number;
+        globalShaderData: ShaderData;
+        /**设置IRenderContext */
+        applyContext(cameraUpdateMark: number): void;
+        /**draw one element by context */
+        drawRenderElement(renderelemt: IRenderElement): void;
+        end(): void;
+    }
+    interface IRenderElement {
+        _geometry: IRenderGeometryElement;
+        _shaderInstances: SingletonList<ShaderInstance>;
+        _materialShaderData: ShaderData;
+        _renderShaderData: ShaderData;
+        _transform: Transform3D;
+        _isRender: boolean;
+        _owner: IBaseRenderNode;
+        _invertFront: boolean;
+        _render(context: IRenderContext3D): void;
+        _addShaderInstance(shader: ShaderInstance): void;
+        _clearShaderInstance(): void;
+        _destroy(): void;
+    }
+    interface IRenderGeometryElement {
+    }
+    /**
+     * 渲染通道
+     */
+    interface IRenderPass {
+        /**渲染状态 */
+        context: RenderContext3D;
+        _cullPass: ICullPass;
+        setRenderlist(list: SingletonList<IBaseRenderNode>): void;
+        applyRenderQueue(queue: IRenderQueue): void;
+        update(): void;
+        render(): void;
+    }
+    /**
+     * RenderQueue,渲染队列
+     */
+    interface IRenderQueue {
+        /** @interanl */
+        _isTransparent: boolean;
+        /**
+         * @param context 渲染上下文
+         * @return 返回渲染数量
+         */
+        renderQueue(context: RenderContext3D): number;
+        addRenderElement(renderElement: RenderElement): void;
+        clear(): void;
+        destroy(): void;
+    }
+    /**
+     * 可替换的SceneManager
+     */
+    interface ISceneRenderManager {
+        list: SingletonList<BaseRender>;
+        /**
+         * add one BaseRender
+         * @param object
+         */
+        addRenderObject(object: BaseRender): void;
+        /**
+         * remove RenderObject
+         * @param object
+         */
+        removeRenderObject(object: BaseRender): void;
+        /**
+         * 移除某个动态的渲染节点
+         * @param object
+         */
+        removeMotionObject(object: BaseRender): void;
+        /**
+         * 增加运动物体
+         * @param object
+         */
+        addMotionObject(object: BaseRender): void;
+        /**
+         * 更新运动物体
+         * @param object
+         */
+        updateMotionObjects(): void;
+        /**
+         * release Manager Node
+         */
+        destroy(): void;
+    }
+    interface IShadowCullInfo {
+        position: Vector3;
+        cullPlanes: Plane[];
+        cullSphere: BoundSphere;
+        cullPlaneCount: number;
+        direction: Vector3;
+    }
+    interface ISortPass {
+        /**
+         * 排序
+         * @param elements
+         * @param left
+         * @param right
+         */
+        sort(elements: SingletonList<RenderElement>, isTransparent: boolean, left: number, right: number): void;
+    }
+    /**
+     * <code>DefineDatas</code> 类用于创建宏定义数据集合。
+     */
+    class DefineDatas implements IClone {
+        /**
+         * 创建一个 <code>DefineDatas</code> 实例。
+         */
+        constructor();
+        /**
+         * 添加宏定义值。
+         * @param define 宏定义值。
+         */
+        add(define: ShaderDefine): void;
+        /**
+         * 移除宏定义。
+         * @param define 宏定义。
+         */
+        remove(define: ShaderDefine): void;
+        /**
+         * 添加宏定义集合。
+         * @param define 宏定义集合。
+         */
+        addDefineDatas(define: DefineDatas): void;
+        /**
+         * 移除宏定义集合。
+         * @param define 宏定义集合。
+         */
+        removeDefineDatas(define: DefineDatas): void;
+        /**
+         * 是否有宏定义。
+         * @param define 宏定义。
+         */
+        has(define: ShaderDefine): boolean;
+        /**
+         * 清空宏定义。
+         */
+        clear(): void;
+        /**
+         * 克隆。
+         * @param	destObject 克隆源。
+         */
+        cloneTo(destObject: any): void;
+        /**
+         * 克隆。
+         * @return	 克隆副本。
+         */
+        clone(): any;
+        destroy(): void;
+    }
+    /**
+     * <code>RenderState</code> 类用于控制渲染状态。
+     */
+    class RenderState {
+        /**剔除枚举_不剔除。*/
+        static CULL_NONE: number;
+        /**剔除枚举_剔除正面。*/
+        static CULL_FRONT: number;
+        /**剔除枚举_剔除背面。*/
+        static CULL_BACK: number;
+        /**混合枚举_禁用。*/
+        static BLEND_DISABLE: number;
+        /**混合枚举_启用_RGB和Alpha统一混合。*/
+        static BLEND_ENABLE_ALL: number;
+        /**混合枚举_启用_RGB和Alpha单独混合。*/
+        static BLEND_ENABLE_SEPERATE: number;
+        /**混合参数枚举_零,例：RGB(0,0,0),Alpha:(1)。*/
+        static BLENDPARAM_ZERO: number;
+        /**混合参数枚举_一,例：RGB(1,1,1),Alpha:(1)。*/
+        static BLENDPARAM_ONE: number;
+        /**混合参数枚举_源颜色,例：RGB(Rs, Gs, Bs)，Alpha(As)。*/
+        static BLENDPARAM_SRC_COLOR: number;
+        /**混合参数枚举_一减源颜色,例：RGB(1-Rs, 1-Gs, 1-Bs)，Alpha(1-As)。*/
+        static BLENDPARAM_ONE_MINUS_SRC_COLOR: number;
+        /**混合参数枚举_目标颜色,例：RGB(Rd, Gd, Bd),Alpha(Ad)。*/
+        static BLENDPARAM_DST_COLOR: number;
+        /**混合参数枚举_一减目标颜色,例：RGB(1-Rd, 1-Gd, 1-Bd)，Alpha(1-Ad)。*/
+        static BLENDPARAM_ONE_MINUS_DST_COLOR: number;
+        /**混合参数枚举_源透明,例:RGB(As, As, As),Alpha(1-As)。*/
+        static BLENDPARAM_SRC_ALPHA: number;
+        /**混合参数枚举_一减源阿尔法,例:RGB(1-As, 1-As, 1-As),Alpha(1-As)。*/
+        static BLENDPARAM_ONE_MINUS_SRC_ALPHA: number;
+        /**混合参数枚举_目标阿尔法，例：RGB(Ad, Ad, Ad),Alpha(Ad)。*/
+        static BLENDPARAM_DST_ALPHA: number;
+        /**混合参数枚举_一减目标阿尔法,例：RGB(1-Ad, 1-Ad, 1-Ad),Alpha(Ad)。*/
+        static BLENDPARAM_ONE_MINUS_DST_ALPHA: number;
+        /**混合参数枚举_阿尔法饱和，例：RGB(min(As, 1 - Ad), min(As, 1 - Ad), min(As, 1 - Ad)),Alpha(1)。*/
+        static BLENDPARAM_SRC_ALPHA_SATURATE: number;
+        /**混合参数枚举_混合设置颜色 */
+        static BLENDPARAM_BLENDCOLOR: number;
+        /**很合参数枚举_混合颜色取反 */
+        static BLENDPARAM_BLEND_ONEMINUS_COLOR: number;
+        /**混合方程枚举_加法,例：source + destination*/
+        static BLENDEQUATION_ADD: number;
+        /**混合方程枚举_减法，例：source - destination*/
+        static BLENDEQUATION_SUBTRACT: number;
+        /**混合方程枚举_反序减法，例：destination - source*/
+        static BLENDEQUATION_REVERSE_SUBTRACT: number;
+        /**混合方程枚举_取最小 TODO */
+        static BLENDEQUATION_MIN: number;
+        /**混合方程枚举_取最大 TODO*/
+        static BLENDEQUATION_MAX: number;
+        /**深度测试函数枚举_关闭深度测试。*/
+        static DEPTHTEST_OFF: number;
+        /**深度测试函数枚举_从不通过。*/
+        static DEPTHTEST_NEVER: number;
+        /**深度测试函数枚举_小于时通过。*/
+        static DEPTHTEST_LESS: number;
+        /**深度测试函数枚举_等于时通过。*/
+        static DEPTHTEST_EQUAL: number;
+        /**深度测试函数枚举_小于等于时通过。*/
+        static DEPTHTEST_LEQUAL: number;
+        /**深度测试函数枚举_大于时通过。*/
+        static DEPTHTEST_GREATER: number;
+        /**深度测试函数枚举_不等于时通过。*/
+        static DEPTHTEST_NOTEQUAL: number;
+        /**深度测试函数枚举_大于等于时通过。*/
+        static DEPTHTEST_GEQUAL: number;
+        /**深度测试函数枚举_总是通过。*/
+        static DEPTHTEST_ALWAYS: number;
+        static STENCILTEST_OFF: number;
+        /**深度测试函数枚举_从不通过。*/
+        static STENCILTEST_NEVER: number;
+        /**深度测试函数枚举_小于时通过。*/
+        static STENCILTEST_LESS: number;
+        /**深度测试函数枚举_等于时通过。*/
+        static STENCILTEST_EQUAL: number;
+        /**深度测试函数枚举_小于等于时通过。*/
+        static STENCILTEST_LEQUAL: number;
+        /**深度测试函数枚举_大于时通过。*/
+        static STENCILTEST_GREATER: number;
+        /**深度测试函数枚举_不等于时通过。*/
+        static STENCILTEST_NOTEQUAL: number;
+        /**深度测试函数枚举_大于等于时通过。*/
+        static STENCILTEST_GEQUAL: number;
+        /**深度测试函数枚举_总是通过。*/
+        static STENCILTEST_ALWAYS: number;
+        /**保持当前值*/
+        static STENCILOP_KEEP: number;
+        /**将模板缓冲区值设置为0*/
+        static STENCILOP_ZERO: number;
+        /**将模具缓冲区值设置为指定的参考值*/
+        static STENCILOP_REPLACE: number;
+        /**增加当前模具缓冲区值+1 */
+        static STENCILOP_INCR: number;
+        /**增加当前模具缓冲区值,超过最大值的时候循环*/
+        static STENCILOP_INCR_WRAP: number;
+        /**递减当前模板缓冲区的值*/
+        static STENCILOP_DECR: number;
+        /**递减当前模板缓冲去的值，小于0时会循环*/
+        static STENCILOP_DECR_WRAP: number;
+        /**按位反转当前的模板缓冲区的值*/
+        static STENCILOP_INVERT: number;
+        /**渲染剔除状态。*/
+        cull: number;
+        /**透明混合。*/
+        blend: number;
+        /**源混合参数,在blend为BLEND_ENABLE_ALL时生效。*/
+        srcBlend: number;
+        /**目标混合参数,在blend为BLEND_ENABLE_ALL时生效。*/
+        dstBlend: number;
+        /**RGB源混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
+        srcBlendRGB: number;
+        /**RGB目标混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
+        dstBlendRGB: number;
+        /**Alpha源混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
+        srcBlendAlpha: number;
+        /**Alpha目标混合参数,在blend为BLEND_ENABLE_SEPERATE时生效。*/
+        dstBlendAlpha: number;
+        /**混合方程。*/
+        blendEquation: number;
+        /**RGB混合方程。*/
+        blendEquationRGB: number;
+        /**Alpha混合方程。*/
+        blendEquationAlpha: number;
+        /**深度测试函数。*/
+        depthTest: number;
+        /**是否深度测试。*/
+        depthWrite: boolean;
+        /**是否模板写入 */
+        stencilWrite: boolean;
+        /**是否开启模板测试 */
+        stencilTest: number;
+        /**模板值 一般会在0-255*/
+        stencilRef: number;
+        /**模板设置值 */
+        stencilOp: Vector3;
+        /**
+         * 创建一个 <code>RenderState</code> 实例。
+         */
+        constructor();
+        /**
+         * 克隆
+         * @param dest
+         */
+        cloneTo(dest: RenderState): void;
+        /**
+         * 克隆。
+         * @return	 克隆副本。
+         */
+        clone(): RenderState;
+    }
     interface IShaderObjStructor {
         name: string;
         enableInstancing: boolean;
@@ -35914,7 +29797,7 @@ declare module Laya {
      * <code>Shader3D</code> 类用于创建Shader3D。
      */
     class Shader3D {
-        static _configDefineValues: IDefineDatas;
+        static _configDefineValues: DefineDatas;
         /**渲染状态_剔除。*/
         static CULL: number;
         /**渲染状态_混合。*/
@@ -35961,6 +29844,8 @@ declare module Laya {
         static PERIOD_SCENE: number;
         /**是否开启调试模式。 */
         static debugMode: boolean;
+        /**调试着色器变种集合。 */
+        static debugShaderVariantCollection: ShaderVariantCollection;
         static init(): void;
         /**
          * 注册宏定义。
@@ -35987,7 +29872,7 @@ declare module Laya {
          * @param   passIndex  通道索引。
          * @param	defineNames 宏定义名字集合。
          */
-        static compileShaderByDefineNames(shaderName: string, subShaderIndex: number, passIndex: number, defineNames: string[], nodeCommonMap: string[]): boolean;
+        static compileShaderByDefineNames(shaderName: string, subShaderIndex: number, passIndex: number, defineNames: string[], nodeCommonMap: string[]): void;
         /**
          * 添加预编译shader文件，主要是处理宏定义
          */
@@ -36020,17 +29905,294 @@ declare module Laya {
          */
         getSubShaderAt(index: number): SubShader;
     }
+    enum ShaderDataType {
+        Int = 0,
+        Bool = 1,
+        Float = 2,
+        Vector2 = 3,
+        Vector3 = 4,
+        Vector4 = 5,
+        Color = 6,
+        Matrix4x4 = 7,
+        Texture2D = 8,
+        TextureCube = 9,
+        Buffer = 10,
+        Matrix3x3 = 11,
+        Texture2DArray = 12,
+        Texture3D = 13
+    }
+    type ShaderDataItem = number | boolean | Vector2 | Vector3 | Vector4 | Color | Matrix4x4 | BaseTexture | Float32Array | Matrix3x3;
+    function ShaderDataDefaultValue(type: ShaderDataType): false | Readonly<Vector2> | 0 | Readonly<Matrix3x3> | Readonly<Vector3> | Readonly<Matrix4x4> | Readonly<Vector4> | Color | Texture2DArray;
+    /**
+     * 着色器数据类。
+     */
+    class ShaderData implements IClone {
+        get uniformBuffersMap(): Map<number, UniformBufferObject>;
+        applyUBOData(): void;
+        /**
+         * 增加Shader宏定义。
+         * @param value 宏定义。
+         */
+        addDefine(define: ShaderDefine): void;
+        /**
+         * 移除Shader宏定义。
+         * @param value 宏定义。
+         */
+        removeDefine(define: ShaderDefine): void;
+        /**
+         * 是否包含Shader宏定义。
+         * @param value 宏定义。
+         */
+        hasDefine(define: ShaderDefine): boolean;
+        /**
+         * 清空宏定义。
+         */
+        clearDefine(): void;
+        /**
+         * 获取布尔。
+         * @param	index shader索引。
+         * @return  布尔。
+         */
+        getBool(index: number): boolean;
+        /**
+         * 设置布尔。
+         * @param	index shader索引。
+         * @param	value 布尔。
+         */
+        setBool(index: number, value: boolean): void;
+        /**
+         * 获取整形。
+         * @param	index shader索引。
+         * @return  整形。
+         */
+        getInt(index: number): number;
+        /**
+         * 设置整型。
+         * @param	index shader索引。
+         * @param	value 整形。
+         */
+        setInt(index: number, value: number): void;
+        /**
+         * 获取浮点。
+         * @param	index shader索引。
+         * @return	浮点。
+         */
+        getNumber(index: number): number;
+        /**
+         * 设置浮点。
+         * @param	index shader索引。
+         * @param	value 浮点。
+         */
+        setNumber(index: number, value: number): void;
+        /**
+         * 获取Vector2向量。
+         * @param	index shader索引。
+         * @return Vector2向量。
+         */
+        getVector2(index: number): Vector2;
+        /**
+         * 设置Vector2向量。
+         * @param	index shader索引。
+         * @param	value Vector2向量。
+         */
+        setVector2(index: number, value: Vector2): void;
+        /**
+         * 获取Vector3向量。
+         * @param	index shader索引。
+         * @return Vector3向量。
+         */
+        getVector3(index: number): Vector3;
+        /**
+         * 设置Vector3向量。
+         * @param	index shader索引。
+         * @param	value Vector3向量。
+         */
+        setVector3(index: number, value: Vector3): void;
+        /**
+         * 获取颜色。
+         * @param 	index shader索引。
+         * @return  向量。
+         */
+        getVector(index: number): Vector4;
+        /**
+         * 设置向量。
+         * @param	index shader索引。
+         * @param	value 向量。
+         */
+        setVector(index: number, value: Vector4): void;
+        /**
+         * 获取颜色
+         * @param index 索引
+         * @returns 颜色
+         */
+        getColor(index: number): Color;
+        /**
+         * 设置颜色
+         * @param index 索引
+         * @param value 颜色值
+         */
+        setColor(index: number, value: Color): void;
+        /**
+         * 获取矩阵。
+         * @param	index shader索引。
+         * @return  矩阵。
+         */
+        getMatrix4x4(index: number): Matrix4x4;
+        /**
+         * 设置矩阵。
+         * @param	index shader索引。
+         * @param	value  矩阵。
+         */
+        setMatrix4x4(index: number, value: Matrix4x4): void;
+        /**
+         * 获取矩阵
+         * @param index
+         * @returns
+         */
+        getMatrix3x3(index: number): Matrix3x3;
+        /**
+         * 设置矩阵。
+         * @param index
+         * @param value
+         */
+        setMatrix3x3(index: number, value: Matrix3x3): void;
+        /**
+         * 获取Buffer。
+         * @param	index shader索引。
+         * @return
+         */
+        getBuffer(index: number): Float32Array;
+        /**
+         * 设置Buffer。
+         * @param	index shader索引。
+         * @param	value  buffer数据。
+         */
+        setBuffer(index: number, value: Float32Array): void;
+        /**
+         * 设置纹理。
+         * @param	index shader索引。
+         * @param	value 纹理。
+         */
+        setTexture(index: number, value: BaseTexture): void;
+        /**
+         * 获取纹理。
+         * @param	index shader索引。
+         * @return  纹理。
+         */
+        getTexture(index: number): BaseTexture;
+        getSourceIndex(value: any): number;
+        /**
+         * set shader data
+         * @deprecated
+         * @param index uniformID
+         * @param value data
+         */
+        setValueData(index: number, value: any): void;
+        /**
+         *
+         * @param index
+         * @param value
+         */
+        setUniformBuffer(index: number, value: UniformBufferObject): void;
+        getUniformBuffer(index: number): UniformBufferObject;
+        setShaderData(uniformIndex: number, type: ShaderDataType, value: ShaderDataItem | Quaternion): void;
+        getShaderData(uniformIndex: number, type: ShaderDataType): number | boolean | Vector2 | Float32Array | Vector3 | Matrix3x3 | Matrix4x4 | Vector4 | Color | BaseTexture;
+        /**
+         * get shader data
+         * @deprecated
+         * @param index uniform ID
+         * @returns
+         */
+        getValueData(index: number): any;
+        /**
+         * 克隆。
+         * @param	destObject 克隆源。
+         */
+        cloneTo(destObject: ShaderData): void;
+        /**
+         * 克隆。
+         * @return	 克隆副本。
+         */
+        clone(): any;
+        reset(): void;
+        destroy(): void;
+    }
+    /**
+     * <code>ShaderDefine</code> 类用于定义宏数据。
+     */
+    class ShaderDefine {
+        /**
+         * 创建一个宏定义的实例
+         * @param index 宏索引
+         * @param value 宏值
+         */
+        constructor(index: number, value: number);
+    }
+    /**
+     * <code>ShaderInstance</code> 类用于实现ShaderInstance。
+     */
+    class ShaderInstance {
+        private _renderShaderInstance;
+        /**
+         * 创建一个 <code>ShaderInstance</code> 实例。
+         */
+        constructor(shaderProcessInfo: ShaderProcessInfo, shaderPass: ShaderCompileDefineBase);
+        /**
+         * get complete
+         */
+        get complete(): boolean;
+        protected _webGLShaderLanguageProcess3D(defineString: string[], attributeMap: {
+            [name: string]: [
+                number,
+                ShaderDataType
+            ];
+        }, uniformMap: UniformMapType, VS: ShaderNode, FS: ShaderNode): void;
+        protected _webGLShaderLanguageProcess2D(defineString: string[], attributeMap: {
+            [name: string]: [
+                number,
+                ShaderDataType
+            ];
+        }, uniformMap: UniformMapType, VS: ShaderNode, FS: ShaderNode): void;
+        private hasSpritePtrID;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected _disposeResource(): void;
+        /**
+         * apply shader programe
+         * @returns
+         */
+        bind(): boolean;
+        /**
+         * upload uniform data
+         * @param shaderUniform
+         * @param shaderDatas
+         * @param uploadUnTexture
+         */
+        uploadUniforms(shaderUniform: CommandEncoder, shaderDatas: ShaderData, uploadUnTexture: boolean): void;
+        /**
+         * set blend depth stencil RenderState
+         * @param shaderDatas
+         */
+        uploadRenderStateBlendDepth(shaderDatas: ShaderData): void;
+        /**
+         * set blend depth stencil RenderState frome Shader
+         * @param shaderDatas
+         */
+        uploadRenderStateBlendDepthByShader(shaderDatas: ShaderData): void;
+        /**
+         * set blend depth stencil RenderState frome Material
+         * @param shaderDatas
+         */
+        uploadRenderStateBlendDepthByMaterial(shaderDatas: ShaderData): void;
+    }
     /**
      * <code>ShaderPass</code> 类用于实现ShaderPass。
      */
     class ShaderPass extends ShaderCompileDefineBase {
-        get pipelineMode(): string;
-        set pipelineMode(value: string);
         /** 优先 ShaderPass 渲染状态 */
-        private _statefirst;
-        get statefirst(): boolean;
-        set statefirst(value: boolean);
-        moduleData: IShaderPassData;
+        statefirst: boolean;
         /**
          * 渲染状态。
          */
@@ -36095,21 +30257,49 @@ declare module Laya {
          */
         clone(): ShaderVariant;
     }
-    interface IShaderVariant {
-        subShaderIndex: number;
-        passIndex: number;
-        defines: string[];
-        nodeCommonMap: string[];
-    }
     /**
      * 着色器变种集合。
      */
     class ShaderVariantCollection {
-        static active: ShaderVariantCollection;
-        items: Record<string, IShaderVariant[]>;
-        constructor(items?: Record<string, IShaderVariant[]>);
-        add(shaderPass: ShaderPass, defines: ReadonlyArray<string>): void;
-        compileAll(): void;
+        /**
+         * 是否已经全部编译。
+         */
+        get allCompiled(): boolean;
+        /**
+         * 包含的变种数量。
+         */
+        get variantCount(): number;
+        /**
+         * 添加着色器变种。
+         * @param variant 着色器变种。
+         * @param 是否添加成功。
+         */
+        add(variant: ShaderVariant): boolean;
+        /**
+         * 移除着色器变种。
+         * @param variant 着色器变种。
+         * @return 是否移除成功。
+         */
+        remove(variant: ShaderVariant): boolean;
+        /**
+         * 是否包含着色器变种。
+         * @param variant 着色器变种。
+         */
+        contatins(variant: ShaderVariant): boolean;
+        /**
+         * 通过索引获取着色器变种。
+         * @param index 索引。
+         * @returns 着色器变种。
+         */
+        getByIndex(index: number): ShaderVariant;
+        /**
+         * 清空。
+         */
+        clear(): void;
+        /**
+         * 执行编译。
+         */
+        compile(): void;
     }
     type UniformMapType = {
         [blockName: string]: {
@@ -36145,7 +30335,6 @@ declare module Laya {
                 ShaderDataType
             ];
         };
-        moduleData: ISubshaderData;
         /**
          * 创建一个 <code>SubShader</code> 实例。
          * @param	attributeMap  顶点属性表。
@@ -36159,6 +30348,17 @@ declare module Laya {
         }, uniformMap?: UniformMapType, uniformDefaultValue?: {
             [name: string]: ShaderDataItem;
         });
+        /**
+         * 添加标记。
+         * @param key 标记键。
+         * @param value 标记值。
+         */
+        setFlag(key: string, value: string): void;
+        /**
+         * 获取标记值。
+         * @return key 标记键。
+         */
+        getFlag(key: string): string;
         /**
          * 添加着色器Pass
          * @param vs
@@ -36226,6 +30426,16 @@ declare module Laya {
         static getVertexDeclaration(vertexFlag: string, compatible?: boolean): VertexDeclaration;
     }
     /**
+     * 渲染状态设置命令流
+     */
+    class RenderStateCommand {
+        cmdArray: Map<RenderStateType, any>;
+        constructor();
+        addCMD(renderstate: RenderStateType, value: number | boolean | Array<number>): void;
+        applyCMD(): void;
+        clear(): void;
+    }
+    /**
      * @private
      */
     class RenderStateContext {
@@ -36280,6 +30490,16 @@ declare module Laya {
          * @param uniformParamsStat Params describe
          */
         constructor(uniformParamsStat: Map<number, UniformBufferParamsType>);
+        /**
+         * @interanl
+         * layout UniformBuffer pitch std140
+         */
+        protected _addUniformParams(uniformID: number, value: UniformBufferParamsType, offset: number): number;
+        /**
+         * @interanl
+         * set upload range
+         */
+        private _setUpdateFlag;
         /**
          * get Buffer byte length
          * @returns
@@ -36389,11 +30609,12 @@ declare module Laya {
     /**
      * 类封装WebGL2UniformBufferObect
      */
-    class UniformBufferObject {
+    class UniformBufferObject extends Buffer {
         static UBONAME_SCENE: string;
         static UBONAME_CAMERA: string;
         static UBONAME_SPRITE3D: string;
         static UBONAME_SHADOW: string;
+        private static commonMap;
         /**
          * create Uniform Buffer Base
          * @param name Uniform block name(must pitch Shader)
@@ -36408,15 +30629,16 @@ declare module Laya {
          * @returns
          */
         static getBuffer(name: string, index: number): UniformBufferObject;
-        _glBuffer: GLBuffer;
         /**@interanl */
         _glPointer: number;
         /**buffer name */
         _name: string;
         /**all byte length */
         byteLength: number;
-        bufferType: BufferTargetType;
-        bufferUsage: BufferUsage;
+        /**
+         * @interanl
+         */
+        constructor(glPointer: number, name: string, bufferUsage: BufferUsage, byteLength: number, isSingle: boolean);
         /**
          * 重置buffer长度
          * @param bytelength
@@ -36483,7 +30705,6 @@ declare module Laya {
     }
     class VertexBuffer extends Buffer {
         private _instanceBuffer;
-        _buffer: Float32Array | Uint16Array | Uint8Array | Uint32Array;
         /**
          * 获取顶点声明。
          */
@@ -36492,14 +30713,6 @@ declare module Laya {
         get instanceBuffer(): boolean;
         set instanceBuffer(value: boolean);
         constructor(targetType: BufferTargetType, bufferUsageType: BufferUsage);
-    }
-    class VertexStateContext {
-        elementCount: number;
-        elementType: number;
-        normalized: number;
-        vertexStride: number;
-        elementOffset: number;
-        elementString: string;
     }
     /**
      * <code>VertexDeclaration</code> 类用于生成顶点声明。
@@ -36534,287 +30747,6 @@ declare module Laya {
          */
         getVertexElementByUsage(usage: number): VertexElement;
     }
-    interface IGraphicCMD {
-        run(context: Context, gx: number, gy: number): void;
-        recover(): void;
-        get cmdID(): string;
-        percent?: boolean;
-        pivotX?: number;
-        pivotY?: number;
-        scaleX?: number;
-        scaleY?: number;
-        angle?: number;
-        tx?: number;
-        ty?: number;
-        matrix?: Matrix;
-        x?: number;
-        y?: number;
-        width?: number;
-        height?: number;
-        points?: any;
-    }
-    /**
-     * @private
-     */
-    class Context {
-        private static tmpuv1;
-        private static _MAXVERTNUM;
-        static MAXCLIPRECT: Rectangle;
-        private _alpha;
-        private static SEGNUM;
-        private static _contextcount;
-        private _drawTexToDrawTri_Vert;
-        private _drawTexToDrawTri_Index;
-        private _tempUV;
-        private _drawTriUseAbsMatrix;
-        private _other;
-        private _path;
-        private _width;
-        private _height;
-        private _renderCount;
-        private _meshQuatTex;
-        private _meshVG;
-        private _meshTex;
-        private _transedPoints;
-        private _temp4Points;
-        private _clipID_Gen;
-        private _lastMat_a;
-        private _lastMat_b;
-        private _lastMat_c;
-        private _lastMat_d;
-        /**
-         * 所cacheAs精灵
-         * 对于cacheas bitmap的情况，如果图片还没准备好，需要有机会重画，所以要保存sprite。例如在图片
-         * 加载完成后，调用repaint
-         */
-        sprite: Sprite | null;
-        private _fillColor;
-        private _flushCnt;
-        private defTexture;
-        drawTexAlign: boolean;
-        private _isMain;
-        private _render2D;
-        private _clearColor;
-        private _clear;
-        private _shaderValueNeedRelease;
-        _render2DManager: RenderManager2D;
-        static __init__(): void;
-        constructor();
-        copyState(ctx: Context): void;
-        set isMain(v: boolean);
-        get isMain(): boolean;
-        set render2D(render: Render2D);
-        get render2D(): Render2D;
-        /**@private */
-        get lineJoin(): string;
-        /**@private */
-        set lineJoin(value: string);
-        /**@private */
-        get lineCap(): string;
-        /**@private */
-        set lineCap(value: string);
-        /**@private */
-        get miterLimit(): string;
-        /**@private */
-        set miterLimit(value: string);
-        /**
-         * 添加需要touch的资源
-         * @param res
-         */
-        touchRes(res: IAutoExpiringResource): void;
-        transformByMatrix(matrix: Matrix, tx: number, ty: number): void;
-        drawRect(x: number, y: number, width: number, height: number, fillColor: any, lineColor: any, lineWidth: number): void;
-        alpha(value: number): void;
-        drawCurves(x: number, y: number, points: any[], lineColor: any, lineWidth: number): void;
-        private _fillAndStroke;
-        static set2DRenderConfig(): void;
-        clearBG(r: number, g: number, b: number, a: number): void;
-        /**
-         * 释放占用内存
-         */
-        private _releaseMem;
-        /**
-         * 释放所有资源
-         */
-        destroy(): void;
-        clear(): void;
-        /**
-         * 设置ctx的size，这个不允许直接设置，必须是canvas调过来的。所以这个函数里也不用考虑canvas相关的东西
-         * @param	w
-         * @param	h
-         */
-        size(w: number, h: number): void;
-        get width(): number;
-        set width(w: number);
-        get height(): number;
-        set height(h: number);
-        /**
-         * 获得当前矩阵的缩放值
-         * 避免每次都计算getScaleX
-         * @return
-         */
-        getMatScaleX(): number;
-        getMatScaleY(): number;
-        getFillColor(): number;
-        set fillStyle(value: any);
-        get fillStyle(): any;
-        set globalAlpha(value: number);
-        get globalAlpha(): number;
-        set textAlign(value: string);
-        get textAlign(): string;
-        set textBaseline(value: string);
-        get textBaseline(): string;
-        set globalCompositeOperation(value: string);
-        get globalCompositeOperation(): string;
-        set strokeStyle(value: any);
-        get strokeStyle(): any;
-        translate(x: number, y: number): void;
-        set lineWidth(value: number);
-        get lineWidth(): number;
-        save(): void;
-        restore(): void;
-        fillText(txt: string | WordText, x: number, y: number, fontStr: string, color: string, align: string, lineWidth?: number, borderColor?: string): void;
-        drawText(text: string | WordText, x: number, y: number, font: string, color: string, textAlign: string): void;
-        strokeWord(text: string | WordText, x: number, y: number, font: string, color: string, lineWidth: number, textAlign: string): void;
-        fillBorderText(txt: string | WordText, x: number, y: number, font: string, color: string, borderColor: string, lineWidth: number, textAlign: string): void;
-        private _fillRect;
-        fillRect(x: number, y: number, width: number, height: number, fillStyle: any): void;
-        fillTexture(texture: Texture, x: number, y: number, width: number, height: number, type: string, offset: Point, color: number): void;
-        /**
-         * 反正只支持一种filter，就不要叫setFilter了，直接叫setColorFilter
-         * @param	value
-         */
-        setColorFilter(filter: ColorFilter): void;
-        drawTexture(tex: Texture, x: number, y: number, width: number, height: number, color?: number): void;
-        drawTextures(tex: Texture, pos: ArrayLike<number>, tx: number, ty: number, colors: number[]): void;
-        private isStopMerge;
-        drawCallOptimize(enable: boolean): boolean;
-        private _drawToRender2D;
-        private _drawMesh;
-        private fillShaderValue;
-        /**
-         * pt所描述的多边形完全在clip外边，整个被裁掉了
-         * @param	pt
-         * @return
-         */
-        private clipedOff;
-        /**
-         * 应用当前矩阵。把转换后的位置放到输出数组中。
-         * @param	x
-         * @param	y
-         * @param	w
-         * @param	h
-         * @param   italicDeg 倾斜角度，单位是度。0度无，目前是下面不动。以后要做成可调的
-         */
-        private transformQuad;
-        /**
-         * 强制拒绝submit合并
-         * 例如切换rt的时候
-         */
-        breakNextMerge(): void;
-        private _repaintSprite;
-        /**
-         *
-         * @param	tex
-         * @param	x
-         * @param	y
-         * @param	width
-         * @param	height
-         * @param	transform	图片本身希望的矩阵
-         * @param	tx			节点的位置
-         * @param	ty
-         * @param	alpha
-         */
-        drawTextureWithTransform(tex: Texture, x: number, y: number, width: number, height: number, transform: Matrix | null, tx: number, ty: number, alpha: number, blendMode: string | null, uv?: number[], color?: number): void;
-        drawGeo(geo: IRenderGeometryElement, material: Material, x: number, y: number): void;
-        drawGeos(geo: IRenderGeometryElement, elements: [
-            Material,
-            number,
-            number
-        ][], x: number, y: number): void;
-        drawTriangles(tex: Texture, x: number, y: number, vertices: Float32Array, uvs: Float32Array, indices: Uint16Array, matrix: Matrix, alpha: number | null, blendMode: string, colorNum?: number): void;
-        transform(a: number, b: number, c: number, d: number, tx: number, ty: number): void;
-        rotate(angle: number): void;
-        scale(scaleX: number, scaleY: number): void;
-        clipRect(x: number, y: number, width: number, height: number, escape?: boolean): void;
-        startRender(): void;
-        endRender(): void;
-        drawLeftData(): void;
-        flush(): void;
-        beginPath(convex?: boolean): void;
-        closePath(): void;
-        /**
-         * 添加一个path。
-         * @param	points [x,y,x,y....]	这个会被保存下来，所以调用者需要注意复制。
-         * @param	close	是否闭合
-         * @param   convex 是否是凸多边形。convex的优先级是这个最大。fill的时候的次之。其实fill的时候不应该指定convex，因为可以多个path
-         * @param	dx  需要添加的平移。这个需要在应用矩阵之前应用。
-         * @param	dy
-         */
-        addPath(points: any[], close: boolean, convex: boolean, dx: number, dy: number): void;
-        fill(): void;
-        private addVGSubmit;
-        stroke(): void;
-        moveTo(x: number, y: number): void;
-        /**
-         *
-         * @param	x
-         * @param	y
-         * @param	b 是否应用矩阵
-         */
-        lineTo(x: number, y: number): void;
-        arcTo(x1: number, y1: number, x2: number, y2: number, r: number): void;
-        arc(cx: number, cy: number, rx: number, ry: number, startAngle: number, endAngle: number, counterclockwise?: boolean, b?: boolean, minNum?: number): void;
-        quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
-        /**
-         * 把颜色跟当前设置的alpha混合
-         * @return
-         */
-        mixRGBandAlpha(color: number): number;
-        strokeRect(x: number, y: number, width: number, height: number, parameterLineWidth: number): void;
-        /*******************************************end矢量绘制***************************************************/
-        drawParticle(x: number, y: number, pt: any): void;
-        private _getPath;
-        /**获取canvas*/
-        get canvas(): HTMLCanvas;
-        /**
-         * 专用函数。通过循环创建来水平填充
-         * @param	tex
-         * @param	bmpid
-         * @param	uv		希望循环的部分的uv
-         * @param	oriw
-         * @param	orih
-         * @param	x
-         * @param	y
-         * @param	w
-         */
-        private _fillTexture_h;
-        /**
-         * 专用函数。通过循环创建来垂直填充
-         * @param	tex
-         * @param	imgid
-         * @param	uv
-         * @param	oriw
-         * @param	orih
-         * @param	x
-         * @param	y
-         * @param	h
-         */
-        private _fillTexture_v;
-        private static tmpUVRect;
-        drawTextureWithSizeGrid(tex: Texture, tx: number, ty: number, width: number, height: number, sizeGrid: any[], gx: number, gy: number, color: number): void;
-    }
-    class DefferTouchResContext extends Context {
-        cache: CachePage;
-        mustTouchRes: IAutoExpiringResource[];
-        randomTouchRes: IAutoExpiringResource[];
-        genID: number;
-        /**
-         * 添加需要touch的资源
-         * @param res
-         */
-        touchRes(res: IAutoExpiringResource): void;
-    }
     /**
      * <code>Render</code> 是渲染管理类。它是一个单例，可以使用 Laya.render 访问。
      */
@@ -36836,7 +30768,6 @@ declare module Laya {
         private static _customEngine;
         static set customRenderEngine(engine: IRenderEngine);
         static get customRenderEngine(): IRenderEngine;
-        static gc(): void;
         /**
          * 初始化引擎。
          * @param	width 游戏窗口宽度。
@@ -36846,9 +30777,6 @@ declare module Laya {
         /**@private */
         private _timeId;
         /**@private */
-        /**
-         * @performanceTool  func count
-         */
         private _onVisibilitychange;
         /**
          * 获取帧对齐的时间。
@@ -36864,42 +30792,6 @@ declare module Laya {
         static get context(): Context;
         /** 渲染使用的原生画布引用。 */
         static get canvas(): any;
-    }
-    interface ISprite2DGeometry {
-        readonly vertexDeclarition: VertexDeclaration;
-        vbBuffer: ArrayBuffer;
-        ibBuffer: ArrayBuffer;
-    }
-    abstract class Render2D {
-        protected _renderTexture: RenderTexture2D;
-        constructor(out?: RenderTexture2D);
-        setRenderTarget(rt: RenderTexture2D): void;
-        abstract clone(out: RenderTexture2D): Render2D;
-        get out(): RenderTexture2D;
-        abstract renderStart(clear: boolean, clearColor: Color): void;
-        abstract draw(mesh: ISprite2DGeometry, vboff: number, vblen: number, iboff: number, iblen: number, mtl: Value2D, customMaterial: Material): void;
-        abstract drawMesh(mesh: IRenderGeometryElement, mtl: Material): void;
-        abstract drawElement(ele: IRenderElement2D): void;
-        abstract renderEnd(): void;
-    }
-    /**
-     * 直接渲染，不攒submit
-     */
-    class Render2DSimple extends Render2D {
-        static rendercontext2D: IRenderContext2D;
-        private _tex_vert_decl;
-        private geo;
-        private _renderElement;
-        constructor(out?: RenderTexture2D);
-        clone(out: RenderTexture2D): Render2D;
-        private _createMesh;
-        private setVertexDecl;
-        renderStart(clear: boolean, clearColor: Color): void;
-        setRenderTarget(rt: RenderTexture2D): void;
-        drawMesh(geo: IRenderGeometryElement, mtl: Material): void;
-        drawElement(ele: IRenderElement2D): void;
-        draw(mesh2d: ISprite2DGeometry, vboff: number, vblen: number, iboff: number, iblen: number, mtl: Value2D, customMaterial: Material): void;
-        renderEnd(): void;
     }
     /**
      *
@@ -36923,8 +30815,6 @@ declare module Laya {
      * 精灵渲染器
      */
     class RenderSprite {
-        /** @private*/
-        static cacheNormalEnable: boolean;
         /** @private */
         static renders: RenderSprite[];
         /** @private */
@@ -36932,121 +30822,11 @@ declare module Laya {
         private static _initRenderFun;
         private static _getTypeRender;
         constructor(type: number, next: RenderSprite | null);
-        _renderNode2D(sprite: Sprite, context: Context, x: number, y: number): void;
-        /**
-         * 把sprite的下一步渲染到缓存的rt上
-         * 要求外面可以直接使用，不用考虑图集的偏移之类的问题
-         * @param sprite
-         * @param context
-         * @returns
-         */
-        _renderNextToCacheRT(sprite: Sprite, context: Context): boolean;
-        static RenderToRenderTexture(sprite: Sprite, context: Context | null, x: number, y: number, renderTexture?: RenderTexture2D): RenderTexture2D;
-        /**
-         * 把sprite画在当前贴图的x,y位置
-         * @param sprite
-         * @param context
-         * @param x
-         * @param y
-         * @returns
-         */
-        static RenderToCacheTexture(sprite: Sprite, context: Context | null, x: number, y: number): boolean;
-        private _spriteRect_TextureSpace;
-        private _maskRect_TextureSpace;
-        _mask(sprite: Sprite, ctx: Context, x: number, y: number): void;
-    }
-    class RenderToCache extends Render2D {
-        renderResult: RenderObject2D[];
-        private _tex_vert_decl;
-        constructor();
-        clone(out: RenderTexture2D): RenderToCache;
-        private _createMesh;
-        private setVertexDecl;
-        renderStart(): void;
-        draw(mesh2d: ISprite2DGeometry, vboff: number, vblen: number, iboff: number, iblen: number, mtl: Value2D): void;
-        drawMesh(mesh: IRenderGeometryElement, mtl: Material): void;
-        drawElement(ele: IRenderElement2D): void;
-        renderEnd(): void;
-    }
-    interface IAutoExpiringResource {
-        isRandomTouch: boolean;
-        touch(): void;
-    }
-    class RenderObject2D implements ISprite2DGeometry {
-        vboff: number;
-        vblen: number;
-        iboff: number;
-        iblen: number;
-        mtl: Value2D;
-        localClipMatrix: Matrix;
-        dynaResourcesNeedTouch: any[];
-        vertexDeclarition: VertexDeclaration;
-        vbBuffer: ArrayBuffer;
-        ibBuffer: ArrayBuffer;
-        geo: IRenderGeometryElement;
-        renderElement: IRenderElement2D;
-        constructor(mesh: ISprite2DGeometry, vboff: number, vblen: number, iboff: number, iblen: number, mtl: Value2D);
-        toNativeMesh(): void;
-        destroyGPUResource(): void;
-    }
-    class Cache_Info {
-        page: CachePage;
-        mat: Matrix;
-        alpha: number;
-        blend: string;
-        contextID: number;
-        clipMatrix: Matrix;
-        reset(): void;
-    }
-    class RenderPageContext {
-        curMatrix: Matrix;
-        alpha: number;
-        render2d: Render2D;
-        width: number;
-        height: number;
-        clipInfo: Matrix;
-        blend: number;
-        /**
-         * 这里的xy就是渲染的xy，需要这个参数是为了正确计算当前矩阵
-         * @param ctx
-         * @param x
-         * @param y
-         */
-        constructor(ctx: Context, x: number, y: number);
-        _copyClipInfo(shaderValue: Value2D): void;
-        clipRect(rect: Rectangle): void;
-        setBlendMode(blend: string): void;
-        _applyBlend(shaderValue: Value2D): void;
-    }
-    class CachePage {
-        sprite: Sprite;
-        meshes: RenderObject2D[];
-        defferTouchRes: IAutoExpiringResource[];
-        defferTouchResRand: IAutoExpiringResource[];
-        children: Sprite[];
-        reset(): void;
-        private clearGPUObject;
-        /**
-         * 根据sprite的相对矩阵（相对于parent）画出缓存的mesh
-         * 为了位置能正确，需要context中提供的矩阵是sprite的parent的世界矩阵
-         * @param sprite
-         * @param context
-         * @param isRoot  如果为true的话，则可以直接使用当前矩阵。优化用。
-         */
-        render(sprite: Sprite, context: RenderPageContext, isRoot: boolean): void;
-    }
-    /**
-     * 把渲染结果保存成mesh和材质
-     */
-    class SpriteCache {
-        /**
-         * 已知sprite和当前世界矩阵curMat, 把sprite的偏移减掉，就是得到parent的世界矩阵
-         * @param sprite
-         * @param curMat 当前的矩阵，这是增加了sprite自身的偏移后的矩阵
-         * @param outMat 把curMat去掉sprite自身的偏移得到的结果
-         */
-        static curMatSubSpriteMat(sprite: Sprite, curMat: Matrix, outMat: Matrix): Matrix;
-        static renderCacheAsNormal(context: Context | DefferTouchResContext, sprite: Sprite, next: RenderSprite, x: number, y: number): boolean;
+        protected onCreate(type: number): void;
+        _maskNative(sprite: Sprite, ctx: Context, x: number, y: number): void;
+        static tmpTarget(ctx: Context, rt: RenderTexture2D, w: number, h: number): void;
+        static recycleTarget(rt: RenderTexture2D): void;
+        static setBlendMode(blendMode: string): void;
     }
     /**
     * <code>VertexElement</code> 类用于创建顶点结构分配。
@@ -37290,36 +31070,312 @@ declare module Laya {
         get defaultTexture(): BaseTexture;
         protected _disposeResource(): void;
     }
-    class Prefab extends Resource {
+    /**
+     * @private
+     * Context扩展类
+     */
+    class Context {
+        static _SUBMITVBSIZE: number;
+        private static _MAXVERTNUM;
+        static MAXCLIPRECT: Rectangle;
+        static _COUNT: number;
+        private static SEGNUM;
+        private static _contextcount;
+        private _drawTexToDrawTri_Vert;
+        private _drawTexToDrawTri_Index;
+        private _tempUV;
+        private _drawTriUseAbsMatrix;
+        static __init__(): void;
+        /**@private */
+        drawImage(...args: any[]): void;
+        /**@private */
+        getImageData(...args: any[]): any;
+        /**@private */
+        measureText(text: string): any;
+        /**@private */
+        setTransform(...args: any[]): void;
+        /**@private */
+        $transform(a: number, b: number, c: number, d: number, tx: number, ty: number): void;
+        set material(value: Material);
+        get material(): Material;
+        /**@private */
+        get lineJoin(): string;
+        /**@private */
+        set lineJoin(value: string);
+        /**@private */
+        get lineCap(): string;
+        /**@private */
+        set lineCap(value: string);
+        /**@private */
+        get miterLimit(): string;
+        /**@private */
+        set miterLimit(value: string);
+        /**@private */
+        clearRect(x: number, y: number, width: number, height: number): void;
+        /**@private */
+        /**@private */
+        drawTexture2(x: number, y: number, pivotX: number, pivotY: number, m: Matrix, args2: any[]): void;
+        transformByMatrix(matrix: Matrix, tx: number, ty: number): void;
+        saveTransform(matrix: Matrix): void;
+        restoreTransform(matrix: Matrix): void;
+        drawRect(x: number, y: number, width: number, height: number, fillColor: any, lineColor: any, lineWidth: number): void;
+        alpha(value: number): void;
+        drawCurves(x: number, y: number, points: any[], lineColor: any, lineWidth: number): void;
+        private _fillAndStroke;
+        /**Math.PI*2的结果缓存 */
+        static PI2: number;
+        /**Math.PI*0.5的结果缓存 */
+        static HPI: number;
+        static const2DRenderCMD: RenderStateCommand;
+        static set2DRenderConfig(): void;
+        private _other;
+        private _renderNextSubmitIndex;
+        private _path;
+        private _width;
+        private _height;
+        private _renderCount;
+        meshlist: any[];
+        private _transedPoints;
+        private _temp4Points;
+        private _clipID_Gen;
+        private _lastMat_a;
+        private _lastMat_b;
+        private _lastMat_c;
+        private _lastMat_d;
         /**
-         * 资源版本
-         * @readonly
+         * 所cacheAs精灵
+         * 对于cacheas bitmap的情况，如果图片还没准备好，需要有机会重画，所以要保存sprite。例如在图片
+         * 加载完成后，调用repaint
          */
+        sprite: Sprite | null;
+        private _fillColor;
+        private _flushCnt;
+        private defTexture;
+        drawTexAlign: boolean;
+        isMain: boolean;
+        clearColor: Color;
+        constructor();
+        clearBG(r: number, g: number, b: number, a: number): void;
+        /**
+         * 释放占用内存
+         * @param	keepRT  是否保留rendertarget
+         */
+        private _releaseMem;
+        /**
+         * 释放所有资源
+         * @param	keepRT  是否保留rendertarget
+         */
+        destroy(keepRT?: boolean): void;
+        clear(): void;
+        /**
+         * 设置ctx的size，这个不允许直接设置，必须是canvas调过来的。所以这个函数里也不用考虑canvas相关的东西
+         * @param	w
+         * @param	h
+         */
+        size(w: number, h: number): void;
+        /**
+         * 当前canvas请求保存渲染结果。
+         * 实现：
+         * 如果value==true，就要给_target赋值
+         * @param value {Boolean}
+         */
+        set asBitmap(value: boolean);
+        /**
+         * 获得当前矩阵的缩放值
+         * 避免每次都计算getScaleX
+         * @return
+         */
+        getMatScaleX(): number;
+        getMatScaleY(): number;
+        getFillColor(): number;
+        set fillStyle(value: any);
+        get fillStyle(): any;
+        set globalAlpha(value: number);
+        get globalAlpha(): number;
+        set textAlign(value: string);
+        get textAlign(): string;
+        set textBaseline(value: string);
+        get textBaseline(): string;
+        set globalCompositeOperation(value: string);
+        get globalCompositeOperation(): string;
+        set strokeStyle(value: any);
+        get strokeStyle(): any;
+        translate(x: number, y: number): void;
+        set lineWidth(value: number);
+        get lineWidth(): number;
+        save(): void;
+        restore(): void;
+        set font(str: string);
+        fillText(txt: string | WordText, x: number, y: number, fontStr: string, color: string, align: string, lineWidth?: number, borderColor?: string): void;
+        drawText(text: string | WordText, x: number, y: number, font: string, color: string, textAlign: string): void;
+        strokeWord(text: string | WordText, x: number, y: number, font: string, color: string, lineWidth: number, textAlign: string): void;
+        fillBorderText(txt: string | WordText, x: number, y: number, font: string, color: string, borderColor: string, lineWidth: number, textAlign: string): void;
+        filltext11(data: string | WordText, x: number, y: number, fontStr: string, color: string, strokeColor: string, lineWidth: number, textAlign: string): void;
+        private _fillRect;
+        fillRect(x: number, y: number, width: number, height: number, fillStyle: any): void;
+        fillTexture(texture: Texture, x: number, y: number, width: number, height: number, type: string, offset: Point, color: number): void;
+        /**
+         * 反正只支持一种filter，就不要叫setFilter了，直接叫setColorFilter
+         * @param	value
+         */
+        setColorFilter(filter: ColorFilter): void;
+        drawTexture(tex: Texture, x: number, y: number, width: number, height: number, color?: number): void;
+        drawTextures(tex: Texture, pos: ArrayLike<number>, tx: number, ty: number, colors: number[]): void;
+        submitDebugger(): void;
+        private isSameClipInfo;
+        drawCallOptimize(enable: boolean): boolean;
+        /**
+         * 转换4个顶点。为了效率这个不做任何检查。需要调用者的配合。
+         * @param	a		输入。8个元素表示4个点
+         * @param	out		输出
+         */
+        transform4Points(a: any[], m: Matrix, out: any[]): void;
+        /**
+         * pt所描述的多边形完全在clip外边，整个被裁掉了
+         * @param	pt
+         * @return
+         */
+        clipedOff(pt: any[]): boolean;
+        /**
+         * 应用当前矩阵。把转换后的位置放到输出数组中。
+         * @param	x
+         * @param	y
+         * @param	w
+         * @param	h
+         * @param   italicDeg 倾斜角度，单位是度。0度无，目前是下面不动。以后要做成可调的
+         */
+        transformQuad(x: number, y: number, w: number, h: number, italicDeg: number, m: Matrix, out: any[]): void;
+        pushRT(): void;
+        popRT(): void;
+        useRT(rt: RenderTexture2D): void;
+        /**
+         * 异步执行rt的restore函数
+         * @param	rt
+         */
+        RTRestore(rt: RenderTexture2D): void;
+        /**
+         * 强制拒绝submit合并
+         * 例如切换rt的时候
+         */
+        breakNextMerge(): void;
+        private _repaintSprite;
+        /**
+         *
+         * @param	tex
+         * @param	x
+         * @param	y
+         * @param	width
+         * @param	height
+         * @param	transform	图片本身希望的矩阵
+         * @param	tx			节点的位置
+         * @param	ty
+         * @param	alpha
+         */
+        drawTextureWithTransform(tex: Texture, x: number, y: number, width: number, height: number, transform: Matrix | null, tx: number, ty: number, alpha: number, blendMode: string | null, uv?: number[], color?: number): void;
+        /**
+         * * 把ctx中的submits提交。结果渲染到target上
+         * @param	ctx
+         * @param	target
+         */
+        private _flushToTarget;
+        drawCanvas(canvas: HTMLCanvas, x: number, y: number, width: number, height: number): void;
+        drawTarget(rt: RenderTexture2D, x: number, y: number, width: number, height: number, m: Matrix, shaderValue: Value2D, uv?: ArrayLike<number> | null, blend?: number, color?: number): boolean;
+        drawTriangles(tex: Texture, x: number, y: number, vertices: Float32Array, uvs: Float32Array, indices: Uint16Array, matrix: Matrix, alpha: number, blendMode: string, colorNum?: number): void;
+        transform(a: number, b: number, c: number, d: number, tx: number, ty: number): void;
+        setTransformByMatrix(value: Matrix): void;
+        rotate(angle: number): void;
+        scale(scaleX: number, scaleY: number): void;
+        clipRect(x: number, y: number, width: number, height: number, escape?: boolean): void;
+        addRenderObject(o: ISubmit): void;
+        /**
+         *
+         * @param	start
+         * @param	end
+         */
+        submitElement(start: number, end: number): number;
+        flush(): number;
+        /*******************************************start矢量绘制***************************************************/
+        beginPath(convex?: boolean): void;
+        closePath(): void;
+        /**
+         * 添加一个path。
+         * @param	points [x,y,x,y....]	这个会被保存下来，所以调用者需要注意复制。
+         * @param	close	是否闭合
+         * @param   convex 是否是凸多边形。convex的优先级是这个最大。fill的时候的次之。其实fill的时候不应该指定convex，因为可以多个path
+         * @param	dx  需要添加的平移。这个需要在应用矩阵之前应用。
+         * @param	dy
+         */
+        addPath(points: any[], close: boolean, convex: boolean, dx: number, dy: number): void;
+        fill(): void;
+        private addVGSubmit;
+        stroke(): void;
+        moveTo(x: number, y: number): void;
+        /**
+         *
+         * @param	x
+         * @param	y
+         * @param	b 是否应用矩阵
+         */
+        lineTo(x: number, y: number): void;
+        arcTo(x1: number, y1: number, x2: number, y2: number, r: number): void;
+        arc(cx: number, cy: number, rx: number, ry: number, startAngle: number, endAngle: number, counterclockwise?: boolean, b?: boolean, minNum?: number): void;
+        quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+        /**
+         * 把颜色跟当前设置的alpha混合
+         * @return
+         */
+        mixRGBandAlpha(color: number): number;
+        strokeRect(x: number, y: number, width: number, height: number, parameterLineWidth: number): void;
+        clip(): void;
+        /*******************************************end矢量绘制***************************************************/
+        drawParticle(x: number, y: number, pt: any): void;
+        private _getPath;
+        /**获取canvas*/
+        get canvas(): HTMLCanvas;
+        private static tmpuv1;
+        /**
+         * 专用函数。通过循环创建来水平填充
+         * @param	tex
+         * @param	bmpid
+         * @param	uv		希望循环的部分的uv
+         * @param	oriw
+         * @param	orih
+         * @param	x
+         * @param	y
+         * @param	w
+         */
+        private _fillTexture_h;
+        /**
+         * 专用函数。通过循环创建来垂直填充
+         * @param	tex
+         * @param	imgid
+         * @param	uv
+         * @param	oriw
+         * @param	orih
+         * @param	x
+         * @param	y
+         * @param	h
+         */
+        private _fillTexture_v;
+        private static tmpUV;
+        private static tmpUVRect;
+        drawTextureWithSizeGrid(tex: Texture, tx: number, ty: number, width: number, height: number, sizeGrid: any[], gx: number, gy: number, color: number): void;
+        addRenderObject3D(scene3D: ISubmit): void;
+    }
+    class Prefab extends Resource {
         readonly version: number;
+        protected _deps: Array<Resource>;
+        /**@private */
+        json: any;
         constructor(version?: number);
         /**
          * 创建实例
-         * @param options 类型
-         * @param errors 错误内容
          */
         create(options?: Record<string, any>, errors?: Array<any>): Node;
-        /**
-         * 获取依赖内容
-         */
         get deps(): ReadonlyArray<Resource>;
-        /**
-         * 增加一个依赖内容
-         * @param res 依赖内容
-         */
         addDep(res: Resource): void;
-        /**
-         * 增加多个依赖内容
-         * @param resArr 依赖内容
-         */
         addDeps(resArr: Array<Resource>): void;
-        /**
-         *
-         */
+        protected _disposeResource(): void;
         get obsolute(): boolean;
         set obsolute(value: boolean);
         private onDepObsolute;
@@ -37434,9 +31490,7 @@ declare module Laya {
         static ALPHATESTVALUE: number;
         /**材质级着色器宏定义,透明测试。*/
         static SHADERDEFINE_ALPHATEST: ShaderDefine;
-        /**材质级着色器宏定义,主贴图。*/
         static SHADERDEFINE_MAINTEXTURE: ShaderDefine;
-        /**材质级着色器宏定义,叠加雾效。*/
         static SHADERDEFINE_ADDTIVEFOG: ShaderDefine;
         /**
          * 加载材质。
@@ -37444,11 +31498,10 @@ declare module Laya {
          * @param complete 完成回掉。
          */
         static load(url: string, complete: Handler): void;
+        /** @private */
+        _shaderValues: ShaderData | null;
         /** 所属渲染队列. */
-        private _renderQueue;
-        get renderQueue(): number;
-        set renderQueue(value: number);
-        ownerELement: any;
+        renderQueue: number;
         /**
          * 着色器数据。
          */
@@ -37475,7 +31528,7 @@ declare module Laya {
         removeDefine(define: ShaderDefine): void;
         /**
          * 开启 或 关闭 shader 宏定义
-         * @param define 宏
+         * @param define
          * @param value true: addDefine, false: removeDefine
          */
         setDefine(define: ShaderDefine, value: boolean): void;
@@ -37510,7 +31563,7 @@ declare module Laya {
         get blendDst(): number;
         set blendDst(value: number);
         /**
-         * 混合源 alpha
+         * 混合目标 alpha
          */
         get blendSrcAlpha(): number;
         set blendSrcAlpha(value: number);
@@ -37522,9 +31575,6 @@ declare module Laya {
          * 混合原 RGB
          */
         set blendSrcRGB(value: number);
-        /**
-         * 混合目标 RGB
-         */
         get blendDstRGB(): number;
         set blendDstRGB(value: number);
         /**
@@ -37595,8 +31645,10 @@ declare module Laya {
          */
         constructor();
         /**
-         * 获取材质的shader
+         * @inheritDoc
+         * @override
          */
+        protected _disposeResource(): void;
         get shader(): Shader3D;
         /**
          * get all material uniform property
@@ -37609,19 +31661,19 @@ declare module Laya {
          */
         setShaderName(name: string): void;
         /**
-         * 通过索引获得bool属性值
+         * 获得bool属性值
          * @param uniformIndex 属性索引
          * @returns
          */
         getBoolByIndex(uniformIndex: number): boolean;
         /**
-         * 通过索引设置bool值
+         * 设置bool值
          * @param uniformIndex 属性索引
          * @param value 值
          */
         setBoolByIndex(uniformIndex: number, value: boolean): void;
         /**
-         * 获得bool值
+         * 活得bool值
          * @param name 属性名称
          * @returns
          */
@@ -37633,13 +31685,13 @@ declare module Laya {
          */
         setBool(name: string, value: boolean): void;
         /**
-         * 通过索引获得Float值
+         * 获得Float值
          * @param uniformIndex 属性索引
          * @returns
          */
         getFloatByIndex(uniformIndex: number): number;
         /**
-         * 通过索引设置Float值
+         * 设置Float值
          * @param uniformIndex 属性索引
          * @param value 值
          */
@@ -37657,13 +31709,13 @@ declare module Laya {
          */
         setFloat(name: string, value: number): void;
         /**
-         * 通过索引获得Int值
+         * 获得Int值
          * @param uniformIndex 属性索引
          * @returns
          */
         getIntByIndex(uniformIndex: number): number;
         /**
-         * 通过索引设置Int值
+         * 设置Int值
          * @param uniformIndex 属性索引
          * @param value 值
          */
@@ -37681,13 +31733,13 @@ declare module Laya {
          */
         setInt(name: string, value: number): void;
         /**
-         * 通过索引获得Vector2
+         * 获得Vector2
          * @param uniformIndex 属性索引
          * @returns
          */
         getVector2ByIndex(uniformIndex: number): Vector2;
         /**
-         * 通过索引设置Vector2
+         * 设置Vector2
          * @param uniformIndex 属性索引
          * @param value 值
          */
@@ -37705,13 +31757,13 @@ declare module Laya {
          */
         setVector2(name: string, value: Vector2): void;
         /**
-         * 通过索引获得Vector3
+         * 获得Vector3
          * @param uniformIndex 属性索引
          * @returns
          */
         getVector3ByIndex(uniformIndex: number): Vector3;
         /**
-         * 通过索引设置Vector3
+         * 设置Vector3
          * @param uniformIndex 属性索引
          * @param value 值
          */
@@ -37729,13 +31781,13 @@ declare module Laya {
          */
         setVector3(name: string, value: Vector3): void;
         /**
-         * 通过索引设置Vector4
+         * 获得Vector4
          * @param uniformIndex 属性索引
          * @param value 值
          */
         setVector4ByIndex(uniformIndex: number, value: Vector4): void;
         /**
-         * 通过索引获取Vector4
+         * 设置Vector4
          * @param uniformIndex 属性索引
          * @returns
          */
@@ -37753,13 +31805,13 @@ declare module Laya {
          */
         getVector4(name: string): Vector4;
         /**
-         * 通过索引获得Color
+         * 获得Color
          * @param uniformIndex 属性索引
          * @returns
          */
         getColorByIndex(uniformIndex: number): Color;
         /**
-         * 通过索引设置Color
+         * 设置Color
          * @param uniformIndex 属性索引
          * @param value 值
          */
@@ -37783,7 +31835,7 @@ declare module Laya {
          */
         getMatrix4x4ByIndex(uniformIndex: number): Matrix4x4;
         /**
-         * 通过索引设置Matrix4x4
+         * 设置Matrix4x4
          * @param uniformIndex 属性索引
          * @param value 值
          */
@@ -37801,33 +31853,33 @@ declare module Laya {
          */
         setMatrix4x4(name: string, value: Matrix4x4): void;
         /**
-         * 通过索引获取 matrix3x3
-         * @param index 索引
+         * 获取 matrix3x3
+         * @param index
          * @returns
          */
         getMatrix3x3ByIndex(index: number): Matrix3x3;
         /**
-         * 通过索引设置 matrix3x3
-         * @param index 索引
-         * @param value 值
+         * 设置 matrix3x3
+         * @param index
+         * @param value
          */
         setMatrix3x3ByIndex(index: number, value: Matrix3x3): void;
         /**
          * 获取 matrix3x3
-         * @param name 属性名称
+         * @param name
          * @returns
          */
         getMatrix3x3(name: string): Matrix3x3;
         /**
          * 设置 matrix3x3
-         * @param name 属性名称
-         * @param value 值
+         * @param name
+         * @param value
          */
         setMatrix3x3(name: string, value: Matrix3x3): void;
         /**
          * 设置纹理
          * @param uniformIndex 属性索引
-         * @param texture 纹理
+         * @param texture
          */
         setTextureByIndex(uniformIndex: number, texture: BaseTexture): void;
         private reSetTexture;
@@ -37840,7 +31892,7 @@ declare module Laya {
         /**
          * 设置纹理
          * @param name 属性名称
-         * @param texture 纹理
+         * @param texture
          */
         setTexture(name: string, texture: BaseTexture): void;
         /**
@@ -37912,83 +31964,120 @@ declare module Laya {
          */
         clone(): any;
         /**
-         * 材质宏
+         * 设置属性值
+         * @deprecated
+         * @param name
+         * @param value
          */
-        get _defineDatas(): IDefineDatas;
+        setShaderPropertyValue(name: string, value: any): void;
         /**
-         * 兼容老的解析结束事件
-         * @override
+         * 获取属性值
+         * @deprecated
+         * @param name
+         */
+        getShaderPropertyValue(name: string): any;
+        get _defineDatas(): DefineDatas;
+        /**
+         * override it
          */
         oldparseEndEvent(): void;
     }
     /**
-     * <code>Mesh</code> 类用于创建文件网格数据模板。
+     * <code>RenderTexture</code> 类用于创建渲染目标。
      */
-    class Mesh2D extends Resource {
-        static MESH2D_INSTANCE_MAX_NUM: number;
+    class NativeRenderTexture2D extends BaseTexture implements IRenderTarget {
+        /** @private */
+        private static _currentActive;
+        private static _clearColor;
+        private _lastRT;
+        private _lastWidth;
+        private _lastHeight;
+        private static rtStack;
+        static defuv: any[];
+        static flipyuv: any[];
         /**
-         * 加载网格模板。
-         * @param url 模板地址。
-         * @param complete 完成回调。
+         * 获取当前激活的Rendertexture
          */
-        static load(url: string, complete: Handler): void;
+        static get currentActive(): NativeRenderTexture2D;
+        /** @private */
+        private _depthStencilFormat;
+        private _colorFormat;
         /**
-         * @readonly
-         * 顶点数据
+         * 获取深度格式。
+         *@return 深度格式。
          */
-        get vertexBuffer(): IVertexBuffer;
+        get depthStencilFormat(): number;
         /**
-         * @readonly
-         * 顶点索引
+         * @inheritDoc
+         * @override
          */
-        get indexBuffer(): IIndexBuffer;
+        get defaultTexture(): BaseTexture;
+        getIsReady(): boolean;
         /**
-         * 获取顶点个数。
+         * 获取宽度。
          */
-        get vertexCount(): number;
-        /**
-         * 获取索引个数。
-         * @returns 索引个数
+        get sourceWidth(): number;
+        /***
+         * 获取高度。
          */
-        get indexCount(): number;
+        get sourceHeight(): number;
         /**
-         * SubMesh的个数。
-         * @returns SubMesh的个数
+         * 获取offsetX。
          */
-        get subMeshCount(): number;
-        /**
-         * 索引格式。
-         * @returns 索引格式
+        get offsetX(): number;
+        /***
+         * 获取offsetY
          */
-        get indexFormat(): IndexFormat;
+        get offsetY(): number;
+        depthStencilTexture: BaseTexture;
+        _renderTarget: InternalRenderTarget;
+        _isCameraTarget: boolean;
+        private _nativeObj;
         /**
-         * 设置indexformat
-         * @param 索引格式
+         * @param width  宽度。
+         * @param height 高度。
+         * @param format 纹理格式。
+         * @param depthStencilFormat 深度格式。
+         * 创建一个 <code>RenderTexture</code> 实例。
          */
-        set indexFormat(value: IndexFormat);
+        constructor(width: number, height: number, format?: number, depthStencilFormat?: number, create?: boolean);
+        get isCube(): boolean;
+        get samples(): number;
+        get generateMipmap(): boolean;
+        _start(): void;
+        _end(): void;
+        _create(): void;
         /**
-         * 创建一个 <code>Mesh</code> 实例,禁止使用。
+         * 保存当前的RT信息。
          */
-        constructor();
+        static pushRT(): void;
         /**
-         * 根据获取子网格。
-         * @param index 索引。
+         * 恢复上次保存的RT信息
          */
-        getSubMesh(index: number): IRenderGeometryElement;
+        static popRT(): void;
         /**
-         * 获取顶点声明。
+         * 开始绑定。
          */
-        getVertexDeclaration(): VertexDeclaration;
+        start(): void;
         /**
-        * 设置顶点数据。
-        * @param vertices 顶点数据。
-        */
-        setVertices(vertices: ArrayBuffer): void;
-        /**
-         * 设置网格索引。
-         * @param indices 网格索引。
+         * 结束绑定。
          */
-        setIndices(indices: Uint8Array | Uint16Array | Uint32Array): void;
+        end(): void;
+        /**
+         * 恢复上一次的RenderTarge.由于使用自己保存的，所以如果被外面打断了的话，会出错。
+         */
+        restore(): void;
+        clear(r?: number, g?: number, b?: number, a?: number): void;
+        /**
+         * 获得像素数据。
+         * @param x X像素坐标。
+         * @param y Y像素坐标。
+         * @param width 宽度。
+         * @param height 高度。
+         * @return 像素数据。
+         */
+        getData(x: number, y: number, width: number, height: number): ArrayBufferView;
+        recycle(): void;
     }
     /**
      * 层次结构分析器API
@@ -38022,85 +32111,49 @@ declare module Laya {
          */
         create(options?: Record<string, any>, errors?: any[]): Node;
     }
-    /**
-     * 深度贴图模式
-     */
-    enum DepthTextureMode {
-        /**不生成深度贴图 */
-        None = 0,
-        /**生成深度贴图 */
-        Depth = 1,
-        /**生成深度+法线贴图 */
-        DepthNormals = 2,
-        /**是否应渲染运动矢量  TODO*/
-        DepthAndDepthNormals = 3,
-        MotionVectors = 4
-    }
     class RenderTexture extends BaseTexture implements IRenderTarget {
+        protected static _currentActive: RenderTexture;
+        static get currentActive(): RenderTexture;
+        protected static _configInstance: any;
+        static configRenderContextInstance(value: any): void;
         private static _pool;
         private static _poolMemory;
         /**
          * 创建一个RenderTexture
-         * @param width 宽度
-         * @param height 高度
-         * @param colorFormat 颜色格式
-         * @param depthFormat 深度格式
-         * @param mipmap 是否生成多级纹理
-         * @param multiSamples 多采样次数
-         * @param depthTexture 是否生成深度纹理
-         * @param sRGB 是否sRGB空间
+         * @param width
+         * @param height
+         * @param colorFormat
+         * @param depthFormat
+         * @param mipmap
+         * @param multiSamples
+         * @param depthTexture
+         * @param sRGB
          * @returns
          */
         static createFromPool(width: number, height: number, colorFormat: RenderTargetFormat, depthFormat: RenderTargetFormat, mipmap?: boolean, multiSamples?: number, depthTexture?: boolean, sRGB?: boolean): RenderTexture;
-        /**
-         * 回收渲染纹理到对象池
-         * @param rt 渲染纹理
-         * @returns
-         */
         static recoverToPool(rt: RenderTexture): void;
-        /**
-         * 清空对象池
-         * @returns
-         */
         static clearPool(): void;
         /**
          * 绑定到主画布上的RenderTexture
          */
         static get bindCanvasRender(): RenderTexture;
         static set bindCanvasRender(value: RenderTexture);
+        _inPool: boolean;
+        _isCameraTarget: boolean;
+        _renderTarget: InternalRenderTarget;
         private _generateDepthTexture;
-        /**
-         * 是否生成深度纹理贴图
-         */
         get generateDepthTexture(): boolean;
         set generateDepthTexture(value: boolean);
-        /**
-         * 深度与模板剔除纹理贴图
-         */
+        private _depthStencilTexture;
         get depthStencilTexture(): BaseTexture;
-        /**
-         * 颜色格式
-         */
+        _generateMipmap: boolean;
         get colorFormat(): RenderTargetFormat;
-        /**
-         * 深度与模板剔除的格式
-         */
+        protected _depthStencilFormat: RenderTargetFormat;
         get depthStencilFormat(): RenderTargetFormat;
-        /**
-         * 多采样次数
-         */
+        protected _multiSamples: number;
         get multiSamples(): number;
-        /**
-         * 是否是立方体贴图
-         */
         get isCube(): boolean;
-        /**
-         * 采样次数
-         */
         get samples(): number;
-        /**
-         * 是否生成多级纹理
-         */
         get generateMipmap(): boolean;
         /**
          * @param width
@@ -38113,27 +32166,11 @@ declare module Laya {
          * @param sRGB
          */
         constructor(width: number, height: number, colorFormat: RenderTargetFormat, depthFormat: RenderTargetFormat, generateMipmap?: boolean, multiSamples?: number, generateDepthTexture?: boolean, sRGB?: boolean);
-        /**
-         * @deprecated 请使用getDataAsync函数代替
-         * 获取渲染纹理的像素数据
-         * @param xOffset x偏移值
-         * @param yOffset y偏移值
-         * @param width 宽度
-         * @param height 高度
-         * @param out 输出
-         * @returns 二进制数据
-         */
+        _createRenderTarget(): void;
+        _start(): void;
+        _end(): void;
         getData(xOffset: number, yOffset: number, width: number, height: number, out: Uint8Array | Float32Array): Uint8Array | Float32Array;
-        /**
-         * 获取渲染纹理的像素数据
-         * @param xOffset x偏移值
-         * @param yOffset y偏移值
-         * @param width 宽度
-         * @param height 高度
-         * @param out 输出
-         * @returns 二进制数据
-         */
-        getDataAsync(xOffset: number, yOffset: number, width: number, height: number, out: Uint8Array | Float32Array): Promise<ArrayBufferView>;
+        protected _disposeResource(): void;
     }
     /**
      * <code>RenderTexture</code> 类用于创建渲染目标。
@@ -38142,8 +32179,11 @@ declare module Laya {
         /** @private */
         private static _currentActive;
         static _clearColor: Color;
-        static _clear: boolean;
         static _clearLinearColor: Color;
+        private _lastRT;
+        private _lastWidth;
+        private _lastHeight;
+        private static rtStack;
         /**
          * 默认uv
          */
@@ -38175,6 +32215,11 @@ declare module Laya {
          * @returns
          */
         getIsReady(): boolean;
+        /**
+         * @en get the colorFormat from RenderInternalRT
+         * @zh 得到此渲染纹理的颜色格式
+         */
+        getColorFormat(): RenderTargetFormat;
         /**
          * 获取宽度。
          */
@@ -38213,6 +32258,26 @@ declare module Laya {
          */
         get generateMipmap(): boolean;
         /**
+         * 保存当前的RT信息。
+         */
+        static pushRT(): void;
+        /**
+         * 恢复上次保存的RT信息
+         */
+        static popRT(): void;
+        /**
+         * 开始绑定。
+         */
+        start(): void;
+        /**
+         * 结束绑定。
+         */
+        end(): void;
+        /**
+         * 恢复上一次的RenderTarge.由于使用自己保存的，所以如果被外面打断了的话，会出错。
+         */
+        restore(): void;
+        /**
          * 清理RT
          * @param r
          * @param g
@@ -38247,6 +32312,7 @@ declare module Laya {
          * @param multiSamples
          */
         constructor(size: number, colorFormat: RenderTargetFormat, depthFormat: RenderTargetFormat, generateMipmap: boolean, multiSamples: number);
+        _start(): void;
     }
     /**
      * <code>Resource</code> 资源存取类。
@@ -38376,7 +32442,7 @@ declare module Laya {
     class Texture extends Resource {
         /**@private 默认 UV 信息。*/
         static readonly DEF_UV: Float32Array;
-        /**@private 无 UV 信息*/
+        /**@private */
         static readonly NO_UV: Float32Array;
         /**@private 反转 UV 信息。*/
         static readonly INV_UV: Float32Array;
@@ -38400,11 +32466,12 @@ declare module Laya {
         url: string;
         /** UUID */
         uuid: string;
-        /**
-         * 缩放率
-         * @private
-         */
+        /** @private */
         scaleRate: number;
+        /**九宫格*/
+        _sizeGrid?: Array<number>;
+        /**状态数量*/
+        _stateNum?: number;
         /**
          *  根据指定资源和坐标、宽高、偏移量等创建 <code>Texture</code> 对象。
          * @param	source 绘图资源 Texture2D 或者 Texture对象。
@@ -38479,28 +32546,31 @@ declare module Laya {
         getTexturePixels(x: number, y: number, width: number, height: number): Uint8Array;
         /**
          * 获取Texture上的某个区域的像素点
-         * @param	x x
-         * @param	y y
-         * @param	width 宽度
-         * @param	height 高度
+         * @param	x
+         * @param	y
+         * @param	width
+         * @param	height
          * @return  返回像素点集合
          */
         getPixels(x: number, y: number, width: number, height: number): Uint8Array;
         /**
          * 通过url强制恢复bitmap。
-         * @param 回调函数
          */
         recoverBitmap(callback?: () => void): void;
         /**
          * 强制释放Bitmap,无论是否被引用。
          */
         disposeBitmap(): void;
-        /**
-         * 是否有效
-         */
         get valid(): boolean;
+        /**
+         * obsolute
+         */
         get obsolute(): boolean;
         set obsolute(value: boolean);
+        /**
+         * @private
+         */
+        protected _disposeResource(): void;
         /**
          * 获得clip贴图
          * @param x x
@@ -38612,9 +32682,6 @@ declare module Laya {
     class Texture2DArray extends BaseTexture {
         private static _defaultTexture;
         static get defaultTexture(): Texture2DArray;
-        /**
-         * 纹理层数
-         */
         depth: number;
         constructor(width: number, height: number, depth: number, format: TextureFormat, mipmap: boolean, canRead: boolean, sRGB?: boolean);
         /**
@@ -38711,51 +32778,13 @@ declare module Laya {
          * 白色纯色纹理。
          */
         static get whiteTexture(): TextureCube;
-        /**
-         * 错误纹理
-         */
         static get errorTexture(): TextureCube;
         constructor(size: number, format: TextureFormat, mipmap?: boolean, sRGB?: boolean, premultiplyAlpha?: boolean);
-        /**
-         * 设置图片数据
-         * @param source 数据数组
-         * @param premultiplyAlpha 是否预乘Alpha
-         * @param invertY 翻转Y轴
-         */
         setImageData(source: (HTMLImageElement | HTMLCanvasElement | ImageBitmap)[], premultiplyAlpha: boolean, invertY: boolean): void;
-        /**
-         * 设置数据
-         * @param source 数据
-         * @param premultiplyAlpha 是否预乘Alpha
-         * @param invertY 翻转Y轴
-         */
         setPixelsData(source: ArrayBufferView[], premultiplyAlpha: boolean, invertY: boolean): void;
-        /**
-         * 更新子像素数据
-         * @param source 数据
-         * @param xOffset x偏移
-         * @param yOffset y偏移
-         * @param width 宽度
-         * @param height 高度
-         * @param mipmapLevel 多级纹理等级
-         * @param generateMipmap 是否生成多级纹理
-         * @param premultiplyAlpha 是否预乘Alpha
-         * @param invertY 翻转Y轴
-         */
         updateSubPixelsData(source: ArrayBufferView[], xOffset: number, yOffset: number, width: number, height: number, mipmapLevel: number, generateMipmap: boolean, premultiplyAlpha: boolean, invertY: boolean): void;
-        /**
-         * 设置立方体贴图DDS数据
-         * @param ddsInfo DDS数据
-         */
         setDDSData(ddsInfo: DDSTextureInfo): void;
-        /**
-         * 设置立方体贴图KTX数据
-         * @param ktxInfo KTX数据
-         */
         setKTXData(ktxInfo: KTXTextureInfo): void;
-        /**
-         * 默认立方体纹理
-         */
         get defaultTexture(): BaseTexture;
     }
     /**
@@ -38780,16 +32809,12 @@ declare module Laya {
         static releaseRT(rt: RenderTexture2D): void;
     }
     class ExternalSkin {
-        /**目标spine */
-        target: ISpineSkeleton;
-        /**
-         * 外部皮肤spine的源
-         */
+        protected _source: string;
+        protected _templet: SpineTemplet;
+        protected _items: ExternalSkinItem[];
+        target: SpineSkeleton;
         get source(): string;
         set source(value: string);
-        /**
-         * 要设置的外部皮肤的内容
-         */
         set items(value: ExternalSkinItem[]);
         get items(): ExternalSkinItem[];
         /**
@@ -38798,599 +32823,19 @@ declare module Laya {
         */
         get templet(): SpineTemplet;
         set templet(value: SpineTemplet);
+        protected init(templet: SpineTemplet): void;
+        flush(): void;
     }
     class ExternalSkinItem {
-        /**
-         * 皮肤
-         */
+        protected _skin: string;
+        protected _slot: string;
+        protected _attachment: string;
         get skin(): string;
         set skin(value: string);
-        /**
-         * 槽位
-         */
         set slot(value: string);
         get slot(): string;
-        /**
-         * 附件
-         */
         set attachment(value: string);
         get attachment(): string;
-    }
-    interface ISpineRender {
-        draw(skeleton: spine.Skeleton, renderNode: Spine2DRenderNode, slotRangeStart?: number, slotRangeEnd?: number): void;
-    }
-    interface ISpineSkeleton {
-        templet: SpineTemplet;
-        getSkeleton(): spine.Skeleton;
-        changeNormal(): void;
-    }
-    class SpineShaderInit {
-        static SpineFastVertexDeclaration: VertexDeclaration;
-        static SpineNormalVertexDeclaration: VertexDeclaration;
-        static SpineRBVertexDeclaration: VertexDeclaration;
-        static instanceNMatrixDeclaration: VertexDeclaration;
-        static instanceSimpleAnimatorDeclaration: VertexDeclaration;
-        static SetSpineBlendMode(value: number, mat: Material): void;
-        static initSpineMaterial(mat: Material): void;
-        static BONEMAT: number;
-        static NMatrix: number;
-        static Color: number;
-        static Size: number;
-        static SpineTexture: number;
-        static SPINE_FAST: ShaderDefine;
-        static SPINE_RB: ShaderDefine;
-        static SPINE_SIMPLE: ShaderDefine;
-        static SPINE_GPU_INSTANCE: ShaderDefine;
-        /**
-        * TextureSV Mesh Descript
-        */
-        static readonly textureSpineAttribute: {
-            [name: string]: [
-                number,
-                ShaderDataType
-            ];
-        };
-        static init(): void;
-    }
-    interface ISpineMesh {
-        appendSlot(slot: ISlotExtend, getBoneId: (boneIndex: number) => number): void;
-        clone(): ISpineMesh;
-        vertexDeclarition: VertexDeclaration;
-        material: Material;
-        draw(graphics: Graphics): void;
-    }
-    abstract class SpineMeshBase {
-        static maxVertex: number;
-        element: IRenderElement2D;
-        /**
-         * Geometry
-         */
-        geo: IRenderGeometryElement;
-        /**
-         * Material
-         */
-        private _material;
-        get material(): Material;
-        set material(value: Material);
-        protected vb: IVertexBuffer;
-        protected ib: IIndexBuffer;
-        protected vertexArray: Float32Array;
-        protected indexArray: Uint16Array;
-        protected verticesLength: number;
-        protected indicesLength: number;
-        constructor(material: Material);
-        init(): void;
-        abstract get vertexDeclarition(): VertexDeclaration;
-        /**
-         * 添加到渲染队列
-         * @param graphics
-         */
-        draw(): void;
-        drawByData(vertices: Float32Array, vblength: number, indices: Uint16Array, iblength: number): void;
-        /**
-         * 清空
-         */
-        clear(): void;
-        _cloneTo(target: SpineMeshBase): void;
-    }
-    class SpineVirtualMesh extends SpineMeshBase {
-        static vertexSize: number;
-        static vertexArray: Float32Array;
-        static indexArray: Uint16Array;
-        /**
-         * Create a visual mesh
-         * @param geo Geometry
-         * @param material Material
-         */
-        constructor(material: Material);
-        /**
-         * 剪裁后的顶点和索引
-         * @param vertices
-         * @param indices
-         */
-        appendVerticesClip(vertices: ArrayLike<number>, indices: ArrayLike<number>): void;
-        /**
-         * 是否能附加 （长度是否够）
-         * @param verticesLength
-         * @param indicesLength
-         * @returns
-         */
-        canAppend(verticesLength: number, indicesLength: number): boolean;
-        /**
-         * 附加顶点
-         * @param vertices
-         * @param verticesLength
-         * @param indices
-         * @param indicesLength
-         * @param finalColor
-         * @param uvs
-         */
-        appendVertices(vertices: ArrayLike<number>, verticesLength: number, indices: number[], indicesLength: number, finalColor: spine.Color, uvs: ArrayLike<number>): void;
-        get vertexDeclarition(): import("../../RenderEngine/VertexDeclaration").VertexDeclaration;
-    }
-    class SpineWasmVirturalMesh extends SpineMeshBase {
-        private _renderElement2D;
-        constructor(material: Material);
-        get vertexDeclarition(): import("../../RenderEngine/VertexDeclaration").VertexDeclaration;
-    }
-    abstract class SpineNormalRenderBase {
-        protected vmeshs: SpineMeshBase[];
-        protected nextBatchIndex: number;
-        protected clearBatch(): void;
-        abstract createMesh(material: Material): SpineMeshBase;
-        protected nextBatch(material: Material, spineRenderNode: Spine2DRenderNode): SpineMeshBase;
-    }
-    class SpineSkeletonRenderer extends SpineNormalRenderBase implements ISpineRender {
-        premultipliedAlpha: boolean;
-        vertexEffect: spine.VertexEffect;
-        templet: SpineTemplet;
-        private tempColor;
-        private tempColor2;
-        private static vertices;
-        private vertexSize;
-        private twoColorTint;
-        private renderable;
-        private clipper;
-        createMesh(material: Material): SpineMeshBase;
-        constructor(templet: SpineTemplet, twoColorTint?: boolean);
-        draw(skeleton: spine.Skeleton, renderNode: Spine2DRenderNode, slotRangeStart?: number, slotRangeEnd?: number): void;
-    }
-    class SpineWasmRender extends SpineNormalRenderBase implements ISpineRender {
-        templet: SpineTemplet;
-        private twoColorTint;
-        graphics: Graphics;
-        spineRender: any;
-        constructor(templet: SpineTemplet, twoColorTint?: boolean);
-        createMesh(material: Material): SpineMeshBase;
-        draw(skeleton: spine.Skeleton, renderNode: Spine2DRenderNode, slotRangeStart?: number, slotRangeEnd?: number): void;
-    }
-    class AnimationRender {
-        static tempIbCreate: IBCreator;
-        name: string;
-        changeIB: Map<number, IChange[]>;
-        changeVB: IVBChange[];
-        frames: number[];
-        frameNumber: number;
-        skinDataArray: SkinAniRenderData[];
-        boneFrames: Float32Array[][];
-        eventsFrames: spine.Event[][];
-        isCache: boolean;
-        static getFloat32Array(bone: spine.Bone): Float32Array;
-        constructor();
-        private checkChangeVB;
-        getFrameIndex(time: number, frameIndex: number): number;
-        cacheBones(preRender: IPreRender): void;
-        check(animation: spine.Animation, preRender: IPreRender): void;
-        createSkinData(mainVB: VBCreator, mainIB: IBCreator, slotAttachMap: Map<number, Map<string, AttachmentParse>>, attachMap: AttachmentParse[]): SkinAniRenderData;
-    }
-    class SkinAniRenderData {
-        name: string;
-        canInstance: boolean;
-        ibs: IBRenderData[];
-        mainibRender: IBRenderData;
-        vb: VBCreator;
-        mainIB: IBCreator;
-        mutiRenderAble: boolean;
-        isNormalRender: boolean;
-        checkVBChange: (slots: spine.Slot[]) => boolean;
-        updateBoneMat: (delta: number, animation: AnimationRender, bones: spine.Bone[], state: spine.AnimationState, boneMat: Float32Array) => void;
-        changeVB: IVBChange[];
-        constructor();
-        checkVBChangeEmpty(slots: spine.Slot[]): boolean;
-        checkVBChangeS(slots: spine.Slot[]): boolean;
-        getIB(frameIndex: number): IBRenderData;
-        updateBoneMatCache(delta: number, animation: AnimationRender, bones: spine.Bone[], state: spine.AnimationState, boneMat: Float32Array): void;
-        updateBoneMatCacheEvent(delta: number, animation: AnimationRender, bones: spine.Bone[], state: spine.AnimationState, boneMat: Float32Array): void;
-        updateBoneMatByBone(delta: number, animation: AnimationRender, bones: spine.Bone[], state: spine.AnimationState, boneMat: Float32Array): void;
-        init(tempMap: Map<number, IChange[]>, mainVB: VBCreator, mainIB: IBCreator, tempArray: number[], slotAttachMap: Map<number, Map<string, AttachmentParse>>, attachMap: AttachmentParse[], changeVB: IVBChange[]): void;
-    }
-    class AnimationRenderProxy {
-        state: spine.AnimationState;
-        currentTime: number;
-        currentFrameIndex: number;
-        animator: AnimationRender;
-        currentSKin: SkinAniRenderData;
-        constructor(animator: AnimationRender);
-        set skinIndex(value: number);
-        get name(): string;
-        reset(): void;
-        renderWithOutMat(slots: spine.Slot[], updator: IVBIBUpdate, curTime: number): void;
-        render(bones: spine.Bone[], slots: spine.Slot[], updator: IVBIBUpdate, curTime: number, boneMat: Float32Array): void;
-    }
-    class AttachmentParse {
-        slotId: number;
-        attachment: string;
-        color: TColor;
-        attachmentColor: TColor;
-        blendMode: number;
-        vertexArray: Float32Array;
-        indexArray: Array<number>;
-        uvs: spine.ArrayLike<number>;
-        stride: number;
-        boneIndex: number;
-        textureName: string;
-        isclip: boolean;
-        sourceData: spine.Attachment;
-        vertexCount: number;
-        init(attachment: spine.Attachment, boneIndex: number, slotId: number, deform: number[], slot: spine.SlotData): boolean;
-    }
-    type TColor = {
-        r: number;
-        g: number;
-        b: number;
-        a: number;
-    };
-    class ChangeDrawOrder implements IChange {
-        order: number[];
-        changeOrder(attachMap: AttachmentParse[]): number[] | null;
-        change(vb: VBCreator, slotAttachMap: Map<number, Map<string, AttachmentParse>>): boolean;
-    }
-    class ChangeRGBA implements IVBChange {
-        slotId: number;
-        sizeMap: Map<string, TAttamentPos>;
-        constructor(slotId: number);
-        initChange(vb: VBCreator): boolean;
-        updateVB(vb: VBCreator, slots: spine.Slot[]): boolean;
-        clone(): IVBChange;
-    }
-    class ChangeSlot implements IChange {
-        slotId: number;
-        attachment: string;
-        attachmentParse: AttachmentParse;
-        change(vb: VBCreator, slotAttachMap: Map<number, Map<string, AttachmentParse>>): boolean;
-        changeOrder(attachMap: AttachmentParse[]): number[] | null;
-    }
-    class IBCreator {
-        ib: Uint16Array;
-        ibLength: number;
-        outRenderData: MultiRenderData;
-        private _realib;
-        get realIb(): Uint16Array;
-        constructor();
-    }
-    interface IChange {
-        change(vb: VBCreator, slotAttachMap: Map<number, Map<string, AttachmentParse>>): boolean;
-        changeOrder(attachMap: AttachmentParse[]): number[] | null;
-    }
-    interface IGetBone {
-        getBoneId(boneIndex: number): number;
-    }
-    interface IPreRender {
-        canCache: boolean;
-        _updateState(delta: number): spine.Bone[];
-        _play(animationName: string): number;
-    }
-    interface ISpineOptimizeRender {
-        init(skeleton: spine.Skeleton, templet: SpineTemplet, renderNode: BaseRenderNode2D, state: spine.AnimationState): void;
-        play(animationName: string): void;
-        render(time: number): void;
-        setSkinIndex(index: number): void;
-        initBake(obj: TSpineBakeData): void;
-        changeSkeleton(skeleton: spine.Skeleton): void;
-        destroy(): void;
-    }
-    interface IVBChange {
-        initChange(vb: VBCreator): boolean;
-        updateVB(vb: VBCreator, slots: spine.Slot[]): boolean;
-        clone(): IVBChange;
-    }
-    interface IVBIBUpdate {
-        updateVB(vertexArray: Float32Array, vbLength: number): void;
-        updateIB(indexArray: Uint16Array, ibLength: number, mutiRenderData: MultiRenderData, isMuti: boolean): void;
-    }
-    type RenderData = {
-        material?: Material;
-        textureName: string;
-        blendMode: number;
-        offset: number;
-        length: number;
-    };
-    class MultiRenderData {
-        static ID: number;
-        id: number;
-        renderData: RenderData[];
-        currentData: RenderData;
-        constructor();
-        addData(textureName: string, blendMode: number, offset: number, length: number): void;
-        endData(length: number): void;
-    }
-    class SketonOptimise implements IPreRender {
-        static normalRenderSwitch: boolean;
-        static cacheSwitch: boolean;
-        canCache: boolean;
-        sketon: spine.Skeleton;
-        _stateData: spine.AnimationStateData;
-        _state: spine.AnimationState;
-        blendModeMap: Map<number, number>;
-        animators: AnimationRender[];
-        skinAttachArray: SkinAttach[];
-        defaultSkinAttach: SkinAttach;
-        maxBoneNumber: number;
-        bakeData: TSpineBakeData;
-        constructor();
-        _initSpineRender(skeleton: spine.Skeleton, templet: SpineTemplet, renderNode: Spine2DRenderNode, state: spine.AnimationState): ISpineOptimizeRender;
-        _updateState(delta: number): spine.Bone[];
-        _play(animationName: string): number;
-        checkMainAttach(skeletonData: spine.SkeletonData): void;
-        attachMentParse(skeletonData: spine.SkeletonData): void;
-        initAnimation(animations: spine.Animation[]): void;
-        cacheBone(): void;
-        init(slots: spine.Slot[]): void;
-    }
-    class SkinAttach {
-        name: string;
-        /**
-         * Attachments for each slot
-         */
-        slotAttachMap: Map<number, Map<string, AttachmentParse>>;
-        mainAttachMentOrder: AttachmentParse[];
-        isNormalRender: boolean;
-        mainVB: VBCreator;
-        mainIB: IBCreator;
-        hasNormalRender: boolean;
-        type: ESpineRenderType;
-        constructor();
-        copyFrom(other: SkinAttach): void;
-        checkMainAttach(slots: spine.SlotData[]): void;
-        attachMentParse(skinData: spine.Skin, slots: spine.SlotData[]): void;
-        init(slots: spine.SlotData[]): void;
-        initAnimator(animator: AnimationRender): void;
-    }
-    type IBRenderData = {
-        realIb: Uint16Array;
-        outRenderData: MultiRenderData;
-    };
-    type TSpineBakeData = {
-        bonesNums: number;
-        aniOffsetMap: {
-            [key: string]: number;
-        };
-        texture2d?: Texture2D;
-        simpPath?: string;
-    };
-    class SlotUtils {
-        static checkAttachment(attachment: spine.Attachment): ESpineRenderType;
-        static appendIndexArray(attachmentParse: AttachmentParse, indexArray: Uint16Array, size: number, offset: number): number;
-    }
-    class SpineBakeScript extends Script {
-        url: string;
-        bakeData: string;
-        constructor();
-        onEnable(): void;
-        onDisable(): void;
-        attach(spine: ISpineOptimizeRender): Promise<void>;
-        private initBake;
-    }
-    class SpineEmptyRender implements ISpineOptimizeRender {
-        changeSkeleton(skeleton: spine.Skeleton): void;
-        static instance: SpineEmptyRender;
-        init(skeleton: spine.Skeleton, templet: SpineTemplet, renderNode: BaseRenderNode2D, state: spine.AnimationState): void;
-        play(animationName: string): void;
-        render(time: number): void;
-        setSkinIndex(index: number): void;
-        initBake(obj: TSpineBakeData): void;
-        destroy(): void;
-    }
-    class SpineInstanceBatch implements IBatch2DRender {
-        _recoverList: FastSinglelist<IRenderElement2D>;
-        /**
-         *
-         * @param left
-         * @param right
-         */
-        check(left: IRenderElement2D, right: IRenderElement2D): boolean;
-        batchRenderElement(list: FastSinglelist<IRenderElement2D>, start: number, length: number): void;
-        updateBuffer(info: SpineInstanceInfo, nMatrixData: Float32Array, simpleAnimatorData: Float32Array, instanceCount: number): void;
-        batch(list: FastSinglelist<IRenderElement2D>, start: number, length: number): void;
-        recover(): void;
-    }
-    interface SpineInstanceInfo {
-        state: IBufferState;
-        nMatrixInstanceVB?: IVertexBuffer;
-        simpleAnimatorVB?: IVertexBuffer;
-    }
-    class SpineInstanceElement2DTool {
-        static MaxInstanceCount: number;
-        /**
-         * get Instance BufferState
-         */
-        private static _instanceBufferInfoMap;
-        static getInstanceInfo(geometry: IRenderGeometryElement): SpineInstanceInfo;
-        static create(): IRenderElement2D;
-        static recover(element: IRenderElement2D): void;
-        static _instanceBufferCreate(length: number): Float32Array;
-        static _instanceBufferRecover(float32: Float32Array): void;
-    }
-    class SpineNormalRender implements ISpineOptimizeRender {
-        destroy(): void;
-        initBake(obj: TSpineBakeData): void;
-        _owner: Spine2DRenderNode;
-        _renerer: ISpineRender;
-        _skeleton: spine.Skeleton;
-        init(skeleton: spine.Skeleton, templet: SpineTemplet, renderNode: Spine2DRenderNode, state: spine.AnimationState): void;
-        play(animationName: string): void;
-        setSkinIndex(index: number): void;
-        changeSkeleton(skeleton: spine.Skeleton): void;
-        render(time: number): void;
-    }
-    class SpineOptimizeConst {
-        static BONEVERTEX: number;
-        static RIGIDBODYVERTEX: number;
-    }
-    class SpineOptimizeRender implements ISpineOptimizeRender {
-        animatorMap: Map<string, AnimationRenderProxy>;
-        currentAnimation: AnimationRenderProxy;
-        bones: spine.Bone[];
-        slots: spine.Slot[];
-        skinRenderArray: SkinRender[];
-        currentRender: SkinRender;
-        _skinIndex: number;
-        _curAnimationName: string;
-        geoMap: Map<ESpineRenderType, TGeo>;
-        private _isRender;
-        spineColor: Color;
-        _skeleton: spine.Skeleton;
-        _state: spine.AnimationState;
-        renderProxy: IRender;
-        renderProxyMap: Map<ERenderProxyType, IRender>;
-        _nodeOwner: Spine2DRenderNode;
-        boneMat: Float32Array;
-        isBake: boolean;
-        bakeData: TSpineBakeData;
-        private _renderProxytype;
-        constructor(spineOptimize: SketonOptimise);
-        destroy(): void;
-        initBake(obj: TSpineBakeData): void;
-        initRender(type: ESpineRenderType): TGeo;
-        changeSkeleton(skeleton: spine.Skeleton): void;
-        init(skeleton: spine.Skeleton, templet: SpineTemplet, renderNode: Spine2DRenderNode, state: spine.AnimationState): void;
-        get renderProxytype(): ERenderProxyType;
-        set renderProxytype(value: ERenderProxyType);
-        beginCache(): void;
-        endCache(): void;
-        setSkinIndex(index: number): void;
-        private _clear;
-        play(animationName: string): void;
-        render(time: number): void;
-    }
-    enum ERenderProxyType {
-        RenderNormal = 0,
-        RenderOptimize = 1,
-        RenderBake = 2
-    }
-    interface IRender {
-        change(skinRender: SkinRender, currentAnimation: AnimationRenderProxy): void;
-        leave(): void;
-        render(curTime: number, boneMat: Float32Array): void;
-    }
-    class SkinRender implements IVBIBUpdate {
-        owner: SpineOptimizeRender;
-        name: string;
-        /**
-       * Geometry
-       */
-        geo: IRenderGeometryElement;
-        protected vb: IVertexBuffer;
-        protected ib: IIndexBuffer;
-        elements: [
-            Material,
-            number,
-            number
-        ][];
-        private hasNormalRender;
-        _renerer: ISpineRender;
-        elementsMap: Map<number, ElementCreator>;
-        templet: SpineTemplet;
-        skinAttachType: ESpineRenderType;
-        material: Material;
-        currentMaterials: Material[];
-        constructor(owner: SpineOptimizeRender, skinAttach: SkinAttach);
-        getMaterialByName(name: string, blendMode: number): Material;
-        updateVB(vertexArray: Float32Array, vbLength: number): void;
-        updateIB(indexArray: Uint16Array, ibLength: number, mutiRenderData: MultiRenderData, isMuti: boolean): void;
-        init(skeleton: spine.Skeleton, templet: SpineTemplet, renderNode: Spine2DRenderNode): void;
-        render(time: number): void;
-    }
-    class ElementCreator {
-        elements: [
-            Material,
-            number,
-            number
-        ][];
-        currentMaterials: Material[];
-        constructor(mutiRenderData: MultiRenderData, skinData: SkinRender);
-        cloneTo(source: [
-            Material,
-            number,
-            number
-        ][]): void;
-    }
-    type TGeo = {
-        geo: IRenderGeometryElement;
-        vb: IVertexBuffer;
-        ib: IIndexBuffer;
-    };
-    abstract class VBCreator implements IGetBone {
-        mapIndex: Map<number, number>;
-        boneArray: number[];
-        vb: Float32Array;
-        vbLength: number;
-        slotVBMap: Map<number, Map<string, TAttamentPos>>;
-        boneMat: Float32Array;
-        private boneMaxId;
-        constructor(autoNew?: boolean);
-        init(autoNew: boolean): void;
-        abstract get vertexSize(): number;
-        abstract appendVertexArray(attachmentParse: AttachmentParse, vertexArray: Float32Array, offset: number, boneGet: IGetBone): number;
-        appendAndCreateIB(attach: AttachmentParse): void;
-        getBoneId(boneIndex: number): number;
-        initBoneMat(): void;
-        appendVB(attach: AttachmentParse): number | TAttamentPos;
-        createIB(attachs: AttachmentParse[], ibCreator: IBCreator, order?: number[]): void;
-        updateBone(bones: spine.Bone[], boneMat: Float32Array): void;
-        updateBoneCache(boneFrames: Float32Array[][], frames: number, boneMat: Float32Array): void;
-        _cloneTo(target: VBCreator): void;
-        abstract _create(): VBCreator;
-        clone(): VBCreator;
-    }
-    class VBBoneCreator extends VBCreator {
-        _create(): VBCreator;
-        get vertexSize(): number;
-        appendVertexArray(attachmentParse: AttachmentParse, vertexArray: Float32Array, offset: number, boneGet: IGetBone): number;
-    }
-    class VBRigBodyCreator extends VBCreator {
-        _create(): VBCreator;
-        get vertexSize(): number;
-        appendVertexArray(attachmentParse: AttachmentParse, vertexArray: Float32Array, offset: number, boneGet: IGetBone): number;
-    }
-    type TAttamentPos = {
-        offset: number;
-        attachment: AttachmentParse;
-    };
-    interface ISlotExtend {
-        vertexArray: Float32Array;
-        indexArray: Array<number>;
-        uvs: spine.ArrayLike<number>;
-        stride: number;
-        boneIndex: number;
-        init(slot: spine.Slot, vside: number): boolean;
-    }
-    class SlotExtend extends SlotExtendBase {
-        init(slot: spine.Slot, vside: number): boolean;
-    }
-    abstract class SlotExtendBase implements ISlotExtend {
-        bone: spine.Bone;
-        boneIndex: number;
-        vertexArray: Float32Array;
-        indexArray: Array<number>;
-        uvs: spine.ArrayLike<number>;
-        stride: number;
-        texture: Texture;
-        attchment: spine.Attachment;
-        abstract init(slot: spine.Slot, vside: number): boolean;
-    }
-    class SlotExtendRG extends SlotExtendBase {
-        init(slot: spine.Slot, vside: number): boolean;
     }
     /**动画开始播放调度
      * @eventType Event.PLAYED
@@ -39407,16 +32852,18 @@ declare module Laya {
     /**
      * spine动画由<code>SpineTemplet</code>，<code>SpineSkeletonRender</code>，<code>SpineSkeleton</code>三部分组成。
      */
-    class Spine2DRenderNode extends BaseRenderNode2D implements ISpineSkeleton {
-        static _pool: IRenderElement2D[];
-        static createRenderElement2D(): IRenderElement2D;
-        static recoverRenderElement2D(value: IRenderElement2D): void;
-        /**状态-停止 */
+    class SpineSkeleton extends Sprite {
         static readonly STOPPED: number;
-        /**状态-暂停 */
         static readonly PAUSED: number;
-        /**状态-播放中 */
         static readonly PLAYING: number;
+        protected _source: string;
+        protected _templet: SpineTemplet;
+        protected _timeKeeper: spine.TimeKeeper;
+        protected _skeleton: spine.Skeleton;
+        protected _state: spine.AnimationState;
+        protected _stateData: spine.AnimationStateData;
+        protected _currentPlayTime: number;
+        protected _renerer: SpineSkeletonRenderer;
         /** 播放速率*/
         private _playbackRate;
         private trackIndex;
@@ -39424,48 +32871,28 @@ declare module Laya {
         private _animationName;
         private _loop;
         private _externalSkins;
-        private _skin;
-        private _matBuffer;
         constructor();
-        /**
-         * 外部皮肤
-         */
         get externalSkins(): ExternalSkin[];
         set externalSkins(value: ExternalSkin[]);
-        addCMDCall(context: Context, px: number, py: number): void;
         /**
          * 重置外部加载的皮肤的样式
          */
         resetExternalSkin(): void;
-        /**
-         * 动画源
-         */
         get source(): string;
         set source(value: string);
-        /**
-         * 皮肤名
-         */
         get skinName(): string;
         set skinName(value: string);
-        /**
-         * 动画名
-         */
         get animationName(): string;
         set animationName(value: string);
-        /**
-         * 是否循环
-         */
         get loop(): boolean;
         set loop(value: boolean);
-        set url(value: string);
-        get url(): string;
         /**
          * 得到动画模板的引用
          * @return templet
          */
         get templet(): SpineTemplet;
         /**
-         * 设置动画模板的引用
+         *
          */
         set templet(value: SpineTemplet);
         /**
@@ -39478,8 +32905,7 @@ declare module Laya {
          * @return	当前播放状态
          */
         get playState(): number;
-        spineItem: ISpineOptimizeRender;
-        onAwake(): void;
+        protected init(templet: SpineTemplet): void;
         /**
          * 播放动画
          *
@@ -39524,198 +32950,6 @@ declare module Laya {
          * @param	skinIndex	皮肤索引
          */
         showSkinByIndex(skinIndex: number): void;
-        event(type: string, data?: any): void;
-        /**
-         * 停止动画
-         */
-        stop(): void;
-        private _clearUpdate;
-        private _beginUpdate;
-        private _needUpdate;
-        onUpdate(): void;
-        /**
-         * 暂停动画的播放
-         */
-        paused(): void;
-        /**
-         * 恢复动画的播放
-         */
-        resume(): void;
-        /**
-         * 添加一个动画
-         * @param nameOrIndex   动画名字或者索引
-         * @param loop          是否循环播放
-         * @param delay         延迟调用，可以为负数
-         */
-        addAnimation(nameOrIndex: any, loop?: boolean, delay?: number): void;
-        /**
-         * 设置当动画被改变时，存储混合(交叉淡出)的持续时间
-         * @param fromNameOrIndex
-         * @param toNameOrIndex
-         * @param duration
-         */
-        setMix(fromNameOrIndex: any, toNameOrIndex: any, duration: number): void;
-        /**
-         * 获取骨骼信息(spine.Bone)
-         * 注意: 获取到的是spine运行时的骨骼信息(spine.Bone)，不适用引擎的方法
-         * @param boneName
-         */
-        getBoneByName(boneName: string): spine.Bone;
-        /**
-         * 获取Skeleton(spine.Skeleton)
-         */
-        getSkeleton(): spine.Skeleton;
-        /**
-         * 替换插槽皮肤
-         * @param slotName
-         * @param attachmentName
-         */
-        setSlotAttachment(slotName: string, attachmentName: string): void;
-        clear(): void;
-        changeNormal(): void;
-        onDestroy(): void;
-        drawGeos(geo: IRenderGeometryElement, elements: [
-            Material,
-            number,
-            number
-        ][]): void;
-        updateElements(geo: IRenderGeometryElement, elements: [
-            Material,
-            number,
-            number
-        ][]): void;
-        drawGeo(geo: IRenderGeometryElement, material: Material): void;
-        getMaterial(texture: Texture, blendMode: number): Material;
-    }
-    enum ERenderType {
-        normal = 0,
-        boneGPU = 1,
-        rigidBody = 2
-    }
-    class SpineAdapter {
-        static _vbArray: Float32Array;
-        static _ibArray: Uint16Array;
-        static _spine: any;
-        static isWasm: boolean;
-        static stateMap: any;
-        static createNormalRender(templet: SpineTemplet, twoColorTint: boolean): SpineWasmRender | SpineSkeletonRenderer;
-        static allAdpat(): void;
-        static adaptJS(): void;
-        static initClass(): void;
-        static bindBuffer(maxNumVertices: number, maxNumIndices: number): void;
-        static drawSkeleton(fun: Function, skeleton: any, twoColorTint: boolean, slotRangeStart: number, slotRangeEnd: number): void;
-    }
-    /**动画开始播放调度
-     * @eventType Event.PLAYED
-     * */
-    /**动画停止播放调度
-     * @eventType Event.STOPPED
-     * */
-    /**动画暂停播放调度
-     * @eventType Event.PAUSED
-     * */
-    /**自定义事件。
-     * @eventType Event.LABEL
-     */
-    /**
-     * @deprecated 请使用Sprite+Spine2DRenderNode组件
-     * spine动画由<code>SpineTemplet</code>，<code>SpineSkeletonRender</code>，<code>SpineSkeleton</code>三部分组成。
-     */
-    class SpineSkeleton extends Sprite {
-        private _spineComponent;
-        constructor();
-        /**
-         * 外部皮肤
-         */
-        get externalSkins(): ExternalSkin[];
-        set externalSkins(value: ExternalSkin[]);
-        /**
-         * 重置外部加载的皮肤的样式
-         */
-        resetExternalSkin(): void;
-        /**
-         * 动画源
-         */
-        get source(): string;
-        set source(value: string);
-        /**
-         * 皮肤名
-         */
-        get skinName(): string;
-        set skinName(value: string);
-        /**
-         * 动画名
-         */
-        get animationName(): string;
-        set animationName(value: string);
-        /**
-         * 是否循环
-         */
-        get loop(): boolean;
-        set loop(value: boolean);
-        /**
-         * 得到动画模板的引用
-         * @return templet
-         */
-        get templet(): SpineTemplet;
-        /**
-         * 设置动画模板的引用
-         */
-        set templet(value: SpineTemplet);
-        /**
-         * 设置当前播放位置
-         * @param	value 当前时间
-         */
-        set currentTime(value: number);
-        /**
-         * 获取当前播放状态
-         * @return	当前播放状态
-         */
-        get playState(): number;
-        get spineItem(): ISpineOptimizeRender;
-        set spineItem(value: ISpineOptimizeRender);
-        /**
-         * 播放动画
-         *
-         * @param	nameOrIndex	动画名字或者索引
-         * @param	loop		是否循环播放
-         * @param	force		false,如果要播的动画跟上一个相同就不生效,true,强制生效
-         * @param	start		起始时间
-         * @param	end			结束时间
-         * @param	freshSkin	是否刷新皮肤数据
-         * @param	playAudio	是否播放音频
-         */
-        play(nameOrIndex: any, loop: boolean, force?: boolean, start?: number, end?: number, freshSkin?: boolean, playAudio?: boolean): void;
-        /**
-         * 得到当前动画的数量
-         * @return 当前动画的数量
-         */
-        getAnimNum(): number;
-        /**
-         * 得到指定动画的名字
-         * @param	index	动画的索引
-         */
-        getAniNameByIndex(index: number): string;
-        /**
-         * 通过名字得到插槽的引用
-         * @param slotName
-         */
-        getSlotByName(slotName: string): spine.Slot;
-        /**
-         * 设置动画播放速率
-         * @param	value	1为标准速率
-         */
-        playbackRate(value: number): void;
-        /**
-         * 通过名字显示一套皮肤
-         * @param	name	皮肤的名字
-         */
-        showSkinByName(name: string): void;
-        /**
-         * 通过索引显示一套皮肤
-         * @param	skinIndex	皮肤索引
-         */
-        showSkinByIndex(skinIndex: number): void;
         /**
          * 停止动画
          */
@@ -39728,6 +32962,7 @@ declare module Laya {
          * 恢复动画的播放
          */
         resume(): void;
+        private reset;
         /**
          * 销毁当前动画
          * @override
@@ -39764,10 +32999,23 @@ declare module Laya {
          */
         setSlotAttachment(slotName: string, attachmentName: string): void;
     }
-    enum ESpineRenderType {
-        normal = 0,
-        boneGPU = 1,
-        rigidBody = 2
+    class SpineSkeletonRenderer {
+        premultipliedAlpha: boolean;
+        vertexEffect: spine.VertexEffect;
+        templet: SpineTemplet;
+        private tempColor;
+        private tempColor2;
+        private vertices;
+        private vertexSize;
+        private twoColorTint;
+        private renderable;
+        private clipper;
+        private temp;
+        private temp2;
+        private temp3;
+        private temp4;
+        constructor(templet: SpineTemplet, twoColorTint?: boolean);
+        draw(skeleton: spine.Skeleton, graphics: Graphics, slotRangeStart?: number, slotRangeEnd?: number): void;
     }
     /**
      * Spine动画模板基类
@@ -39775,19 +33023,12 @@ declare module Laya {
     class SpineTemplet extends Resource {
         static RuntimeVersion: string;
         skeletonData: spine.SkeletonData;
-        materialMap: Map<string, Material>;
         private _textures;
         private _basePath;
         private _ns;
-        needSlot: boolean;
-        sketonOptimise: SketonOptimise;
         constructor();
-        get _mainTexture(): Texture;
-        mainTexture: Texture;
-        mainBlendMode: number;
         get ns(): typeof spine;
         get basePath(): string;
-        getMaterial(texture: Texture, blendMode: number): Material;
         getTexture(name: string): SpineTexture;
         _parse(desc: string | ArrayBuffer, atlasText: string, createURL: string, progress?: IBatchProgress): Promise<void>;
         private getRuntimeVersion;
@@ -39830,345 +33071,277 @@ declare module Laya {
          */
         static changeDefinition(name: string, classObj: any): void;
     }
-    function testSimple(): Promise<void>;
-    class LayaTest {
-        static test(): void;
-    }
-    function usewebgl(): void;
-    class PerfTools {
-        static begin(block: string): void;
-        static end(block: string): void;
-    }
-    class PerformanceDefine {
-        static T_FPS: string;
-        static C_UniformBufferUploadCount: string;
-        static C_GeometryBufferUploadCount: string;
-        static C_overdraw: string;
-        static C_trangleCount: string;
-        static C_SetRenderPassCount: string;
-        static C_DrawCallCount: string;
-        static C_Instancing_DrawCallCount: string;
-        static C_TransDrawCall: string;
-        static C_OpaqueDrawCall: string;
-        static C_DepthCastDrawCall: string;
-        static C_ShaderCompile: string;
-        static T_ShaderCompile: string;
-        static M_GPUBuffer: string;
-        static M_VertexBuffer: string;
-        static M_IndexBuffer: string;
-        static M_UniformBlockBuffer: string;
-        static RC_GPUBuffer: string;
-        static RC_VertexBuffer: string;
-        static RC_IndexBuffer: string;
-        static RC_UniformBlockBuffer: string;
-        static M_ALLTexture: string;
-        static M_Texture2D: string;
-        static M_TextureCube: string;
-        static M_Texture3D: string;
-        static M_Texture2DArray: string;
-        static RC_ALLTexture: string;
-        static RC_Texture2D: string;
-        static RC_TextureCube: string;
-        static RC_Texture3D: string;
-        static RC_Texture2DArray: string;
-        static M_ALLRenderTexture: string;
-        static RC_ALLRenderTexture: string;
-        static T_CameraRender: string;
-        static T_Render_OpaqueRender: string;
-        static T_Render_TransparentRender: string;
-        static T_Render_PostProcess: string;
-        static T_Render_CameraEventCMD: string;
-        static T_Render_ShadowPassMode: string;
-        static T_Render_CameraOtherDest: string;
-        static T_RenderPreUpdate: string;
-        static T_OnlyMeshRender: string;
-        static T_OnlySkinnedMeshRender: string;
-        static T_OnlyShurikenParticleRender: string;
-        static C_Sprite3DCount: string;
-        static C_BaseRenderCount: string;
-        static C_MeshRenderCount: string;
-        static C_SkinnedMeshRenderCount: string;
-        static C_ShurikenParticleRenderCount: string;
-        static T_AnimatorUpdate: string;
-        static T_SkinBoneUpdate: string;
-        static T_ShurikenUpdate: string;
-        static T_Physics_Simulation: string;
-        static T_Physics_UpdateNode: string;
-        static T_PhysicsEvent: string;
-        static C_PhysicsEventCount: string;
-        static T_PhysicsCollider: string;
-        static T_PhysicsTrigger: string;
-        static T_PhysicsColliderEnter: string;
-        static T_PhysicsColliderExit: string;
-        static T_PhysicsColliderStay: string;
-        static T_PhysicsTriggerEnter: string;
-        static T_PhysicsTriggerExit: string;
-        static T_PhysicsTriggerStay: string;
-        static C_PhysicaDynamicRigidBody: string;
-        static C_PhysicaStaticRigidBody: string;
-        static C_PhysicaKinematicRigidBody: string;
-        static C_PhysicaCharacterController: string;
-        static C_PhysicsJoint: string;
-        static T_LoadResourceTime: string;
-        static C_LoadResourceCount: string;
-        static C_LoadRequestCount: string;
-        static T_UITime: string;
-        static C_UICount: string;
-        static C_DrawCount: string;
-        static T_UIRender: string;
-    }
     /**
-     * 性能统计开始
-     * @param block 统计标识（例如：PerformanceDefine.SCENE3D_RENDER）
-     * @constructor
-     */
-    function PERF_BEGIN(block: string): void;
-    /**
-     * 性能统计结束
-     * @param block 统计标识（例如：PerformanceDefine.SCENE3D_RENDER）
-     * @constructor
-     */
-    function PERF_END(block: string): void;
-    function PERF_FRAMECLEAR(): void;
-    /**
-     * @en The `AutoBitmap` class is a display object that represents bitmap images or graphics.
-     * It encapsulates the handling of position, width, height, and nine-patch for UI components.
-     * @zh `AutoBitmap` 类是用于表示位图图像或绘制图形的显示对象。
-     * 封装了位置，宽高及九宫格的处理，供UI组件使用。
+     * <code>AutoBitmap</code> 类是用于表示位图图像或绘制图形的显示对象。
+     * <p>封装了位置，宽高及九宫格的处理，供UI组件使用。</p>
      */
     class AutoBitmap extends Graphics {
+        /**@private 宽度*/
+        private _width;
+        /**@private 高度*/
+        private _height;
+        /**@private 源数据*/
+        private _source;
+        /**@private 网格数据*/
+        private _sizeGrid;
+        /**@private */
+        protected _isChanged: boolean;
+        protected _stateIndex: number;
+        protected _stateNum: number;
         uv: number[];
-        /**
-         * @en The size grid of the texture.
-         * The size grid is a 3x3 division of the texture, allowing it to be scaled without distorting the corners and edges.
-         * The array contains five values representing the top, right, bottom, and left margins, and whether to repeat the fill (0: no repeat, 1: repeat).
-         * The values are separated by commas. For example: "6,6,6,6,1".
-         * @zh 纹理的九宫格数据。
-         * 九宫格是一种将纹理分成3x3格的方式，使得纹理缩放时保持角和边缘不失真。
-         * 数组包含五个值，分别代表上边距、右边距、下边距、左边距以及是否重复填充（0：不重复填充，1：重复填充）。
-         * 值以逗号分隔。例如："6,6,6,6,1"。
-         */
+        _color: string;
+        /**@private */
+        private _drawGridCmd;
+        /**@inheritDoc
+         * @override
+        */
+        destroy(): void;
         get sizeGrid(): number[];
         set sizeGrid(value: number[]);
         /**
-         * @en The width of the display object, in pixels.
-         * @zh 表示显示对象的宽度，以像素为单位。
+         * 表示显示对象的宽度，以像素为单位。
          */
         get width(): number;
         set width(value: number);
         /**
-         * @en The height of the display object, in pixels.
-         * @zh 表示显示对象的高度，以像素为单位。
+         * 表示显示对象的高度，以像素为单位。
          */
         get height(): number;
         set height(value: number);
         /**
-         * @en The texture resource of the object.
-         * @zh 对象的纹理资源。
+         * 对象的纹理资源。
          */
         get source(): Texture;
         set source(value: Texture);
-        /**
-         * @en The color of the object.
-         * @zh 对象的颜色。
-         */
+        setState(index: number, numStates: number): void;
         get color(): string;
         set color(value: string);
-        /**@inheritDoc
-         * @override
-         * @en Destroy the object.
-         * @zh 销毁对象。
+        /** @private */
+        protected _setChanged(): void;
+        /**
+         * @private
+         * 修改纹理资源。
          */
-        destroy(): void;
+        protected changeSource(): void;
+        /**
+         *  由于可能有其他的graphic命令，因此不能用原来的直接clear()的方法
+         */
+        private _setDrawGridCmd;
     }
     /**
-     * @en The `Box` class is the base class for UI containers.
-     * Other container components will inherit from this class.
-     * @zh `Box` 类是 UI 容器的基类。
-     * 其他的容器组件都会继承于该类。
+     * <code>Box</code> 类是一个控件容器类。
      */
     class Box extends UIComponent {
+        private _bgColor;
         /**
-        * @inheritDoc
-        * @override
-        */
+         * @inheritDoc
+         * @override
+         */
         set_dataSource(value: any): void;
-        /**
-        * @en background color
-        * @zh 容器的背景颜色
-        */
+        /**背景颜色*/
         get bgColor(): string;
         set bgColor(value: string);
     }
     /**
-     * @en The Button component is used to represent a button with multiple states. The Button component can display a text label, an icon, or both.
-     * The states can be single-state, two-state (normal, pressed), or three-state (normal, hover, pressed). By default, it is three-state.
-     * @zh `Button` 组件用来表示多种状态的按钮。`Button` 组件可显示文本标签、图标或同时显示两者。
-     * 多种状态，可以是单态，两态（移出、按下）和三态(移出、悬停、按下)，默认是三态。
+     * 当按钮的选中状态（ <code>selected</code> 属性）发生改变时调度。
+     * @eventType laya.events.Event
+     */
+    /**
+     * <code>Button</code> 组件用来表示常用的多态按钮。 <code>Button</code> 组件可显示文本标签、图标或同时显示两者。	 *
+     * <p>可以是单态，两态和三态，默认三态(up,over,down)。</p>
+     *
+     * @example <caption>以下示例代码，创建了一个 <code>Button</code> 实例。</caption>
+     * package
+     *	{
+     *		import laya.ui.Button;
+     *		import laya.utils.Handler;
+     *		public class Button_Example
+     *		{
+     *			public function Button_Example()
+     *			{
+     *				Laya.init(640, 800);//设置游戏画布宽高。
+     *				Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *				Laya.loader.load("resource/ui/button.png", Handler.create(this,onLoadComplete));//加载资源。
+     *			}
+     *			private function onLoadComplete():void
+     *			{
+     *				trace("资源加载完成！");
+     *				var button:Button = new Button("resource/ui/button.png","label");//创建一个 Button 类的实例对象 button ,并传入它的皮肤。
+     *				button.x = 100;//设置 button 对象的属性 x 的值，用于控制 button 对象的显示位置。
+     *				button.y = 100;//设置 button 对象的属性 y 的值，用于控制 button 对象的显示位置。
+     *				button.clickHandler = new Handler(this, onClickButton,[button]);//设置 button 的点击事件处理器。
+     *				Laya.stage.addChild(button);//将此 button 对象添加到显示列表。
+     *			}
+     *			private function onClickButton(button:Button):void
+     *			{
+     *				trace("按钮button被点击了！");
+     *			}
+     *		}
+     *	}
+     * @example
+     * Laya.init(640, 800);//设置游戏画布宽高、渲染模式。
+     * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     * Laya.loader.load("resource/ui/button.png",laya.utils.Handler.create(this,loadComplete));//加载资源
+     * function loadComplete()
+     * {
+     *     console.log("资源加载完成！");
+     *     var button = new laya.ui.Button("resource/ui/button.png","label");//创建一个 Button 类的实例对象 button ,传入它的皮肤skin和标签label。
+     *     button.x =100;//设置 button 对象的属性 x 的值，用于控制 button 对象的显示位置。
+     *     button.y =100;//设置 button 对象的属性 y 的值，用于控制 button 对象的显示位置。
+     *     button.clickHandler = laya.utils.Handler.create(this,onClickButton,[button],false);//设置 button 的点击事件处理函数。
+     *     Laya.stage.addChild(button);//将此 button 对象添加到显示列表。
+     * }
+     * function onClickButton(button)
+     * {
+     *     console.log("按钮被点击了。",button);
+     * }
+     * @example
+     * import Button=laya.ui.Button;
+     * import Handler=laya.utils.Handler;
+     * class Button_Example{
+     *     constructor()
+     *     {
+     *         Laya.init(640, 800);
+     *         Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *         Laya.loader.load("resource/ui/button.png", laya.utils.Handler.create(this,this.onLoadComplete));//加载资源。
+     *     }
+     *     private onLoadComplete()
+     *     {
+     *         var button:Button = new Button("resource/ui/button.png","label");//创建一个 Button 类的实例对象 button ,并传入它的皮肤。
+     *         button.x = 100;//设置 button 对象的属性 x 的值，用于控制 button 对象的显示位置。
+     *         button.y = 100;//设置 button 对象的属性 y 的值，用于控制 button 对象的显示位置。
+     *         button.clickHandler = new Handler(this, this.onClickButton,[button]);//设置 button 的点击事件处理器。
+     *         Laya.stage.addChild(button);//将此 button 对象添加到显示列表。
+     *     }
+     *     private onClickButton(button:Button):void
+     *     {
+     *         console.log("按钮button被点击了！")
+     *     }
+     * }
      */
     class Button extends UIComponent implements ISelect {
         /**
-         * @en Controls whether the button can toggle its display state. When the value is true, the display state can be toggled by clicking, such as switching between selected and unselected states.
-         * @zh 用于控制按钮是否可切换显示状态；值为 true 时，才可以在运行后通过点击切换显示状态。例如选中状态和未选中状态。
+         * 指定按钮按下时是否是切换按钮的显示状态。
+         *
+         * @example 以下示例代码，创建了一个 <code>Button</code> 实例，并设置为切换按钮。
+         * @example
+         * package
+         *	{
+         *		import laya.ui.Button;
+         *		import laya.utils.Handler;
+         *		public class Button_toggle
+         *		{
+         *			public function Button_toggle()
+         *			{
+         *				Laya.init(640, 800);//设置游戏画布宽高、渲染模式。
+         *				Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+         *				Laya.loader.load("resource/ui/button.png", Handler.create(this,onLoadComplete));
+         *			}
+         *			private function onLoadComplete():void
+         *			{
+         *				trace("资源加载完成！");
+         *				var button:Button = new Button("resource/ui/button.png","label");//创建一个 Button 实例对象 button ,传入它的皮肤skin和标签label。
+         *				button.x = 100;//设置 button 对象的属性 x 的值，用于控制 button 对象的显示位置。
+         *				button.y = 100;//设置 button 对象的属性 y 的值，用于控制 button 对象的显示位置。
+         *				button.toggle = true;//设置 button 对象为切换按钮。
+         *				button.clickHandler = new Handler(this, onClickButton,[button]);//设置 button 的点击事件处理器。
+         *				Laya.stage.addChild(button);//将此 button 对象添加到显示列表。
+         *	 		}
+         *			private function onClickButton(button:Button):void
+         *			{
+         *				trace("button.selected = "+ button.selected);
+         *			}
+         *		}
+         *	}
+         * @example
+         * Laya.init(640, 800);//设置游戏画布宽高、渲染模式。
+         * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+         * Laya.loader.load("resource/ui/button.png",laya.utils.Handler.create(this,loadComplete));//加载资源
+         * function loadComplete()
+         * {
+         *     console.log("资源加载完成！");
+         *     var button = new laya.ui.Button("resource/ui/button.png","label");//创建一个 Button 类的实例对象 button ,传入它的皮肤skin和标签label。
+         *     button.x =100;//设置 button 对象的属性 x 的值，用于控制 button 对象的显示位置。
+         *     button.y =100;//设置 button 对象的属性 y 的值，用于控制 button 对象的显示位置。
+         *     button.toggle = true;//设置 button 对象为切换按钮。
+         *     button.clickHandler = laya.utils.Handler.create(this,onClickButton,[button],false);//设置 button 的点击事件处理器。
+         *     Laya.stage.addChild(button);//将此 button 对象添加到显示列表。
+         * }
+         * function onClickButton(button)
+         * {
+         *     console.log("button.selected = ",button.selected);
+         * }
+         * @example
+         * Laya.init(640, 800);//设置游戏画布宽高、渲染模式。
+         * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+         * Laya.loader.load("button.png", null,null, null, null, null);//加载资源
+         * function loadComplete() {
+         *     console.log("资源加载完成！");
+         *     var button:laya.ui.Button = new laya.ui.Button("button.png", "label");//创建一个 Button 类的实例对象 button ,传入它的皮肤skin和标签label。
+         *     button.x = 100;//设置 button 对象的属性 x 的值，用于控制 button 对象的显示位置。
+         *     button.y = 100;//设置 button 对象的属性 y 的值，用于控制 button 对象的显示位置。
+         *     button.toggle = true;//设置 button 对象为切换按钮。
+         *     button.clickHandler = laya.utils.Handler.create(this, onClickButton, [button], false);//设置 button 的点击事件处理器。
+         *     Laya.stage.addChild(button);//将此 button 对象添加到显示列表。
+         * }
+         * function onClickButton(button) {
+         *     console.log("button.selected = ", button.selected);
+         * }
          */
         toggle: boolean;
         /**
-         * @en The skin resource address of the object.
-         * Supports single state, two states and three states, set with the `stateNum` property.
-         * @zh 对象的皮肤资源地址。
-         * 支持单态，两态和三态，用 `stateNum` 属性设置
-         * @see #stateNum
+         * @private
+         * 按钮上的文本。
          */
-        get skin(): string;
-        set skin(value: string);
-        /**
-         * @en The state value of the object, expressed as a number.
-         * The default value is 3. This value determines how the skin resource image is sliced.
-         * Values:
-         * - 1: Single state. The image is not sliced, and the button has only one skin state.
-         * - 2: Two states. The image will be sliced equally in the vertical direction into 2 parts, from top to bottom, the up state skin and the down and over and selected state skin, respectively.
-         * - 3: Three states. The image will be sliced equally in the vertical direction into 3 parts, from top to bottom, the up state skin, the over state skin, and the down and selected state skin, respectively.
-         * @zh 指定对象的状态值，以数字表示。
-         * 默认值为3。此值决定皮肤资源图片的切割方式。
-         * 取值：
-         * - 1：单态。图片不做切割，按钮的皮肤状态只有一种。
-         * - 2：两态。图片将以竖直方向被等比切割为2部分，从上向下，依次为弹起状态皮肤、按下和经过及选中状态皮肤。
-         * - 3：三态。图片将以竖直方向被等比切割为3部分，从上向下，依次为弹起状态皮肤、经过状态皮肤、按下和选中状态皮肤
-         */
-        get stateNum(): number;
-        set stateNum(value: number);
-        /**
-         * @en The text content of the button.
-         * @zh 按钮的文本内容。
-         */
-        get label(): string;
-        set label(value: string);
-        /**
-         * @en Indicates the selected state of the button.
-         * If the value is true, it indicates that the object is in the selected state. Otherwise, it is not selected.
-         * @zh 表示按钮的选中状态。
-         * 如果值为true，表示该对象处于选中状态。否则该对象处于未选中状态。
-         * @implements
-         */
-        get selected(): boolean;
-        set selected(value: boolean);
-        /**
-          * @en The text color of the button in each state.
-          * Format: "upColor,overColor,downColor".
-          * @zh 表示按钮各个状态下的文本颜色。
-          * 格式: "upColor,overColor,downColor"。
-          */
-        get labelColors(): string;
-        set labelColors(value: string);
-        /**
-         * @en The stroke color of the button in each state.
-         * Format: "upColor,overColor,downColor".
-         * @zh 表示按钮各个状态下的描边颜色。
-         * 格式: "upColor,overColor,downColor"。
-         */
-        get strokeColors(): string;
-        set strokeColors(value: string);
-        /**
-         * @en The margins of the button's text label.
-         * Format: "top,right,bottom,left".
-         * @zh 表示按钮文本标签的边距。
-         * 格式："上边距,右边距,下边距,左边距"。
-         */
-        get labelPadding(): string;
-        set labelPadding(value: string);
-        /**
-         * @en The font size of the button's text label.
-         * @zh 表示按钮文本标签的字体大小。
-         */
-        get labelSize(): number;
-        set labelSize(value: number);
-        /**
-         * @en The stroke width, in pixels.
-         * Default value is 0, indicating no stroke.
-         * @zh 描边宽度（以像素为单位）。
-         * 默认值0，表示不描边。
-         */
-        get labelStroke(): number;
-        set labelStroke(value: number);
-        /**
-         * @en The stroke color, represented by a string.
-         * The default value is "#000000" (black).
-         * @zh 描边颜色，以字符串表示。
-         * 默认值为 "#000000"（黑色）;
-         * @see laya.display.Text.strokeColor()
-         */
-        get labelStrokeColor(): string;
-        set labelStrokeColor(value: string);
-        /**
-         * @en Indicates whether the button's text label is bold.
-         * @zh 表示按钮文本标签是否为粗体字。
-         */
-        get labelBold(): boolean;
-        set labelBold(value: boolean);
-        /**
-         * @en The font name of the button's text label, expressed as a string.
-         * @zh 表示按钮文本标签的字体名称，以字符串形式表示。
-         */
-        get labelFont(): string;
-        set labelFont(value: string);
-        /**
-         * @en The text alignment mode.
-         * @zh 标签水平对齐模式。
-         */
-        get labelAlign(): string;
-        set labelAlign(value: string);
-        /**
-         * @en The vertical alignment mode.
-         * @zh 标签垂直对齐模式。
-         */
-        get labelVAlign(): string;
-        set labelVAlign(value: string);
-        /**
-         * @en The click event handler of the object (without default parameters).
-         * @zh 对象的点击事件处理器函数（无默认参数）。
-         * @implements
-         */
-        get clickHandler(): Handler;
-        set clickHandler(value: Handler);
-        /**
-         * @en The button's text label `Text` control.
-         * @zh 按钮文本标签 `Text` 控件。
-         */
-        get text(): Text;
+        protected _text: Text;
         /**
          * @private
-        */
-        set text(value: Text);
-        /**
-           * @en The size grid of the texture.
-           * The size grid is a 3x3 division of the texture, allowing it to be scaled without distorting the corners and edges.
-           * The array contains five values representing the top, right, bottom, and left margins, and whether to repeat the fill (0: no repeat, 1: repeat).
-           * The values are separated by commas. For example: "6,6,6,6,1".
-           * @zh 皮肤纹理的九宫格数据。
-           * 九宫格是一种将纹理分成3x3格的方式，使得纹理缩放时保持角和边缘不失真。
-           * 数组包含五个值，分别代表上边距、右边距、下边距、左边距以及是否重复填充（0：不重复填充，1：重复填充）。
-           * 值以逗号分隔。例如："6,6,6,6,1"。
-           */
-        get sizeGrid(): string;
-        set sizeGrid(value: string);
-        /**
-         * @en The x and y offset of the icon, format: 100,100
-         * @zh 图标x,y偏移，格式：100,100
+         * 按钮文本标签的颜色值。
          */
-        get iconOffset(): string;
-        set iconOffset(value: string);
+        protected _labelColors: string[];
         /**
-         * @en Creates a new instance of the `Button` class.
-         * @param skin The address of the skin resource.
-         * @param label The text content of the button.
-         * @zh 创建一个新的 `Button` 类实例。
+         * @private
+         * 按钮文本标签描边的颜色值。
+         */
+        protected _strokeColors: string[];
+        /**
+         * @private
+         * 按钮的状态值。
+         */
+        protected _state: number;
+        /**
+         * @private
+         * 表示按钮的选中状态。
+         */
+        protected _selected: boolean;
+        protected _skin: string;
+        /**
+         * @private
+         * 指定此显示对象是否自动计算并改变大小等属性。
+         */
+        protected _autoSize: boolean;
+        /**
+         * @private
+         * 按钮的状态数。
+         */
+        protected _stateNum: number;
+        /**
+         * @private
+         * 按钮的点击事件函数。
+         */
+        protected _clickHandler: Handler;
+        /**
+         * @private
+         */
+        protected _stateChanged: boolean;
+        _graphics: AutoBitmap;
+        /**
+         * 创建一个新的 <code>Button</code> 类实例。
          * @param skin 皮肤资源地址。
          * @param label 按钮的文本内容。
          */
         constructor(skin?: string, label?: string);
         /**
-         * 销毁
-         * @param destroyChild 是否删除子节点
          * @inheritDoc
          * @override
          */
@@ -40176,30 +33349,266 @@ declare module Laya {
         /**
          * @inheritDoc
          * @override
-         * @en Sets the data source.
-         * @zh 设置数据源。
+         */
+        protected createChildren(): void;
+        /**@private */
+        protected createText(): void;
+        /**@inheritDoc
+         * @override
+        */
+        protected initialize(): void;
+        /**
+         * 对象的 <code>Event.MOUSE_OVER、Event.MOUSE_OUT、Event.MOUSE_DOWN、Event.MOUSE_UP、Event.CLICK</code> 事件侦听处理函数。
+         * @param e Event 对象。
+         */
+        protected onMouse(e: Event): void;
+        /**
+         * <p>对象的皮肤资源地址。</p>
+         * 支持单态，两态和三态，用 <code>stateNum</code> 属性设置
+         * <p>对象的皮肤地址，以字符串表示。</p>
+         * @see #stateNum
+         */
+        get skin(): string;
+        set skin(value: string);
+        _setSkin(url: string): Promise<void>;
+        protected _skinLoaded(tex: any): void;
+        /**
+         * <p>指定对象的状态值，以数字表示。</p>
+         * <p>默认值为3。此值决定皮肤资源图片的切割方式。</p>
+         * <p><b>取值：</b>
+         * <li>1：单态。图片不做切割，按钮的皮肤状态只有一种。</li>
+         * <li>2：两态。图片将以竖直方向被等比切割为2部分，从上向下，依次为
+         * 弹起状态皮肤、
+         * 按下和经过及选中状态皮肤。</li>
+         * <li>3：三态。图片将以竖直方向被等比切割为3部分，从上向下，依次为
+         * 弹起状态皮肤、
+         * 经过状态皮肤、
+         * 按下和选中状态皮肤</li>
+         * </p>
+         */
+        get stateNum(): number;
+        set stateNum(value: number);
+        /**
+         * @private
+         * 对象的资源切片发生改变。
+         */
+        protected changeClips(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected measureWidth(): number;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected measureHeight(): number;
+        /**
+         * 按钮的文本内容。
+         */
+        get label(): string;
+        set label(value: string);
+        /**
+         * 表示按钮的选中状态。
+         * <p>如果值为true，表示该对象处于选中状态。否则该对象处于未选中状态。</p>
+         * @implements
+         */
+        get selected(): boolean;
+        set selected(value: boolean);
+        /**
+         * 对象的状态值。
+         * @see #stateMap
+         */
+        protected get state(): number;
+        protected set state(value: number);
+        /**
+         * @private
+         * 改变对象的状态。
+         */
+        protected changeState(): void;
+        /**
+         * 表示按钮各个状态下的文本颜色。
+         * <p><b>格式:</b> "upColor,overColor,downColor"。</p>
+         */
+        get labelColors(): string;
+        set labelColors(value: string);
+        /**
+         * 表示按钮各个状态下的描边颜色。
+         * <p><b>格式:</b> "upColor,overColor,downColor"。</p>
+         */
+        get strokeColors(): string;
+        set strokeColors(value: string);
+        /**
+         * 表示按钮文本标签的边距。
+         * <p><b>格式：</b>"上边距,右边距,下边距,左边距"。</p>
+         */
+        get labelPadding(): string;
+        set labelPadding(value: string);
+        /**
+         * 表示按钮文本标签的字体大小。
+         * @see laya.display.Text.fontSize()
+         */
+        get labelSize(): number;
+        set labelSize(value: number);
+        /**
+         * <p>描边宽度（以像素为单位）。</p>
+         * 默认值0，表示不描边。
+         * @see laya.display.Text.stroke()
+         */
+        get labelStroke(): number;
+        set labelStroke(value: number);
+        /**
+         * <p>描边颜色，以字符串表示。</p>
+         * 默认值为 "#000000"（黑色）;
+         * @see laya.display.Text.strokeColor()
+         */
+        get labelStrokeColor(): string;
+        set labelStrokeColor(value: string);
+        /**
+         * 表示按钮文本标签是否为粗体字。
+         * @see laya.display.Text.bold()
+         */
+        get labelBold(): boolean;
+        set labelBold(value: boolean);
+        /**
+         * 表示按钮文本标签的字体名称，以字符串形式表示。
+         */
+        get labelFont(): string;
+        set labelFont(value: string);
+        /**
+         * 标签对齐模式，
+         */
+        get labelAlign(): string;
+        set labelAlign(value: string);
+        /**
+         * 标签垂直对齐模式，
+         */
+        get labelVAlign(): string;
+        set labelVAlign(value: string);
+        /**
+         * 对象的点击事件处理器函数（无默认参数）。
+         * @implements
+         */
+        get clickHandler(): Handler;
+        set clickHandler(value: Handler);
+        /**
+         * 按钮文本标签 <code>Text</code> 控件。
+         */
+        get text(): Text;
+        /**
+         * 兼容老IDE
+         * @private
+        */
+        set text(value: Text);
+        /**
+         * <p>当前实例的位图 <code>AutoImage</code> 实例的有效缩放网格数据。</p>
+         * <p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
+         * <ul><li>例如："4,4,4,4,1"</li></ul></p>
+         */
+        get sizeGrid(): string;
+        set sizeGrid(value: string);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
          */
         set_dataSource(value: any): void;
+        /**图标x,y偏移，格式：100,100*/
+        get iconOffset(): string;
+        set iconOffset(value: string);
+        /**@private */
+        protected _setStateChanged(): void;
     }
     /**
-     * @en Dispatched when the selection state (the `selected` property) of the button changes.
-     * @zh 当按钮的选中状态（ `selected` 属性）发生改变时调度。
+     * 当按钮的选中状态（ <code>selected</code> 属性）发生改变时调度。
      * @eventType laya.events.Event
      */
     /**
-     * @en The `CheckBox` component displays a small box that can have a check mark.
-     * The `CheckBox` component can also display an optional text label, which is positioned to the right of the CheckBox by default.
-     * When assigning a value to `CheckBox` using `dataSource`, the default property is `selected`.
-     * @zh `CheckBox` 组件显示一个小方框，该方框内可以有选中标记。
-     * `CheckBox` 组件还可以显示可选的文本标签，默认该标签位于 CheckBox 右侧。
-     * 使用 `dataSource` 赋值时，`CheckBox` 的默认属性是 `selected`。
+     * <code>CheckBox</code> 组件显示一个小方框，该方框内可以有选中标记。
+     * <code>CheckBox</code> 组件还可以显示可选的文本标签，默认该标签位于 CheckBox 右侧。
+     * <p><code>CheckBox</code> 使用 <code>dataSource</code>赋值时的的默认属性是：<code>selected</code>。</p>
+     *
+     * @example <caption>以下示例代码，创建了一个 <code>CheckBox</code> 实例。</caption>
+     * package
+     *	{
+     *		import laya.ui.CheckBox;
+     *		import laya.utils.Handler;
+     *		public class CheckBox_Example
+     *		{
+     *			public function CheckBox_Example()
+     *			{
+     *				Laya.init(640, 800);//设置游戏画布宽高。
+     * 				Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *				Laya.loader.load("resource/ui/check.png", Handler.create(this,onLoadComplete));//加载资源。
+     *			}
+     *			private function onLoadComplete():void
+     *			{
+     *				trace("资源加载完成！");
+     *				var checkBox:CheckBox = new CheckBox("resource/ui/check.png", "这个是一个CheckBox组件。");//创建一个 CheckBox 类的实例对象 checkBox ,传入它的皮肤skin和标签label。
+     *				checkBox.x = 100;//设置 checkBox 对象的属性 x 的值，用于控制 checkBox 对象的显示位置。
+     *				checkBox.y = 100;//设置 checkBox 对象的属性 y 的值，用于控制 checkBox 对象的显示位置。
+     *				checkBox.clickHandler = new Handler(this, onClick, [checkBox]);//设置 checkBox 的点击事件处理器。
+     *				Laya.stage.addChild(checkBox);//将此 checkBox 对象添加到显示列表。
+     *			}
+     *			private function onClick(checkBox:CheckBox):void
+     *			{
+     *				trace("输出选中状态: checkBox.selected = " + checkBox.selected);
+     *			}
+     *		}
+     *	}
+     * @example
+     * Laya.init(640, 800);//设置游戏画布宽高
+     * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色
+     * Laya.loader.load("resource/ui/check.png",laya.utils.Handler.create(this,loadComplete));//加载资源
+     * function loadComplete()
+     * {
+     *     console.log("资源加载完成！");
+     *     var checkBox:laya.ui.CheckBox= new laya.ui.CheckBox("resource/ui/check.png", "这个是一个CheckBox组件。");//创建一个 CheckBox 类的类的实例对象 checkBox ,传入它的皮肤skin和标签label。
+     *     checkBox.x =100;//设置 checkBox 对象的属性 x 的值，用于控制 checkBox 对象的显示位置。
+     *     checkBox.y =100;//设置 checkBox 对象的属性 y 的值，用于控制 checkBox 对象的显示位置。
+     *     checkBox.clickHandler = new laya.utils.Handler(this,this.onClick,[checkBox],false);//设置 checkBox 的点击事件处理器。
+     *     Laya.stage.addChild(checkBox);//将此 checkBox 对象添加到显示列表。
+     * }
+     * function onClick(checkBox)
+     * {
+     *     console.log("checkBox.selected = ",checkBox.selected);
+     * }
+     * @example
+     * import CheckBox= laya.ui.CheckBox;
+     * import Handler=laya.utils.Handler;
+     * class CheckBox_Example{
+     *     constructor()
+     *     {
+     *         Laya.init(640, 800);
+     *         Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *         Laya.loader.load("resource/ui/check.png", Handler.create(this,this.onLoadComplete));//加载资源。
+     *     }
+     *     private onLoadComplete()
+     *     {
+     *         var checkBox:CheckBox = new CheckBox("resource/ui/check.png", "这个是一个CheckBox组件。");//创建一个 CheckBox 类的实例对象 checkBox ,传入它的皮肤skin和标签label。
+     *         checkBox.x = 100;//设置 checkBox 对象的属性 x 的值，用于控制 checkBox 对象的显示位置。
+     *         checkBox.y = 100;//设置 checkBox 对象的属性 y 的值，用于控制 checkBox 对象的显示位置。
+     *         checkBox.clickHandler = new Handler(this, this.onClick,[checkBox]);//设置 checkBox 的点击事件处理器。
+     *         Laya.stage.addChild(checkBox);//将此 checkBox 对象添加到显示列表。
+     *     }
+     *     private onClick(checkBox:CheckBox):void
+     *     {
+     *         console.log("输出选中状态: checkBox.selected = " + checkBox.selected);
+     *     }
+     * }
      */
     class CheckBox extends Button {
         /**
-         * @en `CheckBox` component constructor.
-         * @param skin The skin resource address.
-         * @param label The content of the text label.
-         * @zh `CheckBox` 组件的构造函数。
+         * 创建一个新的 <code>CheckBox</code> 组件实例。
          * @param skin 皮肤资源地址。
          * @param label 文本标签的内容。
          */
@@ -40207,137 +33616,278 @@ declare module Laya {
         /**
          * @inheritDoc
          * @override
-         * @en Sets the data source of the component.
-         * @param value The data source.
-         * @zh 设置组件的数据源。
-         * @param value 数据源。
+         */
+        protected preinitialize(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected initialize(): void;
+        /**
+         * @inheritDoc
+         * @override
          */
         set_dataSource(value: any): void;
     }
     /**
-     * @en The `Clip` class is a bitmap slice animation.
-     * `Clip` can split an image into a slice animation by horizontal split count `clipX`, vertical split count `clipY`,
-     * or horizontal split width `clipWidth`, vertical split height `clipHeight`,
-     * from left to right, from top to bottom.
-     * The Image and Clip components are the only two components that support asynchronous loading, such as clip.skin = "abc/xxx.png". Other UI components do not support asynchronous loading.
-     * @zh `Clip` 类是位图切片动画。
-     * `Clip` 可将一张图片，按横向分割数量 `clipX` 、竖向分割数量 `clipY` ，
-     * 或横向分割每个切片的宽度 `clipWidth` 、竖向分割每个切片的高度 `clipHeight` ，
-     * 从左向右，从上到下，分割组合为一个切片动画。
+     * 图片加载完成后调度。
+     * @eventType Event.LOADED
+     */
+    /**
+     * 当前帧发生变化后调度。
+     * @eventType laya.events.Event
+     */
+    /**
+     * <p> <code>Clip</code> 类是位图切片动画。</p>
+     * <p> <code>Clip</code> 可将一张图片，按横向分割数量 <code>clipX</code> 、竖向分割数量 <code>clipY</code> ，
+     * 或横向分割每个切片的宽度 <code>clipWidth</code> 、竖向分割每个切片的高度 <code>clipHeight</code> ，
+     * 从左向右，从上到下，分割组合为一个切片动画。</p>
      * Image和Clip组件是唯一支持异步加载的两个组件，比如clip.skin = "abc/xxx.png"，其他UI组件均不支持异步加载。
+     *
+     * @example <caption>以下示例代码，创建了一个 <code>Clip</code> 实例。</caption>
+     * package
+     *	{
+     *		import laya.ui.Clip;
+     *		public class Clip_Example
+     *		{
+     *			private var clip:Clip;
+     *			public function Clip_Example()
+     *			{
+     *				Laya.init(640, 800);//设置游戏画布宽高。
+     *				Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *				onInit();
+     *			}
+     *			private function onInit():void
+     *			{
+     *				clip = new Clip("resource/ui/clip_num.png", 10, 1);//创建一个 Clip 类的实例对象 clip ,传入它的皮肤skin和横向分割数量、竖向分割数量。
+     *				clip.autoPlay = true;//设置 clip 动画自动播放。
+     *				clip.interval = 100;//设置 clip 动画的播放时间间隔。
+     *				clip.x = 100;//设置 clip 对象的属性 x 的值，用于控制 clip 对象的显示位置。
+     *				clip.y = 100;//设置 clip 对象的属性 y 的值，用于控制 clip 对象的显示位置。
+     *				clip.on(Event.CLICK, this, onClick);//给 clip 添加点击事件函数侦听。
+     *				Laya.stage.addChild(clip);//将此 clip 对象添加到显示列表。
+     *			}
+     *			private function onClick():void
+     *			{
+     *				trace("clip 的点击事件侦听处理函数。clip.total="+ clip.total);
+     *				if (clip.isPlaying == true)
+     *				{
+     *					clip.stop();//停止动画。
+     *				}else {
+     *					clip.play();//播放动画。
+     *				}
+     *			}
+     *		}
+     *	}
+     * @example
+     * Laya.init(640, 800);//设置游戏画布宽高
+     * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色
+     * var clip;
+     * Laya.loader.load("resource/ui/clip_num.png",laya.utils.Handler.create(this,loadComplete));//加载资源
+     * function loadComplete() {
+     *     console.log("资源加载完成！");
+     *     clip = new laya.ui.Clip("resource/ui/clip_num.png",10,1);//创建一个 Clip 类的实例对象 clip ,传入它的皮肤skin和横向分割数量、竖向分割数量。
+     *     clip.autoPlay = true;//设置 clip 动画自动播放。
+     *     clip.interval = 100;//设置 clip 动画的播放时间间隔。
+     *     clip.x =100;//设置 clip 对象的属性 x 的值，用于控制 clip 对象的显示位置。
+     *     clip.y =100;//设置 clip 对象的属性 y 的值，用于控制 clip 对象的显示位置。
+     *     clip.on(Event.CLICK,this,onClick);//给 clip 添加点击事件函数侦听。
+     *     Laya.stage.addChild(clip);//将此 clip 对象添加到显示列表。
+     * }
+     * function onClick()
+     * {
+     *     console.log("clip 的点击事件侦听处理函数。");
+     *     if(clip.isPlaying == true)
+     *     {
+     *         clip.stop();
+     *     }else {
+     *         clip.play();
+     *     }
+     * }
+     * @example
+     * import Clip = laya.ui.Clip;
+     * import Handler = laya.utils.Handler;
+     * class Clip_Example {
+     *     private clip: Clip;
+     *     constructor() {
+     *         Laya.init(640, 800);//设置游戏画布宽高。
+     *         Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *         this.onInit();
+     *     }
+     *     private onInit(): void {
+     *         this.clip = new Clip("resource/ui/clip_num.png", 10, 1);//创建一个 Clip 类的实例对象 clip ,传入它的皮肤skin和横向分割数量、竖向分割数量。
+     *         this.clip.autoPlay = true;//设置 clip 动画自动播放。
+     *         this.clip.interval = 100;//设置 clip 动画的播放时间间隔。
+     *         this.clip.x = 100;//设置 clip 对象的属性 x 的值，用于控制 clip 对象的显示位置。
+     *         this.clip.y = 100;//设置 clip 对象的属性 y 的值，用于控制 clip 对象的显示位置。
+     *         this.clip.on(laya.events.Event.CLICK, this, this.onClick);//给 clip 添加点击事件函数侦听。
+     *         Laya.stage.addChild(this.clip);//将此 clip 对象添加到显示列表。
+     *     }
+     *     private onClick(): void {
+     *         console.log("clip 的点击事件侦听处理函数。clip.total=" + this.clip.total);
+     *         if (this.clip.isPlaying == true) {
+     *             this.clip.stop();//停止动画。
+     *         } else {
+     *             this.clip.play();//播放动画。
+     *         }
+     *     }
+     * }
+     *
      */
     class Clip extends UIComponent {
+        /**@private */
+        protected _sources: Texture[];
+        /**@private */
+        protected _skin: string;
+        /**@private */
+        protected _clipX: number;
+        /**@private */
+        protected _clipY: number;
+        /**@private */
+        protected _clipWidth: number;
+        /**@private */
+        protected _clipHeight: number;
+        /**@private */
+        protected _autoPlay: boolean;
+        /**@private */
+        protected _interval: number;
+        /**@private */
+        protected _complete: Handler;
+        /**@private */
+        protected _isPlaying: boolean;
+        /**@private */
+        protected _index: number;
+        /**@private */
+        protected _clipChanged: boolean;
+        /**@private */
+        protected _group: string;
+        /**@private */
+        protected _toIndex: number;
+        _graphics: AutoBitmap;
         /**
-         * @en The address of the skin resource.
-         * @zh 皮肤资源地址
+         * 创建一个新的 <code>Clip</code> 示例。
+         * @param url 资源类库名或者地址
+         * @param clipX x方向分割个数
+         * @param clipY y方向分割个数
+         */
+        constructor(url?: string, clipX?: number, clipY?: number);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected createChildren(): void;
+        /**@private	 @override*/
+        protected _onDisplay(e?: boolean): void;
+        /**
          * @copy laya.ui.Image#skin
          */
         get skin(): string;
         set skin(value: string);
-        /**
-         * @en Number of slices on the X-axis (horizontal).
-         * @zh X轴（横向）切片数量。
-         */
+        _setSkin(url: string): Promise<void>;
+        protected _skinLoaded(): void;
+        /**X轴（横向）切片数量。*/
         get clipX(): number;
         set clipX(value: number);
-        /**
-         * @en Number of slices on the Y-axis (vertical).
-         * @zh Y轴(竖向)切片数量。
-         */
+        /**Y轴(竖向)切片数量。*/
         get clipY(): number;
         set clipY(value: number);
         /**
-         * @en Width of each slice when dividing horizontally. Takes precedence over `clipX` when set together with `clipX`.
-         * @zh 横向分割时每个切片的宽度，与 `clipX` 同时设置时优先级高于 `clipX` 。
+         * 横向分割时每个切片的宽度，与 <code>clipX</code> 同时设置时优先级高于 <code>clipX</code> 。
          */
         get clipWidth(): number;
         set clipWidth(value: number);
         /**
-        * @en Height of each slice when dividing vertically. Takes precedence over `clipY` when set together with `clipY`.
-        * @zh 竖向分割时每个切片的高度，与 `clipY` 同时设置时优先级高于 `clipY` 。
-        */
+         * 竖向分割时每个切片的高度，与 <code>clipY</code> 同时设置时优先级高于 <code>clipY</code> 。
+         */
         get clipHeight(): number;
         set clipHeight(value: number);
         /**
-         * @en Source data.
-         * @zh 源数据。
+         * @private
+         * 改变切片的资源、切片的大小。
+         */
+        protected changeClip(): void;
+        /**
+         * @private
+         * 加载切片图片资源完成函数。
+         * @param url 资源地址。
+         * @param img 纹理。
+         */
+        protected loadComplete(url: string, img: Texture): void;
+        /**
+         * 源数据。
          */
         get sources(): Texture[];
         set sources(value: Texture[]);
         /**
-        * @en Resource group.
-        * @zh 资源分组。
-        */
+         * 资源分组。
+         */
         get group(): string;
         set group(value: string);
         /**
-         * @en The size grid of the texture.
-         * The size grid is a 3x3 division of the texture, allowing it to be scaled without distorting the corners and edges.
-         * The array contains five values representing the top, right, bottom, and left margins, and whether to repeat the fill (0: no repeat, 1: repeat).
-         * The values are separated by commas. For example: "6,6,6,6,1".
-         * @zh 纹理的九宫格数据。
-         * 九宫格是一种将纹理分成3x3格的方式，使得纹理缩放时保持角和边缘不失真。
-         * 数组包含五个值，分别代表上边距、右边距、下边距、左边距以及是否重复填充（0：不重复填充，1：重复填充）。
-         * 值以逗号分隔。例如："6,6,6,6,1"。
+         * @inheritDoc
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected measureWidth(): number;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected measureHeight(): number;
+        /**
+         * <p>当前实例的位图 <code>AutoImage</code> 实例的有效缩放网格数据。</p>
+         * <p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
+         * <ul><li>例如："4,4,4,4,1"</li></ul></p>
          */
         get sizeGrid(): string;
         set sizeGrid(value: string);
         /**
-         * @en Current frame index.
-         * @zh 当前帧索引。
+         * 当前帧索引。
          */
         get index(): number;
         set index(value: number);
         /**
-         * @en Total frames of the slice animation.
-         * @zh 切片动画的总帧数。
+         * 切片动画的总帧数。
          */
         get total(): number;
         /**
-         * @en Indicates whether the slice animation is automatically played. If true, the slice animation is automatically played; otherwise, it is not.
-         * It can control the playback and stop of the slice animation.
-         * @zh 是否自动播放切片动画，若自动播放值为true,否则值为false。
-         * 可控制切片动画的播放、停止。
+         * 表示是否自动播放切片动画，若自动播放值为true,否则值为false;
+         * <p>可控制切片动画的播放、停止。</p>
          */
         get autoPlay(): boolean;
         set autoPlay(value: boolean);
         /**
-         * @en Indicates the interval (in milliseconds) at which the slice animation is played.
-         * @zh 切片动画播放间隔时间（以毫秒为单位）。
+         * 表示切片动画播放间隔时间(以毫秒为单位)。
          */
         get interval(): number;
         set interval(value: number);
         /**
-         * @en Indicates the current playback state of the slice animation.
-         * If the slice animation is playing, the value is true; otherwise, it is false.
-         * @zh 切片动画的当前播放状态。
-         * 如果切片动画正在播放中，则为true，否则为false。
+         * 表示切片动画的当前播放状态。
+         * 如果切片动画正在播放中，则为true，否则为flash。
          */
         get isPlaying(): boolean;
         set isPlaying(value: boolean);
         /**
-         * @en 'Clip' constructor.
-         * @param url Resource address.
-         * @param clipX Number of divisions in the X direction.
-         * @param clipY Number of divisions in the Y direction.
-         * @zh  `Clip` 构造函数。
-         * @param url 资源地址。
-         * @param clipX X方向分割数量。
-         * @param clipY Y方向分割数量。
-         */
-        constructor(url?: string, clipX?: number, clipY?: number);
-        /**
-         * @en Plays the slice animation.
-         * @param from Start index.
-         * @param to End index, -1 is not limited.
-         * @zh 播放切片动画。
+         * 播放切片动画。
          * @param	from	开始索引
          * @param	to		结束索引，-1为不限制
          */
         play(from?: number, to?: number): void;
         /**
-         * @en Stops the slice animation.
-         * @zh 停止切片动画。
+         * @private
+         */
+        protected _loop(): void;
+        /**
+         * 停止切片动画。
          */
         stop(): void;
         /**
@@ -40345,80 +33895,253 @@ declare module Laya {
          * @override
          */
         set_dataSource(value: any): void;
+        /**@private */
+        protected _setClipChanged(): void;
     }
     /**
      * 选择项改变后调度。
      * @eventType laya.events.Event
      */
     /**
-     * @en The `ColorPicker` component displays a color palette from which the user can select a color.
-     * @zh `ColorPicker` 组件将显示包含多个颜色样本的列表，用户可以从中选择颜色。
+     * <code>ColorPicker</code> 组件将显示包含多个颜色样本的列表，用户可以从中选择颜色。
+     *
+     * @example <caption>以下示例代码，创建了一个 <code>ColorPicker</code> 实例。</caption>
+     * package
+     *	{
+     *		import laya.ui.ColorPicker;
+     *		import laya.utils.Handler;
+     *		public class ColorPicker_Example
+     *		{
+     *			public function ColorPicker_Example()
+     *			{
+     *				Laya.init(640, 800);//设置游戏画布宽高。
+     *				Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *				Laya.loader.load("resource/ui/color.png", Handler.create(this,onLoadComplete));//加载资源。
+     *			}
+     *			private function onLoadComplete():void
+     *			{
+     *				trace("资源加载完成！");
+     *				var colorPicket:ColorPicker = new ColorPicker();//创建一个 ColorPicker 类的实例对象 colorPicket 。
+     *				colorPicket.skin = "resource/ui/color.png";//设置 colorPicket 的皮肤。
+     *				colorPicket.x = 100;//设置 colorPicket 对象的属性 x 的值，用于控制 colorPicket 对象的显示位置。
+     *				colorPicket.y = 100;//设置 colorPicket 对象的属性 y 的值，用于控制 colorPicket 对象的显示位置。
+     *				colorPicket.changeHandler = new Handler(this, onChangeColor,[colorPicket]);//设置 colorPicket 的颜色改变回调函数。
+     *				Laya.stage.addChild(colorPicket);//将此 colorPicket 对象添加到显示列表。
+     *			}
+     *			private function onChangeColor(colorPicket:ColorPicker):void
+     *			{
+     *				trace("当前选择的颜色： " + colorPicket.selectedColor);
+     *			}
+     *		}
+     *	}
+     * @example
+     * Laya.init(640, 800);//设置游戏画布宽高
+     * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色
+     * Laya.loader.load("resource/ui/color.png",laya.utils.Handler.create(this,loadComplete));//加载资源
+     * function loadComplete()
+     * {
+     *     console.log("资源加载完成！");
+     *     var colorPicket = new laya.ui.ColorPicker();//创建一个 ColorPicker 类的实例对象 colorPicket 。
+     *     colorPicket.skin = "resource/ui/color.png";//设置 colorPicket 的皮肤。
+     *     colorPicket.x = 100;//设置 colorPicket 对象的属性 x 的值，用于控制 colorPicket 对象的显示位置。
+     *     colorPicket.y = 100;//设置 colorPicket 对象的属性 y 的值，用于控制 colorPicket 对象的显示位置。
+     *     colorPicket.changeHandler = laya.utils.Handler.create(this, onChangeColor,[colorPicket],false);//设置 colorPicket 的颜色改变回调函数。
+     *     Laya.stage.addChild(colorPicket);//将此 colorPicket 对象添加到显示列表。
+     * }
+     * function onChangeColor(colorPicket)
+     * {
+     *     console.log("当前选择的颜色： " + colorPicket.selectedColor);
+     * }
+     * @example
+     * import ColorPicker = laya.ui.ColorPicker;
+     * import Handler = laya.utils.Handler;
+     * class ColorPicker_Example {
+     *     constructor() {
+     *         Laya.init(640, 800);//设置游戏画布宽高。
+     *         Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *         Laya.loader.load("resource/ui/color.png", Handler.create(this, this.onLoadComplete));//加载资源。
+     *     }
+     *     private onLoadComplete(): void {
+     *         console.log("资源加载完成！");
+     *         var colorPicket: ColorPicker = new ColorPicker();//创建一个 ColorPicker 类的实例对象 colorPicket 。
+     *         colorPicket.skin = "resource/ui/color.png";//设置 colorPicket 的皮肤。
+     *         colorPicket.x = 100;//设置 colorPicket 对象的属性 x 的值，用于控制 colorPicket 对象的显示位置。
+     *         colorPicket.y = 100;//设置 colorPicket 对象的属性 y 的值，用于控制 colorPicket 对象的显示位置。
+     *         colorPicket.changeHandler = new Handler(this, this.onChangeColor, [colorPicket]);//设置 colorPicket 的颜色改变回调函数。
+     *         Laya.stage.addChild(colorPicket);//将此 colorPicket 对象添加到显示列表。
+     *     }
+     *     private onChangeColor(colorPicket: ColorPicker): void {
+     *         console.log("当前选择的颜色： " + colorPicket.selectedColor);
+     *     }
+     * }
      */
     class ColorPicker extends UIComponent {
         /**
-         * @en The function handler executed when the color changes.
-         * The default return parameter is `color`: the color value string.
-         * @zh 当颜色发生改变时执行的函数处理器。
+         * 当颜色发生改变时执行的函数处理器。
          * 默认返回参数color：颜色值字符串。
          */
         changeHandler: Handler;
         /**
-         * @en The selected color value.
-         * @zh 表示选择的颜色值。
+         * @private
+         * 指定每个正方形的颜色小格子的宽高（以像素为单位）。
+         */
+        protected _gridSize: number;
+        /**
+         * @private
+         * 表示颜色样本列表面板的背景颜色值。
+         */
+        protected _bgColor: string;
+        /**
+         * @private
+         * 表示颜色样本列表面板的边框颜色值。
+         */
+        protected _borderColor: string;
+        /**
+         * @private
+         * 表示颜色样本列表面板选择或输入的颜色值。
+         */
+        protected _inputColor: string;
+        /**
+         * @private
+         * 表示颜色输入框的背景颜色值。
+         */
+        protected _inputBgColor: string;
+        /**
+         * @private
+         * 表示颜色样本列表面板。
+         */
+        protected _colorPanel: Box;
+        /**
+         * @private
+         * 表示颜色网格。
+         */
+        protected _colorTiles: Sprite;
+        /**
+         * @private
+         * 表示颜色块显示对象。
+         */
+        protected _colorBlock: Sprite;
+        /**
+         * @private
+         * 表示颜色输入框控件 <code>Input</code> 。
+         */
+        protected _colorInput: Input;
+        /**
+         * @private
+         * 表示点击后显示颜色样本列表面板的按钮控件 <code>Button</code> 。
+         */
+        protected _colorButton: Button;
+        /**
+         * @private
+         * 表示颜色值列表。
+         */
+        protected _colors: any[];
+        /**
+         * @private
+         * 表示选择的颜色值。
+         */
+        protected _selectedColor: string;
+        /** @private */
+        protected _panelChanged: boolean;
+        constructor(createChildren?: boolean);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        destroy(destroyChild?: boolean): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected createChildren(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected initialize(): void;
+        private onPanelMouseDown;
+        /**
+         * 改变颜色样本列表面板。
+         */
+        protected changePanel(): void;
+        /**
+         * 颜色样本列表面板的显示按钮的 <code>Event.MOUSE_DOWN</code> 事件侦听处理函数。
+         */
+        private onColorButtonClick;
+        /**
+         * 打开颜色样本列表面板。
+         */
+        open(): void;
+        /**
+         * 关闭颜色样本列表面板。
+         */
+        close(): void;
+        /**
+         * 舞台的 <code>Event.MOUSE_DOWN</code> 事件侦听处理函数。
+         */
+        private removeColorBox;
+        /**
+         * 小格子色块的 <code>Event.KEY_DOWN</code> 事件侦听处理函数。
+         */
+        private onColorFieldKeyDown;
+        /**
+         * 颜色值输入框 <code>Event.CHANGE</code> 事件侦听处理函数。
+         */
+        private onColorInputChange;
+        /**
+         * 小格子色块的 <code>Event.CLICK</code> 事件侦听处理函数。
+         */
+        private onColorTilesClick;
+        /**
+         * @private
+         * 小格子色块的 <code>Event.MOUSE_MOVE</code> 事件侦听处理函数。
+         */
+        private onColorTilesMouseMove;
+        /**
+         * 通过鼠标位置取对应的颜色块的颜色值。
+         */
+        protected getColorByMouse(): string;
+        /**
+         * 绘制颜色块。
+         * @param color 需要绘制的颜色块的颜色值。
+         */
+        private drawBlock;
+        /**
+         * 表示选择的颜色值。
          */
         get selectedColor(): string;
         set selectedColor(value: string);
         /**
-         * @en The skin URL of the color picker.
-         * @zh 颜色选择器的皮肤地址。
          * @copy laya.ui.Button#skin
          */
         get skin(): string;
         set skin(value: string);
         /**
-         * @en The background color value of the color palette panel.
-         * @zh 表示颜色样本列表面板的背景颜色值。
+         * 改变颜色。
+         */
+        private changeColor;
+        /**
+         * 表示颜色样本列表面板的背景颜色值。
          */
         get bgColor(): string;
         set bgColor(value: string);
         /**
-         * @en The border color value of the color palette panel.
-         * @zh 表示颜色样本列表面板的边框颜色值。
+         * 表示颜色样本列表面板的边框颜色值。
          */
         get borderColor(): string;
         set borderColor(value: string);
         /**
-         * @en The color value selected or entered in the color palette panel.
-         * @zh 表示颜色样本列表面板选择或输入的颜色值。
+         * 表示颜色样本列表面板选择或输入的颜色值。
          */
         get inputColor(): string;
         set inputColor(value: string);
         /**
-         * @en The background color value of the color input box.
-         * @zh 表示颜色输入框的背景颜色值。
+         * 表示颜色输入框的背景颜色值。
          */
         get inputBgColor(): string;
         set inputBgColor(value: string);
-        constructor(createChildren?: boolean);
-        /**
-         * @en Opens the color palette panel.
-         * @zh 打开颜色样本列表面板。
-         */
-        open(): void;
-        /**
-         * @en Closes the color palette panel.
-         * @zh 关闭颜色样本列表面板。
-         */
-        close(): void;
-        /**
-         * @inheritDoc
-         * @override
-         * @en Destroys the color picker component.
-         * @param destroyChild Indicates whether to destroy the component's children as well. Default value is true.
-         * @zh 销毁颜色选择器组件。
-         * @param destroyChild 是否同时销毁子项。默认为 true。
-         */
-        destroy(destroyChild?: boolean): void;
+        /**@private */
+        protected _setPanelChanged(): void;
     }
     /**
      * 当用户更改 <code>ComboBox</code> 组件中的选定内容时调度。
@@ -40426,181 +34149,150 @@ declare module Laya {
      * selectedIndex属性变化时调度。
      */
     /**
-     * @en The `ComboBox` component contains a drop-down list from which the user can select a single value.
-     * @zh `ComboBox` 组件包含一个下拉列表，用户可以从该列表中选择单个值。
+     * <code>ComboBox</code> 组件包含一个下拉列表，用户可以从该列表中选择单个值。
+     *
+     * @example <caption>以下示例代码，创建了一个 <code>ComboBox</code> 实例。</caption>
+     * package
+     *	{
+     *		import laya.ui.ComboBox;
+     *		import laya.utils.Handler;
+     *		public class ComboBox_Example
+     *		{
+     *			public function ComboBox_Example()
+     *			{
+     *				Laya.init(640, 800);//设置游戏画布宽高。
+     *				Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *				Laya.loader.load("resource/ui/button.png", Handler.create(this,onLoadComplete));//加载资源。
+     *			}
+     *			private function onLoadComplete():void
+     *			{
+     *				trace("资源加载完成！");
+     *				var comboBox:ComboBox = new ComboBox("resource/ui/button.png", "item0,item1,item2,item3,item4,item5");//创建一个 ComboBox 类的实例对象 comboBox ,传入它的皮肤和标签集。
+     *				comboBox.x = 100;//设置 comboBox 对象的属性 x 的值，用于控制 comboBox 对象的显示位置。
+     *				comboBox.y = 100;//设置 comboBox 对象的属性 x 的值，用于控制 comboBox 对象的显示位置。
+     *				comboBox.selectHandler = new Handler(this, onSelect);//设置 comboBox 选择项改变时执行的处理器。
+     *				Laya.stage.addChild(comboBox);//将此 comboBox 对象添加到显示列表。
+     *			}
+     *			private function onSelect(index:int):void
+     *			{
+     *				trace("当前选中的项对象索引： ",index);
+     *			}
+     *		}
+     *	}
+     * @example
+     * Laya.init(640, 800);//设置游戏画布宽高。
+     * Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     * Laya.loader.load("resource/ui/button.png",laya.utils.Handler.create(this,loadComplete));//加载资源
+     * function loadComplete() {
+     *     console.log("资源加载完成！");
+     *     var comboBox = new laya.ui.ComboBox("resource/ui/button.png", "item0,item1,item2,item3,item4,item5");//创建一个 ComboBox 类的实例对象 comboBox ,传入它的皮肤和标签集。
+     *     comboBox.x = 100;//设置 comboBox 对象的属性 x 的值，用于控制 comboBox 对象的显示位置。
+     *     comboBox.y = 100;//设置 comboBox 对象的属性 x 的值，用于控制 comboBox 对象的显示位置。
+     *     comboBox.selectHandler = new laya.utils.Handler(this, onSelect);//设置 comboBox 选择项改变时执行的处理器。
+     *     Laya.stage.addChild(comboBox);//将此 comboBox 对象添加到显示列表。
+     * }
+     * function onSelect(index)
+     * {
+     *     console.log("当前选中的项对象索引： ",index);
+     * }
+     * @example
+     * import ComboBox = laya.ui.ComboBox;
+     * import Handler = laya.utils.Handler;
+     * class ComboBox_Example {
+     *     constructor() {
+     *         Laya.init(640, 800);//设置游戏画布宽高。
+     *         Laya.stage.bgColor = "#efefef";//设置画布的背景颜色。
+     *         Laya.loader.load("resource/ui/button.png", Handler.create(this, this.onLoadComplete));//加载资源。
+     *     }
+     *     private onLoadComplete(): void {
+     *         console.log("资源加载完成！");
+     *         var comboBox: ComboBox = new ComboBox("resource/ui/button.png", "item0,item1,item2,item3,item4,item5");//创建一个 ComboBox 类的实例对象 comboBox ,传入它的皮肤和标签集。
+     *         comboBox.x = 100;//设置 comboBox 对象的属性 x 的值，用于控制 comboBox 对象的显示位置。
+     *         comboBox.y = 100;//设置 comboBox 对象的属性 x 的值，用于控制 comboBox 对象的显示位置。
+     *         comboBox.selectHandler = new Handler(this, this.onSelect);//设置 comboBox 选择项改变时执行的处理器。
+     *         Laya.stage.addChild(comboBox);//将此 comboBox 对象添加到显示列表。
+     *     }
+     *     private onSelect(index: number): void {
+     *         console.log("当前选中的项对象索引： ", index);
+     *     }
+     * }
+     *
      */
     class ComboBox extends UIComponent {
+        /**@private */
+        protected _visibleNum: number;
+        /**
+         * @private
+         */
+        protected _button: Button;
+        /**
+         * @private
+         */
+        protected _list: List;
+        /**
+         * @private
+         */
+        protected _isOpen: boolean;
+        /**
+         * @private
+         */
+        protected _itemColors: string[];
+        /**
+         * @private
+         */
+        protected _itemPadding: number[];
+        /**
+         * @private
+         */
+        protected _itemSize: number;
+        /**
+         * @private
+         */
+        protected _labels: string[];
+        /**
+         * @private
+         * 下拉提示文本
+         */
+        protected _defaultLabel: string;
+        /**
+         * @private
+         */
+        protected _selectedIndex: number;
+        /**
+         * @private
+         */
+        protected _selectHandler: Handler;
+        /**
+         * @private 下拉框列表单元的高度
+         */
+        protected _itemHeight: number;
+        /**
+         * @private
+         */
+        protected _listHeight: number;
+        /**
+         * @private
+         */
+        protected _listChanged: boolean;
+        /**
+         * @private
+         */
+        protected _itemChanged: boolean;
+        /**
+         * @private
+         */
+        protected _scrollBarSkin: string;
         protected _scrollType: ScrollType;
         /**
-         * @en Rendering item, used to display a dropdown list to display objects
-         * @zh 渲染项，用来显示下拉列表展示对象
+         * @private
+         */
+        protected _isCustomList: boolean;
+        /**
+         * 渲染项，用来显示下拉列表展示对象
          */
         itemRender: any;
         /**
-         * @en The skin resource address of the object. Supports single state, two states and three states, set with the `stateNum` property.
-         * @zh 对象的皮肤纹理资源地址。 支持单态，两态和三态，用 `stateNum` 属性设置
-         * @see #stateNum
-         */
-        get skin(): string;
-        set skin(value: string);
-        /**
-         * @en The padding of the drop-down list text.
-         * @readme The format is: top, right, bottom, left
-         * @zh 下拉列表文本的边距。
-         * @readme 格式：上边距,右边距,下边距,左边距
-         */
-        get itemPadding(): string;
-        set itemPadding(value: string);
-        /**
-         * @en The string of label collection.
-         * @zh 标签集合字符串。
-         */
-        get labels(): string;
-        set labels(value: string);
-        /**
-         * @en Indicates the index of the selected drop-down list item.
-         * @zh 表示选择的下拉列表项的索引。
-         */
-        get selectedIndex(): number;
-        set selectedIndex(value: number);
-        /**
-         * @en The default drop-down prompt text.
-         * @zh 默认的下拉提示文本。
-         */
-        get defaultLabel(): string;
-        set defaultLabel(value: string);
-        /**
-         * @en The handler to be executed when changing the selection of the drop-down list (default returns parameter index:int).
-         * @zh 改变下拉列表的选择项时执行的处理器(默认返回参数index:int)。
-         */
-        get selectHandler(): Handler;
-        set selectHandler(value: Handler);
-        /**
-         * @en Indicates the label of the selected drop-down list item.
-         * @zh 表示选择的下拉列表项的的标签。
-         */
-        get selectedLabel(): string;
-        set selectedLabel(value: string);
-        /**
-         * @en Gets or sets the maximum number of rows that can be displayed in the drop-down list without a scrollbar.
-         * @zh 获取或设置没有滚动条的下拉列表中可显示的最大行数。
-         */
-        get visibleNum(): number;
-        set visibleNum(value: number);
-        /**
-         * @en The height of the drop-down list item.
-         * @zh 下拉列表项的高度。
-         */
-        get itemHeight(): number;
-        set itemHeight(value: number);
-        /**
-         * @en The color of drop-down list items.
-         * The format is: "background color when hovering or selected, label color when hovering or selected, label color, border color, background color"
-         * @zh 下拉列表项颜色。
-         * 格式：悬停或被选中时背景颜色,悬停或被选中时标签颜色,标签颜色,边框颜色,背景颜色"。
-         */
-        get itemColors(): string;
-        set itemColors(value: string);
-        /**
-         * @en The font size of the drop-down list item label.
-         * @zh 下拉列表项标签的字体大小。
-         */
-        get itemSize(): number;
-        set itemSize(value: number);
-        /**
-         * @en Indicates the open state of the drop-down list.
-         * @zh 表示下拉列表的打开状态。
-         */
-        get isOpen(): boolean;
-        set isOpen(value: boolean);
-        /**
-         * @en The scroll type.
-         * @zh 滚动类型。
-         */
-        get scrollType(): ScrollType;
-        set scrollType(value: ScrollType);
-        /**
-         * @en The scrollbar skin.
-         * @zh 滚动条皮肤。
-         */
-        get scrollBarSkin(): string;
-        set scrollBarSkin(value: string);
-        /**
-         * @en The size grid of the texture.
-         * The size grid is a 3x3 division of the texture, allowing it to be scaled without distorting the corners and edges.
-         * The array contains five values representing the top, right, bottom, and left margins, and whether to repeat the fill (0: no repeat, 1: repeat).
-         * The values are separated by commas. For example: "6,6,6,6,1".
-         * @zh 纹理的九宫格数据。
-         * 九宫格是一种将纹理分成3x3格的方式，使得纹理缩放时保持角和边缘不失真。
-         * 数组包含五个值，分别代表上边距、右边距、下边距、左边距以及是否重复填充（0：不重复填充，1：重复填充）。
-         * 值以逗号分隔。例如："6,6,6,6,1"。
-         */
-        get sizeGrid(): string;
-        set sizeGrid(value: string);
-        /**
-         * @en a reference to the `VScrollBar` scrollbar component contained in the `ComboBox` component.
-         * @zh `ComboBox` 组件所包含的 `VScrollBar` 滚动条组件的引用。
-         */
-        get scrollBar(): VScrollBar;
-        /**
-         * @en a reference to the `Button` component contained in the `ComboBox` component.
-         * @zh `ComboBox` 组件所包含的 `Button` 组件的引用。
-         */
-        get button(): Button;
-        /**
-         * @en a reference to the `List` list component contained in the `ComboBox` component.
-         * @zh `ComboBox` 组件所包含的 `List` 列表组件的引用。
-         */
-        get list(): List;
-        set list(value: List);
-        /**
-         * @en the text label color of the `Button` component contained in the `ComboBox` component.
-         * The format is: upColor,overColor,downColor
-         * @zh  `ComboBox` 组件所包含的 `Button` 组件的文本标签颜色。
-         * 格式：upColor,overColor,downColor
-         */
-        get labelColors(): string;
-        set labelColors(value: string);
-        /**
-         * @en the text margin of the `Button` component contained in the `ComboBox` component.
-         * The format is: top, right, bottom, left
-         * @zh `ComboBox` 组件所包含的 `Button` 组件的文本边距。
-         * 格式：上边距,右边距,下边距,左边距
-         */
-        get labelPadding(): string;
-        set labelPadding(value: string);
-        /**
-        * @en the label font size of the `Button` component contained in the `ComboBox` component.
-        * @zh `ComboBox` 组件所包含的 `Button` 组件的标签字体大小。
-        */
-        get labelSize(): number;
-        set labelSize(value: number);
-        /**
-        * @en Indicates whether the button text label is bold.
-        * @zh 表示按钮文本标签是否为粗体字。
-        * @see laya.display.Text#bold
-        */
-        get labelBold(): boolean;
-        set labelBold(value: boolean);
-        /**
-         * @en Indicates the font name of the button text label, expressed as a string.
-         * @zh 表示按钮文本标签的字体名称，以字符串形式表示。
-         * @see laya.display.Text#font
-         */
-        get labelFont(): string;
-        set labelFont(value: string);
-        /**
-         * @en Indicates the state value of the button.
-         * @zh 表示按钮的状态值。
-         * @see laya.ui.Button#stateNum
-         */
-        get stateNum(): number;
-        set stateNum(value: number);
-        /**
-         * @en `ComboBox` constructor.
-         * @param skin The skin resource address.
-         * @param labels The string of the label collection in the drop-down list. Separated by commas, such as "item0,item1,item2,item3,item4,item5".
-         * @zh  `ComboBox` UI组件的构造函数。
+         * 创建一个新的 <code>ComboBox</code> 组件实例。
          * @param skin 皮肤资源地址。
          * @param labels 下拉列表的标签集字符串。以逗号做分割，如"item0,item1,item2,item3,item4,item5"。
          */
@@ -40609,25 +34301,196 @@ declare module Laya {
          * @inheritDoc
          * @override
         */
-        protected createChildren(): void;
-        /**
-         * @en Destroy the component and release the memory occupied by the component. Destroy the child objects of the component at the same time by default.
-         * @param destroyChild Whether to simultaneously destroy the child objects of the component. The default value is true.
-         * @zh 销毁组件并释放组件所占用的内存。默认会同时销毁组件的子对象。
-         * @param destroyChild 是否同时销毁组件的子对象。默认值为true。
-         * @inheritDoc
-         * @override
-         */
         destroy(destroyChild?: boolean): void;
         /**
          * @inheritDoc
          * @override
-         * @en Set the data source of the ComboBox.
-         * @param value The new data source.
-         * @zh 设置下拉选项框的数据源。
-         * @param value 新的数据源。
+        */
+        protected createChildren(): void;
+        private _createList;
+        private _setListEvent;
+        /**
+         * @private
          */
+        private onListDown;
+        private onScrollBarDown;
+        private onButtonMouseDown;
+        get skin(): string;
+        set skin(value: string);
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected measureWidth(): number;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected measureHeight(): number;
+        /**
+         * @private
+         */
+        protected changeList(): void;
+        /**
+         * @private
+         * 下拉列表的鼠标事件响应函数。
+         */
+        protected onlistItemMouse(e: Event, index: number): void;
+        /**
+         * @private
+         */
+        private switchTo;
+        /**
+         * 更改下拉列表的打开状态。
+         */
+        protected changeOpen(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * 下拉列表文本的边距Padding
+         * @readme <p><b>格式：</b>上边距,右边距,下边距,左边距</p>
+         */
+        get itemPadding(): string;
+        set itemPadding(value: string);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
+        /**
+         * 标签集合字符串。
+         */
+        get labels(): string;
+        set labels(value: string);
+        /**
+         * 更改下拉列表。
+         */
+        protected changeItem(): void;
+        /**
+         * 表示选择的下拉列表项的索引。
+         */
+        get selectedIndex(): number;
+        set selectedIndex(value: number);
+        private changeSelected;
+        /**
+        * 默认的下拉提示文本。
+        */
+        get defaultLabel(): string;
+        set defaultLabel(value: string);
+        /**
+         * 改变下拉列表的选择项时执行的处理器(默认返回参数index:int)。
+         */
+        get selectHandler(): Handler;
+        set selectHandler(value: Handler);
+        /**
+         * 表示选择的下拉列表项的的标签。
+         */
+        get selectedLabel(): string;
+        set selectedLabel(value: string);
+        /**
+         * 获取或设置没有滚动条的下拉列表中可显示的最大行数。
+         */
+        get visibleNum(): number;
+        set visibleNum(value: number);
+        /**
+         * 下拉列表项的高度
+         */
+        get itemHeight(): number;
+        set itemHeight(value: number);
+        /**
+         * 下拉列表项颜色。
+         * <p><b>格式：</b>"悬停或被选中时背景颜色,悬停或被选中时标签颜色,标签颜色,边框颜色,背景颜色"</p>
+         */
+        get itemColors(): string;
+        set itemColors(value: string);
+        /**
+         * 下拉列表项标签的字体大小。
+         */
+        get itemSize(): number;
+        set itemSize(value: number);
+        /**
+         * 表示下拉列表的打开状态。
+         */
+        get isOpen(): boolean;
+        set isOpen(value: boolean);
+        private _onStageMouseWheel;
+        /**
+         * 关闭下拉列表。
+         */
+        protected removeList(e: Event): void;
+        /**
+         * 滚动类型
+         */
+        get scrollType(): ScrollType;
+        set scrollType(value: ScrollType);
+        /**
+         * 滚动条皮肤。
+         */
+        get scrollBarSkin(): string;
+        set scrollBarSkin(value: string);
+        /**
+         * <p>当前实例的位图 <code>AutoImage</code> 实例的有效缩放网格数据。</p>
+         * <p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
+         * <ul><li>例如："4,4,4,4,1"</li></ul></p>
+         */
+        get sizeGrid(): string;
+        set sizeGrid(value: string);
+        /**
+         * 获取对 <code>ComboBox</code> 组件所包含的 <code>VScrollBar</code> 滚动条组件的引用。
+         */
+        get scrollBar(): VScrollBar;
+        /**
+         * 获取对 <code>ComboBox</code> 组件所包含的 <code>Button</code> 组件的引用。
+         */
+        get button(): Button;
+        /**
+         * 获取对 <code>ComboBox</code> 组件所包含的 <code>List</code> 列表组件的引用。
+         */
+        get list(): List;
+        set list(value: List);
+        /**
+         * @inheritDoc
+         * @override
+        */
         set_dataSource(value: any): void;
+        /**
+         * 获取或设置对 <code>ComboBox</code> 组件所包含的 <code>Button</code> 组件的文本标签颜色。
+         * <p><b>格式：</b>upColor,overColor,downColor</p>
+         */
+        get labelColors(): string;
+        set labelColors(value: string);
+        /**
+         * 获取或设置对 <code>ComboBox</code> 组件所包含的 <code>Button</code> 组件的文本边距。
+         * <p><b>格式：</b>上边距,右边距,下边距,左边距</p>
+         */
+        get labelPadding(): string;
+        set labelPadding(value: string);
+        /**
+         * 获取或设置对 <code>ComboBox</code> 组件所包含的 <code>Button</code> 组件的标签字体大小。
+         */
+        get labelSize(): number;
+        set labelSize(value: number);
+        /**
+         * 表示按钮文本标签是否为粗体字。
+         * @see laya.display.Text#bold
+         */
+        get labelBold(): boolean;
+        set labelBold(value: boolean);
+        /**
+         * 表示按钮文本标签的字体名称，以字符串形式表示。
+         * @see laya.display.Text#font
+         */
+        get labelFont(): string;
+        set labelFont(value: string);
+        /**
+         * 表示按钮的状态值。
+         * @see laya.ui.Button#stateNum
+         */
+        get stateNum(): number;
+        set stateNum(value: number);
     }
     /**
      * <code>Dialog</code> 组件是一个弹出对话框，实现对话框弹出，拖动，模式窗口功能。
@@ -40774,32 +34637,12 @@ declare module Laya {
         static YES: string;
         /**对话框内的某个按钮命名为ok，点击此按钮则会关闭*/
         static OK: string;
+        /**@private 表示对话框管理器。*/
+        private static _manager;
         /**对话框管理容器，所有的对话框都在该容器内，并且受管理器管理，可以自定义自己的管理器，来更改窗口管理的流程。
          * 任意对话框打开和关闭，都会触发管理类的open和close事件*/
         static get manager(): DialogManager;
         static set manager(value: DialogManager);
-        /**
-         * 设置锁定界面，在界面未准备好前显示锁定界面，准备完毕后则移除锁定层，如果为空则什么都不显示
-         * @param	view 锁定界面内容
-         */
-        static setLockView(view: UIComponent): void;
-        /**
-         * 锁定所有层，显示加载条信息，防止下面内容被点击
-         */
-        static lock(value: boolean): void;
-        /**关闭所有对话框。*/
-        static closeAll(): void;
-        /**
-         * 根据组获取对话框集合
-         * @param	group 组名称
-         * @return	对话框数组
-         */
-        static getDialogsByGroup(group: string): any[];
-        /**
-         * 根据组关闭所有弹出框
-         * @param	group 需要关闭的组名称
-         */
-        static closeByGroup(group: string): any[];
         /**
          * 对话框被关闭时会触发的回调函数处理器。
          * <p>回调函数参数为用户点击的按钮名字name:String。</p>
@@ -40825,6 +34668,11 @@ declare module Laya {
         isPopupCenter: boolean;
         /**关闭类型，点击name为"close"，"cancel"，"sure"，"no"，"yes"，"no"的按钮时，会自动记录点击按钮的名称*/
         closeType: string;
+        /**@private */
+        private _dragArea;
+        constructor();
+        /**@private 提取拖拽区域*/
+        protected _dealDragArea(): void;
         /**
          * 用来指定对话框的拖拽区域。默认值为"0,0,0,0"。
          * <p><b>格式：</b>构成一个矩形所需的 x,y,width,heith 值，用逗号连接为字符串。
@@ -40833,19 +34681,10 @@ declare module Laya {
          */
         get dragArea(): string;
         set dragArea(value: string);
-        /**弹出框的显示状态；如果弹框处于显示中，则为true，否则为false;*/
-        get isPopup(): boolean;
-        /**
-         * @inheritDoc
-         * @override
-         */
-        set zOrder(value: number);
-        /**
-         * @inheritDoc
-         * @override
-         */
-        get zOrder(): number;
-        constructor();
+        /**@private */
+        private _onMouseDown;
+        /**@private 处理默认点击事件*/
+        protected _onClick(e: Event): void;
         /**
          * @inheritDoc
          * @override
@@ -40874,6 +34713,42 @@ declare module Laya {
          * @param showEffect 是否显示弹出效果
          */
         popup(closeOther?: boolean, showEffect?: boolean): void;
+        /**@private */
+        protected _open(modal: boolean, closeOther: boolean, showEffect: boolean): void;
+        /**弹出框的显示状态；如果弹框处于显示中，则为true，否则为false;*/
+        get isPopup(): boolean;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        set zOrder(value: number);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        get zOrder(): number;
+        /**
+         * 设置锁定界面，在界面未准备好前显示锁定界面，准备完毕后则移除锁定层，如果为空则什么都不显示
+         * @param	view 锁定界面内容
+         */
+        static setLockView(view: UIComponent): void;
+        /**
+         * 锁定所有层，显示加载条信息，防止下面内容被点击
+         */
+        static lock(value: boolean): void;
+        /**关闭所有对话框。*/
+        static closeAll(): void;
+        /**
+         * 根据组获取对话框集合
+         * @param	group 组名称
+         * @return	对话框数组
+         */
+        static getDialogsByGroup(group: string): any[];
+        /**
+         * 根据组关闭所有弹出框
+         * @param	group 需要关闭的组名称
+         */
+        static closeByGroup(group: string): any[];
     }
     /**打开任意窗口后调度。
      * @eventType Event.OPEN
@@ -40904,8 +34779,12 @@ declare module Laya {
          * 创建一个新的 <code>DialogManager</code> 类实例。
          */
         constructor();
+        private _closeOnSide;
         /**设置锁定界面，如果为空则什么都不显示*/
         setLockView(value: UIComponent): void;
+        /**@private */
+        private _onResize;
+        private _centerDialog;
         /**
          * 显示对话框
          * @param dialog 需要显示的对象框 <code>Dialog</code> 实例。
@@ -40913,6 +34792,8 @@ declare module Laya {
          * @param showEffect 是否显示弹出效果
          */
         open(dialog: Dialog, closeOther?: boolean, showEffect?: boolean): void;
+        /**@private */
+        private _clearDialogEffect;
         /**
          * 执行打开对话框。
          * @param dialog 需要关闭的对象框 <code>Dialog</code> 实例。
@@ -40936,6 +34817,8 @@ declare module Laya {
          * 关闭所有的对话框。
          */
         closeAll(): void;
+        /**@private */
+        private _closeAll;
         /**
          * 根据组获取所有对话框
          * @param	group 组名称
@@ -40957,6 +34840,33 @@ declare module Laya {
      * fontClip.value = "a1326";//显示"a1326"文字
      */
     class FontClip extends Clip {
+        /**数值*/
+        protected _valueArr: string;
+        /**文字内容数组**/
+        protected _indexMap: Record<string, number>;
+        /**位图字体内容**/
+        protected _sheet: string;
+        /**@private */
+        protected _direction: string;
+        /**X方向间隙*/
+        protected _spaceX: number;
+        /**Y方向间隙*/
+        protected _spaceY: number;
+        /**@private 水平对齐方式*/
+        private _align;
+        /**@private 显示文字宽*/
+        private _wordsW;
+        /**@private 显示文字高*/
+        private _wordsH;
+        /**
+         * @param skin 位图字体皮肤
+         * @param sheet 位图字体内容，空格代表换行
+         */
+        constructor(skin?: string, sheet?: string);
+        /**
+         * 资源加载完毕
+         */
+        protected loadComplete(url: string, img: Texture): void;
         get index(): number;
         set index(value: number);
         /**
@@ -40988,11 +34898,26 @@ declare module Laya {
         set align(v: string);
         /**水平对齐方式*/
         get align(): string;
+        /**渲染数值*/
+        protected changeValue(): void;
         /**
-         * @param skin 位图字体皮肤
-         * @param sheet 位图字体内容，空格代表换行
+         * @inheritDoc
+         * @override
          */
-        constructor(skin?: string, sheet?: string);
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
+        /**
+         * @override
+         */
+        protected measureWidth(): number;
+        /**
+         * @override
+         */
+        protected measureHeight(): number;
         /**
          *
          * @param destroyChild
@@ -41020,6 +34945,21 @@ declare module Laya {
          * 居底部对齐。
          */
         static BOTTOM: string;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected sortItem(items: any[]): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected changeItems(): void;
     }
     /**
      * 使用 <code>HScrollBar</code> （水平 <code>ScrollBar</code> ）控件，可以在因数据太多而不能在显示区域完全显示时控制显示的数据部分。
@@ -41095,6 +35035,11 @@ declare module Laya {
      * }
     */
     class HScrollBar extends ScrollBar {
+        /**
+         * @override
+         * @inheritDoc
+         */
+        protected initialize(): void;
     }
     /**
      * 使用 <code>HSlider</code> 控件，用户可以通过在滑块轨道的终点之间移动滑块来选择值。
@@ -41269,6 +35214,26 @@ declare module Laya {
      * @see AutoBitmap
      */
     class Image extends UIComponent {
+        /**@private */
+        protected _skin: string;
+        /**@private */
+        protected _group: string;
+        protected _useSourceSize: boolean;
+        _graphics: AutoBitmap;
+        /**
+         * 创建一个 <code>Image</code> 实例。
+         * @param skin 皮肤资源地址。
+         */
+        constructor(skin?: string | null);
+        /**
+         * 销毁对象并释放加载的皮肤资源。
+         */
+        dispose(): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected createChildren(): void;
         /**
          * <p>对象的皮肤地址，以字符串表示。</p>
          * <p>如果资源未加载，则先加载资源，加载完成后应用于此对象。</p>
@@ -41276,14 +35241,7 @@ declare module Laya {
          */
         get skin(): string;
         set skin(value: string);
-        /**
-         * <p>当前实例的位图 <code>AutoImage</code> 实例的有效缩放网格数据。</p>
-         * <p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
-         * <ul><li>例如："4,4,4,4,1"。</li></ul></p>
-         * @see laya.ui.AutoBitmap#sizeGrid
-         */
-        get sizeGrid(): string;
-        set sizeGrid(value: string);
+        _setSkin(url: string): Promise<void>;
         get source(): Texture;
         set source(value: Texture);
         get color(): string;
@@ -41296,19 +35254,38 @@ declare module Laya {
         get useSourceSize(): boolean;
         set useSourceSize(value: boolean);
         /**
-         * 创建一个 <code>Image</code> 实例。
-         * @param skin 皮肤资源地址。
+         * @inheritDoc
+         * @override
          */
-        constructor(skin?: string | null);
+        protected measureWidth(): number;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected measureHeight(): number;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
+        /**
+         * <p>当前实例的位图 <code>AutoImage</code> 实例的有效缩放网格数据。</p>
+         * <p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
+         * <ul><li>例如："4,4,4,4,1"。</li></ul></p>
+         * @see laya.ui.AutoBitmap#sizeGrid
+         */
+        get sizeGrid(): string;
+        set sizeGrid(value: string);
         /**
          * @inheritDoc
          * @override
          */
         set_dataSource(value: any): void;
-        /**
-         * 销毁对象并释放加载的皮肤资源。
-         */
-        dispose(): void;
     }
     /**
      * <code>ISelect</code> 接口，实现对象的 <code>selected</code> 属性和 <code>clickHandler</code> 选择回调函数处理器。
@@ -41435,6 +35412,23 @@ declare module Laya {
      */
     class Label extends UIComponent {
         /**
+         * @private
+         * 文本 <code>Text</code> 实例。
+         */
+        protected _tf: Text;
+        protected _fitContent: LabelFitContent;
+        /**
+         * 创建一个新的 <code>Label</code> 实例。
+         * @param text 文本内容字符串。
+         */
+        constructor(text?: string);
+        /**
+         * @override
+         * @inheritDoc
+        */
+        protected createChildren(): void;
+        protected _onPostLayout(): void;
+        /**
          * 当前文本内容字符串。
          * @see laya.display.Text.text
          */
@@ -41536,6 +35530,43 @@ declare module Laya {
          */
         get textField(): Text;
         /**
+         * @inheritDoc
+         * @override
+         */
+        protected measureWidth(): number;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        protected measureHeight(): number;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        get_width(): number;
+        set_width(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        get_height(): number;
+        set_height(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        set_dataSource(value: any): void;
+        /**
          * @copy laya.display.Text#overflow
          */
         get overflow(): string;
@@ -41560,6 +35591,20 @@ declare module Laya {
          */
         set underlineColor(value: string);
         /**
+         * @en Text decoration style of the text, specifically whether it is underlined.
+         * @zh 文本是否显示下划线。
+         * @copy laya.display.Text#underline
+         */
+        get strikethrough(): boolean;
+        set strikethrough(value: boolean);
+        /**
+         * @en Color of the text underline.
+         * @zh 文本下划线的颜色。
+         * @copy laya.display.Text#underlineColor
+         */
+        get strikethroughColor(): string;
+        set strikethroughColor(value: string);
+        /**
          * @copy laya.display.Text#ignoreLang
          */
         get ignoreLang(): boolean;
@@ -41569,50 +35614,24 @@ declare module Laya {
         set ignoreLang(value: boolean);
         get templateVars(): Record<string, any>;
         set templateVars(value: Record<string, any> | boolean);
-        /**
-         * 创建一个新的 <code>Label</code> 实例。
-         * @param text 文本内容字符串。
-         */
-        constructor(text?: string);
-        /**
-         * @override
-         * @inheritDoc
-        */
-        protected createChildren(): void;
-        /**
-         * @inheritDoc
-         * @override
-         */
-        get_width(): number;
-        set_width(value: number): void;
-        /**
-         * @inheritDoc
-         * @override
-         */
-        get_height(): number;
-        set_height(value: number): void;
-        /**
-         * @inheritDoc
-         * @override
-         */
-        set_dataSource(value: any): void;
         setVar(name: string, value: any): Label;
     }
     /**
      * <code>LayoutBox</code> 是一个布局容器类。
      */
     class LayoutBox extends Box {
-        /** 子对象的间隔。*/
-        get space(): number;
-        set space(value: number);
-        /** 子对象对齐方式。*/
-        get align(): string;
-        set align(value: string);
+        /**@private */
+        protected _space: number;
+        /**@private */
+        protected _align: string;
+        /**@private */
+        protected _itemChanged: boolean;
         /**
          * @inheritDoc
          * @override
         */
         addChild<T extends Node>(child: T): T;
+        private onResize;
         /**
          * @inheritDoc
          * @override
@@ -41625,6 +35644,22 @@ declare module Laya {
         removeChildAt(index: number): Node;
         /** 刷新。*/
         refresh(): void;
+        /**
+         * 改变子对象的布局。
+         */
+        protected changeItems(): void;
+        /** 子对象的间隔。*/
+        get space(): number;
+        set space(value: number);
+        /** 子对象对齐方式。*/
+        get align(): string;
+        set align(value: string);
+        /**
+         * 排序项目列表。可通过重写改变默认排序规则。
+         * @param items  项目列表。
+         */
+        protected sortItem(items: any[]): void;
+        protected _setItemChanged(): void;
     }
     /**
      * 当对象的 <code>selectedIndex</code> 属性发生变化时调度。
@@ -41786,24 +35821,67 @@ declare module Laya {
         totalPage: number;
         /**禁用滚动条停止 */
         disableStopScroll: boolean;
+        /**@private */
+        protected _content: Box;
+        /**@private */
+        protected _scrollBar: ScrollBar | null;
+        /**@private */
+        protected _itemRender: any;
+        /**@private */
+        protected _repeatX: number;
+        /**@private */
+        protected _repeatY: number;
+        /**@private */
+        protected _repeatX2: number;
+        /**@private */
+        protected _repeatY2: number;
+        /**@private */
+        protected _spaceX: number;
+        /**@private */
+        protected _spaceY: number;
+        /**@private */
+        protected _cells: UIComponent[];
+        /**@private */
+        protected _array: any[] | null;
+        /**@private */
+        protected _startIndex: number;
+        /**@private */
+        protected _selectedIndex: number;
+        /**@private */
+        protected _page: number;
+        /**@private */
+        protected _isVertical: boolean;
+        /**@private */
+        protected _cellSize: number;
+        /**@private */
+        protected _cellOffset: number;
+        /**@private */
+        protected _isMoved: boolean;
         /**是否缓存内容，如果数据源较少，并且list内无动画，设置此属性为true能大大提高性能 */
         cacheContent: boolean;
+        /**@private */
+        protected _createdLine: number;
+        /**@private */
+        protected _cellChanged: boolean;
+        /**@private */
+        protected _offset: Point;
+        /**@private */
+        protected _usedCache: string | null;
+        /**@private */
+        protected _elasticEnabled: boolean;
+        protected _scrollType: ScrollType;
+        protected _vScrollBarSkin: string;
+        protected _hScrollBarSkin: string;
         /**
-         * 列表的当前页码。
+         * @inheritDoc
+         * @override
          */
-        get page(): number;
-        set page(value: number);
+        destroy(destroyChild?: boolean): void;
         /**
-         * 列表的数据总个数。
+         * @inheritDoc
+         * @override
          */
-        get length(): number;
-        /**
-         * 单元格集合。
-         */
-        get cells(): UIComponent[];
-        /**是否开启橡皮筋效果*/
-        get elasticEnabled(): boolean;
-        set elasticEnabled(value: boolean);
+        protected createChildren(): void;
         /**
          * @inheritDoc
          * @override
@@ -41814,6 +35892,8 @@ declare module Laya {
          * @override
          */
         get cacheAs(): string;
+        private onScrollStart;
+        private onScrollEnd;
         /**
          * 获取对 <code>List</code> 组件所包含的内容容器 <code>Box</code> 组件的引用。
          */
@@ -41850,6 +35930,16 @@ declare module Laya {
         get itemRender(): any;
         set itemRender(value: any);
         /**
+         * @inheritDoc
+         * @override
+        */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        _setHeight(value: number): void;
+        /**
          * 水平方向显示的单元格数量。
          */
         get repeatX(): number;
@@ -41870,15 +35960,66 @@ declare module Laya {
         get spaceY(): number;
         set spaceY(value: number);
         /**
+         * @private
+         * 更改单元格的信息。
+         * 在此销毁、创建单元格，并设置单元格的位置等属性。相当于此列表内容发送改变时调用此函数。
+         */
+        protected changeCells(): void;
+        private _getOneCell;
+        private _createItems;
+        protected createItem(): UIComponent;
+        /**
+         * @private
+         * 添加单元格。
+         * @param cell 需要添加的单元格对象。
+         */
+        protected addCell(cell: UIComponent): void;
+        onAfterDeserialize(): void;
+        /**
+         * 初始化单元格信息。
+         */
+        initItems(): void;
+        /**
+         * 设置可视区域大小。
+         * <p>以（0，0，width参数，height参数）组成的矩形区域为可视区域。</p>
+         * @param width 可视区域宽度。
+         * @param height 可视区域高度。
+         */
+        setContentSize(width: number, height: number): void;
+        /**
+         * @private
+         * 单元格的鼠标事件侦听处理函数。
+         */
+        protected onCellMouse(e: Event): void;
+        /**
+         * @private
+         * 改变单元格的可视状态。
+         * @param cell 单元格对象。
+         * @param visable 是否显示。
+         * @param index 单元格的属性 <code>index</code> 值。
+         */
+        protected changeCellState(cell: UIComponent, visible: boolean, index: number): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected _sizeChanged(): void;
+        /**
+         * @private
+         * 滚动条的 <code>Event.CHANGE</code> 事件侦听处理函数。
+         */
+        protected onScrollBarChange(e?: Event | null): void;
+        private posCell;
+        /**
          * 表示当前选择的项索引。selectedIndex值更改会引起list重新渲染
          */
         get selectedIndex(): number;
         set selectedIndex(value: number);
         /**
-         * 列表数据源。
+         * @private
+         * 改变单元格的选择状态。
          */
-        get array(): any[];
-        set array(value: any[]);
+        protected changeSelectStatus(): void;
         /**
          * 当前选中的单元格数据源。
          */
@@ -41895,27 +36036,49 @@ declare module Laya {
         get startIndex(): number;
         set startIndex(value: number);
         /**
+         * @private
+         * 渲染单元格列表。
+         */
+        protected renderItems(from?: number, to?: number): void;
+        /**
+         * 渲染一个单元格。
+         * @param cell 需要渲染的单元格对象。
+         * @param index 单元格索引。
+         */
+        protected renderItem(cell: UIComponent, index: number): void;
+        private _bindData;
+        /**
+         * 列表数据源。
+         */
+        get array(): any[];
+        private _preLen;
+        set array(value: any[]);
+        /**
          * 更新数据源，不刷新list，只增加滚动长度
          * @param	array 数据源
          */
         updateArray(array: any[]): void;
-        onAfterDeserialize(): void;
         /**
-         * 初始化单元格信息。
+         * 列表的当前页码。
          */
-        initItems(): void;
+        get page(): number;
+        set page(value: number);
         /**
-         * 设置可视区域大小。
-         * <p>以（0，0，width参数，height参数）组成的矩形区域为可视区域。</p>
-         * @param width 可视区域宽度。
-         * @param height 可视区域高度。
+         * 列表的数据总个数。
          */
-        setContentSize(width: number, height: number): void;
+        get length(): number;
         /**
          * @inheritDoc
          * @override
         */
         set_dataSource(value: any): void;
+        /**
+         * 单元格集合。
+         */
+        get cells(): UIComponent[];
+        /**是否开启橡皮筋效果*/
+        get elasticEnabled(): boolean;
+        set elasticEnabled(value: boolean);
         /**
          * 刷新列表数据源。
          */
@@ -41971,11 +36134,10 @@ declare module Laya {
          * @param complete	缓动结束回掉
          */
         tweenTo(index: number, time?: number, complete?: Handler | null): void;
-        /**
-         * @inheritDoc
-         * @override
-         */
-        destroy(destroyChild?: boolean): void;
+        /**@private */
+        protected _setCellChanged(): void;
+        /**@override */
+        protected commitMeasure(): void;
     }
     /**
      * 微信开放数据展示组件，直接实例本组件，即可根据组件宽高，位置，以最优的方式显示开放域数据
@@ -42269,17 +36431,57 @@ declare module Laya {
          * <p>默认返回参数<code>value</code> 属性（进度值）。</p>
          */
         changeHandler: Handler;
+        /**@private */
+        protected _bg: Image;
+        /**@private */
+        protected _bar: Image;
+        /**@private */
+        protected _skin: string;
+        /**@private */
+        protected _value: number;
+        /**
+         * 创建一个新的 <code>ProgressBar</code> 类实例。
+         * @param skin 皮肤地址。
+         */
+        constructor(skin?: string);
+        /**
+         * @inheritDoc
+         * @override
+        */
+        destroy(destroyChild?: boolean): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected createChildren(): void;
         /**
          * @copy laya.ui.Image#skin
          */
         get skin(): string;
         set skin(value: string);
+        _setSkin(url: string): Promise<void>;
+        protected _skinLoaded(): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected measureWidth(): number;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected measureHeight(): number;
         /**
          * 当前的进度量。
          * <p><b>取值：</b>介于0和1之间。</p>
          */
         get value(): number;
         set value(num: number);
+        /**
+         * @private
+         * 更改进度值的显示。
+         */
+        protected changeValue(): void;
         /**
          * 获取进度条对象。
          */
@@ -42296,11 +36498,6 @@ declare module Laya {
         get sizeGrid(): string;
         set sizeGrid(value: string);
         /**
-         * 创建一个新的 <code>ProgressBar</code> 类实例。
-         * @param skin 皮肤地址。
-         */
-        constructor(skin?: string);
-        /**
          * @inheritDoc
          * @override
         */
@@ -42310,11 +36507,6 @@ declare module Laya {
          * @override
         */
         set_dataSource(value: any): void;
-        /**
-         * @inheritDoc
-         * @override
-        */
-        destroy(destroyChild?: boolean): void;
     }
     /**
      * <code>Radio</code> 控件使用户可在一组互相排斥的选择中做出一种选择。
@@ -42322,17 +36514,35 @@ declare module Laya {
      * @see laya.ui.RadioGroup
      */
     class Radio extends Button {
-        /**
-         * 获取或设置 <code>Radio</code> 关联的可选用户定义值。
-         */
-        get value(): any;
-        set value(obj: any);
+        /**@private */
+        protected _value: any;
         /**
          * 创建一个新的 <code>Radio</code> 类实例。
          * @param skin 皮肤。
          * @param label 标签。
          */
         constructor(skin?: string, label?: string);
+        /**
+         * @override
+         */
+        protected preinitialize(): void;
+        /**
+         * @inheritDoc
+         * @override
+         * */
+        protected initialize(): void;
+        /**
+         * @private
+         * 对象的<code>Event.CLICK</code>事件侦听处理函数。
+         */
+        protected onClick(e: Event): void;
+        /**
+         * 获取或设置 <code>Radio</code> 关联的可选用户定义值。
+         */
+        get value(): any;
+        set value(obj: any);
+        protected changeClips(): void;
+        _setWidth(value: number): void;
     }
     /**
      * 当 <code>Group</code> 实例的 <code>selectedIndex</code> 属性发生变化时调度。
@@ -42413,11 +36623,17 @@ declare module Laya {
      * }
      */
     class RadioGroup extends UIGroup {
+        /**@inheritDoc
+         * @override
+        */
+        protected createItem(skin: string, label: string): Sprite;
     }
     /**
      * 自适应缩放容器，容器设置大小后，容器大小始终保持stage大小，子内容按照原始最小宽高比缩放
      */
     class ScaleBox extends Box {
+        private _oldW;
+        private _oldH;
         /**
          * @override
          */
@@ -42426,6 +36642,7 @@ declare module Laya {
          * @override
          */
         onDisable(): void;
+        private onResize;
         /**
          * @override
          */
@@ -42878,6 +37095,14 @@ declare module Laya {
         get bar(): Button;
     }
     class StatUI implements IStatUI {
+        private _txt;
+        private _sp;
+        private _view;
+        private _toggleView;
+        private _toggleSprite;
+        private _checkBoxArray;
+        private _show;
+        private _showToggle;
         /**
          * @override
          * 显示性能统计信息。
@@ -42892,6 +37117,8 @@ declare module Laya {
         */
         hide(): void;
         update(): void;
+        private createUI;
+        private createToggleUI;
         render(ctx: any, x: number, y: number): void;
     }
     /**
@@ -43024,6 +37251,12 @@ declare module Laya {
      */
     class Tab extends UIGroup {
         constructor();
+        /**
+         * @private
+         * @inheritDoc
+         * @override
+         */
+        protected createItem(skin: string, label: string): Sprite;
     }
     /**
      * <code>TextArea</code> 类用于创建显示对象以显示和输入文本。
@@ -43105,8 +37338,55 @@ declare module Laya {
      * }
      */
     class TextArea extends TextInput {
+        protected _scrollType: ScrollType;
+        protected _vScrollBarSkin: string;
+        protected _hScrollBarSkin: string;
+        /**@private */
+        protected _vScrollBar: VScrollBar;
+        /**@private */
+        protected _hScrollBar: HScrollBar;
+        /**
+         * <p>创建一个新的 <code>TextArea</code> 示例。</p>
+         * @param text 文本内容字符串。
+         */
+        constructor(text?: string);
+        protected _onPostLayout(): void;
+        /**
+         *
+         * @param destroyChild
+         * @override
+         */
+        destroy(destroyChild?: boolean): void;
+        /**
+         * @override
+         */
+        protected initialize(): void;
+        /**
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+    
+        /**
+         * @override
+         */
+        _setHeight(value: number): void;
         get scrollType(): ScrollType;
         set scrollType(value: ScrollType);
+        private createHScrollBar;
+        private createVScrollBar;
+        /**
+         * 垂直方向滚动条皮肤。
+         */
+        get vScrollBarSkin(): string;
+        set vScrollBarSkin(value: string);
+        /**
+         * 水平方向滚动条皮肤。
+         */
+        get hScrollBarSkin(): string;
+        set hScrollBarSkin(value: string);
+        protected onVBarChanged(e: Event): void;
+        protected onHBarChanged(e: Event): void;
         /**垂直滚动条实体*/
         get vScrollBar(): VScrollBar;
         /**水平滚动条实体*/
@@ -43119,29 +37399,9 @@ declare module Laya {
         get maxScrollX(): number;
         /**水平滚动值*/
         get scrollX(): number;
-        /**
-         * 垂直方向滚动条皮肤。
-         */
-        get vScrollBarSkin(): string;
-        set vScrollBarSkin(value: string);
-        /**
-         * 水平方向滚动条皮肤。
-         */
-        get hScrollBarSkin(): string;
-        set hScrollBarSkin(value: string);
-        /**
-         * <p>创建一个新的 <code>TextArea</code> 示例。</p>
-         * @param text 文本内容字符串。
-         */
-        constructor(text?: string);
+        private changeScroll;
         /**滚动到某个位置*/
         scrollTo(y: number): void;
-        /**
-         *
-         * @param destroyChild
-         * @override
-         */
-        destroy(destroyChild?: boolean): void;
     }
     /**
      * 输入文本后调度。
@@ -43241,11 +37501,37 @@ declare module Laya {
      * }
      */
     class TextInput extends Label {
+        /** @private */
+        protected _skin: string;
+        _graphics: AutoBitmap;
+        _tf: Input;
+        /**
+         * 创建一个新的 <code>TextInput</code> 类实例。
+         * @param text 文本内容。
+         */
+        constructor(text?: string);
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected preinitialize(): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected createChildren(): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected initialize(): void;
         /**
          * @copy laya.ui.Image#skin
          */
         get skin(): string;
         set skin(value: string);
+        _setSkin(url: string): Promise<void>;
+        protected _skinLoaded(source: any): void;
         /**
          * <p>当前实例的背景图（ <code>AutoBitmap</code> ）实例的有效缩放网格数据。</p>
          * <p>数据格式："上边距,右边距,下边距,左边距,是否重复填充(值为0：不重复填充，1：重复填充)"，以逗号分隔。
@@ -43253,6 +37539,16 @@ declare module Laya {
          */
         get sizeGrid(): string;
         set sizeGrid(value: string);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _setHeight(value: number): void;
         /**
          * <p>指示当前是否是文本域。</p>
          * 值为true表示当前是文本域，否则不是文本域。
@@ -43264,6 +37560,8 @@ declare module Laya {
          */
         set editable(value: boolean);
         get editable(): boolean;
+        /**选中输入框内的文本。*/
+        select(): void;
         /**限制输入的字符。*/
         get restrict(): string;
         set restrict(pattern: string);
@@ -43292,13 +37590,6 @@ declare module Laya {
          */
         get type(): string;
         set type(value: string);
-        /**
-         * 创建一个新的 <code>TextInput</code> 类实例。
-         * @param text 文本内容。
-         */
-        constructor(text?: string);
-        /**选中输入框内的文本。*/
-        select(): void;
         setSelection(startIndex: number, endIndex: number): void;
     }
     /**鼠标提示管理类*/
@@ -43308,16 +37599,47 @@ declare module Laya {
         static tipTextColor: string;
         static tipBackColor: string;
         static tipDelay: number;
-        /**默认鼠标提示函数*/
-        get defaultTipHandler(): Function;
-        set defaultTipHandler(value: Function);
+        private _tipBox;
+        private _tipText;
+        private _defaultTipHandler;
         constructor();
+        /**
+         * @private
+         */
+        private _onStageHideTip;
+        /**
+         * @private
+         */
+        private _onStageShowTip;
+        /**
+         * @private
+         */
+        private _showTip;
+        /**
+         * @private
+         */
+        private _onStageMouseDown;
+        /**
+         * @private
+         */
+        private _onStageMouseMove;
+        /**
+         * @private
+         */
+        private _showToStage;
         /**关闭所有鼠标提示*/
         closeAll(): void;
         /**
          * 显示显示对象类型的tip
          */
         showDislayTip(tip: Sprite): void;
+        /**
+         * @private
+         */
+        private _showDefaultTip;
+        /**默认鼠标提示函数*/
+        get defaultTipHandler(): Function;
+        set defaultTipHandler(value: Function);
     }
     /**
      * 实例的 <code>selectedIndex</code> 属性发生变化时调度。
@@ -43541,6 +37863,37 @@ declare module Laya {
      * }
      */
     class Tree extends Box {
+        /**@private */
+        protected _list: List;
+        /**@private */
+        protected _source: any[];
+        /**@private */
+        protected _renderHandler: Handler;
+        /**@private */
+        protected _spaceLeft: number;
+        /**@private */
+        protected _spaceBottom: number;
+        /**@private */
+        protected _keepStatus: boolean;
+        /**
+         * 创建一个新的 <code>Tree</code> 类实例。
+         * <p>在 <code>Tree</code> 构造函数中设置属性width、height的值都为200。</p>
+         */
+        constructor();
+        /**
+         * @inheritDoc
+         * @override
+        */
+        destroy(destroyChild?: boolean): void;
+        /**
+         * @override
+         */
+        protected createChildren(): void;
+        /**
+         * @private
+         * 此对象包含的<code>List</code>实例的<code>Event.CHANGE</code>事件侦听处理函数。
+         */
+        protected onListChange(e?: Event): void;
         /**
          * 数据源发生变化后，是否保持之前打开状态，默认为true。
          * <p><b>取值：</b>
@@ -43613,18 +37966,31 @@ declare module Laya {
         get selectedItem(): any;
         set selectedItem(value: any);
         /**
-         *  xml结构的数据源。
+         * @private
+         * 获取数据源集合。
          */
-        set xml(value: XML);
+        protected getArray(): any[];
         /**
-         * 表示选择的树节点项的<code>path</code>属性值。
+         * @private
+         * 获取项对象的深度。
          */
-        get selectedPath(): string;
+        protected getDepth(item: any, num?: number): number;
         /**
-         * 创建一个新的 <code>Tree</code> 类实例。
-         * <p>在 <code>Tree</code> 构造函数中设置属性width、height的值都为200。</p>
+         * @private
+         * 获取项对象的上一级的打开状态。
          */
-        constructor();
+        protected getParentOpenStatus(item: any): boolean;
+        /**
+         * @private
+         * 渲染一个项对象。
+         * @param cell 一个项对象。
+         * @param index 项的索引。
+         */
+        protected renderItem(cell: Box, index: number): void;
+        /**
+         * @private
+         */
+        private onArrowClick;
         /**
          * 设置指定项索引的项对象的打开状态。
          * @param index 项索引。
@@ -43641,147 +38007,209 @@ declare module Laya {
          */
         set_dataSource(value: any): void;
         /**
+         *  xml结构的数据源。
+         */
+        set xml(value: XML);
+        /**
+         * @private
+         * 解析并处理XML类型的数据源。
+         */
+        protected parseXml(xml: XML, source: any[], nodeParent: any, isRoot: boolean): void;
+        /**
+         * @private
+         * 处理数据项的打开状态。
+         */
+        protected parseOpenStatus(oldSource: any[], newSource: any[]): void;
+        /**
+         * @private
+         * 判断两个项对象在树结构中的父节点是否相同。
+         * @param item1 项对象。
+         * @param item2 项对象。
+         * @return 如果父节点相同值为true，否则值为false。
+         */
+        protected isSameParent(item1: any, item2: any): boolean;
+        /**
+         * 表示选择的树节点项的<code>path</code>属性值。
+         */
+        get selectedPath(): string;
+        /**
          * 更新项列表，显示指定键名的数据项。
          * @param	key 键名。
          */
         filter(key: string): void;
         /**
-         * @inheritDoc
-         * @override
-        */
-        destroy(destroyChild?: boolean): void;
+         * @private
+         * 获取数据源中指定键名的值。
+         */
+        private getFilterSource;
     }
     /**
-     * @en UIComponent is the base class of UI Component.
-     * Life cycle: preinitialize > createChildren > initialize > constructor of component
-     * @zh UIComponent 是UI组件类的基类。
-     * 生命周期：preinitialize > createChildren > initialize > 组件构造函数
+     * <code>Component</code> 是ui控件类的基类。
+     * <p>生命周期：preinitialize > createChildren > initialize > 组件构造函数</p>
      */
     class UIComponent extends Sprite {
+        /**@private 控件的数据源。 */
+        protected _dataSource: any;
+        /**@private 鼠标悬停提示 */
+        protected _toolTip: any;
+        /**@private 禁用 */
+        protected _disabled: boolean;
+        /**@private 变灰*/
+        protected _gray: boolean;
+        /**@private 相对布局组件*/
+        protected _widget: Widget;
         /**
-        * @en The vertical distance in pixels from the top edge of the component to the top edge of its parent.
-        * This property is used for relative layout, which means the component's position is always relative to its parent's top edge.
-        * @zh 组件顶边距离父节点顶边的垂直距离（以像素为单位）。
-        * 此属性用于相对布局,意味着组件的位置始终相对于父节点的顶部边缘。
-        */
+         * <p>创建一个新的 <code>Component</code> 实例。</p>
+         */
+        constructor(createChildren?: boolean);
+        /**
+         * @inheritDoc
+         * @override
+         */
+        destroy(destroyChild?: boolean): void;
+        /**
+         * <p>预初始化。</p>
+         * 子类可在此函数内设置、修改属性默认值
+         */
+        protected preinitialize(): void;
+        /**
+         * <p>创建并添加控件子节点。</p>
+         * 子类可在此函数内创建并添加子节点。
+         */
+        protected createChildren(): void;
+        /**
+         * <p>控件初始化。</p>
+         * 在此子对象已被创建，可以对子对象进行修改。
+         */
+        protected initialize(): void;
+        /**
+         * @override
+         */
+        get_width(): number;
+        /**
+         * <p>显示对象的实际显示区域宽度（以像素为单位）。</p>
+         */
+        protected measureWidth(): number;
+        /**
+         * <p>立即执行影响宽高度量的延迟调用函数。</p>
+         * <p>使用 <code>runCallLater</code> 函数，立即执行影响宽高度量的延迟运行函数(使用 <code>callLater</code> 设置延迟执行函数)。</p>
+         * @see #callLater()
+         * @see #runCallLater()
+         */
+        protected commitMeasure(): void;
+        /**
+         * @override
+         */
+        get_height(): number;
+        /**
+         * <p>显示对象的实际显示区域高度（以像素为单位）。</p>
+         */
+        protected measureHeight(): number;
+        /**
+         * @implements
+         * <p>数据赋值，通过对UI赋值来控制UI显示逻辑。</p>
+         * <p>简单赋值会更改组件的默认属性，使用大括号可以指定组件的任意属性进行赋值。</p>
+         * @example
+           //默认属性赋值
+           dataSource = {label1: "改变了label", checkbox1: true};//(更改了label1的text属性值，更改checkbox1的selected属性)。
+           //任意属性赋值
+           dataSource = {label2: {text:"改变了label",size:14}, checkbox2: {selected:true,x:10}};
+         */
+        get dataSource(): any;
+        get_dataSource(): any;
+        set dataSource(value: any);
+        set_dataSource(value: any): void;
+        /**
+         * <p>从组件顶边到其内容区域顶边之间的垂直距离（以像素为单位）。</p>
+         */
         get top(): number;
+        get_top(): number;
         set top(value: number);
+        set_top(value: number): void;
         /**
-         * @en The vertical distance in pixels from the bottom edge of the component to the bottom edge of its parent.
-         * This property is used for relative layout, which means the component's position is always relative to its parent's bottom edge.
-         * @zh 组件底边距离父节点底边的垂直距离（以像素为单位）。
-         * 此属性用于相对布局,意味着组件的位置始终相对于父节点的底部边缘。
+         * <p>从组件底边到其内容区域底边之间的垂直距离（以像素为单位）。</p>
          */
         get bottom(): number;
+        get_bottom(): number;
         set bottom(value: number);
+        set_bottom(value: number): void;
         /**
-         * @en The horizontal distance in pixels from the left edge of the component to the left edge of its parent.
-         * This property is used for relative layout, which means the component's position is always relative to its parent's left edge.
-         * @zh 组件左边距离父节点左边的水平距离（以像素为单位）。
-         * 此属性用于相对布局,意味着组件的位置始终相对于父节点的左侧边缘。
+         * <p>从组件左边到其内容区域左边之间的水平距离（以像素为单位）。</p>
          */
         get left(): number;
         set left(value: number);
         /**
-         * @en The horizontal distance in pixels from the right edge of the component to the right edge of its parent.
-         * This property is used for relative layout, which means the component's position is always relative to its parent's right edge.
-         * @zh 组件右边距离父节点右边的水平距离（以像素为单位）。
-         * 此属性用于相对布局,意味着组件的位置始终相对于父节点的右侧边缘。
+         * <p>从组件右边到其内容区域右边之间的水平距离（以像素为单位）。</p>
          */
         get right(): number;
         set right(value: number);
         /**
-         * @en The distance in pixels from the center axis of this object in the horizontal direction to the center line of the parent container in the horizontal direction.
-         * @zh 在父容器中，此对象的水平方向中轴线与父容器的水平方向中心线的距离（以像素为单位）。
+         * <p>在父容器中，此对象的水平方向中轴线与父容器的水平方向中心线的距离（以像素为单位）。</p>
          */
         get centerX(): number;
         set centerX(value: number);
         /**
-         * @en The distance in pixels from the center axis of this object in the vertical direction to the center line of the parent container in the vertical direction.
-         * @zh 在父容器中，此对象的垂直方向中轴线与父容器的垂直方向中心线的距离（以像素为单位）。
+         * <p>在父容器中，此对象的垂直方向中轴线与父容器的垂直方向中心线的距离（以像素为单位）。</p>
          */
         get centerY(): number;
         set centerY(value: number);
+        protected _shouldRefreshLayout(): void;
+        protected _sizeChanged(): void;
         /**
-         * @en Data assignment, control UI display logic by assigning UI.
-         * Simple assignment will change the default properties of the component, and curly braces can be used to assign any property of the component.
-         * @zh 数据源赋值，通过对UI赋值来控制UI显示逻辑。
-         * 简单赋值会更改组件的默认属性，使用大括号可以指定组件的任意属性进行赋值。
-         * @example
-           //Default property assignment
-           dataSource = {label1: "Label changed", checkbox1: true};//(Change the text property value of label1, change the selected property of checkbox1).
-           //Any property assignment
-           dataSource = {label2: {text:"Label changed",size:14}, checkbox2: {selected:true,x:10}};
-         */
-        get dataSource(): any;
-        set dataSource(value: any);
-        /**
-         * @en Mouse hover prompt.
-         * It can be assigned as text `String` or function `Handler` to implement custom style mouse prompts and parameter carrying, etc.
-         * @zh 鼠标悬停提示。
-         * 可以赋值为文本`String`或函数`Handler`，用来实现自定义样式的鼠标提示和参数携带等。
+         * <p>鼠标悬停提示。</p>
+         * <p>可以赋值为文本 <code>String</code> 或函数 <code>Handler</code> ，用来实现自定义样式的鼠标提示和参数携带等。</p>
          * @example
          * private var _testTips:TestTipsUI = new TestTipsUI();
          * private function testTips():void {
-           //Simple mouse prompt
-         * btn2.toolTip = "This is a mouse tip&lt;b&gt;Bold&lt;/b&gt;&lt;br&gt;New line";
-           //Custom mouse prompt
+           //简单鼠标提示
+         * btn2.toolTip = "这里是鼠标提示&lt;b&gt;粗体&lt;/b&gt;&lt;br&gt;换行";
+           //自定义的鼠标提示
          * btn1.toolTip = showTips1;
-           //Custom mouse prompt with parameters
+           //带参数的自定义鼠标提示
          * clip.toolTip = new Handler(this,showTips2, ["clip"]);
          * }
          * private function showTips1():void {
-         * _testTips.label.text = "This is button[" + btn1.label + "]";
+         * _testTips.label.text = "这里是按钮[" + btn1.label + "]";
          * tip.addChild(_testTips);
          * }
          * private function showTips2(name:String):void {
-         * _testTips.label.text = "This is " + name;
+         * _testTips.label.text = "这里是" + name;
          * tip.addChild(_testTips);
          * }
          */
         get toolTip(): any;
         set toolTip(value: any);
         /**
-         * @en Whether it is grayed out.
-         * @zh 是否变灰。
+         * 对象的 <code>Event.MOUSE_OVER</code> 事件侦听处理函数。
          */
+        private onMouseOver;
+        /**
+         * 对象的 <code>Event.MOUSE_OUT</code> 事件侦听处理函数。
+         */
+        private onMouseOut;
+        /** 是否变灰。*/
         get gray(): boolean;
         set gray(value: boolean);
-        /**
-         * @en Whether the page is disabled, it will turn gray and disable the mouse when set to true.
-         * @zh 是否禁用页面，设置为true后，会变灰并且禁用鼠标。
-         */
+        /** 是否禁用页面，设置为true后，会变灰并且禁用鼠标。*/
         get disabled(): boolean;
         set disabled(value: boolean);
         /**
-         * @en The constructor function that is called when creating a new instance of the UIComponent.
-         * It calls a series of initialization methods in sequence. Subclasses inheriting from this class can override these methods directly to implement their own initialization logic.
-         * If these initialization methods are not needed, `createChildren` can be set to `false` to skip them and reduce unnecessary overhead.
-         * @param createChildren Whether to execute the initialization methods, default is true.
-         * @zh 创建UI组件新实例时调用的构造函数。
-         * 它将依次调用一系列初始化方法。继承该类的子类可以直接重写这些方法,实现自己的初始化逻辑。
-         * 如果不需要这些初始化方法,可以将 `createChildren` 设置为 `false`,以跳过它们并减少不必要的开销。
-         * @param createChildren 是否执行子对象初始化方法,默认为 true。
+         * @private
+         * <p>获取对象的布局样式。请不要直接修改此对象</p>
          */
-        constructor(createChildren?: boolean);
+        private _getWidget;
+        /**@private */
+        protected onCompResize(): void;
         /**
-         * @en Recalculate and update the layout of the object.
-         * This method will reset the horizontal and vertical layout of the object based on the `_widget` property.
-         * It will calculate the position and size of the object according to the layout rules specified by the `_widget` property,
-         * such as `left`, `right`, `top`, `bottom`, `centerX`, and `centerY`.
-         * @zh 重新计算并更新对象的布局。
-         * 这个方法将根据 `_widget` 属性重置对象的水平和垂直布局。
-         * 它会根据 `_widget` 属性指定的布局规则,如 `left`、`right`、`top`、`bottom`、`centerX` 和 `centerY`,计算对象的位置和大小。
+         *
+         * @param child
+         * @override
+         */
+        protected _childChanged(child?: Node): void;
+        /**
+         * 重新排版
          */
         freshLayout(): void;
-        /**
-         * @override
-         * @en Destroy the object.
-         * @param destroyChild Whether to destroy child nodes, default is true.
-         * @zh 销毁对象。
-         * @param destroyChild 是否销毁子节点,默认为 true。
-         */
-        destroy(destroyChild?: boolean): void;
     }
     /**
      * <code>UIEvent</code> 类用来定义UI组件类的事件类型。
@@ -43810,21 +38238,111 @@ declare module Laya {
          * 改变 <code>Group</code> 的选择项时执行的处理器，(默认返回参数： 项索引（index:int）)。
          */
         selectHandler: Handler;
+        /**@private */
+        protected _items: ISelect[];
+        /**@private */
+        protected _selectedIndex: number;
+        /**@private */
+        protected _skin: string;
+        /**@private */
+        protected _direction: string;
+        /**@private */
+        protected _space: number;
+        /**@private */
+        protected _labels: string;
+        /**@private */
+        protected _labelColors: string;
+        /**@private */
+        private _labelFont;
+        /**@private */
+        protected _labelStrokeColor: string;
+        /**@private */
+        protected _strokeColors: string;
+        /**@private */
+        protected _labelStroke: number;
+        /**@private */
+        protected _labelSize: number;
+        /**@private */
+        protected _labelBold: boolean;
+        /**@private */
+        protected _labelPadding: string;
+        /**@private */
+        protected _labelAlign: string;
+        /**@private */
+        protected _stateNum: number;
+        /**@private */
+        protected _labelChanged: boolean;
+        /**
+         * 创建一个新的 <code>Group</code> 类实例。
+         * @param labels 标签集字符串。以逗号做分割，如"item0,item1,item2,item3,item4,item5"。
+         * @param skin 皮肤。
+         */
+        constructor(labels?: string, skin?: string);
+        /**
+         * @override
+         */
+        protected preinitialize(): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        destroy(destroyChild?: boolean): void;
+        /**
+         * 添加一个项对象，返回此项对象的索引id。
+         *
+         * @param item 需要添加的项对象。
+         * @param autoLayout 是否自动布局，如果为true，会根据 <code>direction</code> 和 <code>space</code> 属性计算item的位置。
+         * @return
+         */
+        addItem(item: ISelect, autoLayout?: boolean): number;
+        /**
+         * 删除一个项对象。
+         * @param item 需要删除的项对象。
+         * @param autoLayout 是否自动布局，如果为true，会根据 <code>direction</code> 和 <code>space</code> 属性计算item的位置。
+         */
+        delItem(item: ISelect, autoLayout?: boolean): void;
+        onAfterDeserialize(): void;
+        /**
+         * 初始化项对象们。
+         */
+        initItems(): void;
+        /**
+         * @private
+         * 项对象的点击事件侦听处理函数。
+         * @param index 项索引。
+         */
+        protected itemClick(index: number): void;
         /**
          * 表示当前选择的项索引。默认值为-1。
          */
         get selectedIndex(): number;
         set selectedIndex(value: number);
         /**
+         * @private
+         * 通过对象的索引设置项对象的 <code>selected</code> 属性值。
+         * @param index 需要设置的项对象的索引。
+         * @param selected 表示项对象的选中状态。
+         */
+        protected setSelect(index: number, selected: boolean): void;
+        /**
          * @copy laya.ui.Image#skin
          */
         get skin(): string;
         set skin(value: string);
+        _setSkin(url: string): Promise<void>;
+        protected _skinLoaded(): void;
         /**
          * 标签集合字符串。以逗号做分割，如"item0,item1,item2,item3,item4,item5"。
          */
         get labels(): string;
         set labels(value: string);
+        /**
+         * @private
+         * 创建一个项显示对象。
+         * @param skin 项对象的皮肤。
+         * @param label 项对象标签。
+         */
+        protected createItem(skin: string, label: string): Sprite;
         /**
          * @copy laya.ui.Button#labelColors()
          */
@@ -43894,6 +38412,16 @@ declare module Laya {
         get space(): number;
         set space(value: number);
         /**
+         * @private
+         * 更改项对象的属性值。
+         */
+        protected changeLabels(): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected commitMeasure(): void;
+        /**
          * 项对象们的存放数组。
          */
         get items(): ISelect[];
@@ -43903,45 +38431,18 @@ declare module Laya {
         get selection(): ISelect;
         set selection(value: ISelect);
         /**
-         * 创建一个新的 <code>Group</code> 类实例。
-         * @param labels 标签集字符串。以逗号做分割，如"item0,item1,item2,item3,item4,item5"。
-         * @param skin 皮肤。
-         */
-        constructor(labels?: string, skin?: string);
-        /**
-         * @inheritDoc
-         * @override
-        */
-        destroy(destroyChild?: boolean): void;
-        /**
-         * 添加一个项对象，返回此项对象的索引id。
-         *
-         * @param item 需要添加的项对象。
-         * @param autoLayout 是否自动布局，如果为true，会根据 <code>direction</code> 和 <code>space</code> 属性计算item的位置。
-         * @return
-         */
-        addItem(item: ISelect, autoLayout?: boolean): number;
-        /**
-         * 删除一个项对象。
-         * @param item 需要删除的项对象。
-         * @param autoLayout 是否自动布局，如果为true，会根据 <code>direction</code> 和 <code>space</code> 属性计算item的位置。
-         */
-        delItem(item: ISelect, autoLayout?: boolean): void;
-        onAfterDeserialize(): void;
-        /**
-         * 初始化项对象们。
-         */
-        initItems(): void;
-        /**
          * @inheritDoc
          * @override
          */
         set_dataSource(value: any): void;
+        /**@private */
+        protected _setLabelChanged(): void;
     }
     /**
      * <code>UIUtils</code> 是文本工具集。
      */
     class UIUtils {
+        private static grayFilter;
         /**
          * 用字符串填充数组，并返回数组副本。
          * @param	arr 源数组对象。
@@ -43962,6 +38463,12 @@ declare module Laya {
          * @param	isGray 如果值true，则添加灰度滤镜，否则移除灰度滤镜。
          */
         static gray(target: Sprite, isGray?: boolean): void;
+        /**@private */
+        private static _funMap;
+        /**
+         * @private 根据字符串，返回函数表达式
+         */
+        static getBindFun(value: string): Function;
     }
     /**
          * <code>VBox</code> 是一个垂直布局容器类。
@@ -43985,39 +38492,47 @@ declare module Laya {
         static RIGHT: string;
         /** 兼容以前的changeItems逻辑，是否在发生变动时，使用 sortItem 排序所有item */
         isSortItem: boolean;
+        /**
+         * @override
+         */
+        _setWidth(value: number): void;
+        /**
+         * @inheritDoc
+         * @override
+        */
+        protected changeItems(): void;
     }
     /**
      * <code>View</code> 是一个视图类
      * 在2.0里，View继承自Scene类，但这是不合理的，Scene是一个2D+3D的大概念。所以在3.0里请忽略这个继承。
      */
     class View extends Scene {
+        /**@private 兼容老版本*/
+        static uiMap: any;
+        /**@private 控件的数据源。 */
+        protected _dataSource: any;
         constructor();
+        /**
+         * @private 兼容老版本
+         * 注册UI配置信息，比如注册一个路径为"test/TestPage"的页面，UI内容是IDE生成的json
+         * @param	url		UI的路径
+         * @param	json	UI内容
+         */
+        static regUI(url: string, json: any): void;
+        /**@private */
+        changeData(key: string): void;
         set_dataSource(value: any): void;
     }
     /**
      * <code>ViewStack</code> 类用于视图堆栈类，用于视图的显示等设置处理。
      */
     class ViewStack extends Box {
-        /**
-         * 表示当前视图索引。
-         */
-        get selectedIndex(): number;
-        set selectedIndex(value: number);
-        /**
-         * 获取或设置当前选择的项对象。
-         */
-        get selection(): Node;
-        set selection(value: Node);
-        /**
-         *  索引设置处理器。
-         * <p>默认回调参数：index:int</p>
-         */
-        get setIndexHandler(): Handler;
-        set setIndexHandler(value: Handler);
-        /**
-         * 视图集合数组。
-         */
-        get items(): any[];
+        /**@private */
+        protected _items: any[];
+        /**@private */
+        protected _setIndexHandler: Handler;
+        /**@private */
+        protected _selectedIndex: number;
         constructor();
         /**
          * 批量设置视图对象。
@@ -44035,6 +38550,39 @@ declare module Laya {
          * 初始化视图对象集合。
          */
         initItems(): void;
+        /**
+         * 表示当前视图索引。
+         */
+        get selectedIndex(): number;
+        set selectedIndex(value: number);
+        /**
+         * @private
+         * 通过对象的索引设置项对象的 <code>selected</code> 属性值。
+         * @param index 需要设置的对象的索引。
+         * @param selected 表示对象的选中状态。
+         */
+        protected setSelect(index: number, selected: boolean): void;
+        /**
+         * 获取或设置当前选择的项对象。
+         */
+        get selection(): Node;
+        set selection(value: Node);
+        /**
+         *  索引设置处理器。
+         * <p>默认回调参数：index:int</p>
+         */
+        get setIndexHandler(): Handler;
+        set setIndexHandler(value: Handler);
+        /**
+         * @private
+         * 设置属性<code>selectedIndex</code>的值。
+         * @param index 选中项索引值。
+         */
+        protected setIndex(index: number): void;
+        /**
+         * 视图集合数组。
+         */
+        get items(): any[];
         /**
          * @inheritDoc
          * @override
@@ -45448,13 +39996,15 @@ declare module Laya {
     }
     /**
      * 鼠标点击区域，可以设置绘制一系列矢量图作为点击区域和非点击区域（目前只支持圆形，矩形，多边形）
+     *
      */
     class HitArea implements IHitArea {
+        _hit: Graphics;
+        _unHit: Graphics;
         /**
          * 检测对象是否包含指定的点。
          * @param	x	点的 X 轴坐标值（水平位置）。
          * @param	y	点的 Y 轴坐标值（垂直位置）。
-         * @param   sp  ？？？？
          * @return	如果包含指定的点，则值为 true；否则为 false。
          */
         contains(x: number, y: number, sp: Sprite): boolean;
@@ -45468,9 +40018,6 @@ declare module Laya {
          */
         get unHit(): Graphics;
         set unHit(value: Graphics);
-        /**
-         * 序列化后调动
-         */
         onAfterDeserialize(): void;
     }
     /**
@@ -45853,46 +40400,14 @@ declare module Laya {
         static renderSlow: boolean;
         /** 资源管理器所管理资源的累计内存,以字节为单位。*/
         static cpuMemory: number;
-        static draw2D: number;
         static blitDrawCall: number;
         /** 资源管理器所管理资源的累计内存,以字节为单位。*/
         static gpuMemory: number;
         /**@interanl */
         static bufferMemory: number;
-        static physics_dynamicRigidBodyCount: number;
-        static physics_staticRigidBodyCount: number;
-        static phyiscs_KinematicRigidBodyCount: number;
-        static physics_CharacterControllerCount: number;
-        static physics_jointCount: number;
-        static phyiscs_EventCount: number;
-        /** 开启关闭阴影 */
-        static enableShadow: boolean;
-        /** 开启关闭多光源 */
-        static enableMulLight: boolean;
-        /** 开启关闭光源 */
-        static enableLight: boolean;
-        /** 开启关闭CMD */
-        static enableCameraCMD: boolean;
-        /** 开启关闭后期处理 */
-        static enablePostprocess: boolean;
-        /** 开启关闭skin渲染 */
-        static enableSkin: boolean;
-        /** 开启关闭透明渲染 */
-        static enableTransparent: boolean;
-        /** 开启关闭粒子 */
-        static enableParticle: boolean;
-        /** 开启关闭动画更新 */
-        static enableAnimatorUpdate: boolean;
-        /** 开启关闭物理更新*/
-        static enablePhysicsUpdate: boolean;
-        /** 开启关闭msaa */
-        static enablemsaa: boolean;
-        /** 开启关闭非透明物体渲染 */
-        static enableOpaque: boolean;
         static _statUI: IStatUI;
         /**
          * 显示性能统计信息。
-         * 需要最开始的时候调用才有效果。
          * @param	x X轴显示位置。
          * @param	y Y轴显示位置。
          */
@@ -46212,9 +40727,6 @@ declare module Laya {
          * 恢复时钟
          */
         resume(): void;
-        /**
-         * 删除始终，同时清理时钟上面所有事件
-         */
         destroy(): void;
     }
     /**
@@ -46410,6 +40922,15 @@ declare module Laya {
          * 更改文件名的扩展名。
          */
         static replaceFileExtension(path: string, newExt: string, excludeDot?: boolean): string;
+        /**
+         * @en Converts a RenderTexture to a Base64 encoded string.
+         * @param rendertexture The RenderTexture to convert.
+         * @returns The converted Base64 string
+         * @zh 将RenderTexture转换为Base64
+         * @param rendertexture 要转换的RenderTexture
+         * @returns 转换后的Base64字符串
+         */
+        static uint8ArrayToArrayBuffer(rendertexture: RenderTexture | RenderTexture2D): string;
     }
     /**
      * @private
@@ -46512,7 +41033,7 @@ declare module Laya {
         text: string;
         width: number;
         pageChars: any[];
-        pagecharsCtx: any;
+        pagecharsCtx: Context;
         scalex: number;
         scaley: number;
         _nativeObj: any;
@@ -46555,15 +41076,24 @@ declare module Laya {
     }
     class DrawStyle {
         static DEFAULT: DrawStyle;
-        static _Defaultinit(): void;
         _color: ColorUtils;
-        static create(value: ColorUtils | string): DrawStyle;
+        static create(value: any): DrawStyle;
         constructor(value: any);
         setValue(value: any): void;
         reset(): void;
         toInt(): number;
         equal(value: any): boolean;
         toColorStr(): string;
+    }
+    class NativeWebGLCacheAsNormalCanvas {
+        _nativeObj: any;
+        _context: any;
+        constructor(ctx: any, sp: any);
+        startRec(): void;
+        endRec(): void;
+        isCacheValid(): boolean;
+        isTextNeedRestore(): boolean;
+        get context(): any;
     }
     class Path {
         paths: any[];
@@ -46616,6 +41146,7 @@ declare module Laya {
         _globalClipMatrix: Matrix;
         _clipInfoID: number;
         _clipRect: Rectangle;
+        incache: boolean;
         isSaveMark(): boolean;
         restore(context: Context): void;
         static save(context: Context): void;
@@ -46649,12 +41180,12 @@ declare module Laya {
         submitStartPos: number;
         submitEndPos: number;
         context: Context;
-        touches: CharRenderInfo[];
+        touches: any[];
         submits: any[];
         sprite: Sprite | null;
         private _pathMesh;
         private _triangleMesh;
-        meshlist: Sprite2DGeometry[];
+        meshlist: any[];
         private _oldMesh;
         private _oldPathMesh;
         private _oldTriMesh;
@@ -46667,9 +41198,23 @@ declare module Laya {
         constructor(ctx: Context, sp: Sprite);
         startRec(): void;
         endRec(): void;
+        /**
+         * 当前缓存是否还有效。例如clip变了就失效了，因为clip太难自动处理
+         * @return
+         */
+        isCacheValid(): boolean;
         isTextNeedRestore(): boolean;
         flushsubmit(): void;
         releaseMem(): void;
+    }
+    /**
+     * ...
+     * @author ...
+     */
+    class BaseShader extends Resource {
+        static activeShader: BaseShader | null;
+        static bindShader: BaseShader;
+        constructor();
     }
     class Shader2D {
         /**
@@ -46700,7 +41245,7 @@ declare module Laya {
         static UNIFORM_CLIPMATPOS: number;
         static UNIFORM_MMAT2: number;
         static UNIFORM_SIZE: number;
-        static UNIFORM_VERTALPHA: number;
+        static UNIFORM_CLIPOFF: number;
         static UNIFORM_MVPMatrix: number;
         static UNIFORM_SPRITETEXTURE: number;
         static UNIFORM_STRENGTH_SIG2_2SIG2_GAUSS1: number;
@@ -46715,36 +41260,46 @@ declare module Laya {
         static __init__(): void;
         static initSprite2DCommandEncoder(): void;
     }
+    class SkinMeshBuffer {
+        ib: IndexBuffer2D;
+        vb: VertexBuffer2D;
+        static instance: SkinMeshBuffer;
+        constructor();
+        static getInstance(): SkinMeshBuffer;
+        addSkinMesh(skinMesh: any): void;
+        reset(): void;
+    }
     class PrimitiveSV extends Value2D {
         constructor();
-        protected initialize(): void;
-        reinit(): void;
     }
     class TextureSV extends Value2D {
+        strength: number;
         private _blurInfo;
-        private _u_blurInfo1;
-        private _u_blurInfo2;
-        private _u_TexRange;
-        private _colorMat;
-        private _colorAlpha;
-        private _strength_sig2_2sig2_gauss1;
-        constructor();
-        protected initialize(): void;
-        reinit(): void;
         get blurInfo(): Vector2;
         set blurInfo(value: Vector2);
+        private _u_blurInfo1;
         get u_blurInfo1(): Vector4;
         set u_blurInfo1(value: Vector4);
+        private _u_blurInfo2;
         get u_blurInfo2(): Vector4;
         set u_blurInfo2(value: Vector4);
+        private _u_TexRange;
         get u_TexRange(): Vector4;
         set u_TexRange(value: Vector4);
+        private _colorMat;
         get colorMat(): Matrix4x4;
         set colorMat(value: Matrix4x4);
+        private _colorAlpha;
         get colorAlpha(): Vector4;
         set colorAlpha(value: Vector4);
+        private _strength_sig2_2sig2_gauss1;
         get strength_sig2_2sig2_gauss1(): Vector4;
         set strength_sig2_2sig2_gauss1(value: Vector4);
+        constructor();
+        /**
+         * @override
+         */
+        clear(): void;
     }
     enum RenderSpriteData {
         Zero = 0,
@@ -46755,49 +41310,54 @@ declare module Laya {
         static globalShaderData: ShaderData;
         protected static _cache: any[];
         protected static _typeClass: any;
-        static _compileDefine: IDefineDatas;
-        _needRelease: boolean;
-        shaderData: ShaderData;
-        _defaultShader: Shader3D;
-        private mainID;
-        private ref;
-        private _cacheID;
-        filters: any[];
-        private _textureHost;
-        constructor(mainID: RenderSpriteData);
-        protected initialize(): void;
-        reinit(): void;
         static _initone(type: number, classT: any): void;
+        static TEMPMAT4_ARRAY: any[];
+        static _compileDefine: DefineDatas;
         /**
          * 对象池概念
          * @param mainType
          * @returns
          */
         static create(mainType: RenderSpriteData): Value2D;
+        defines: ShaderData;
+        _defaultShader: Shader3D;
+        alpha: number;
+        ALPHA: number;
+        mainID: RenderSpriteData;
+        ref: number;
+        private _inClassCache;
+        private _cacheID;
         get size(): Vector2;
-        set vertAlpha(value: number);
-        get vertAlpha(): number;
+        filters: any[];
         get u_MvpMatrix(): Matrix4x4;
-        get textureHost(): Texture | BaseTexture;
-        set textureHost(value: Texture | BaseTexture);
+        texture: any;
+        private _textureHost;
+        get textureHost(): Texture | RenderTexture2D | TextTexture;
+        set textureHost(value: Texture | RenderTexture2D | TextTexture);
+        _color: Vector4;
         set color(value: Vector4);
         get color(): Vector4;
+        _colorAdd: Vector4;
         set colorAdd(value: Vector4);
         get colorAdd(): Vector4;
+        private _clipMatDir;
         set clipMatDir(value: Vector4);
         get clipMatDir(): Vector4;
+        private _clipMatpos;
         set clipMatPos(value: Vector2);
         get clipMatPos(): Vector2;
-        upload(material: Material | null, shaderData: ShaderData): void;
-        setFilter(value: ColorFilter): void;
+        _clipOff: Vector2;
+        set clipOff(value: Vector2);
+        get clipOff(): Vector2;
+        constructor(mainID: RenderSpriteData);
+        /**
+         * 组织Define宏数据
+         */
+        updateShaderData(): void;
+        upload(material?: Material): void;
+        setFilters(value: any[]): void;
         clear(): void;
-        blendNormal(): void;
-        blendPremulAlpha(): void;
-        blendAdd(): void;
-        blendMask(): void;
         release(): void;
-    }
-    class Value2DManager {
     }
     class BasePoly {
         private static tempData;
@@ -46888,7 +41448,56 @@ declare module Laya {
         steiner: any;
         constructor(i: any, x: any, y: any);
     }
-    class SubmitBase {
+    interface ISubmit {
+        renderSubmit(): number;
+        getRenderType(): number;
+        releaseRender(): void;
+    }
+    class Submit extends SubmitBase {
+        protected static _poolSize: number;
+        protected static POOL: Submit[];
+        material: Material;
+        constructor(renderType?: number);
+        /**
+         * @override
+         */
+        renderSubmit(): number;
+        /**
+         * @override
+         */
+        releaseRender(): void;
+        /**
+         * create方法只传对submit设置的值
+         */
+        static create(context: Context, mesh: Mesh2D, sv: Value2D): Submit;
+        /**
+         * 创建一个矢量submit
+         * @param	ctx
+         * @param	mesh
+         * @param	numEle		对应drawElement的第二个参数:count
+         * @param	offset		drawElement的时候的ib的偏移。
+         * @param	sv			Value2D
+         * @return
+         */
+        static createShape(ctx: Context, mesh: Mesh2D, numEle: number, sv: Value2D): Submit;
+    }
+    class SubmitBase implements ISubmit {
+        static TYPE_2D: number;
+        static TYPE_CANVAS: number;
+        static TYPE_CMDSETRT: number;
+        static TYPE_CUSTOM: number;
+        static TYPE_BLURRT: number;
+        static TYPE_CMDDESTORYPRERT: number;
+        static TYPE_DISABLESTENCIL: number;
+        static TYPE_OTHERIBVB: number;
+        static TYPE_PRIMITIVE: number;
+        static TYPE_RT: number;
+        static TYPE_BLUR_RT: number;
+        static TYPE_TARGET: number;
+        static TYPE_CHANGE_VALUE: number;
+        static TYPE_SHAPE: number;
+        static TYPE_TEXTURE: number;
+        static TYPE_FILLTEXTURE: number;
         static KEY_ONCE: number;
         static KEY_FILLRECT: number;
         static KEY_DRAWTEXTURE: number;
@@ -46896,26 +41505,89 @@ declare module Laya {
         static KEY_TRIANGLES: number;
         static RENDERBASE: SubmitBase;
         static ID: number;
+        static preRender: ISubmit;
         clipInfoID: number;
-        blendType: number;
         protected _id: number;
-        _mesh: Sprite2DGeometry;
-        material: Material;
-        _colorFiler: ColorFilter;
         shaderValue: Value2D;
-        constructor();
-        static create(context: Context, mesh: Sprite2DGeometry, sv: Value2D): SubmitBase;
+        static __init__(): void;
+        constructor(renderType?: number);
+        getID(): number;
+        getRenderType(): number;
+        toString(): string;
+        renderSubmit(): number;
+        releaseRender(): void;
     }
     /**
-     * ...
-     * @author xie
+     * cache as normal 模式下的生成的canvas的渲染。
      */
+    class SubmitCanvas extends SubmitBase {
+        canv: Context;
+        static POOL: SubmitCanvas[];
+        static create(canvas: any, alpha: number, filters: any[]): SubmitCanvas;
+        constructor();
+        /**
+         * @override
+         */
+        renderSubmit(): number;
+        /**
+         * @override
+         */
+        releaseRender(): void;
+        /**
+         * @override
+         */
+        getRenderType(): number;
+    }
+    class SubmitCMD implements ISubmit {
+        static POOL: SubmitCMD[];
+        fun: Function;
+        args: any[];
+        constructor();
+        renderSubmit(): number;
+        getRenderType(): number;
+        releaseRender(): void;
+        static create(args: any[], fun: Function, thisobj: any): SubmitCMD;
+    }
+    /**
+         * ...
+         * @author xie
+         */
     class SubmitKey {
         blendShader: number;
         submitType: number;
         other: number;
         constructor();
         clear(): void;
+        copyFrom(src: SubmitKey): void;
+        copyFrom2(src: SubmitKey, submitType: number, other: number): void;
+        equal3_2(next: SubmitKey, submitType: number, other: number): boolean;
+        equal4_2(next: SubmitKey, submitType: number, other: number): boolean;
+        equal_3(next: SubmitKey): boolean;
+        equal(next: SubmitKey): boolean;
+    }
+    class SubmitTarget implements ISubmit {
+        shaderValue: Value2D;
+        blendType: number;
+        srcRT: RenderTexture2D;
+        constructor();
+        static POOL: SubmitTarget[];
+        renderSubmit(): number;
+        blend(): void;
+        getRenderType(): number;
+        releaseRender(): void;
+        static create(context: Context, mesh: Mesh2D, sv: Value2D, rt: RenderTexture2D): SubmitTarget;
+    }
+    class SubmitTexture extends SubmitBase {
+        private static _poolSize;
+        private static POOL;
+        material: Material;
+        constructor(renderType?: number);
+        /**
+         * @override
+         */
+        releaseRender(): void;
+        renderSubmit(): number;
+        static create(context: Context, mesh: Mesh2D, sv: Value2D): SubmitTexture;
     }
     /**
      * 阿拉伯文的转码。把unicode的阿拉伯文字母编码转成他们的老的能描述不同写法的编码。
@@ -47010,12 +41682,11 @@ declare module Laya {
     /**
      * TODO如果占用内存较大,这个结构有很多成员可以临时计算
      */
-    class CharRenderInfo implements IAutoExpiringResource {
-        isRandomTouch: boolean;
+    class CharRenderInfo {
         char: string;
-        texture: TextTexture;
+        tex: any;
         deleted: boolean;
-        uv: number[];
+        uv: any[];
         pos: number;
         width: number;
         height: number;
@@ -47063,33 +41734,6 @@ declare module Laya {
          */
         getCharBmp(char: string, font: string, lineWidth: number, colStr: string, strokeColStr: string, size: CharRenderInfo, margin_left: number, margin_top: number, margin_right: number, margin_bottom: number, rect?: any[] | null): ImageData | null;
     }
-    interface IFontMeasure {
-        getFontSizeInfo(font: string, size: number): number;
-    }
-    class MeasureFont implements IFontMeasure {
-        private bmpData32;
-        private static tmpRI;
-        private charRender;
-        constructor(charRender: ICharRender);
-        getFontSizeInfo(font: string, size: number): number;
-        /**
-         * 检查当前线是否存在数据
-         * @param	data
-         * @param	l
-         * @param	sx
-         * @param	ex
-         * @return
-         */
-        private checkBmpLine;
-        /**
-         * 根据bmp数据和当前的包围盒，更新包围盒
-         * 由于选择的文字是连续的，所以可以用二分法
-         * @param	data
-         * @param	curbbx 	[l,t,r,b]
-         * @param   onlyH 不检查左右
-         */
-        private updateBbx;
-    }
     /**
      *  文字贴图的大图集。
      */
@@ -47098,9 +41742,7 @@ declare module Laya {
         texHeight: number;
         private atlasgrid;
         texture: TextTexture | null;
-        charMaps: {
-            [key: string]: CharRenderInfo;
-        };
+        charMaps: any;
         static atlasGridW: number;
         constructor();
         setProtecteDist(d: number): void;
@@ -47119,7 +41761,7 @@ declare module Laya {
         destroy(): void;
         printDebugInfo(): void;
     }
-    class TextRender extends EventDispatcher {
+    class TextRender {
         static useOldCharBook: boolean;
         static atlasWidth: number;
         static noAtlas: boolean;
@@ -47142,7 +41784,10 @@ declare module Laya {
          * 例如 [Arial]=0x00002020, 表示宽高都是32
          */
         private fontSizeInfo;
-        charRender: ICharRender;
+        static atlasWidth2: number;
+        private charRender;
+        private static tmpRI;
+        private static pixelBBX;
         private mapFont;
         private fontID;
         private fontScaleX;
@@ -47151,6 +41796,7 @@ declare module Laya {
         static textRenderInst: TextRender;
         textAtlases: TextAtlas[];
         private isoTextures;
+        private bmpData32;
         private static imgdtRect;
         private lastFont;
         private fontSizeW;
@@ -47159,14 +41805,10 @@ declare module Laya {
         private fontSizeOffY;
         private renderPerChar;
         private tmpAtlasPos;
+        private textureMem;
         private fontStr;
         static simClean: boolean;
-        private _fontMeasure;
         constructor();
-        set fontMeasure(m: IFontMeasure);
-        get fontMeasure(): IFontMeasure;
-        private _wan1wansz;
-        private getFontSizeInfo;
         /**
          * 设置当前字体，获得字体的大小信息。
          * @param	font
@@ -47188,9 +41830,7 @@ declare module Laya {
          * @param  startx 保存的数据是相对位置，所以需要加上这个偏移。用相对位置更灵活一些。
          * @param y {int} 因为这个只能画在一行上所以没有必要保存y。所以这里再把y传进来
          */
-        protected _drawResortedWords(ctx: Context, startx: number, starty: number, samePagesData: {
-            [key: number]: any;
-        }): void;
+        protected _drawResortedWords(ctx: Context, startx: number, starty: number, samePagesData: any[]): void;
         /**
          * 检查 txts数组中有没有被释放的资源
          * @param	txts {{ri:CharRenderInfo,...}[][]}
@@ -47214,25 +41854,45 @@ declare module Laya {
          * 尝试清理大图集
          */
         cleanAtlases(): void;
+        getCharBmp(c: string): any;
+        /**
+         * 检查当前线是否存在数据
+         * @param	data
+         * @param	l
+         * @param	sx
+         * @param	ex
+         * @return
+         */
+        private checkBmpLine;
+        /**
+         * 根据bmp数据和当前的包围盒，更新包围盒
+         * 由于选择的文字是连续的，所以可以用二分法
+         * @param	data
+         * @param	curbbx 	[l,t,r,b]
+         * @param   onlyH 不检查左右
+         */
+        private updateBbx;
+        getFontSizeInfo(font: string): number;
         printDbgInfo(): void;
         showAtlas(n: number, bgcolor: string, x: number, y: number, w: number, h: number): Sprite;
+        filltext_native(ctx: Context, data: string | WordText, x: number, y: number, fontStr: string, color: string, strokeColor: string, lineWidth: number, textAlign: string): void;
     }
-    /**
-     * 保存文字的贴图
-     */
-    class TextTexture extends Texture2D {
+    class TextTexture extends Resource {
         private static pool;
         private static poolLen;
         private static cleanTm;
-        static EVENT_REUSE: string;
+        private _render2DContext;
         genID: number;
+        bitmap: any;
         curUsedCovRate: number;
         curUsedCovRateAtlas: number;
         lastTouchTm: number;
         ri: CharRenderInfo;
-        constructor(textureW?: number, textureH?: number);
+        get gammaCorrection(): number;
+        constructor(textureW: number, textureH: number);
+        recreateResource(): void;
         /**
-         * 添加一个文字位图
+         *
          * @param	data
          * @param	x			拷贝位置。
          * @param	y
@@ -47241,8 +41901,7 @@ declare module Laya {
          */
         addChar(data: ImageData, x: number, y: number, uv?: any[]): any[];
         /**
-         * 添加一个文字
-         * 玩一玩不支持 getImageData，只能用canvas的方式
+         * 玩一玩不支持 getImageData
          * @param	canv
          * @param	x
          * @param	y
@@ -47261,29 +41920,90 @@ declare module Laya {
         /**
          * 定期清理
          * 为了简单，只有发生 getAPage 或者 discardPage的时候才检测是否需要清理
-         *
-         * 暂时先不用这个了。
          */
         static clean(): void;
+        touchRect(ri: CharRenderInfo, curloop: number): void;
+        get texture(): any;
+        drawOnScreen(x: number, y: number): void;
+    }
+    class Buffer2D {
+        static FLOAT32: number;
+        static SHORT: number;
+        protected _maxsize: number;
+        _upload: boolean;
+        protected _uploadSize: number;
+        protected _bufferSize: number;
+        protected _u8Array: Uint8Array;
+        _floatArray32: Float32Array;
+        _uint32Array: Uint32Array;
+        _uint16Array: Uint16Array;
+        private constBuffer;
+        get bufferLength(): number;
+        set byteLength(value: number);
+        setByteLength(value: number): void;
         /**
-         * 这个贴图被当前帧使用了。
-         * 这个是基于贴图的，更简单，效率更高
+         * 在当前的基础上需要多大空间，单位是byte
+         * @param	sz
+         * @return  增加大小之前的写位置。单位是byte
          */
-        touchTexture(): void;
-        touchRect(ri: CharRenderInfo, frame: number): void;
+        needSize(sz: number): number;
+        constructor(buffer: Buffer);
+        getFloat32Array(): Float32Array;
+        protected _bufferData(): void;
+        protected _bufferSubData(offset?: number, dataStart?: number, dataLength?: number): void;
+        /**
+         * buffer重新分配了，继承类根据需要做相应的处理。
+         */
+        protected _checkArrayUse(): void;
+        _bind_upload(): boolean;
+        _bind_subUpload(offset?: number, dataStart?: number, dataLength?: number): boolean;
+        /**
+         * 重新分配buffer大小，如果nsz比原来的小则什么都不做。
+         * @param	nsz		buffer大小，单位是byte。
+         * @param	copy	是否拷贝原来的buffer的数据。
+         * @return
+         */
+        _resizeBuffer(nsz: number, copy: boolean): Buffer2D;
+        append(data: any): void;
+        /**
+         * 附加Uint16Array的数据。数据长度是len。byte的话要*2
+         * @param	data
+         * @param	len
+         */
+        appendU16Array(data: Uint16Array, len: number): void;
+        getBuffer(): ArrayBuffer;
+        setNeedUpload(): void;
+        subUpload(offset?: number, dataStart?: number, dataLength?: number): boolean;
+        _disposeResource(): void;
+        /**
+         * 清理数据。保留ArrayBuffer
+         */
+        clear(): void;
     }
     /**
      * <code>BufferState</code> 类用于实现渲染所需的Buffer状态集合。
      */
     class BufferState {
-        private static vertexBufferArray;
+        static _curBindedBufferState: BufferState;
         /**@private [只读]*/
-        _deviceBufferState: IBufferState;
+        protected _nativeVertexArrayObject: IRenderVertexState;
         /**
          * 创建一个 <code>BufferState</code> 实例。
          */
         constructor();
-        applyState(vertexBuffers: VertexBuffer3D[], indexBuffer: IndexBuffer3D | null): void;
+        protected applyVertexBuffers(): void;
+        protected applyIndexBuffers(): void;
+        applyState(vertexBuffers: VertexBuffer[], indexBuffer: IndexBuffer | null): void;
+        /**
+         * @private
+         */
+        bind(): void;
+        /**
+         * @private
+         */
+        unBind(): void;
+        isbind(): boolean;
+        static clearbindBufferState(): void;
         /**
          * @private
          */
@@ -47300,6 +42020,22 @@ declare module Laya {
         getWith(name?: string | null): string;
         getFunsScript(funsdef: string): string;
     }
+    class IndexBuffer2D extends IndexBuffer {
+        static create: Function;
+        protected _uint16Array: Uint16Array;
+        buffer2D: Buffer2D;
+        constructor(bufferUsage?: number);
+        /**
+         * @override
+         */
+        /**
+         * @inheritDoc
+         * @override
+         */
+        _bindForVAO(): void;
+        destory(): void;
+        disposeResource(): void;
+    }
     class MatirxArray {
         /**
          * 4*4矩阵数组相乘。
@@ -47312,19 +42048,111 @@ declare module Laya {
         static copyArray(f: any[], t: any[]): void;
     }
     /**
+     * Mesh2d只是保存数据。描述attribute用的。本身不具有渲染功能。
+     */
+    class Mesh2D {
+        _stride: number;
+        vertNum: number;
+        indexNum: number;
+        protected _applied: boolean;
+        _vb: VertexBuffer2D;
+        _ib: IndexBuffer2D;
+        private _vao;
+        private static _gvaoid;
+        private _attribInfo;
+        protected _quadNum: number;
+        canReuse: boolean;
+        /**
+         * @param	stride
+         * @param	vballoc  vb预分配的大小。主要是用来提高效率。防止不断的resizebfufer
+         * @param	iballoc
+         */
+        constructor(stride: number, vballoc: number, iballoc: number);
+        /**
+         * 直接创建一个固定的ib。按照固定四边形的索引。
+         * @param	var QuadNum
+         */
+        createQuadIB(QuadNum: number): void;
+        /**
+         * 设置mesh的属性。每3个一组，对应的location分别是0,1,2...
+         * 含义是：type,size,offset
+         * 不允许多流。因此stride是固定的，offset只是在一个vertex之内。
+         * @param	attribs
+         */
+        setAttributes(attribs: any[]): void;
+        /**
+         * 初始化VAO的配置，只需要执行一次。以后使用的时候直接bind就行
+         * @param	gl
+         */
+        private configVAO;
+        /**
+         * 应用这个mesh
+         * @param	gl
+         */
+        useMesh(): void;
+        /**
+         * 子类实现。用来把自己放到对应的回收池中，以便复用。
+         */
+        releaseMesh(): void;
+        /**
+         * 释放资源。
+         */
+        destroy(): void;
+        /**
+         * 清理vb数据
+         */
+        clearVB(): void;
+    }
+    /**
      * drawImage，fillRect等会用到的简单的mesh。每次添加必然是一个四边形。
      */
-    class MeshQuadTexture extends Sprite2DGeometry {
+    class MeshParticle2D extends Mesh2D {
+        static const_stride: number;
+        private static _fixattriInfo;
+        private static _POOL;
+        static vertexDeclaration: VertexDeclaration;
+        static __init__(): void;
+        constructor(maxNum: number);
+        setMaxParticleNum(maxNum: number): void;
+        /**
+         *
+         */
+        static getAMesh(maxNum: number): MeshParticle2D;
+        /**
+         * 把本对象放到回收池中，以便getMesh能用。
+         * @override
+         */
+        releaseMesh(): void;
+        /**
+         * @override
+         */
+        destroy(): void;
+    }
+    /**
+     * drawImage，fillRect等会用到的简单的mesh。每次添加必然是一个四边形。
+     */
+    class MeshQuadTexture extends Mesh2D {
         static const_stride: number;
         private static _fixib;
         private static _maxIB;
+        private static _fixattriInfo;
+        private static _POOL;
         static VertexDeclarition: VertexDeclaration;
-        private _vbFloat32Array;
-        private _curVBPos;
         static __int__(): void;
-        constructor(vballoc?: number);
-        protected onVBRealloc(buff: ArrayBuffer): void;
-        protected onIBRealloc(buff: ArrayBuffer): void;
+        constructor();
+        /**
+         *
+         */
+        static getAMesh(mainctx: boolean): MeshQuadTexture;
+        /**
+         * 把本对象放到回收池中，以便getMesh能用。
+         * @override
+         */
+        releaseMesh(): void;
+        /**
+         * @override
+         */
+        destroy(): void;
         /**
          *
          * @param pos 顶点坐标
@@ -47333,22 +42161,21 @@ declare module Laya {
          * @param useTex 是否使用贴图。false的话是给fillRect用的
          */
         addQuad(pos: ArrayLike<number>, uv: ArrayLike<number>, color: number, useTex: boolean): void;
-        clearMesh(): void;
-        get ibBuffer(): ArrayBuffer;
-        get vertexDeclarition(): VertexDeclaration;
     }
     /**
      * 与MeshQuadTexture基本相同。不过index不是固定的
      */
-    class MeshTexture extends Sprite2DGeometry {
+    class MeshTexture extends Mesh2D {
         static const_stride: number;
+        private static _fixattriInfo;
+        private static _POOL;
         static VertexDeclarition: VertexDeclaration;
-        private _vbFloat32Array;
-        private _ibU16Array;
         static __init__(): void;
         constructor();
-        protected onVBRealloc(buff: ArrayBuffer): void;
-        protected onIBRealloc(buff: ArrayBuffer): void;
+        /**
+         *
+         */
+        static getAMesh(mainctx: boolean): MeshTexture;
         /**
          * 增加四个顶点
          * @param vertices
@@ -47357,31 +42184,49 @@ declare module Laya {
          * @param matrix
          * @param rgba
          */
-        addData(vertices: Float32Array, uvs: Float32Array, idx: Uint16Array, matrix: Matrix, rgba: number, uvrect?: number[]): void;
-        get vertexDeclarition(): VertexDeclaration;
+        addData(vertices: Float32Array, uvs: Float32Array, idx: Uint16Array, matrix: Matrix, rgba: number): void;
+        /**
+         * 把本对象放到回收池中，以便getMesh能用。
+         * @override
+         */
+        releaseMesh(): void;
+        /**
+         * @override
+         */
+        destroy(): void;
     }
     /**
      * 用来画矢量的mesh。顶点格式固定为 x,y,rgba
      */
-    class MeshVG extends Sprite2DGeometry {
+    class MeshVG extends Mesh2D {
         static const_stride: number;
+        private static _fixattriInfo;
+        private static _POOL;
         static vertexDeclaration: VertexDeclaration;
-        private _vbFloat32Array;
         static __init__(): void;
         constructor();
-        protected onVBRealloc(buff: ArrayBuffer): void;
-        protected onIBRealloc(buff: ArrayBuffer): void;
+        static getAMesh(mainctx: boolean): MeshVG;
         /**
          * 往矢量mesh中添加顶点和index。会把rgba和points在mesh中合并。
          * @param	points	顶点数组，只包含x,y。[x,y,x,y...]
          * @param	rgba	rgba颜色
          * @param	ib		index数组。
          */
-        addVertAndIBToMesh(points: number[], rgba: number, ib: any[]): void;
-        get vertexDeclarition(): VertexDeclaration;
+        addVertAndIBToMesh(ctx: Context, points: any[], rgba: number, ib: any[]): void;
+        /**
+         * 把本对象放到回收池中，以便getMesh能用。
+         * @override
+         */
+        releaseMesh(): void;
+        /**
+         * @override
+         */
+        destroy(): void;
     }
     class RenderState2D {
+        static _MAXSIZE: number;
         /**@private 一个初始化的 <code>Matrix</code> 对象，不允许修改此对象内容。*/
+        static EMPTYMAT4_ARRAY: number[];
         static TEMPMAT4_ARRAY: number[];
         static worldMatrix4: number[];
         static worldMatrix: Matrix;
@@ -47389,10 +42234,11 @@ declare module Laya {
         static worldAlpha: number;
         static worldScissorTest: boolean;
         static worldShaderDefines: ShaderDefines2D;
-        static worldFilters: ColorFilter[];
+        static worldFilters: any[];
         static width: number;
         static height: number;
         static InvertY: boolean;
+        static mat2MatArray(mat: Matrix, matArray: any[]): any[];
         static restoreTempArray(): void;
         static clear(): void;
     }
@@ -47460,35 +42306,32 @@ declare module Laya {
         toscript(def: any, out: any[]): any[];
         private _toscript;
     }
-    /**
-     * Mesh2d只是保存数据。描述attribute用的。本身没有webgl数据。
-     */
-    abstract class Sprite2DGeometry implements ISprite2DGeometry {
-        protected _stride: number;
-        protected _vertNum: number;
-        protected _indexNum: number;
-        protected _VBBuff: ArrayBuffer;
-        protected _IBBuff: ArrayBuffer;
+    class VertexBuffer2D extends VertexBuffer {
+        static create: Function;
+        buffer2D: Buffer2D;
+        private _vertexStride;
+        get vertexStride(): number;
+        constructor(vertexStride: number, bufferUsage: number);
+        getFloat32Array(): Float32Array;
+        get _floatArray32(): Float32Array;
+        get _uint32Array(): Uint32Array;
         /**
-         * @param	stride
-         * @param	vballoc  vb预分配的大小。主要是用来提高效率。防止不断的resizebfufer
-         * @param	iballoc
+         * 在当前位置插入float数组。
+         * @param	data
+         * @param	pos
          */
-        constructor(stride: number, vballoc: number, iballoc: number);
-        get vbBuffer(): ArrayBuffer;
-        get ibBuffer(): ArrayBuffer;
-        get indexNum(): number;
-        get vertexNum(): number;
-        abstract get vertexDeclarition(): VertexDeclaration;
-        clearMesh(): void;
-        protected abstract onVBRealloc(buff: ArrayBuffer): void;
-        protected abstract onIBRealloc(buff: ArrayBuffer): void;
+        appendArray(data: any[]): void;
+        deleteBuffer(): void;
         /**
-        * 在当前的基础上需要多大空间，单位是byte
-        * @param	sz
-        */
-        protected expVBSize(len: number): void;
-        protected expIBSize(len: number): void;
+         * @inheritDoc
+         * @override
+         */
+        _bindForVAO(): void;
+        /**
+         * @override
+         * override
+         */
+        destroy(): void;
     }
     /**
      * @private

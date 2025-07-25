@@ -38,9 +38,9 @@ declare global {
         }
         export interface IUtils {
 
-            readJson(filePath: string, silient?: boolean): any | null;
+            readJson(filePath: string, silent?: boolean): any;
 
-            readJsonAsync(filePath: string, silient?: boolean): Promise<any>;
+            readJsonAsync(filePath: string, silent?: boolean): Promise<any>;
 
             readJson5(filePath: string): any | null;
 
@@ -103,15 +103,13 @@ declare global {
 
             addHashToFileName(filename: string, hash: string): string;
 
-            normalizePath(filePath: string): Array<string>;
-
             sleep(ms: number): Promise<void>;
 
             until(predicate: () => boolean, timeoutInMs?: number): Promise<void>;
 
             escapeRegExp(str: string): string;
 
-            loadLib(src: string, async?: boolean, onScriptError?: (err: ErrorEvent) => void): Promise<HTMLScriptElement>;
+            loadLib(src: string): Promise<void>;
 
             calculate(str: string): number;
 
@@ -160,7 +158,6 @@ declare global {
 
             getDerivedTypes(type: FTypeDescriptor): Array<FTypeDescriptor>;
             getRequireComponents(type: string): Array<string>;
-            getAllowMultipleComponent(type: FTypeDescriptor): boolean;
             getNodeMenuItems(type: WorldType): Record<string, Array<TypeMenuItem>>;
             getComponentMenuItems(type: WorldType, inHierarchyMenu?: boolean): Record<string, Array<TypeMenuItem>>;
             sortMenuItems(col: Array<TypeMenuItem>): void;
@@ -185,9 +182,6 @@ declare global {
             getDefaultValueComparators(typeDef: FTypeDescriptor): Readonly<Record<string, DefaultValueComparator>>;
 
             getPropertyByPath(type: FTypeDescriptor, datapath: ReadonlyArray<string>, out?: FPropertyDescriptor[]): FPropertyDescriptor[];
-
-            getTypeOfObj(obj: any): FTypeDescriptor;
-            getTypeOfClass(cls: Function): FTypeDescriptor;
         }
         export interface ITemplateUtils {
             renderTemplate(content: string, templateArgs?: Record<string, any>, options?: { escape?: boolean, useSingleBracket?: boolean }): string;
@@ -271,26 +265,6 @@ declare global {
             push?(keys?: ReadonlyArray<string>): Promise<void>;
         }
 
-        export interface IEncodeObjOptions {
-            eliminateDefaults?: boolean;
-        }
-
-        export interface IDecodeObjOptions {
-            outErrors?: Array<string>;
-            strictTypeCheck?: boolean;
-        }
-
-        export namespace ISerializeUtil {
-            const isDeserializing: boolean;
-
-            function encodeObj(data: any, typeDef: FTypeDescriptor, options?: IEncodeObjOptions): any;
-            function decodeObj(data: any, receiver?: any, type?: string, options?: IDecodeObjOptions): any;
-        }
-
-        export interface ISerializeNotification {
-            onAfterDeserialize(): void;
-        }
-
         export interface ISelectResourceDialog extends IDialog {
             show(popupOwner?: gui.Widget, initialValue?: string, assetTypeFilter?: AssetType[], allowInternalAssets?: boolean, customFilter?: string): Promise<void>;
         }
@@ -322,6 +296,11 @@ declare global {
             save(): Promise<void>;
             dispose(): Promise<void>;
 
+            readonly importSettingsHistory: IDataHistory;
+            getImportSettings(resId: string): Promise<any>;
+            applyImportSettings(): Promise<void>;
+            revertImportSettings(): Promise<void>;
+
             cloneMaterial(asset: IAssetInfo): Promise<IAssetInfo>;
         }
 
@@ -347,17 +326,6 @@ declare global {
             runScript?: string;
             scriptArgs?: string[];
             [index: string]: any;
-        }
-
-        export interface IRender3DCanvas extends gui.Widget {
-            readonly ready: boolean;
-
-            createObject(scriptName: string, initMethod?: string, ...initMethodArgs: Array<any>): Promise<any>;
-
-            releaseObject(): Promise<void>;
-
-            call(method: string, ...args: any[]): Promise<any>;
-            refresh(): void;
         }
         export interface IQRCodeDialog extends IDialog {
             show(popupOwner: gui.Widget, url: string): Promise<void>;
@@ -406,16 +374,7 @@ declare global {
             expand(asset: IAssetInfo): void;
             rename(asset: IAssetInfo): Promise<void>;
             addNew(folder: IAssetInfo, fileName: string, callback: (fileName: string) => void): void;
-            createAsset(fileName: string, templateName: string, args?: Record<string, string>): Promise<void>;
-            createFolder(folderName?: string): void;
-        }
-        export interface IPreviewPanel extends IEditorPanel {
-            toolbar?: gui.Widget;
-
-            accept(asset: IAssetInfo): boolean;
-
-            refresh(asset: IAssetInfo, render3DCanvas: IRender3DCanvas): Promise<void>;
-            rotateObject?(x: number, y: number): void;
+            createAsset(fileName: string, templateName: string, assetPath?: string, args?: Record<string, string>): Promise<void>;
         }
         export interface IPlist {
             parsePlist(content: string): Record<string, any>;
@@ -562,6 +521,7 @@ declare global {
             readonly history: IDataHistory;
             readonly selectionHistory: IDataHistory;
             readonly rootNode: IMyNode;
+            readonly rootNode2D: IMyNode;
             readonly rootNode3D: IMyNode;
             readonly prefabRootNode: IMyNode;
             readonly sceneId: string;
@@ -616,7 +576,7 @@ declare global {
             runBatch(func: () => void, options?: { noHistory?: boolean, noPush?: boolean }): void;
             findNodes(keyword: string, maxResults?: number): Promise<Array<IMyNode>>;
 
-            addComponent(node: IMyNode, componentType: string): Promise<IMyComponent>;
+            addComponent(node: IMyNode, componentType: string, props?: Record<string, any>): Promise<IMyComponent>;
             removeComponent(node: IMyNode, compId: string): Promise<void>;
 
             changeNodesType(node: IMyNode, nodeType: string): Promise<void>;
@@ -631,6 +591,8 @@ declare global {
             pasteNodes(): Promise<Array<IMyNode>>;
             duplicateNodes(): Promise<Array<IMyNode>>;
             deleteNodes(): void;
+            changeNodesOrder(action: "bringForward" | "sendBackward" | "sendToBack" | "bringToFront"): void;
+
             createPrefab(nodeId: string, savePath: string, fileName?: string): Promise<{ asset: IAssetInfo, newNode: IMyNode }>;
 
             addComponentToNodes(componentType: string): void;
@@ -666,26 +628,29 @@ declare global {
             readonly parent: IMyNode;
             readonly children: Array<IMyNode>;
             readonly childIndex: number;
-            readonly name: string;
+            name: string;
             ver: number;
             treeVer: number;
             propsVer: number;
             statusVer: number;
             features: number;
             /** 不允许移动，删除 */
-            readonly dontDestroy?: boolean;
+            dontDestroy?: boolean;
             /** 不允许增删子节点 */
-            readonly dontChangeChildren?: boolean;
+            dontChangeChildren?: boolean;
             /** 不允许增加组件 */
-            readonly noAddComponent?: boolean;
+            noAddComponent?: boolean;
 
             addChild(node: IMyNode): void;
+            setChildIndex(index: number): void;
             isAncestorOf(node: IMyNode): boolean;
 
-            readonly componentIds: ReadonlyArray<string>;
+            componentIds: ReadonlyArray<string>;
             readonly components: Record<string, IMyComponent>;
             getComponent(type: string, allowDerives?: boolean): IMyComponent;
-            readonly [PrefabOverridesKey]?: Array<Array<string>>;
+
+            readonly prefabId: string;
+            [PrefabOverridesKey]?: Array<Array<string>>;
             getPrefabOverrides(key?: string): Array<Array<string>>;
 
             readonly isRoot: boolean;
@@ -695,13 +660,13 @@ declare global {
         }
 
         export interface IMyComponent {
-            readonly owner: string;
-            readonly id: string;
-            readonly type: string;
+            owner: string;
+            id: string;
+            type: string;
             readonly props: Record<string, any>;
 
-            readonly inPrefab?: boolean;
-            readonly [PrefabOverridesKey]?: Array<Array<string>>;
+            inPrefab?: boolean;
+            [PrefabOverridesKey]?: Array<Array<string>>;
         }
         export namespace MyMessagePortStatic {
             function requestFromHost(queueTask?: boolean): Promise<IMyMessagePort>;
@@ -720,33 +685,6 @@ declare global {
             transfer(channel: string, transfer: Transferable[], ...args: any[]): void;
             invoke(channel: string, ...args: any[]): Promise<any>;
             callHandler(channel: string, ...args: any[]): Promise<any>;
-        }
-        export interface IModuleInfo {
-            id: string;
-            name: string;
-            visible: boolean;
-            description: string;
-            dependencies: Array<IModuleInfo>;
-            downloadUrls: Array<{
-                url: string,
-                destination: string
-            }>;
-            category: string;
-            downloadSize: number;
-            installedSize: number;
-            selfInstalled: boolean;
-            installed: boolean;
-            path: string;
-            data: any;
-        }
-
-        export interface IModulesManager {
-            allModules: Array<IModuleInfo>;
-            homePath: string;
-
-            getModule(id: string): Readonly<IModuleInfo>;
-            setModuleInstalled(id: string): void;
-            installModules(modules: Array<string>, alert?: boolean, waitForComplete?: boolean): Promise<boolean>;
         }
         export interface IMenuItem {
             /**
@@ -873,7 +811,7 @@ declare global {
         }
 
         export interface IListInsertionHelper {
-            getInsertPos(): { obj: gui.Widget, pos: 'in' | 'above' | 'below' };
+            getInsertPos(): { obj: gui.Widget, pos: 'in' | 'above' | 'below' | 'outside' };
         }
 
         export interface IListHelper {
@@ -909,25 +847,16 @@ declare global {
             removeListener(channel: string, listener: (...args: any[]) => void): void;
             send(channel: string, ...args: any[]): void;
             sendSync(channel: string, ...args: any[]): any;
+            sendTo(webContentsId: number, channel: string, ...args: any[]): void;
             sendToHost(channel: string, ...args: any[]): void;
-        }
-        export namespace IInspectorRegistry {
-            const version: number;
-
-            function registerFieldClass(type: string, cls: new () => IPropertyField): void;
-
-            function getFieldClass(type: string): new () => IPropertyField;
-
-            function registerLayout(type: string, cls: new () => IInspectorLayout, displayOrder?: number): void;
-
-            function createLayouts(type: string, targets: ReadonlyArray<any>): Array<IInspectorLayout>;
-
-            function returnLayouts(type: string, items: Array<IInspectorLayout>): void;
         }
         export interface IInspectorLayout {
             accept(item: any): boolean;
+            onRender(items: ReadonlyArray<any>, inspectors: IInspectorHelper, componentInspectors: IInspectorHelper): Promise<void>;
 
-            onRender(items: ReadonlyArray<any>, inspectors: IInspectorHelper, outTracables: Array<any>): Promise<void>;
+            readonly history?: IDataHistory;
+
+            onRevert?(): Promise<void>;
             onApply?(): Promise<void>;
         }
         export interface IInspectorOptions {
@@ -939,9 +868,6 @@ declare global {
         }
 
         export interface IInspectorHelper {
-            hideCatalogBg: boolean;
-            joinProps: boolean;
-
             add(target: any, type: string, data: any, options?: IInspectorOptions): void;
             next(): void;
 
@@ -1053,23 +979,11 @@ declare global {
             queryToCloseAllTabs(includeScene?: boolean): Promise<boolean>;
             queryToSaveAllTabs(): Promise<boolean>;
         }
-        export type IFileActions = {
-            onOpen?: (asset: IAssetInfo) => void;
-            onCreateNode?: (asset: IAssetInfo, props: any, parentNode?: IMyNode, options?: ICreateNodeOptions) => Promise<IMyNode>;
-            onDropToScene?: (asset: IAssetInfo, is3D: boolean, pt: gui.Vec2, selectedNode?: IMyNode) => Promise<boolean>;
-            onCreateInField?: (field: IPropertyField) => void;
-        }
         export interface IExtensionManager {
-            readonly reloading: boolean;
+            get reloading(): boolean;
             reload(forced?: boolean): void;
-            createSettings(name: string, location?: SettingsLocation, type?: string | FTypeDescriptor | Function): void;
+            createSettings(name: string, location?: SettingsLocation, typeName?: string): void;
             createBuildTarget(name: string, options: IBuildTargetInfo): void;
-
-            setFileType(fileExtensions: ReadonlyArray<string>, type: AssetType | string): void;
-            setFileIcon(fileExtensions: ReadonlyArray<string>, icon?: string): void;
-            setFileThumbnail(fileExtensions: ReadonlyArray<string>, sceneScriptName: string, fast?: boolean): void;
-
-            addFileActions(assetTypeOrFileExts: ReadonlyArray<AssetType | string>, actions: IFileActions): void;
         }
         export interface IEventTracking {
             start(): void;
@@ -1105,7 +1019,6 @@ declare global {
             readonly extensionManager: IExtensionManager;
             readonly accountManager: IAccountManager;
             readonly settingsService: ISettingsService;
-            readonly modulesManager: IModulesManager;
 
             readonly scene: IMyScene;
             readonly appMenu: IMenu;
@@ -1120,7 +1033,6 @@ declare global {
             createSceneManager(program?: string): Promise<ISceneManager>;
             createHotkeyManager(clientMode?: boolean): IHotkeyManager;
             createExtensionManager(): Promise<IExtensionManager>;
-            createModulesManager(): Promise<IModulesManager>;
             connectAssetDb(): Promise<IAssetDb>;
             connectShaderDb(): Promise<IShaderDb>;
             createSettingsService(): Promise<ISettingsService>;
@@ -1184,21 +1096,70 @@ declare global {
             onOpenFile?(filePath: string): void;
         }
         export interface IPanelOptions {
+            /**
+             * 面板的显示标题。
+             */
             title?: string;
+            /**
+             * 面板的图标。是一个图标的URL。
+             */
             icon?: string;
+            /**
+             * 在usage为project-settings等值时，它决定了面板在特定窗口中的显示顺序。
+             */
             order?: number;
+            /**
+             * 面板宽度伸缩优先级。可取值为1/0/-1。数值越大，在同级面板一起横向伸缩时，将优先伸缩stretchPriorityX值较大的面板。
+             */
             stretchPriorityX?: number;
+            /**
+             * 面板高度伸缩优先级。可取值为1/0/-1。数值越大，在同级面板一起纵向伸缩时，将优先伸缩stretchPriorityY值较大的面板。
+             */
             stretchPriorityY?: number;
+            /**
+             * 面板上方是否显示Tab。默认为true。如果为false，则面板永远独立显示，不能和其他面板组合。
+             */
             allowTabs?: boolean;
+            /**
+             * 是否允许关闭面板。默认为true。
+             */
             allowClose?: boolean;
+            /**
+             * 是否在Panel(面板）菜单中显示打开这个面板的菜单项。默认为true。
+             */
             showInMenu?: boolean;
+            /**
+             * 是否允许面板在弹出窗口中显示。默认为true。
+             */
             allowPopup?: boolean;
+            /**
+             * 是否自动启动。默认为true。
+             */
             autoStart?: boolean;
-            location?: "left" | "right" | "top" | "bottom" | "popup";
+            /**
+             * 面板的定位。相对于locationBase（默认为ScenePanel）。如果为popup，则弹出一个新的窗口。
+             */
+            location?: "left" | "right" | "top" | "bottom" | "embed" | "popup";
+            /**
+             * location（定位）属性所参考的面板ID。默认为ScenePanel(场景面板)。
+             */
+            locationBase?: string;
+            /**
+             * 打开面板的热键。例如: mod+1（mod在windows下为ctrl，在mac下为cmd）。默认为空。
+             */
             hotkey?: string;
+            /**
+             * 是否透明。默认为false。
+             */
             transparent?: boolean;
+            /**
+             * 是否在面板标题栏显示帮助按钮，点击后打开指定的的网址。
+             */
             help?: string;
-            usage?: "common" | "project-settings" | "build-settings" | "preference" | "preview";
+            /**
+             * 面板的用途。默认为common。
+             */
+            usage?: "common" | "project-settings" | "build-settings" | "preference";
         }
 
         export interface IEditorPanel {
@@ -1541,13 +1502,11 @@ declare global {
         }
 
         export interface IDataUtils {
-            transformDataByType(source: any, typeDef: FTypeDescriptor, eliminateDefaults?: boolean): any;
+            transformDataByType(obj: any, typeDef: FTypeDescriptor): any;
 
-            formatDataByType(source: any, typeDef: FTypeDescriptor): any;
+            formatDataByType(data: any, typeDef: FTypeDescriptor): any;
 
             propTypeEquals(type1: FPropertyType, type2: FPropertyType): boolean;
-
-            checkTypeMatch(type: FPropertyType, value: any): any;
         }
         export interface IDataInspector {
             readonly id: string;
@@ -1590,31 +1549,16 @@ declare global {
             undo(): boolean;
             redo(): boolean;
 
-            addChange(target: any, datapath: string | string[], value: any, oldvalue: any, extInfo?: any, transient?: boolean, batchId?: number, group?: number): number;
+            addChange(target: any, datapath: string | string[], value: any, oldvalue: any, extInfo?: any, transient?: boolean, batchId?: number): number;
             flush(): void;
 
             trace(obj: any): any;
             untrace(obj: any): void;
 
-            getUndoTargets(group?: number): Array<any>;
-            getUndoTargetSet(group?: number): ReadonlySet<any>;
+            getUndoTargets(): Array<any>;
 
             runInSingleBatch(callback: () => Promise<void>): Promise<void>;
             runUntrace(callback: () => void): void;
-
-            canUndoWithGroup(group: number): boolean;
-            canRedoWithGroup(group: number): boolean;
-            clearGroup(group: number): boolean;
-        }
-        export interface IDataComponent {
-            readonly props: any;
-            readonly scriptObj: any;
-            readonly typeName: string;
-
-            load(data: any): void;
-            markChanged(): void;
-            export(eliminateDefaults?: boolean): any;
-            destroy(): void;
         }
         export interface ICryptoUtils {
             createHash(data: string): string;
@@ -1763,21 +1707,11 @@ declare global {
              */
             writeText(text: string, type?: 'selection' | 'clipboard'): void;
         }
-        export namespace IClassRegistry {
-            const classMap: Record<string, Function>;
-            const userClassMap: Record<string, Function>;
-
-            function regClass(className: string, cls: any): void;
-            function getClass(className: string): any;
-
-        }
         export interface IBuildTargetInfo {
             caption?: string;
             inspector?: string;
             templatePath?: string;
             settingsName?: string;
-            runningPlatforms?: Array<NodeJS.Platform>;
-            requireModules?: Array<string>;
         }
 
         export enum RuntimePlatformType {
@@ -1851,13 +1785,14 @@ declare global {
         }
 
         export enum AssetFlags {
-            Readonly = 1,
-            SubAsset = 2,
-            Internal = 256,
-            Memory = 512,
-            NoDbCache = 1024,
-            Hidden = 2048,
-            Temp = 4096
+            Readonly = 0x1,
+            SubAsset = 0x2,
+            Composite = 0x4,
+            Internal = 0x100,
+            Memory = 0x200,
+            NoDbCache = 0x400,
+            Hidden = 0x800,
+            Temp = 0x1000,
         }
 
         export enum AssetChangedFlag {
@@ -1882,7 +1817,6 @@ declare global {
             file: string;
             ext: string;
             type: AssetType;
-            subType: string;
             ver: number;
             parentId: string;
             hasChild?: boolean;
@@ -1905,7 +1839,7 @@ declare global {
             readonly port: IMyMessagePort;
             getVersionOfType(type: AssetType): number;
 
-            getFolderContent(folderAssetId: string, types?: ReadonlyArray<AssetType | string>, matchSubType?: boolean, customFilter?: string): Promise<IAssetInfo[]>;
+            getFolderContent(folderAssetId: string, types?: ReadonlyArray<AssetType>, matchSubType?: boolean, customFilter?: string): Promise<IAssetInfo[]>;
             getAsset(assetIdOrPath: string, allowResourcesSearch?: boolean): Promise<IAssetInfo>;
             getAssetSync(assetIdOrPath: string): IAssetInfo;
             getAssetsInPath(assetId: string): Promise<Array<IAssetInfo>>;
@@ -1932,8 +1866,8 @@ declare global {
             reimport(assets: ReadonlyArray<IAssetInfo>, args?: ReadonlyArray<string>): void;
             unpack(assets: ReadonlyArray<IAssetInfo>): void;
 
-            search(keyword: string, types?: ReadonlyArray<AssetType | string>, matchSubType?: boolean, customFilter?: string): Promise<Array<IAssetInfo>>;
-            filter(assetIds: ReadonlyArray<string>, types?: ReadonlyArray<AssetType | string>, matchSubType?: boolean, customFilter?: string): Promise<Array<IAssetInfo>>;
+            search(keyword: string, types?: ReadonlyArray<AssetType>, matchSubType?: boolean, customFilter?: string): Promise<Array<IAssetInfo>>;
+            filter(assetIds: ReadonlyArray<string>, types?: ReadonlyArray<AssetType>, matchSubType?: boolean, customFilter?: string): Promise<Array<IAssetInfo>>;
 
             rename(assetId: string, newName: string): Promise<number>;
             move(sourceAssetIds: ReadonlyArray<string>, targetFolderId: string, conflictResolution?: "keepBoth" | "replace"): Promise<void>;
@@ -1945,13 +1879,7 @@ declare global {
 
             syncI18nSettings(): Promise<void>;
 
-            matchType(assetId: string, types: Array<AssetType | string>): Promise<boolean>;
-
-            getFileActions(asset: IAssetInfo): IFileActions;
-            getFileActionsByType(assetType: AssetType | string): IFileActions;
-        }
-        export interface IAddModulesDialog extends IDialog {
-            show(popupOwner: gui.Widget, selectedModules?: Array<string>): Promise<void>;
+            getAssetTypeByFileExt(ext: string): AssetType[];
         }
         /**
          * 登录用户的信息
@@ -2204,6 +2132,8 @@ declare global {
             icon?: string;
             /** 脚本的路径 */
             scriptPath?: string;
+            /** 是否资源类型 */
+            isAsset?: boolean;
             /** 表示这个类型有类似结构体的行为特性，即总是作为一个整体使用。
              * 例如，obj对象的某个属性b的值是a1，a1是T类型的实例，且T类型的structLike为true，那么当a1的属性改变时，编辑器将同时调用obj.b = a1。
              * 默认为false。
@@ -2220,17 +2150,11 @@ declare global {
             /** 是否引擎符号。如果是引擎符号，则不勾选翻译引擎符号时，不会应用本地化翻译。*/
             isEngineSymbol?: boolean;
 
-            /** 是否资源类型 */
-            isAsset?: boolean;
-            /** 对资源类型的类适用。多个资源类型用逗号分隔，例如“Image,Audio"。可用值参考editor/public/IAssetInfo.ts。 */
+            /** 对资源类型的属性适用。多个资源类型用逗号分隔，例如“Image,Audio"。可用值参考editor/public/IAssetInfo.ts。 */
             assetTypeFilter?: string;
-            /** 对资源类型的类适用。当这个资源的实例被检查器中的某个字段引用时，设置为true可使资源的属性同时内联显示。类似于材质的效果。 */
-            allowInpectInline?: boolean;
 
             /** 对Component适用，是否允许在Editor执行 */
             runInEditor?: boolean;
-            /** 对Component适用，是否允许同一个节点添加此类型的脚本多次。默认是false。 */
-            allowMultipleComponent?: boolean;
             /** 对Component适用，当AddComponent时同时添加依赖的Component */
             requireComponents?: Array<string>;
             /** 对Component使用，为true时，表示隐藏设置enable和屏蔽Remove Component功能。 */
@@ -2401,13 +2325,36 @@ declare global {
             private __mouseWheel;
         }
 
+        export class NumericInputWithSlider extends gui.Label {
+            private _slider;
+            private _input;
+            constructor();
+            get min(): number;
+            set min(value: number);
+            get max(): number;
+            set max(value: number);
+            get fractionDigits(): number;
+            set fractionDigits(value: number);
+            get step(): number;
+            set step(value: number);
+            get editable(): boolean;
+            set editable(value: boolean);
+            get suffix(): string;
+            set suffix(value: string);
+            get value(): number;
+            set value(value: number);
+            get text(): string;
+            set text(value: string);
+            onConstruct(): void;
+        }
+
         export class ResourceInput extends gui.Label {
             protected _text: string;
             protected _c1: gui.Controller;
             protected _asset: IAssetInfo;
             protected _editable: boolean;
             protected _btnSelect: gui.Widget;
-            protected _typeFilter: Array<AssetType | string>;
+            protected _typeFilter: Array<AssetType>;
             protected _promtText: string;
             protected _titleObject: gui.Widget;
             allowInternalAssets: boolean;
@@ -2420,9 +2367,8 @@ declare global {
             set assetValue(value: IAssetInfo);
             get editable(): boolean;
             set editable(value: boolean);
-            set typeFilter(value: Array<AssetType | string>);
-            get typeFilter(): Array<AssetType | string>;
-            hasTypeFilter(type: AssetType): boolean;
+            set typeFilter(value: Array<AssetType>);
+            get typeFilter(): Array<AssetType>;
             private refresh;
             onConstruct(): void;
             private __focusIn;
@@ -2618,7 +2564,7 @@ declare global {
             onConstruct(): void;
             get history(): IDataHistory;
             resetInspectors(): void;
-            inspect(data: any, type: string | FTypeDescriptor | Function, options?: IInspectorOptions): void;
+            inspect(data: any, type: string | FTypeDescriptor, options?: IInspectorOptions): void;
             getInspectors(): ReadonlyArray<IDataInspector>;
             showCatalog(catalog: string): void;
             private _onDataChanged;
@@ -2693,37 +2639,6 @@ declare global {
             create(): IPropertyFieldCreateResult;
         }
 
-        export class FileInspectorLayout implements IInspectorLayout {
-            protected _type: string | Function;
-            protected _assets: ReadonlyArray<IAssetInfo>;
-            protected _components: Array<IDataComponent>;
-            protected _eliminateDefaults: boolean;
-            constructor(type: string | Function);
-            accept(asset: IAssetInfo): boolean;
-            onApply(): Promise<void>;
-            onRender(assets: ReadonlyArray<IAssetInfo>, inspectors: IInspectorHelper, outTracables: Array<any>): Promise<void>;
-            protected readFile(asset: IAssetInfo): Promise<IDataComponent>;
-            protected writeFile(asset: IAssetInfo, dc: IDataComponent): Promise<void>;
-        }
-
-        export class MetaDataInspectorLayout implements IInspectorLayout {
-            protected _type: string | Function;
-            protected _assets: ReadonlyArray<IAssetInfo>;
-            protected _components: Array<IDataComponent>;
-            protected _sectionName: string;
-            constructor(type: string | Function, sectionName?: string);
-            accept(asset: IAssetInfo): boolean;
-            onApply(): Promise<void>;
-            onRender(assets: ReadonlyArray<IAssetInfo>, inspectors: IInspectorHelper, outTracables: Array<any>): Promise<void>;
-            protected readMeta(asset: IAssetInfo): Promise<IDataComponent>;
-            protected writeMeta(asset: IAssetInfo, dc: IDataComponent): Promise<void>;
-        }
-
-        export class ResourceInspectorLayout implements IInspectorLayout {
-            accept(asset: IAssetInfo): boolean;
-            onRender(assets: ReadonlyArray<IAssetInfo>, inspectors: IInspectorHelper): Promise<void>;
-        }
-
 
         const DataWatcher: typeof IDataWatcher;
         const DataHistory: new (versionTracker?: IVersionTracker, maxItems?: number) => IDataHistory;
@@ -2743,8 +2658,6 @@ declare global {
         const EventTracking: new (appId: string, pageShow?: boolean, pageHide?: boolean, showLog?: boolean) => IEventTracking;
         const AbortToken: new () => IAbortToken;
         const BuildTask: { start(platform: string, destPath?: string): void };
-        const DataComponent: new (type: string | Function, data?: any) => IDataComponent;
-        const InspectorRegistry: typeof IInspectorRegistry;
 
         const SelectResourceDialog: new () => ISelectResourceDialog;
         const SelectNodeDialog: new () => ISelectNodeDialog;
@@ -2753,19 +2666,14 @@ declare global {
         const BuildTaskDialog: new () => IDialog;
         const ChooseUploadTargetDialog: new () => IDialog;
         const QRCodeDialog: new () => IQRCodeDialog;
-        const AddModulesDialog: new () => IAddModulesDialog;
         const utils: ICryptoUtils & INativeTools & IUUIDUtils & IObjectUtils & IUtils & INetUtils & IDataUtils & ITemplateUtils & IPlist;
         const GUIUtils: IGUIUtils;
-        const SerializeUtil: typeof ISerializeUtil;
 
         function require(id: string): any;
 
-        function regClass(): Function;
-        function classInfo(info?: Partial<FTypeDescriptor>): Function;
-        function property(info: FPropertyType | Function | Partial<FPropertyDescriptor | { type: Function }>): Function;
-        function inspectorField(name: string): Function;
-        function inspectorLayout(type: string, displayOrder?: number): Function;
-        function panel(id: string, options?: IPanelOptions): Function;
+        function inspectorField(name: string): (func: new () => PropertyField) => void;
+        function inspectorLayout(type: string): (func: new () => IInspectorLayout) => void;
+        function panel(id: string, options?: IPanelOptions): (func: new () => EditorPanel) => void;
         function onLoad(target: Object, propertyName: string): void;
         function onUnload(target: Object, propertyName: string): void;
         function menu(name: string, options?: ICustomMenuItemOptions): Function;

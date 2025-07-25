@@ -166,7 +166,7 @@ declare global {
         }
 
         export interface IResourceManager {
-            saveResources(): Promise<void>;
+            saveResources(): void;
             readonly dirtyResources: Set<string>;
 
             setProps(obj: any, datapath: string[], value: any): Promise<boolean>;
@@ -200,16 +200,14 @@ declare global {
             readonly bgColor: Laya.Color;
             onPreRender(): void;
             onPostRender(): void;
+            onComplete: (bitmap: ImageBitmap, contentWidth: number, contentHeight: number) => void;
         }
 
         export interface IOffscreenRenderer {
             readonly width: number;
             readonly height: number;
 
-            onComplete: (target: IOffscreenRenderSubmit, bitmap: ImageBitmap, contentWidth: number, contentHeight: number) => void;
-
             submit(target: IOffscreenRenderSubmit): void;
-            draw(target: IOffscreenRenderSubmit): Promise<{ bitmap: ImageBitmap, contentWidth: number, contentHeight: number }>;
             destroy(): void;
         }
 
@@ -237,11 +235,6 @@ declare global {
             rotate(x: number, y: number): void;
 
             changeShape(shape: string): Promise<void>;
-        }
-        export interface IObjectPool {
-            getObject(className: string): any;
-            returnObject(obj: any): void;
-            destroy(): void;
         }
 
         export interface IMyScene extends gui.EventDispatcher {
@@ -441,7 +434,7 @@ declare global {
             readonly port: number;
             readonly securePort: number;
             readonly url: string;
-            serveAnywhere(webRootPath: string, secure?: boolean): Promise<string>;
+            serveAnywhere(webRootPath: string): Promise<string>;
         }
         export interface IIcoEncoder {
             encode(imageBuffers: Array<Buffer | ArrayBuffer>): Buffer;
@@ -962,15 +955,6 @@ declare global {
 
             getNodeById(id: string): Laya.Node;
         }
-        export interface IExtensionManager {
-            readonly loading: boolean;
-            readonly loaded: boolean;
-
-            start(): Promise<void>;
-
-            findFunction(name: string): Function;
-            reload(): void;
-        }
         export type IFileContent = {
             nameSuffix?: string;
             weight?: number;
@@ -1082,7 +1066,6 @@ declare global {
         }
 
         export interface IOutFileInfo {
-            asset?: IAssetInfo;
             filePath?: string;
             ext?: string;
             config?: any;
@@ -1112,7 +1095,6 @@ declare global {
             readonly unpackedWebRootPath: string;
 
             readonly isPackaged: boolean;
-            readonly cliMode: boolean;
             readonly isForeground: boolean;
             readonly started: boolean;
 
@@ -1128,7 +1110,6 @@ declare global {
             readonly scene: IGameScene;
             readonly uiRoot: Laya.Sprite;
             readonly buildManager: IBuildManager;
-            readonly extensionManager: IExtensionManager;
 
             readonly onUpdate: IDelegate<() => void>;
             readonly onAppActivate: IDelegate<() => void>;
@@ -1262,13 +1243,17 @@ declare global {
         }
 
         export interface ICodeBuilder {
+            readonly busy: boolean;
+            get started(): boolean;
+
             start(): Promise<void>;
             rebuild(reason?: number): void;
             flushChanges(): Promise<void>;
 
             getJsPlugins(): ReadonlyMap<string, IJsPluginInfo>;
             getScriptBundleDefs(): ReadonlyMap<string, IScriptBundleDefinition>;
-            getScripts(): Array<string>;
+
+            findFunction(name: string): Function;
 
             buildRelease(outDir: string, outputAssets: { has(asset: IAssetInfo): boolean }, options?: ICodeBuildOptions): Promise<Array<string>>;
             buildScriptBundle(defAsset: IAssetInfo, outDir: string, options?: ICodeBuildOptions): Promise<Array<string>>;
@@ -1456,12 +1441,6 @@ declare global {
              */
             findFileInLib(filePath: string): string;
 
-            /**
-             * 
-             * @param moduleId 
-             */
-            getModulePath(moduleId: string): string;
-
             setProgressTitle(text: string): void;
             addProgress(value: number): void;
             setProgress(value: number): void;
@@ -1477,7 +1456,6 @@ declare global {
         export interface IBuildExports {
             indexJS: string;
             libs: Array<string>;
-            esmLibs: Array<string>;
             bundles: Array<string>;
             subpackages: Array<IOutSubpackageInfo>;
             miniGameSubPackages: Array<{ name: string, root: string }>;
@@ -1557,12 +1535,11 @@ declare global {
         export interface IBuildManager {
             getTargetInfo(platform: string): IBuildTargetInfo;
             getPlugins(platform: string, tempPlugins?: Array<IBuildPlugin>): Array<IBuildPlugin>;
+            addPlugin(platform: string, cls: new () => IBuildPlugin, piority?: number): void;
+            removeAllPlugins(): void;
         }
         export interface IBuildConfig {
             name: string;
-            displayName: string;
-            version: string;
-            icon: string;
             useCompressedEngine: boolean;
             minifyJS: boolean;
             sourcemap: boolean;
@@ -1580,9 +1557,8 @@ declare global {
             runtimePlatforms: RuntimePlatformType[];
             allowTextureCompressedFormat: boolean;
             keepTextureSourceFile: boolean;
-            engineLibs: Array<string | { name: string, esm?: boolean }>;
-            renderDevice: "webgl" | "webgpu" | "opengl" | "metal" | "vulkan";
-            runHandler: { serve: string, open?: string, QRCode?: string, secure?: boolean },
+            engineLibs: Array<string>;
+            runHandler: { serve: string, open?: string, QRCode?: string },
             /**
              * 匹配列表内名字的文件或者目录如果已存在于发布目录内，不会在发布初始化时被清除。
              * 注意：不能使用通配符，名字是完全匹配。
@@ -1601,36 +1577,12 @@ declare global {
              */
             subpackageGameJsName: string;
         }
-        export interface IAssetThumbnail {
-            generate(asset: IAssetInfo): Promise<Buffer | string>;
-            destroy(): void;
-        }
-
-        export interface IAssetSaver {
-            onSave(asset: IAssetInfo, res: any): Promise<void>;
-        }
         export interface IAssetProcessor {
             onPreprocessImage?(assetImporter: IImageAssetImporter): void | Promise<void>;
             onPreprocessAsset?(assetImporter: IAssetImporter): void | Promise<void>;
 
             onPostprocessImage?(assetImporter: IImageAssetImporter): void | Promise<void>;
             onPostprocessAsset?(assetImporter: IAssetImporter): void | Promise<void>;
-        }
-        export interface IAssetPreview extends IOffscreenRenderSubmit {
-            readonly scene: IOffscreenRenderScene;
-            readonly sprite: Laya.Sprite;
-
-            renderTarget: Laya.Sprite;
-            bgColor: Laya.Color;
-
-            setAsset(asset: IAssetInfo): Promise<any>;
-            onReset(): void;
-
-            onPreRender(): void;
-
-            onPostRender(): void;
-
-            destroy(): void;
         }
         export interface IAssetManager {
             readonly allAssets: Readonly<Record<string, IAssetInfo>>;
@@ -1659,7 +1611,7 @@ declare global {
             getI18nSettings(id: string): IAssetInfo;
             getAllI18nSettings(forGUI?: boolean): Record<string, IAssetInfo>;
 
-            getAssetTypeByFileExt(ext: string): AssetType;
+            getAssetTypeByFileExt(ext: string): AssetType[];
 
             setMetaData(asset: IAssetInfo, data: any): Promise<void>;
 
@@ -1672,13 +1624,6 @@ declare global {
             unpackModel(asset: IAssetInfo): Promise<void>;
             flushChanges(): Promise<void>;
         }
-        export interface IAssetImporterOptions {
-            version?: number;
-            sortingOrder?: number;
-            weight?: number;
-            numParallelTasks?: number;
-        };
-
         export interface IAssetImporter {
             readonly asset: IAssetInfo;
             readonly parentAsset: IAssetInfo;
@@ -1696,10 +1641,7 @@ declare global {
             clearLibrary(): void;
             createSubAsset(fileName: string, id?: string): ISubAssetInfo;
             createAsset(filePath: string, metaData?: any): IAssetInfo;
-
             setIsShader(shaderName: string, typeDef: FTypeDescriptor): void;
-            setSubType(value: AssetType | string): void;
-
             getAssetPathById(assetId: string): string;
             findAsset(filePath: string): IAssetInfo;
             /**
@@ -1710,14 +1652,6 @@ declare global {
 
         export interface IImageAssetImporter extends IAssetImporter {
             readonly settings: ITextureSettings;
-        }
-
-        export interface IAssetExporterOptions {
-            exclude?: boolean;
-        }
-
-        export interface IAssetExporter {
-            handleExport(): Promise<void>;
         }
 
         export type FEnumDescriptor = {
@@ -1937,6 +1871,8 @@ declare global {
             icon?: string;
             /** 脚本的路径 */
             scriptPath?: string;
+            /** 是否资源类型 */
+            isAsset?: boolean;
             /** 表示这个类型有类似结构体的行为特性，即总是作为一个整体使用。
              * 例如，obj对象的某个属性b的值是a1，a1是T类型的实例，且T类型的structLike为true，那么当a1的属性改变时，编辑器将同时调用obj.b = a1。
              * 默认为false。
@@ -1953,17 +1889,11 @@ declare global {
             /** 是否引擎符号。如果是引擎符号，则不勾选翻译引擎符号时，不会应用本地化翻译。*/
             isEngineSymbol?: boolean;
 
-            /** 是否资源类型 */
-            isAsset?: boolean;
-            /** 对资源类型的类适用。多个资源类型用逗号分隔，例如“Image,Audio"。可用值参考editor/public/IAssetInfo.ts。 */
+            /** 对资源类型的属性适用。多个资源类型用逗号分隔，例如“Image,Audio"。可用值参考editor/public/IAssetInfo.ts。 */
             assetTypeFilter?: string;
-            /** 对资源类型的类适用。当这个资源的实例被检查器中的某个字段引用时，设置为true可使资源的属性同时内联显示。类似于材质的效果。 */
-            allowInpectInline?: boolean;
 
             /** 对Component适用，是否允许在Editor执行 */
             runInEditor?: boolean;
-            /** 对Component适用，是否允许同一个节点添加此类型的脚本多次。默认是false。 */
-            allowMultipleComponent?: boolean;
             /** 对Component适用，当AddComponent时同时添加依赖的Component */
             requireComponents?: Array<string>;
             /** 对Component使用，为true时，表示隐藏设置enable和屏蔽Remove Component功能。 */
@@ -2037,13 +1967,14 @@ declare global {
         }
 
         export enum AssetFlags {
-            Readonly = 1,
-            SubAsset = 2,
-            Internal = 256,
-            Memory = 512,
-            NoDbCache = 1024,
-            Hidden = 2048,
-            Temp = 4096
+            Readonly = 0x1,
+            SubAsset = 0x2,
+            Composite = 0x4,
+            Internal = 0x100,
+            Memory = 0x200,
+            NoDbCache = 0x400,
+            Hidden = 0x800,
+            Temp = 0x1000,
         }
 
         export enum AssetChangedFlag {
@@ -2068,7 +1999,6 @@ declare global {
             file: string;
             ext: string;
             type: AssetType;
-            subType: string;
             ver: number;
             parentId: string;
             hasChild?: boolean;
@@ -2138,6 +2068,7 @@ declare global {
             removeListener(channel: string, listener: (...args: any[]) => void): void;
             send(channel: string, ...args: any[]): void;
             sendSync(channel: string, ...args: any[]): any;
+            sendTo(webContentsId: number, channel: string, ...args: any[]): void;
             sendToHost(channel: string, ...args: any[]): void;
         }
         export interface ILanguageModule {
@@ -2292,7 +2223,6 @@ declare global {
 
             getDerivedTypes(type: FTypeDescriptor): Array<FTypeDescriptor>;
             getRequireComponents(type: string): Array<string>;
-            getAllowMultipleComponent(type: FTypeDescriptor): boolean;
             getNodeMenuItems(type: WorldType): Record<string, Array<TypeMenuItem>>;
             getComponentMenuItems(type: WorldType, inHierarchyMenu?: boolean): Record<string, Array<TypeMenuItem>>;
             sortMenuItems(col: Array<TypeMenuItem>): void;
@@ -2317,15 +2247,12 @@ declare global {
             getDefaultValueComparators(typeDef: FTypeDescriptor): Readonly<Record<string, DefaultValueComparator>>;
 
             getPropertyByPath(type: FTypeDescriptor, datapath: ReadonlyArray<string>, out?: FPropertyDescriptor[]): FPropertyDescriptor[];
-
-            getTypeOfObj(obj: any): FTypeDescriptor;
-            getTypeOfClass(cls: Function): FTypeDescriptor;
         }
         export interface IUtils {
 
-            readJson(filePath: string, silient?: boolean): any | null;
+            readJson(filePath: string, silent?: boolean): any;
 
-            readJsonAsync(filePath: string, silient?: boolean): Promise<any>;
+            readJsonAsync(filePath: string, silent?: boolean): Promise<any>;
 
             readJson5(filePath: string): any | null;
 
@@ -2388,15 +2315,13 @@ declare global {
 
             addHashToFileName(filename: string, hash: string): string;
 
-            normalizePath(filePath: string): Array<string>;
-
             sleep(ms: number): Promise<void>;
 
             until(predicate: () => boolean, timeoutInMs?: number): Promise<void>;
 
             escapeRegExp(str: string): string;
 
-            loadLib(src: string, async?: boolean, onScriptError?: (err: ErrorEvent) => void): Promise<HTMLScriptElement>;
+            loadLib(src: string): Promise<void>;
 
             calculate(str: string): number;
 
@@ -2454,8 +2379,6 @@ declare global {
             inspector?: string;
             templatePath?: string;
             settingsName?: string;
-            runningPlatforms?: Array<NodeJS.Platform>;
-            requireModules?: Array<string>;
         }
 
         export enum RuntimePlatformType {
@@ -2618,12 +2541,11 @@ declare global {
             onDrawGizmosSelected?(): void;
         }
 
-        export class HandleDrawBase {
+        export class HandleDrawBase extends Command {
             protected pickColor: Laya.Vector4;
             protected drawCmd: Laya.Command;
             constructor();
             setPickColor(pickColor: Laya.Vector4): void;
-            execute(cmdBuffer: Laya.CommandBuffer): void;
             recover(): void;
             destroy(): void;
         }
@@ -2635,78 +2557,106 @@ declare global {
             _dotSize: number;
             constructor(dotted?: boolean);
             addLine(line: Laya.PixelLineSprite3D): void;
-            execute(cmdBuffer: Laya.CommandBuffer): void;
+            run(): void;
             recover(): void;
             destroy(): void;
         }
 
-        export class AssetPreview implements IAssetPreview {
-            readonly scene: IOffscreenRenderScene;
-            readonly sprite: Laya.Sprite;
-            renderTarget: Laya.Sprite;
+        export class NumericInput extends gui.Label {
+            min: number;
+            max: number;
+            private _value;
+            private _holder;
+            private _lastHolderPos;
+            private _textField;
+            private _lastScroll;
+            private _fractionDigits;
+            private _step;
+            private _suffix;
             constructor();
-            get bgColor(): Laya.Color;
-            set bgColor(value: Laya.Color);
-            setAssetById(assetId: string): Promise<any>;
-            setAsset(asset: IAssetInfo): Promise<any>;
-            onReset(): void;
-            onPreRender(): void;
-            onPostRender(): void;
-            changeShape(shape: string): Promise<void>;
-            setLight(on: boolean): void;
-            rotate(x: number, y: number): void;
-            destroy(): void;
+            get fractionDigits(): number;
+            set fractionDigits(value: number);
+            get step(): number;
+            set step(value: number);
+            get editable(): boolean;
+            set editable(value: boolean);
+            get suffix(): string;
+            set suffix(value: string);
+            get value(): number;
+            set value(val: number);
+            get text(): string;
+            set text(value: string);
+            onConstruct(): void;
+            private __onKeydown;
+            private _holderDragStart;
+            private _holderDragEnd;
+            private _holderDragMove;
+            private __click;
+            private __focusIn;
+            private __focusOut;
+            private __onSubmit;
+            private __mouseWheel;
         }
 
-        /// <reference types="node" />
-
-        export class AssetThumbnail implements IAssetThumbnail {
-            static readonly imageSize = 112;
-            static readonly bgColor: Laya.Color;
-            private static _border;
-            private static _renderer;
-            generate(asset: IAssetInfo): Promise<string | Buffer>;
-            destroy(): void;
-            static get offscreenRenderer(): IOffscreenRenderer;
-            static addBorder(bitmap: ImageBitmap): Promise<Buffer>;
+        export class NumericInputWithSlider extends gui.Label {
+            private _slider;
+            private _input;
+            constructor();
+            get min(): number;
+            set min(value: number);
+            get max(): number;
+            set max(value: number);
+            get fractionDigits(): number;
+            set fractionDigits(value: number);
+            get step(): number;
+            set step(value: number);
+            get editable(): boolean;
+            set editable(value: boolean);
+            get suffix(): string;
+            set suffix(value: string);
+            get value(): number;
+            set value(value: number);
+            get text(): string;
+            set text(value: string);
+            onConstruct(): void;
         }
 
-        export class AssetImporter implements IAssetImporter {
-            metaData: Record<string, any>;
-            settings: Record<string, any>;
-            importArgs: ReadonlyArray<string>;
-            handleImport(): Promise<void>;
-            get asset(): IAssetInfo;
-            get parentAsset(): IAssetInfo;
-            get isNewAsset(): boolean;
-            get subAssets(): ReadonlyArray<ISubAssetInfo>;
-            get assetFullPath(): string;
-            clearLibrary(): void;
-            get subAssetLocation(): string;
-            createSubAsset(fileName: string, id?: string): ISubAssetInfo;
-            createAsset(filePath: string, metaData?: any): IAssetInfo;
-            setIsShader(shaderName: string, typeDef: FTypeDescriptor): void;
-            setSubType(value: AssetType | string): void;
-            getAssetPathById(assetId: string): string;
-            findAsset(filePath: string): IAssetInfo;
-            get tempPath(): string;
-            /**
-             * @param progress 0-100的值
-             */
-            setProgress(progress: number): void;
+        export class TextInput extends gui.Label {
+            protected _savedText: string;
+            protected _textField: gui.TextInput;
+            protected _clear: gui.Widget;
+            protected _lang: gui.Widget;
+            protected _key: gui.TextField;
+            protected _textInfo: gui.I18nTextInfo;
+            get text(): string;
+            set text(value: string);
+            get editable(): boolean;
+            set editable(value: boolean);
+            onConstruct(): void;
+            private __keyDown;
+            private __focusIn;
+            private __focusOut;
+            private __textChanged;
+            private __clickClear;
+            private __clickLang;
+            private __clickLangRemove;
         }
 
-        export class AssetExporter implements IAssetExporter {
-            readonly asset: IAssetInfo;
-            readonly fileExtensionOverrides: Record<string, string>;
-            readonly exportInfo: IAssetExportInfo;
-            readonly logger: ILogger;
-            readonly prefabDataAnalyzer: IPrefabDataAnalyzer;
-            readonly toolOptions: IExportAssetToolOptions;
-            get parentAsset(): IAssetInfo;
-            handleExport(): Promise<void>;
-            protected parseLinks(links: Array<IAssetLinkInfo>, basePath?: string): Array<IAssetExportDepInfo>;
-            protected addQueue(asset: IAssetInfo): IAssetExportInfo;
+        export class TextArea extends gui.Label {
+            private _savedText;
+            private _textField;
+            private _lang;
+            private _key;
+            private _textInfo;
+            get editable(): boolean;
+            set editable(value: boolean);
+            get text(): string;
+            set text(value: string);
+            onConstruct(): void;
+            private __focusIn;
+            private __focusOut;
+            private __clickLang;
+            private __clickLangRemove;
         }
 
 
@@ -2726,7 +2676,6 @@ declare global {
         const SerializeUtil: typeof ISerializeUtil;
         const ExportAssetTool: new (options?: IExportAssetToolOptions) => IExportAssetTool;
         const PrefabDataAnalyzer: new () => IPrefabDataAnalyzer;
-        const TypedDataAnalyzer: new () => ITypedDataAnalyzer;
         const MaxRectsPacker: new <T extends IRectangle>(width: number, height: number, padding: number, options?: IMaxRectsPackingOptions) => IMaxRectsPacker<T>;
         const TexturePacker: typeof ITexturePacker;
         const TextureTool: typeof ITextureTool;
@@ -2737,28 +2686,23 @@ declare global {
         const i18nUtils: typeof II18nUtils;
         const BuildTask: typeof BuildTaskStatic;
         const PropsKey: Symbol;
-
         function require(id: string): any;
 
         function onLoad(target: Object, propertyName: string): void;
         function onUnload(target: Object, propertyName: string): void;
 
-        function regClass(): Function;
-        function customEditor(target: Function): Function;
+        function customEditor(target: new () => Laya.Node | Laya.Component): (func: new () => CustomEditor) => void;
         /**
          * 注册一个构建插件
          * @param platform 应用的目标平台
          * @param piority 执行优先级。数字越大，越先执行
          */
-        function regBuildPlugin(platform: string, piority?: number): Function;
+        function regBuildPlugin(platform: string, piority?: number): (func: new () => IBuildPlugin) => void;
         /**
          * 注册一个资源处理器
          */
-        function regAssetProcessor(): Function;
-
-        function regAssetImporter(assetTypeOrFileExts: ReadonlyArray<AssetType | string>, options?: IAssetImporterOptions): Function;
-        function regAssetExporter(assetTypeOrFileExts: ReadonlyArray<AssetType | string>, options?: IAssetExporterOptions): Function;
-        function regAssetSaver(assetTypeOrFileExts: ReadonlyArray<AssetType | string>): Function;
+        function regAssetProcessor(): (func: new () => IAssetProcessor) => void;
+        function regClass(): Function;
     }
 
     var EditorEnv: IEditorEnv.IEditorEnvSingleton;

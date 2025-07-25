@@ -34,7 +34,7 @@ export class Main extends Laya.Script {
     private joystick: Joystick;
 
     public monsterRes: string[] = [
-         "resources/role/bake/RootNode.lh"
+         "resources/role/bake/RootNode.lh",
         // "resources/3d/Adventurer Male 01.lh",
         // "resources/3d/Angel Female 01.lh",
         // "resources/3d/Archer Female 01.lh",
@@ -60,6 +60,10 @@ export class Main extends Laya.Script {
     private frameCount: number = 0;
     private fpsUpdateInterval: number = 1000; // 每分钟更新一次FPS
     private lastFpsUpdateTime: number = 0;
+
+    private frameRateBtn: Laya.Button;
+    private currentFrameRate: number = 60; // 当前帧率，默认60
+    private resetCameraBtn: Laya.Button;
 
     onAwake() {
         console.log("游戏初始化");
@@ -87,7 +91,6 @@ export class Main extends Laya.Script {
         this.button.on(Laya.Event.CLICK, this, this.onStartGame);
         this.createUI();
         this.createMonsterCountDisplay();
-        this.createFpsDisplay(); // 添加这行
         this.onStartGame();
         this.button.visible = false;
     }
@@ -142,6 +145,16 @@ export class Main extends Laya.Script {
         this.showHealthBarBtn.pos(Laya.stage.width / 2 + 5, Laya.stage.height - 55);
         this.showHealthBarBtn.on(Laya.Event.CLICK, this, this.toggleHealthBar);
         Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.showHealthBarBtn);
+
+        // 创建"帧率设置"按钮
+        this.frameRateBtn = new Laya.Button("resources/common/common_btn_blue.png", "60帧");
+        this.frameRateBtn.stateNum = 1;
+        this.frameRateBtn.size(100, 40);
+        this.frameRateBtn.labelSize = 22;
+        this.frameRateBtn.labelColors = "#ffffff";
+        this.frameRateBtn.pos(Laya.stage.width / 2 - 105, Laya.stage.height - 105);
+        this.frameRateBtn.on(Laya.Event.CLICK, this, this.toggleFrameRate);
+        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.frameRateBtn);
     }
 
     private createMonsterCountDisplay(): void {
@@ -288,8 +301,6 @@ export class Main extends Laya.Script {
             });
         }
 
-        // 更新FPS计算
-        this.updateFps();
     }
 
     updateCameraPosition() {
@@ -340,7 +351,7 @@ export class Main extends Laya.Script {
             this.camera.removeCommandBuffer(this.cameraEventFlag, this.commandBuffer);
             
             // 清除 CommandBuffer
-            this.commandBuffer.clear();
+            (this.commandBuffer as any).clear();
             this.commandBuffer = null;
         }
 
@@ -407,32 +418,25 @@ export class Main extends Laya.Script {
         console.log(`Health bars are now ${this.isShowingHealthBar ? "visible" : "hidden"}`);
     }
 
-    private createFpsDisplay(): void {
-        this.fpsText = new Laya.Text();
-        this.fpsText.fontSize = 30;
-        this.fpsText.color = "#ffffff";
-        this.fpsText.pos(Laya.stage.width - 200, 60); // 放在怪物数量显示下方
-        Laya.stage.getChildByName("root").getChildByName("Scene2D").getChildByName("UI").addChild(this.fpsText);
-        this.fpsText.text = "FPS: 0";
-    }
-
-    private updateFps(): void {
-        const currentTime = Laya.Browser.now();
-        const deltaTime = currentTime - this.lastFpsUpdateTime;
-        
-        this.frameCount++;
-        this.totalFrameTime += deltaTime;
-
-        if (this.totalFrameTime >= this.fpsUpdateInterval) {
-            const averageFps = Math.round((this.frameCount / this.totalFrameTime) * 1000);
-            this.fpsText.text = `FPS: ${averageFps}`;
-
-            // 重置计数器
-            this.frameCount = 0;
-            this.totalFrameTime = 0;
-            this.lastFpsUpdateTime = currentTime;
+    private toggleFrameRate(): void {
+        // 循环切换帧率：60 -> 30 -> 15 -> 60
+        if (this.currentFrameRate === 60) {
+            this.currentFrameRate = 30;
+        } else if (this.currentFrameRate === 30) {
+            this.currentFrameRate = 15;
         } else {
-            this.lastFpsUpdateTime = currentTime;
+            this.currentFrameRate = 60;
+        }
+
+        // 更新按钮文字
+        this.frameRateBtn.label = `${this.currentFrameRate}帧`;
+
+        // 调用微信小游戏接口设置帧率
+        if (typeof wx !== 'undefined' && wx.setPreferredFramesPerSecond) {
+            wx.setPreferredFramesPerSecond(this.currentFrameRate);
+            console.log(`Frame rate set to ${this.currentFrameRate} FPS`);
+        } else {
+            console.log(`Frame rate would be set to ${this.currentFrameRate} FPS (wx interface not available)`);
         }
     }
 }
