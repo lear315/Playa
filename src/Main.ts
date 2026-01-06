@@ -29,7 +29,7 @@ export class Main extends Laya.Script {
     private camera: Laya.Camera;
 
 
-    public playerRes: string = "resources/3d/AngelMale01.lh";
+    public playerRes: string = "resources/3d/Angel Female 01.lh";
     public player: PlayerEntity;
     private joystick: Joystick;
 

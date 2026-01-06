@@ -8,12 +8,13 @@
     "backgroundColor": "rgba(0, 0, 0, 1)"
   },
   "modules": {
-    "_$type": "Record",
+    "_$type": true,
     "laya.d3": true,
     "laya.ui": true,
     "laya.ani": true,
     "laya.physics3D": true,
-    "laya.spine": false
+    "laya.spine": false,
+    "laya.legacyParser": true
   },
   "splash": {
     "fit": "center"

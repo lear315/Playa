@@ -30,7 +30,7 @@ export class Enter extends Laya.Script {
         } else if (Laya.Browser.onIOS) {
             
         } else {
-            Laya.URL.basePath = "https://seaclear-1255444941.file.myqcloud.com/20250722win/";
+           // Laya.URL.basePath = "https://seaclear-1255444941.file.myqcloud.com/20250722win/";
         }
 
 
